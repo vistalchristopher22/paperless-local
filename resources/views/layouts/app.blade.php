@@ -621,7 +621,7 @@
                                 <span class="menu-link">Maintenance</span></a>
                             <div class="collapse" id="collapseMaintenance">
                                 <ul class="submenu">
-                                    <li><a href="/charts.html">SP Members</a></li>
+                                    <li><a href="{{ route('sanggunian-members.index') }}">SP Members</a></li>
                                 </ul>
                             </div>
                         </li>

@@ -11,9 +11,4 @@ final class UserRepository extends BaseRepository
     {
         parent::__construct($user);
     }
-
-    public function temporaryDelete(Model $account)
-    {
-        return parent::delete($account);
-    }
 }

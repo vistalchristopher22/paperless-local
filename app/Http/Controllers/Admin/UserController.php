@@ -104,7 +104,7 @@ final class UserController extends Controller
      */
     public function destroy(User $account)
     {
-        $this->userRepository->temporaryDelete($account);
+        $this->userRepository->delete($account);
         return back()->with('success', 'Account successfully deleted.');
     }
 }
