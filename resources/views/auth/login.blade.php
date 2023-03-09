@@ -56,19 +56,23 @@
 
         <!-- Login Form-->
         <div class="d-flex flex-column w-100 align-items-center">
-
             <!-- Logo-->
             <a href="/index.html" class="d-table mt-5 mb-4 mx-auto">
                 <div class="d-flex align-items-center">
                 </div>
             </a>
             <!-- Logo-->
-
-            <div class="shadow-lg rounded p-4 p-sm-5 bg-white form">
+            <div class="shadow rounded p-4 p-sm-5 bg-white form">
                 <h3 class="fw-bold">Login</h3>
                 <p class="text-muted">Welcome back!</p>
                 <!-- Login Form-->
                 <form class="mt-4" method="POST" action="{{ route('login') }}">
+
+                    @if ($errors->any())
+                        <div class="text-center">
+                            <span class="text-center text-danger">Invalid Username or Password</span>
+                        </div>
+                    @endif
                     <div class="form-group">
                         <label class="form-label" for="login-email">Username</label>
                         <input type="text" name="username" class="form-control" value="admin" id="login-email"
