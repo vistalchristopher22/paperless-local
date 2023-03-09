@@ -297,29 +297,22 @@
                             </span>
                         </button>
                         <ul class="dropdown-menu dropdown-md dropdown-menu-end" aria-labelledby="profileDropdown">
-                            <li><a class="dropdown-item d-flex align-items-center" href="#">Set Visibility</a>
-                            </li>
-                            <li><a class="dropdown-item d-flex align-items-center" href="#">Edit Profile</a>
-                            </li>
-                            <li><a class="dropdown-item d-flex align-items-center" href="#">Edit Settings</a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
                             <li class="d-flex py-2 align-items-start">
                                 <button class="btn-icon bg-primary-faded text-primary fw-bolder me-3">J</button>
                                 <div class="d-flex align-items-start justify-content-between flex-grow-1">
                                     <div>
-                                        <p class="lh-1 mb-2 fw-semibold text-body">John Daniels</p>
-                                        <p class="text-muted lh-1 mb-2 small">john@email.com</p>
+                                        <p class="lh-1 mb-2 fw-semibold text-body text-capitalize">
+                                            {{ auth()->user()->last_name }},
+                                            {{ auth()->user()->first_name }}</p>
+                                        <p class="text-muted lh-1 mb-2 small">{{ '@' . auth()->user()->username }}</p>
                                     </div>
-                                    <small class="badge bg-success-faded text-success rounded-pill">Pro</small>
                                 </div>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item d-flex align-items-center" href="#">Account Settings</a>
+                            <li><a class="dropdown-item d-flex align-items-center"
+                                    href="{{ route('information.edit') }}">Account Settings</a>
                             </li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
@@ -347,7 +340,11 @@
                 <nav class="mb-0" aria-label="breadcrumb">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">@yield('page-title', 'Default Page title')</li>
+                        <li class="breadcrumb-item active" aria-current="page">@yield(
+                            'page-title',
+                            'Default Page
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    title'
+                        )</li>
                     </ol>
                 </nav>
 
@@ -580,12 +577,13 @@
 
                         <!-- Dashboard Menu Section-->
                         <li class="menu-section mt-2">Menu</li>
-                        <li class="menu-item"><a class="d-flex align-items-center" href="/index.html">
+                        <li class="menu-item"><a class="d-flex align-items-center" href="{{ route('home') }}">
                                 <span class="menu-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                         class="w-100">
                                         <rect fill-opacity=".5" fill="currentColor" x="3" y="3"
-                                            width="7" height="7"></rect>
+                                            width="7" height="7">
+                                        </rect>
                                         <rect fill="currentColor" x="14" y="3" width="7"
                                             height="7"></rect>
                                         <rect fill-opacity=".5" fill="currentColor" x="14" y="14"
@@ -597,8 +595,6 @@
                                 </span>
                                 <span class="menu-link">
                                     Dashboard
-                                    <span
-                                        class="badge bg-success-faded text-success pb-1 ms-2 align-middle rounded-pill">beta</span>
                                 </span></a></li>
                         <!-- / Dashboard Menu Section-->
 
@@ -622,6 +618,8 @@
                             <div class="collapse" id="collapseMaintenance">
                                 <ul class="submenu">
                                     <li><a href="{{ route('sanggunian-members.index') }}">SP Members</a></li>
+                                    <li><a href="#">Session</a></li>
+                                    <li><a href="#">Attendance</a></li>
                                 </ul>
                             </div>
                         </li>

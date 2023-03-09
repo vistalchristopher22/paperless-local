@@ -13,7 +13,7 @@
             <h6 class="card-title m-0">Edit Information</h6>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ route('account.update', $account->id) }}">
+            <form method="POST" action="{{ route('information.update') }}">
                 @csrf
                 @method('PUT')
 
@@ -76,33 +76,6 @@
                     @enderror
                 </div>
 
-                <!-- Account Type -->
-                <div class="form-group">
-                    <label for="account_type">Account Type</label>
-                    <select name="account_type" id="account_type" class="form-control">
-                        @foreach ($types as $type)
-                            <option {{ old('account_type', $account->account_type) == $type ? 'selected' : '' }}
-                                value="{{ $type }}">{{ $type }}</option>
-                        @endforeach
-                    </select>
-                    @error('account_type')
-                        <span class="text-danger"> {{ $message }}</span>
-                    @enderror
-                </div>
-
-                <!-- Status -->
-                <div class="form-group">
-                    <label for="status">Status</label>
-                    <select name="status" id="status" class="form-control">
-                        @foreach ($status as $status)
-                            <option {{ old('status', $account->status) == $status->value ? 'selected' : '' }}
-                                value="{{ $status->value }}">{{ $status->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('status')
-                        <span class="text-danger"> {{ $message }}</span>
-                    @enderror
-                </div>
 
                 <!-- Submit Button -->
                 <div>
