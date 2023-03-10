@@ -5,9 +5,9 @@ namespace App\Repositories;
 use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
 
-final class AgendaRepository extends BaseRepository
+final class {{class}} extends BaseRepository
 {
-    // You can change the model
+    // Change the modal
     public function __construct(Model $model)
     {
         parent::__construct($model);
