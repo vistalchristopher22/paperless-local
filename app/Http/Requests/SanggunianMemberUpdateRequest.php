@@ -24,7 +24,9 @@ class SanggunianMemberUpdateRequest extends FormRequest
         return [
             'fullname' => 'required',
             'district' => 'required',
-            'sanggunian' => 'required'
+            'sanggunian' => 'required',
+            'username' => ['required', 'unique:sanggunian_members,username,' . request()->sanggunian_member->id],
+            'password' => 'nullable',
         ];
     }
 }

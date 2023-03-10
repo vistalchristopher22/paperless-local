@@ -10,6 +10,14 @@ use App\Http\Controllers\Admin\UserController;
 
 Route::redirect('/', '/login');
 
+Route::get('login-administrator', function () {
+    echo 'hello login administrator';
+})->name('admin.auth.login');
+
+Route::get('sample', function () {
+    echo 'hello administrator';
+})->name('admin.dashboard');
+
 Auth::routes();
 
 Route::get('home', [HomeController::class, 'index'])->name('home');

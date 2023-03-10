@@ -41,7 +41,7 @@
                     <tbody>
                         @foreach ($members as $member)
                             <tr>
-                                <td class="text-muted ">{{ $member->name }}</td>
+                                <td class="text-muted ">{{ $member->fullname }}</td>
                                 <td class="text-muted ">{{ $member->district }}</td>
                                 <td class="text-muted ">{{ $member->sanggunian }}</td>
                                 <td class="text-muted text-center">

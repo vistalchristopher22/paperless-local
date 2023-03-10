@@ -44,9 +44,6 @@ class User extends Authenticatable
         'status' => UserStatus::class,
     ];
 
-    public function __construct()
-    {
-    }
 
 
     protected function password(): Attribute

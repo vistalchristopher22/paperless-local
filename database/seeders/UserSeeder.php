@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Account',
             'username' => 'admin',
             'password' => 'password',
-            'account_type' => UserTypes::ADMIN->name,
+            'account_type' => UserTypes::ADMIN->value,
             'status' => UserStatus::Active,
         ]);
     }

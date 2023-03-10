@@ -31,7 +31,7 @@ final class UserUpdateRequest extends FormRequest
             'last_name' => 'required',
             'suffix' => 'nullable|min:2',
             'username' => "required|unique:users,username," . request()->account->id,
-            'password' => 'nullable|min:8|max:16',
+            'password' => 'nullable|min:8',
             'account_type' => 'required',
             'status' => 'required',
         ];

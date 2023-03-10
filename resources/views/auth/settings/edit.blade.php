@@ -7,6 +7,12 @@
                 {{ Session::get('success') }}
             </div>
         </div>
+    @else
+        <div class="card mb-2 bg-info shadow-sm text-white">
+            <div class="card-body">
+                Skip password field to keep your current password.
+            </div>
+        </div>
     @endif
     <div class="card">
         <div class="card-header justify-content-between align-items-center d-flex">

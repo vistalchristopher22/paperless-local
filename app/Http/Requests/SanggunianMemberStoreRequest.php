@@ -25,6 +25,8 @@ class SanggunianMemberStoreRequest extends FormRequest
             'fullname' => 'required',
             'district' => 'required',
             'sanggunian' => 'required',
+            'username' => ['required', 'unique:sanggunian_members,username'],
+            'password' => 'nullable',
         ];
     }
 }

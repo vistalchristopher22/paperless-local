@@ -78,8 +78,9 @@
                     <label for="account_type">Account Type</label>
                     <select name="account_type" id="account_type" class="form-control">
                         @foreach ($types as $type)
-                            <option {{ old('account_type') == $type ? 'selected' : '' }} value="{{ $type }}">
-                                {{ $type }}</option>
+                            <option {{ old('account_type') == $type->value ? 'selected' : '' }}
+                                value="{{ $type }}">
+                                {{ $type->value }}</option>
                         @endforeach
                     </select>
                     @error('account_type')

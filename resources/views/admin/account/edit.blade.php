@@ -7,6 +7,12 @@
                 {{ Session::get('success') }}
             </div>
         </div>
+    @else
+        <div class="card mb-2 bg-info shadow-sm text-white">
+            <div class="card-body">
+                Skip password field to keep your current password.
+            </div>
+        </div>
     @endif
     <div class="card">
         <div class="card-header justify-content-between align-items-center d-flex">
@@ -106,7 +112,7 @@
 
                 <!-- Submit Button -->
                 <div>
-                    <button type="submit" class="btn btn-primary float-end mt-3">Update</button>
+                    <button type="submit" class="btn btn-success text-white float-end mt-3">Update</button>
                 </div>
             </form>
         </div>

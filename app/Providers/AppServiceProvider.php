@@ -22,8 +22,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Feature::purge();
         Feature::define('administrator', function (User $user) {
-            return $user->account_type == UserTypes::ADMIN->name;
+            return $user->account_type == UserTypes::ADMIN->value;
         });
     }
 }

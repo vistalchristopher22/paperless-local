@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
+use App\Models\SanggunianMember;
 use App\Http\Controllers\Controller;
 use App\Repositories\SanggunianMemberRepository;
 use App\Http\Requests\SanggunianMemberStoreRequest;
 use App\Http\Requests\SanggunianMemberUpdateRequest;
-use App\Models\SanggunianMember;
+use App\Services\SanggunianMemberService;
 
 final class SanggunianMemberController extends Controller
 {
 
-    public function __construct(private SanggunianMemberRepository $sanggunianMemberRepository)
+    public function __construct(private SanggunianMemberRepository $sanggunianMemberRepository, private SanggunianMemberService $sanggunianMemberService)
     {
     }
 
@@ -34,9 +34,11 @@ final class SanggunianMemberController extends Controller
     public function store(SanggunianMemberStoreRequest $request)
     {
         $this->sanggunianMemberRepository->store([
-            'name'       => $request->fullname,
+            'fullname'   => $request->fullname,
             'district'   => $request->district,
             'sanggunian' => $request->sanggunian,
+            'username'   => $request->username,
+            'password'   => $request->password,
         ]);
 
         return redirect()->back()->with('success', 'Successfully add new Sangguniang Panlalawigan Member');
@@ -54,12 +56,7 @@ final class SanggunianMemberController extends Controller
 
     public function update(SanggunianMemberUpdateRequest $request, SanggunianMember $sanggunianMember)
     {
-        $this->sanggunianMemberRepository->update($sanggunianMember, [
-            'name'       => $request->fullname,
-            'district'   => $request->district,
-            'sanggunian' => $request->sanggunian,
-        ]);
-
+        $this->sanggunianMemberRepository->update($sanggunianMember, $this->sanggunianMemberService->isUserWantToChangePassword($request->all()));
         return back()->with('success', 'Success! Sangguniang Panlalawigan Member updated successfully.');
     }
 

@@ -42,7 +42,7 @@ final class UserController extends Controller
     public function create()
     {
         return view('admin.account.create', [
-            'types' => UserTypes::names(),
+            'types' => UserTypes::cases(),
             'status' => UserStatus::cases(),
         ]);
     }
@@ -73,7 +73,7 @@ final class UserController extends Controller
     public function edit(User $account)
     {
         return view('admin.account.edit', compact('account'))->with([
-            'types' => UserTypes::names(),
+            'types' => UserTypes::cases(),
             'status' => UserStatus::cases(),
         ]);
     }
