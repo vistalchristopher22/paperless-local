@@ -19,7 +19,7 @@
         <div class="card-header justify-content-between align-items-center d-flex">
             <h6 class="card border-0 m-0 ">Complete Listing of Agendas</h6>
             <div class="dropdown">
-                <a href="{{ route('account.create') }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('agendas.create') }}" class="btn btn-primary btn-sm">
                     Add New Agenda
                 </a>
             </div>
@@ -33,20 +33,33 @@
                         <tr>
                             <th class="text-center">Title</th>
                             <th class="text-center">Description</th>
+                            <th class="text-center">Chairman</th>
+                            <th class="text-center">Vice Chairman</th>
+                            <th class="text-center">Members</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($agendas as $user)
+                        @foreach ($agendas as $agenda)
                             <tr class="align-middle">
-                                <td class="text-start text-muted">
-                                    {{ $user->title }}
+                                <td class="text-start">
+                                    <span class="mx-3">{{ $agenda->title }}</span>
                                 </td>
-                                <td></td>
+                                <td>{{ $agenda->description }}</td>
+                                <td>{{ $agenda->chairman_information->fullname }}</td>
+                                <td>{{ $agenda->vice_chairman_information->fullname }}</td>
+                                @foreach ($agenda->members as $member)
+                                    @php
+                                        $members .= $member->sanggunian_member->implode('fullname') . ', ';
+                                    @endphp
+                                @endforeach
+                                <td>
+                                    {{ Str::limit(Str::replaceLast(',', '', $members), 50, '...') }}
+                                </td>
                                 <td class="align-middle text-center">
-                                    <form action="{{ route('account.destroy', $user) }}" method="POST">
+                                    <form action="{{ route('account.destroy', $agenda) }}" method="POST">
                                         <a class="btn btn-sm btn-success text-white"
-                                            href="{{ route('account.edit', $user) }}">Edit</a>
+                                            href="{{ route('account.edit', $agenda) }}">Edit</a>
                                         @method('DELETE')
                                         @csrf
                                         <button type="submit" class="btn btn-sm btn-danger text-white">Delete</button>
