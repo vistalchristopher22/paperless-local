@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('suffix')->nullable();
             $table->string('username')->unique();
             $table->string('password');
-            $table->enum('account_type', UserTypes::values())->default(UserTypes::USER->value);
+            $table->enum('account_type', UserTypes::values())->default(UserTypes::ADMIN->value);
             $table->enum('status', UserStatus::values());
             $table->rememberToken();
             $table->timestamps();
