@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\AgendaController;
 use App\Http\Controllers\Admin\SanggunianMemberController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'features:administrator'], function () {
         Route::resource('account', UserController::class);
         Route::resource('sanggunian-members', SanggunianMemberController::class);
+        Route::resource('agendas', AgendaController::class);
     });
 
     Route::get('edit-information', [AccountController::class, 'edit'])->name('information.edit');

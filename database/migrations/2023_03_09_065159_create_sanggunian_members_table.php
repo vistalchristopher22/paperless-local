@@ -14,8 +14,6 @@ sl<?php
             Schema::create('sanggunian_members', function (Blueprint $table) {
                 $table->id();
                 $table->string('fullname');
-                $table->string('username')->unique();
-                $table->string('password');
                 $table->string('district');
                 $table->string('sanggunian');
                 $table->timestamps();

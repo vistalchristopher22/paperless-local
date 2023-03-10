@@ -43,24 +43,24 @@
                     @enderror
                 </div>
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username" value="{{ old('username', $member->username) }}"
                         class="form-control">
                     @error('username')
                         <span class="text-danger"> {{ $message }}</span>
                     @enderror
-                </div>
+                </div> --}}
 
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="password">Password</label>
                     <input type="text" name="password" id="password" value="{{ old('password') }}"
                         class="form-control">
                     @error('password')
                         <span class="text-danger"> {{ $message }}</span>
                     @enderror
-                </div>
+                </div> --}}
 
                 <!-- Submit Button -->
                 <div>

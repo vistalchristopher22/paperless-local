@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@section('page-title', 'Sangguniang Panlalawigan Members')
 @prepend('page-css')
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
     <style>
@@ -18,10 +17,10 @@
     @endif
     <div class="card mb-4">
         <div class="card-header justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0">Sangguniang Panlalawigan Members</h6>
+            <h6 class="card border-0 m-0 ">Complete Listing of Agendas</h6>
             <div class="dropdown">
-                <a href="{{ route('sanggunian-members.create') }}" class="btn btn-primary btn-sm">
-                    Add New Member
+                <a href="{{ route('account.create') }}" class="btn btn-primary btn-sm">
+                    Add New Agenda
                 </a>
             </div>
         </div>
@@ -29,31 +28,28 @@
 
             <!-- User Listing Table-->
             <div class="table-responsive">
-                <table class="table table-striped border" id="members-table">
+                <table class="table table-striped border" id="agendas-table">
                     <thead>
                         <tr>
-                            <th class="text-center">Fullname</th>
-                            <th class="text-center">District</th>
-                            <th>Sanggunian</th>
-                            <th>Joined</th>
+                            <th class="text-center">Title</th>
+                            <th class="text-center">Description</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($members as $member)
-                            <tr>
-                                <td class="text-muted ">{{ $member->fullname }}</td>
-                                <td class="text-muted ">{{ $member->district }}</td>
-                                <td class="text-muted ">{{ $member->sanggunian }}</td>
-                                <td class="text-muted">{{ $member->created_at->format('jS M, Y') }}</td>
-                                <td class="text-muted text-center">
-
-                                    <form action="{{ route('sanggunian-members.destroy', $member) }}" method="POST">
+                        @foreach ($agendas as $user)
+                            <tr class="align-middle">
+                                <td class="text-start text-muted">
+                                    {{ $user->title }}
+                                </td>
+                                <td></td>
+                                <td class="align-middle text-center">
+                                    <form action="{{ route('account.destroy', $user) }}" method="POST">
+                                        <a class="btn btn-sm btn-success text-white"
+                                            href="{{ route('account.edit', $user) }}">Edit</a>
                                         @method('DELETE')
                                         @csrf
-                                        <a href="{{ route('sanggunian-members.edit', $member) }}"
-                                            class="btn btn-success text-white btn-sm">Edit</a>
-                                        <button type="submit" class="btn btn-danger text-white btn-sm">Delete</button>
+                                        <button type="submit" class="btn btn-sm btn-danger text-white">Delete</button>
                                     </form>
                                 </td>
                             </tr>
@@ -69,7 +65,7 @@
         <script src="//cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
         <script>
             $(document).ready(function() {
-                $('#members-table').DataTable({});
+                $('#agendas-table').DataTable({});
             });
         </script>
     @endpush

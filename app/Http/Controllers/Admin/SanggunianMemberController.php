@@ -37,8 +37,6 @@ final class SanggunianMemberController extends Controller
             'fullname'   => $request->fullname,
             'district'   => $request->district,
             'sanggunian' => $request->sanggunian,
-            'username'   => $request->username,
-            'password'   => $request->password,
         ]);
 
         return redirect()->back()->with('success', 'Successfully add new Sangguniang Panlalawigan Member');
