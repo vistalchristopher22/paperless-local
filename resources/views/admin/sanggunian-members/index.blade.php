@@ -16,7 +16,33 @@
             </div>
         </div>
     @endif
-    <div class="card mb-4">
+
+    <div class="row">
+        @foreach ($members as $member)
+            <div class="col-lg-4 my-2">
+                <div class="card">
+                    <img src="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png"
+                        class="card-img-top">
+                    <div class="card-body">
+                        <p class="h5 text-center mb-3 card-text fw-medium">{{ $member->fullname }}</p>
+                        <p class="h5 text-center mb-3 card-text fw-medium">{{ $member->district ?? '-' }}</p>
+                        <p class="h5 text-center mb-3 card-text fw-medium">{{ $member->sanggunian }}</p>
+                        <form action="{{ route('sanggunian-members.destroy', $member) }}" method="POST">
+                            <div class="d-grid gap-2">
+                                @method('DELETE')
+                                @csrf
+                                <a href="{{ route('sanggunian-members.edit', $member) }}"
+                                    class="btn btn-primary text-white">Edit</a>
+                                <button type="submit" class="btn btn-danger text-white">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+    {{-- <div class="card mb-4">
         <div class="card-header justify-content-between align-items-center d-flex">
             <h6 class="card-title m-0">Sangguniang Panlalawigan Members</h6>
             <div class="dropdown">
@@ -62,7 +88,7 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div> --}}
     @push('page-scripts')
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"
             integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
