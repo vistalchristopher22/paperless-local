@@ -651,6 +651,7 @@
                             <div class="collapse" id="collapseMaintenance">
                                 <ul class="submenu">
                                     <li><a href="{{ route('agendas.index') }}">Agendas</a></li>
+                                    <li><a href="{{ route('division.index') }}">Division</a></li>
                                 </ul>
                             </div>
                         </li>
