@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @prepend('page-css')
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.dataTables.min.css">
     <style>
         .dataTables_filter input {
             margin-bottom: 10px;
@@ -12,6 +13,12 @@
         <div class="card mb-2 bg-success shadow-sm text-white">
             <div class="card-body">
                 {{ Session::get('success') }}
+            </div>
+        </div>
+    @else
+        <div class="card bg-primary text-white mb-3">
+            <div class="card-body alert-dismissible fade show" role="alert">
+                You can reorder the rows by dragging and dropping them.
             </div>
         </div>
     @endif
@@ -31,39 +38,36 @@
                 <table class="table table-striped border" id="agendas-table">
                     <thead>
                         <tr>
+                            <th class="text-center">Order</th>
                             <th class="text-center">Title</th>
-                            {{-- <th class="text-center">Description</th> --}}
                             <th class="text-center">Chairman</th>
                             <th class="text-center">Vice Chairman</th>
                             <th class="text-center">Members</th>
-                            <th></th>
+                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($agendas as $agenda)
-                            <tr class="align-middle">
-                                <td class="text-start">
-                                    <span class="mx-3">{{ $agenda->title }}</span>
+                            <tr class="align-middle draggable" data-id="{{ $agenda->id }}">
+                                <td class="text-center">
+                                    {{ $agenda->index }}
                                 </td>
-                                {{-- <td>{{ $agenda->description }}</td> --}}
-                                <td>{{ $agenda->chairman_information->fullname }}</td>
+                                <td class="text-start">
+                                    <span class="mx-3">
+                                        {{ Str::limit($agenda->title, 50, '...') }}</span>
+                                </td>
+                                <td class="text-truncate">{{ $agenda->chairman_information->fullname }}</td>
                                 <td>{{ $agenda->vice_chairman_information->fullname }}</td>
-                                @foreach ($agenda->members as $member)
-                                    @php
-                                        $members .= $member->sanggunian_member->implode('fullname') . ', ';
-                                    @endphp
-                                @endforeach
-                                <td>
-                                    {{ Str::limit(Str::replaceLast(',', '', $members), 50, '...') }}
+                                <td class="text-center">
+                                    @if ($agenda->members->count() > 0)
+                                        <a href="" class="text-primary fw-medium">View
+                                            Members</a>
+                                    @endif
+
                                 </td>
                                 <td class="align-middle text-center">
-                                    <form action="{{ route('account.destroy', $agenda) }}" method="POST">
-                                        <a class="btn btn-sm btn-success text-white"
-                                            href="{{ route('account.edit', $agenda) }}">Edit</a>
-                                        @method('DELETE')
-                                        @csrf
-                                        <button type="submit" class="btn btn-sm btn-danger text-white">Delete</button>
-                                    </form>
+                                    <a class="btn btn-sm btn-success text-white"
+                                        href="{{ route('agendas.edit', $agenda) }}">Edit</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -76,9 +80,49 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"
             integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
         <script src="//cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+        <script src="//cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js"></script>
         <script>
             $(document).ready(function() {
-                $('#agendas-table').DataTable({});
+
+                let table = $('#agendas-table').DataTable({
+                    ordering: false,
+                    pageLength: 100,
+                    rowReorder: {
+                        dataSrc: 'id',
+                        update: false,
+                        selector: 'tr',
+                        snapX: 5,
+                        scrollX: true,
+                        before: function(e, details, changes) {
+                            var dt = this.s.dt;
+
+                            // Trigger preRowReorder event
+                            dt.trigger('preRowReorder', [details, changes]);
+                        }
+                    },
+                });
+
+                table.on('preRowReorder', function(e, details, changes) {
+                    let confirmation = confirm("Do you want to reorder this row?");
+                    if (confirmation) {
+                        details.forEach((row, index) => {
+                            let [orderCell] = row.node.children;
+                            orderCell.innerText = `${row.newPosition + 1}`;
+
+
+                            $.ajax({
+                                url: '/re-order/agenda',
+                                method: 'POST',
+                                data: {
+                                    id: `${row.node.getAttribute('data-id')}`,
+                                    index: `${row.newPosition + 1}`,
+                                },
+                            });
+                        })
+                    }
+                });
+
+
             });
         </script>
     @endpush

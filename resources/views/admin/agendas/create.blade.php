@@ -1,4 +1,10 @@
 @extends('layouts.app')
+@prepend('page-css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@endprepend
 @section('page-title', 'Create Agenda')
 @section('content')
     @if (Session::has('success'))
@@ -24,17 +30,10 @@
                     @enderror
                 </div>
 
-                <div class="form-group">
-                    <label>Descrption</label>
-                    <textarea name="description" class="form-control" rows="2"></textarea>
-                    @error('description')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
 
                 <div class="form-group">
                     <label>Chairman</label>
-                    <select name="chairman" class="form-select">
+                    <select name="chairman" class="form-select" id="select-chairman">
                         @foreach ($members as $member)
                             <option value="{{ $member->id }}">{{ $member->fullname }}</option>
                         @endforeach
@@ -46,7 +45,7 @@
 
                 <div class="form-group">
                     <label>Vice Chairman</label>
-                    <select name="vice_chairman" class="form-select">
+                    <select name="vice_chairman" class="form-select" aria-label="select example">
                         @foreach ($members as $member)
                             <option value="{{ $member->id }}">{{ $member->fullname }}</option>
                         @endforeach
@@ -78,4 +77,26 @@
             </form>
         </div>
     </div>
+    @push('page-scripts')
+    <script>
+        $(document).ready(function() {
+            
+            $('select[name="members[]"]').select2({
+                placeholder: 'Select members',
+                theme: "classic",
+            });
+
+            $('select[name="vice_chairman"]').select2({
+                placeholder: 'Select Vice chairman',
+                theme: "classic",
+            });
+
+            $('select[name="chairman"]').select2({
+                placeholder: 'Select Chairman',
+                theme: "classic",
+            });
+   
+        });
+    </script>
+    @endpush
 @endsection

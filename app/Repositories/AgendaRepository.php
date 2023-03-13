@@ -3,9 +3,10 @@
 namespace App\Repositories;
 
 use App\Models\Agenda;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 
 final class AgendaRepository extends BaseRepository
 {
@@ -29,25 +30,67 @@ final class AgendaRepository extends BaseRepository
      */
     public function get(): Collection
     {
-        return $this->model->with(['chairman_information', 'vice_chairman_information', 'members', 'members.sanggunian_member'])->get();
+        return $this->model->orderBy('index', 'ASC')->with(['chairman_information', 'vice_chairman_information', 'members', 'members.sanggunian_member'])->get();
     }
 
     /**
-     * It stores an agenda and its members in the database.
+     * > It stores an agenda and its members in the database
      * {@inheritdoc}
+     * @param array data The data to be stored.
      *
-     * @param array data an array of data that will be used to create the agenda
+     * @return mixed The newly stored agenda with the members added to it.
      */
     public function store(array $data = []): mixed
     {
         return DB::transaction(function () use ($data) {
-            $newlyStoredAgenda = parent::store([
-                'title' => $data['title'],
-                'chairman' => $data['chairman'],
-                'vice_chairman' => $data['vice_chairman'],
-            ]);
-
+            $newlyStoredAgenda = parent::store(Arr::except($data, 'members'));
             return $this->agendaMemberRepository->addMembersToThis(agenda: $newlyStoredAgenda, members: $data['members']);
         });
+    }
+
+    /**
+     * > We are updating the agenda and removing the existing members and adding the new members to the
+     * agenda
+     * {@inheritdoc}
+     *
+     * @param Model agenda The agenda model instance
+     * @param array data The data to be used to update the model.
+     *
+     * @return mixed True
+     */
+    public function update(Model $agenda, array $data = []): mixed
+    {
+        DB::transaction(function () use ($agenda, $data) {
+            parent::update($agenda, Arr::except($data, 'members'));
+            $this->agendaMemberRepository->removeExistingMembers($agenda);
+            $this->agendaMemberRepository->addMembersToThis($agenda, $data['members']);
+        });
+        return true;
+    }
+
+    /**
+     * It returns an array of the ids of the members of the given agenda
+     *
+     * @param Agenda agenda The agenda object
+     *
+     * @return array An array of the members id's
+     */
+    public function getMembersId(Agenda $agenda): array
+    {
+        return $agenda->members->pluck('member')->toArray();
+    }
+
+    /**
+     * It updates the index of the record with the given id.
+     *
+     * @param array data The data to be updated.
+     *
+     * @return bool A boolean value.
+     */
+    public function reOrderIndex(array $data = []): bool
+    {
+        return $this->findBy('id', $data['id'])->update([
+            'index' => $data['index'],
+        ]);
     }
 }
