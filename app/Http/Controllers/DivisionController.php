@@ -16,7 +16,7 @@ class DivisionController extends Controller
     /**
      * It returns a view called `admin.division.index` with a variable called `division` that contains
      * the result of the `get()` function in the `divisionRepository` class
-     * 
+     *
      * @return The view admin.division.index and the division variable is being passed to the view.
      */
     public function index()
@@ -33,7 +33,7 @@ class DivisionController extends Controller
 
     /**
      * It stores a new division in the database
-     * 
+     *
      * @param DivisionStoreRequest request The request object.
      */
     public function store(DivisionStoreRequest $request)
@@ -57,10 +57,10 @@ class DivisionController extends Controller
 
     /**
      * It updates a division
-     * 
+     *
      * @param DivisionUpdateRequest request The request object.
      * @param Division division The model that we are updating.
-     * 
+     *
      * @return A view with a success message.
      */
     public function update(DivisionUpdateRequest $request, Division $division)
@@ -73,9 +73,9 @@ class DivisionController extends Controller
     /**
      * The function takes a division object as a parameter, and then deletes the division object from
      * the database
-     * 
+     *
      * @param Division division This is the model that we are using.
-     * 
+     *
      * @return A view with a success message.
      */
     public function destroy(Division $division)
