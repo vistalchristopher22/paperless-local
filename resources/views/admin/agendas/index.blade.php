@@ -92,37 +92,27 @@
                         update: false,
                         selector: 'tr',
                         snapX: 5,
-                        scrollX: true,
-                        before: function(e, details, changes) {
-                            var dt = this.s.dt;
-
-                            // Trigger preRowReorder event
-                            dt.trigger('preRowReorder', [details, changes]);
-                        }
+                        scrollX: true
                     },
                 });
 
-                table.on('preRowReorder', function(e, details, changes) {
-                    let confirmation = confirm("Do you want to reorder this row?");
-                    if (confirmation) {
-                        details.forEach((row, index) => {
-                            let [orderCell] = row.node.children;
-                            orderCell.innerText = `${row.newPosition + 1}`;
+                table.on('row-reorder', function(e, details, changes) {
+                    details.forEach((row, index) => {
+                        // Get the first cell of the row
+                        let [orderCell] = row.node.children;
+                        orderCell.innerText = `${row.newPosition + 1}`;
 
 
-                            $.ajax({
-                                url: '/re-order/agenda',
-                                method: 'POST',
-                                data: {
-                                    id: `${row.node.getAttribute('data-id')}`,
-                                    index: `${row.newPosition + 1}`,
-                                },
-                            });
-                        })
-                    }
+                        $.ajax({
+                            url: '/re-order/agenda',
+                            method: 'POST',
+                            data: {
+                                id: `${row.node.getAttribute('data-id')}`,
+                                index: `${row.newPosition + 1}`,
+                            },
+                        });
+                    })
                 });
-
-
             });
         </script>
     @endpush
