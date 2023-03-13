@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 class AgendaController extends Controller
 {
-
     public function __construct(private AgendaRepository $agendaRepository, private SanggunianMemberRepository $sanggunianMemberRepository)
     {
         $this->middleware('convert.id.to.models')->only(['store', 'update']);
@@ -20,10 +19,9 @@ class AgendaController extends Controller
     {
         return view('admin.agendas.index', [
             'agendas' => $this->agendaRepository->get(),
-            'members' => "",
+            'members' => '',
         ]);
     }
-
 
     /**
      * It returns a view with a list of sangguniang panlalawigan members
@@ -35,37 +33,33 @@ class AgendaController extends Controller
         ]);
     }
 
-
     /**
      * The store function takes a request object as a parameter, passes the request object to the
      * agendaRepository's store function, and then returns a success message
-     * 
+     *
      * @param Request request The request object.
      */
     public function store(AgendaStoreRequest $request)
     {
         $this->agendaRepository->store($request->all());
+
         return back()->with('success', 'Successfully add new committee agenda.');
     }
-
 
     public function show(string $id)
     {
         //
     }
 
-
     public function edit(string $id)
     {
         //
     }
 
-
     public function update(Request $request, string $id)
     {
         //
     }
-
 
     public function destroy(string $id)
     {

@@ -5,8 +5,6 @@ namespace App\Repositories;
 use App\Models\Division;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\BaseRepository;
-use Illuminate\Database\Eloquent\Model;
 
 final class DivisionRepository extends BaseRepository
 {
@@ -23,16 +21,13 @@ final class DivisionRepository extends BaseRepository
 
     public function store(array $data = []): mixed
     {
-        return DB::transaction(function () use($data){
-
+        return DB::transaction(function () use ($data) {
             $division = parent::store([
                 'name' => $data['name'],
-                'description' => $data['description']
+                'description' => $data['description'],
             ]);
 
             return $division;
-
         });
     }
-
 }

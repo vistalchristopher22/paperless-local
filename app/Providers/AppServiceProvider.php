@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use App\Enums\UserTypes;
 use App\Models\User;
-use Laravel\Pennant\Feature;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Pennant\Feature;
 
 class AppServiceProvider extends ServiceProvider
 {

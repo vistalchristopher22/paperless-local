@@ -21,7 +21,7 @@ class UserFactory extends Factory
             'first_name' => fake()->firstName(),
             'middle_name' => fake()->firstName(),
             'last_name' => fake()->firstName(),
-            'username' => 'admin' . rand(1, 100),
+            'username' => 'admin'.rand(1, 100),
             'password' => 'password', // password
             'remember_token' => Str::random(10),
         ];

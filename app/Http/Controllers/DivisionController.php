@@ -2,33 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Division;
-use Illuminate\Http\Request;
-use App\Repositories\DivisionRepository;
 use App\Http\Requests\DivisionStoreRequest;
 use App\Http\Requests\DivisionUpdateRequest;
+use App\Models\Division;
+use App\Repositories\DivisionRepository;
 
 class DivisionController extends Controller
 {
-
     public function __construct(private DivisionRepository $divisionRepository)
     {
     }
 
-
     public function index()
     {
         return view('admin.division.index', [
-            'division' => $this->divisionRepository->get()
+            'division' => $this->divisionRepository->get(),
         ]);
     }
-
 
     public function create()
     {
         return view('admin.division.create');
     }
-
 
     public function store(DivisionStoreRequest $request)
     {
@@ -37,20 +32,17 @@ class DivisionController extends Controller
         return back()->with('success', 'You have successfully added new division.');
     }
 
-
     public function show(string $id)
     {
         //
     }
 
-
     public function edit(Division $division)
     {
         return view('admin.division.edit', [
-            'division' => $division
+            'division' => $division,
         ]);
     }
-
 
     public function update(DivisionUpdateRequest $request, Division $division)
     {
@@ -58,7 +50,6 @@ class DivisionController extends Controller
 
         return back()->with('success', 'You have successfully updated a division.');
     }
-
 
     public function destroy(Division $division)
     {

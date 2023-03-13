@@ -2,12 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Contracts\IAgendaMember;
 use App\Models\Agenda;
 use App\Models\AgendaMember;
-use App\Contracts\IAgendaMember;
 use Illuminate\Support\Collection;
-use App\Repositories\BaseRepository;
-use App\Repositories\AgendaRepository;
 
 final class AgendaMemberRepository extends BaseRepository implements IAgendaMember
 {

@@ -20,7 +20,7 @@ return [
         /*
          | The model you want to use as Group model must use the MateusJunges\ACL\Traits\GroupsTrait
          */
-        'group'      => Junges\ACL\Models\Group::class,
+        'group' => Junges\ACL\Models\Group::class,
     ],
 
     /*
@@ -54,19 +54,19 @@ return [
     |
      */
     'tables' => [
-        'groups'                      => 'groups',
-        'permissions'                 => 'permissions',
-        'users'                       => 'users',
-        'group_has_permissions'       => 'group_has_permissions',
-        'model_has_permissions'       => 'model_has_permissions',
-        'model_has_groups'            => 'model_has_groups',
+        'groups' => 'groups',
+        'permissions' => 'permissions',
+        'users' => 'users',
+        'group_has_permissions' => 'group_has_permissions',
+        'model_has_permissions' => 'model_has_permissions',
+        'model_has_groups' => 'model_has_groups',
     ],
 
     'column_names' => [
-        'group_pivot_key'      => null,
+        'group_pivot_key' => null,
         'permission_pivot_key' => null,
-        'model_morph_key'      => 'model_id',
-        'team_foreign_key'     => 'team_id'
+        'model_morph_key' => 'model_id',
+        'team_foreign_key' => 'team_id',
     ],
 
     'teams' => false,
@@ -101,6 +101,6 @@ return [
          * You can optionally specify a cache driver to use for permissions caching using
          * store drivers listed in config/cache.php.
          */
-        'store' => 'default'
-    ]
+        'store' => 'default',
+    ],
 ];

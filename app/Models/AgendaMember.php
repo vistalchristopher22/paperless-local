@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\SanggunianMember;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class AgendaMember extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
 
     public function sanggunian_member()

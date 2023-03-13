@@ -9,6 +9,7 @@ abstract class AccountService
         if (empty($data['password'])) {
             unset($data['password']);
         }
+
         return $data;
     }
 }

@@ -3,12 +3,11 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\AgendaController;
 use App\Http\Controllers\Admin\SanggunianMemberController;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
 

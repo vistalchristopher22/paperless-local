@@ -3,10 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
-use App\Enums\UserTypes;
-use App\Enums\UserStatus;
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 final class UserStoreRequest extends FormRequest
 {
@@ -30,7 +28,7 @@ final class UserStoreRequest extends FormRequest
             'middle_name' => 'nullable|min:2',
             'last_name' => 'required',
             'suffix' => 'nullable|min:2',
-            'username' => "required|unique:users,username",
+            'username' => 'required|unique:users,username',
             'password' => 'nullable|min:8',
             'account_type' => 'required',
             'status' => ['required'],

@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\AgendaMember;
-use App\Models\SanggunianMember;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Agenda extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
 
     public function chairman_information()
@@ -21,7 +20,6 @@ class Agenda extends Model
     {
         return $this->hasOne(SanggunianMember::class, 'id', 'vice_chairman');
     }
-
 
     public function members()
     {

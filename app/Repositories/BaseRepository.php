@@ -13,7 +13,6 @@ class BaseRepository implements IBaseRepository
         $this->model = $model;
     }
 
-
     public function get(): Collection
     {
         return $this->model->whereNull('deleted_at')->get();

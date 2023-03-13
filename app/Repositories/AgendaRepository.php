@@ -3,10 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Agenda;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\BaseRepository;
-use Illuminate\Database\Eloquent\Model;
 
 final class AgendaRepository extends BaseRepository
 {
@@ -25,6 +24,7 @@ final class AgendaRepository extends BaseRepository
      * It gets the model, then gets the chairman_information, vice_chairman_information, members, and
      * members.sanggunian_member.
      * {@inheritdoc}
+     *
      * @return Collection The model with the relationships.
      */
     public function get(): Collection
@@ -35,12 +35,12 @@ final class AgendaRepository extends BaseRepository
     /**
      * It stores an agenda and its members in the database.
      * {@inheritdoc}
+     *
      * @param array data an array of data that will be used to create the agenda
      */
     public function store(array $data = []): mixed
     {
         return DB::transaction(function () use ($data) {
-
             $newlyStoredAgenda = parent::store([
                 'title' => $data['title'],
                 // 'description' => $data['description'],
