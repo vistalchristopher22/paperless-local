@@ -13,7 +13,7 @@ final class AgendaRepository extends BaseRepository
     /**
      * The constructor of the AgendaRepository class is called, which in turn calls the constructor of
      * the BaseRepository class, which in turn calls the constructor of the EloquentRepository class
-     * 
+     *
      * @param Agenda model The model that the repository will be working with.
      */
     public function __construct(Agenda $model, private AgendaMemberRepository $agendaMemberRepository)

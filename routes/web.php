@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\DivisionController;
 
 Route::redirect('/', '/login');
 
@@ -28,6 +29,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('account', UserController::class);
         Route::resource('sanggunian-members', SanggunianMemberController::class);
         Route::resource('agendas', AgendaController::class);
+        Route::resource('division', DivisionController::class);
     });
 
     Route::get('edit-information', [AccountController::class, 'edit'])->name('information.edit');
