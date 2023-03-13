@@ -43,7 +43,6 @@ final class AgendaRepository extends BaseRepository
         return DB::transaction(function () use ($data) {
             $newlyStoredAgenda = parent::store([
                 'title' => $data['title'],
-                // 'description' => $data['description'],
                 'chairman' => $data['chairman'],
                 'vice_chairman' => $data['vice_chairman'],
             ]);
