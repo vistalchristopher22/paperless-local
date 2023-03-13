@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\UserRepository;
+use App\Services\UploadImageService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 
@@ -27,19 +28,18 @@ final class AccountController extends Controller
         ]);
     }
 
+
+
     /**
-     * It updates the user's account details.
+     * > The user wants to update their profile picture and/or password
      *
      * @param Request request The request object
-     * @return The user is being returned to the previous page with a success message.
      */
     public function update(Request $request)
     {
-        $this->userRepository->update(
-            $this->userRepository->findBy('id', auth()->user()->id),
-            $this->userService->isUserWantToChangePassword($request->except('_token'))
-        );
-
+        $data = $this->userService->isUserWantToChangeProfilePicture($request, new UploadImageService());
+        $data = $this->userService->isUserWantToChangePassword($request->except(['_token', 'image']));
+        $this->userRepository->update($this->userRepository->findBy('id', auth()->user()->id), $data);
         return back()->with('success', 'Success! account details have been updated.');
     }
 }

@@ -19,7 +19,7 @@
             <h6 class="card-title m-0">Edit Information</h6>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ route('information.update') }}">
+            <form method="POST" action="{{ route('information.update') }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -78,6 +78,14 @@
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" class="form-control">
                     @error('password')
+                        <span class="text-danger"> {{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="file">Profile Picture</label>
+                    <input type="file" name="image" id="file" class="form-control">
+                    @error('image')
                         <span class="text-danger"> {{ $message }}</span>
                     @enderror
                 </div>
