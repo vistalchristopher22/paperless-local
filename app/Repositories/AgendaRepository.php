@@ -43,7 +43,7 @@ final class AgendaRepository extends BaseRepository
 
             $newlyStoredAgenda = parent::store([
                 'title' => $data['title'],
-                'description' => $data['description'],
+                // 'description' => $data['description'],
                 'chairman' => $data['chairman'],
                 'vice_chairman' => $data['vice_chairman'],
             ]);

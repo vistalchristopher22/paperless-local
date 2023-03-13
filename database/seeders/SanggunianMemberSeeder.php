@@ -15,7 +15,16 @@ class SanggunianMemberSeeder extends Seeder
     {
         $data = [
             ["fullname" => "Hon. Jose Dumagan, Jr.", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
-            ["fullname" => "Hon. Charles P. Arezza", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
+            ["fullname" => "Hon. Valerio T. Montesclaros, Jr.", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
+            ["fullname" => "Hon. Raul K. Salazar", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
+            ["fullname" => "Hon. Antonio C. Azarcon", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
+            ["fullname" => "Hon. Gines Ricky J. Sayawan, Sr.", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
+            ["fullname" => "Hon. Conrad C. Cejoco", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
+            ["fullname" => "Hon. Amado M. Layno, Jr.", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
+            ["fullname" => "Hon. Ruel D. Momo", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
+            ["fullname" => "Hon. John Paul C. Pimentel", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
+            ["fullname" => "Hon. Melanie Joy M. Guno", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
+            ["fullname" => "Hon. Charles P. Arreza", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
             ["fullname" => "Hon. Jimmy I. Guinsod", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
             ["fullname" => "Hon. Ruel D. Momo", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],
             ["fullname" => "Hon. Margarita G. Garay", "district" => "-", "sanggunian" => "19th Sangguniang Panlalawigan Member"],

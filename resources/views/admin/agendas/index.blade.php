@@ -32,7 +32,7 @@
                     <thead>
                         <tr>
                             <th class="text-center">Title</th>
-                            <th class="text-center">Description</th>
+                            {{-- <th class="text-center">Description</th> --}}
                             <th class="text-center">Chairman</th>
                             <th class="text-center">Vice Chairman</th>
                             <th class="text-center">Members</th>
@@ -45,7 +45,7 @@
                                 <td class="text-start">
                                     <span class="mx-3">{{ $agenda->title }}</span>
                                 </td>
-                                <td>{{ $agenda->description }}</td>
+                                {{-- <td>{{ $agenda->description }}</td> --}}
                                 <td>{{ $agenda->chairman_information->fullname }}</td>
                                 <td>{{ $agenda->vice_chairman_information->fullname }}</td>
                                 @foreach ($agenda->members as $member)

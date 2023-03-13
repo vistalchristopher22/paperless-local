@@ -6,6 +6,25 @@
         .dataTables_filter input {
             margin-bottom: 10px;
         }
+
+        .fade-in {
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+        }
+
+        .fade-out {
+            opacity: 1;
+            transition: opacity 0.8s ease-in-out;
+
+        }
+
+        .fade-out.hide {
+            opacity: 0;
+        }
     </style>
 @endprepend
 @section('content')
@@ -17,7 +36,19 @@
         </div>
     @endif
 
-    <div class="row">
+    <div class="row d-none">
+        <div class="row">
+            <div class="col-lg-10">
+                Search
+                <input type="search" class="form-control" id="search-field">
+            </div>
+            @feature('administrator')
+                <div class="col-lg-2 d-flex justify-content-end align-items-center px-0 mx-0">
+                    <span>&nbsp;</span>
+                    <a href="{{ route('sanggunian-members.create') }}" class="btn btn-primary mt-3">Add New Member</a>
+                </div>
+            @endfeature
+        </div>
         @foreach ($members as $member)
             <div class="col-lg-4 my-2">
                 <div class="card">
@@ -27,22 +58,24 @@
                         <p class="h5 text-center mb-3 card-text fw-medium">{{ $member->fullname }}</p>
                         <p class="h5 text-center mb-3 card-text fw-medium">{{ $member->district ?? '-' }}</p>
                         <p class="h5 text-center mb-3 card-text fw-medium">{{ $member->sanggunian }}</p>
-                        <form action="{{ route('sanggunian-members.destroy', $member) }}" method="POST">
-                            <div class="d-grid gap-2">
-                                @method('DELETE')
-                                @csrf
-                                <a href="{{ route('sanggunian-members.edit', $member) }}"
-                                    class="btn btn-primary text-white">Edit</a>
-                                <button type="submit" class="btn btn-danger text-white">Delete</button>
-                            </div>
-                        </form>
+                        @feature('administrator')
+                            <form action="{{ route('sanggunian-members.destroy', $member) }}" method="POST">
+                                <div class="d-grid gap-2">
+                                    @method('DELETE')
+                                    @csrf
+                                    <a href="{{ route('sanggunian-members.edit', $member) }}"
+                                        class="btn btn-primary text-white">Edit</a>
+                                    <button type="submit" class="btn btn-danger text-white">Delete</button>
+                                </div>
+                            </form>
+                        @endfeature
                     </div>
                 </div>
             </div>
         @endforeach
     </div>
 
-    {{-- <div class="card mb-4">
+    <div class="card mb-4 ">
         <div class="card-header justify-content-between align-items-center d-flex">
             <h6 class="card-title m-0">Sangguniang Panlalawigan Members</h6>
             <div class="dropdown">
@@ -88,7 +121,7 @@
                 </table>
             </div>
         </div>
-    </div> --}}
+    </div>
     @push('page-scripts')
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"
             integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
@@ -96,6 +129,32 @@
         <script>
             $(document).ready(function() {
                 $('#members-table').DataTable({});
+            });
+
+            const searchField = document.querySelector('#search-field');
+            const memberCards = document.querySelectorAll('.card');
+
+            searchField.addEventListener('keyup', (event) => {
+                const searchTerm = event.target.value.toLowerCase();
+                memberCards.forEach(card => {
+                    const memberName = card.querySelector('.card-body p:first-child').textContent.toLowerCase();
+                    const districtName = card.querySelector('.card-body p:nth-child(2)').textContent
+                        .toLowerCase();
+                    const sanggunianName = card.querySelector('.card-body p:nth-child(3)').textContent
+                        .toLowerCase();
+                    if (memberName.includes(searchTerm) || districtName.includes(searchTerm) || sanggunianName
+                        .includes(searchTerm)) {
+                        card.style.opacity = 1;
+                        card.classList.add('fade-in');
+                        card.classList.remove('fade-out');
+                        card.style.display = 'block';
+                    } else {
+                        card.style.opacity = '0.5';
+                        card.classList.add('fade-out');
+                        card.classList.remove('fade-in');
+                        card.style.display = 'none';
+                    }
+                });
             });
         </script>
     @endpush

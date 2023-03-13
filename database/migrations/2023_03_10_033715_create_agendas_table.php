@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('agendas', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
-            $table->unsignedBigInteger('chairman');
+            // $table->text('description');
+            $table->unsignedBigInteger('chairman')->nullable();
             $table->foreign('chairman')->references('id')->on('sanggunian_members');
-            $table->unsignedBigInteger('vice_chairman');
+            $table->unsignedBigInteger('vice_chairman')->nullable();
             $table->foreign('vice_chairman')->references('id')->on('sanggunian_members');
-
             $table->softDeletes();
             $table->timestamps();
         });

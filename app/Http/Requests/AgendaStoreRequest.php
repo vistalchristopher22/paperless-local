@@ -23,7 +23,7 @@ class AgendaStoreRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string'],
-            'description' => ['nullable', 'string'],
+            // 'description' => ['nullable', 'string'],
             'chairman' => ['required', 'numeric'],
             'vice_chairman' => ['required', 'numeric'],
             'members' => ['required'],
