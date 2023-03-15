@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'features:administrator'], function () {
         Route::resource('account', UserController::class);
         Route::resource('sanggunian-members', SanggunianMemberController::class);
+        Route::post('re-order/agenda', [AgendaController::class, 'reOrder'])->name('agenda.re-order');
         Route::resource('agendas', AgendaController::class);
         Route::resource('division', DivisionController::class);
     });

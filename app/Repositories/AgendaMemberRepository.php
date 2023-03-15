@@ -14,6 +14,12 @@ final class AgendaMemberRepository extends BaseRepository implements IAgendaMemb
         parent::__construct($model);
     }
 
+    public function removeExistingMembers(Agenda $agenda): mixed
+    {
+        $agenda->members()->delete();
+        return $this;
+    }
+
     public function addMembersToThis(Agenda $agenda, Collection|array $members = []): mixed
     {
         return $agenda->members()->saveMany($members);

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AgendaStoreRequest extends FormRequest
+class UpdateAgendaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class AgendaStoreRequest extends FormRequest
             'chairman' => ['required', 'numeric'],
             'vice_chairman' => ['required', 'numeric'],
             'members' => ['required'],
-            'members.*.member' => ['required', 'numeric'],
+            // 'members.*.member' => ['required', 'numeric'],
         ];
     }
 }

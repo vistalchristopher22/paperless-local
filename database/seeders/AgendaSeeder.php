@@ -257,16 +257,6 @@ class AgendaSeeder extends Seeder
                 'Hon. Raul K. Salazar',
                 'Hon. Antonio C. Azarcon',
             ],
-
-            [
-                'title' => 'Committee on Sports, Games and Amusement',
-                'chairman' => 'Hon. Anthony Joseph P. Cañedo',
-                'vice_chairman' => 'Hon. Charles P. Arreza',
-                'members' => 'Hon. Manuel O. Alameda, Sr.',
-                'Hon. John Paul C. Pimentel',
-                'Hon. Raul K. Salazar',
-                'Hon. Antonio C. Azarcon',
-            ],
             [
                 'title' => 'Committee on Energy and Power',
                 'chairman' => 'Hon. John Paul C. Pimentel',
@@ -276,7 +266,6 @@ class AgendaSeeder extends Seeder
                 'Hon. Amado M. Layno, Jr.',
                 'Hon. Manuel O. Alameda, Sr.',
             ],
-
             [
                 'title' => 'Committee on Information, Technology and Communication',
                 'chairman' => 'Hon. Anthony Joseph P. Cañedo',
@@ -299,6 +288,7 @@ class AgendaSeeder extends Seeder
         foreach ($data as $key => $agenda) {
             Agenda::create([
                 'title' => $agenda['title'],
+                'index' => $key + 1,
                 'chairman' => SanggunianMember::where('fullname', $agenda['chairman'])->first()->id,
                 'vice_chairman' => SanggunianMember::where('fullname', $agenda['vice_chairman'])->first()->id,
             ]);

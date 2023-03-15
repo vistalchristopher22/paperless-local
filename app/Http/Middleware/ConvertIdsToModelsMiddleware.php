@@ -18,7 +18,6 @@ class ConvertIdsToModelsMiddleware
     {
         $members = AgendaMemberService::convertIdsToModel($request->input('members'));
         $request->merge(['members' => $members]);
-
         return $next($request);
     }
 }
