@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\UserStatus;
+use App\Models\User;
 use App\Enums\UserTypes;
+use App\Enums\UserStatus;
+use App\Services\UserService;
 use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
+use App\Services\UploadImageService;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Models\User;
-use App\Repositories\UserRepository;
-use App\Services\UserService;
+use App\Repositories\DivisionRepository;
 
 final class UserController extends Controller
 {
+
+    private $divisionRepository;
+
+
     public function __construct(private UserRepository $userRepository, private UserService $userService)
     {
+        $this->divisionRepository = app()->make(DivisionRepository::class);
     }
 
     /**
@@ -27,6 +34,7 @@ final class UserController extends Controller
     {
         return view('admin.account.index', [
             'users' => $this->userRepository->get(),
+            'divisions' => $this->divisionRepository->get()
         ]);
     }
 
@@ -40,21 +48,25 @@ final class UserController extends Controller
         return view('admin.account.create', [
             'types' => UserTypes::cases(),
             'status' => UserStatus::cases(),
+            'divisions' => $this->divisionRepository->get()
         ]);
     }
 
-    /**
-     * The `store` function takes a `UserStoreRequest` object as a parameter, and then calls the
-     * `store` function on the `userRepository` object, passing in the `->all()` array
-     *
-     * @param UserStoreRequest request The request object.
-     */
+
+   /**
+    * > The store function is used to store a new user in the database
+    *
+    * @param UserStoreRequest request The request object.
+    *
+    * @return The user is being returned to the previous page with a success message.
+    */
     public function store(UserStoreRequest $request)
     {
-        $this->userRepository->store($request->all());
-
+        $data = $this->userService->isUserWantToChangeProfilePicture($request, new UploadImageService());
+        $this->userRepository->store($data);
         return back()->with('success', 'Success! User account created.');
     }
+
 
     /**
      * It returns a view with the account and the types and status.
@@ -67,25 +79,30 @@ final class UserController extends Controller
         return view('admin.account.edit', compact('account'))->with([
             'types' => UserTypes::cases(),
             'status' => UserStatus::cases(),
+            'divisions' => $this->divisionRepository->get()
         ]);
     }
 
+
     /**
-     * The `update` function takes a `UserUpdateRequest` and a `User` model, and then updates the
-     * `User` model with the `UserService`'s `isUserWantToChangePassword` function
+     * If the user wants to change their profile picture, then upload the image and save the path to
+     * the database. If the user wants to change their password, then hash the password and save it to
+     * the database
      *
-     * @param UserUpdateRequest request The request object.
+     * @param UserUpdateRequest request The request object
      * @param User account The account model instance.
+     *
+     * @return The user is being returned.
      */
     public function update(UserUpdateRequest $request, User $account)
     {
-        $this->userRepository->update(
-            $account,
-            $this->userService->isUserWantToChangePassword($request->except('_token'))
-        );
+        $data = $this->userService->isUserWantToChangeProfilePicture($request, new UploadImageService());
+        $data = $this->userService->isUserWantToChangePassword($data);
+        $this->userRepository->update($account, $data);
 
         return back()->with('success', 'Success! account details have been updated.');
     }
+
 
     /**
      * > The destroy function is used to delete a user account
@@ -99,4 +116,5 @@ final class UserController extends Controller
 
         return back()->with('success', 'Account successfully deleted.');
     }
+
 }

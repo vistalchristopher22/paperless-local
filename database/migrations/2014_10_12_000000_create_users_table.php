@@ -23,6 +23,7 @@ return new class () extends Migration {
             $table->enum('account_type', UserTypes::values())->default(UserTypes::ADMIN->value);
             $table->enum('status', UserStatus::values());
             $table->string('profile_picture')->default('no_image.png');
+            $table->string('division');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

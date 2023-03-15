@@ -48,7 +48,7 @@
                                 </td>
                                 <td class="text-muted text-center">{{ $user->username }}</td>
                                 <td class="text-muted">{{ $user->account_type }}</td>
-                                <td class="text-muted"><i class="ri-map-pin-line align-bottom"></i> London, UK</td>
+                                <td class="text-muted">{{ $user->division }}</td>
                                 <td class="text-muted">{{ $user->created_at->format('jS M, Y') }}</td>
                                 <td>
                                     <div class="d-flex align-items-center">

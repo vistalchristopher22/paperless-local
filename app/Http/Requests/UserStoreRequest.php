@@ -3,11 +3,13 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Division;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Http\FormRequest;
 
 final class UserStoreRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -32,6 +34,7 @@ final class UserStoreRequest extends FormRequest
             'password' => 'nullable|min:8',
             'account_type' => 'required',
             'status' => ['required'],
+            'division' => 'required',
         ];
     }
 }

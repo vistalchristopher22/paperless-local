@@ -32,6 +32,7 @@ final class UserUpdateRequest extends FormRequest
             'password' => 'nullable|min:8',
             'account_type' => 'required',
             'status' => 'required',
+            'division' => 'required'
         ];
     }
 }

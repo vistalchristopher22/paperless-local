@@ -2,12 +2,15 @@
 
 namespace App\Services;
 
-use App\Contracts\Services\IUploadImageService;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
+use App\Http\Requests\UserStoreRequest;
+use App\Contracts\Services\IUploadImageService;
 
 final class UserService extends AccountService
 {
+
     public function __construct(private UserRepository $userRepository)
     {
     }
@@ -29,4 +32,8 @@ final class UserService extends AccountService
 
         return $request->all();
     }
+
+
+
+
 }

@@ -48,6 +48,14 @@ class DivisionController extends Controller
         //
     }
 
+
+   /**
+    * It returns the view of the edit page.
+    *
+    * @param Division division The division object that was passed to the controller.
+    *
+    * @return A view with the division object
+    */
     public function edit(Division $division)
     {
         return view('admin.division.edit', [

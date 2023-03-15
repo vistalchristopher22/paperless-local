@@ -13,7 +13,7 @@
             <h6 class="card-title m-0">Create User</h6>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ route('account.store') }}">
+            <form method="POST" action="{{ route('account.store') }}" enctype="multipart/form-data">
                 @csrf
                 <!-- First Name -->
                 <div class="form-group">
@@ -102,8 +102,28 @@
                     @enderror
                 </div>
 
+                <!-- Division -->
+                <div class="form-group">
+                    <label for="">Division</label>
+
+                    <select class="form-control" name="division" id="division">
+                        <option default>--Please Select--</option>
+                    @foreach($divisions as $data)
+                        <option value="{{ $data->name }}">{{ $data->name }}</option>
+                    @endforeach
+                    </select>
+                </div>
+
+
+                <!-- Image File -->
+                <label for="">Image</label>
+                <div class="form-group">
+                    <input type="file" class="form-control" name="image">
+                </div>
+
                 <!-- Submit Button -->
-                <div>
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <a href="{{ route('account.index') }}" class="text-decoration-underline fw-bold">Back</a>
                     <button type="submit" class="btn btn-primary float-end mt-3">Submit</button>
                 </div>
             </form>

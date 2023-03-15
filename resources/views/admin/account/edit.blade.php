@@ -19,7 +19,7 @@
             <h6 class="card-title m-0">Edit Information</h6>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ route('account.update', $account->id) }}">
+            <form method="POST" action="{{ route('account.update', $account->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -110,8 +110,32 @@
                     @enderror
                 </div>
 
+                  <!-- Division -->
+                <div class="form-group">
+                    <label for="">Division</label>
+
+                    <select class="form-control" name="division" id="division">
+                        <option value="{{ $account->division }}">{{ $account->division }}</option>
+                    @foreach($divisions as $data)
+                        @if($data->name != $account->division)
+                            <option value="{{ $data->name }}">{{ $data->name }}</option>
+                        @endif
+                    @endforeach
+                    </select>
+                </div>
+
+                <!-- Image File -->
+                <img class="img-thumbnail mt-2" src="{{ asset('storage/user-images/' . $account->profile_picture )  }}" width="200px">
+                <br>
+                <br>
+                <label for="">Image</label>
+                <div class="form-group">
+                    <input type="file" class="form-control" name="image">
+                </div>
+
                 <!-- Submit Button -->
-                <div>
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <a href="{{ route('account.index') }}" class="text-decoration-underline fw-bold">Back</a>
                     <button type="submit" class="btn btn-success text-white float-end mt-3">Update</button>
                 </div>
             </form>
