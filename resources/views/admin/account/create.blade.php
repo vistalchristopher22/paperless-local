@@ -108,10 +108,13 @@
 
                     <select class="form-control" name="division" id="division">
                         <option default>--Please Select--</option>
-                    @foreach($divisions as $data)
-                        <option value="{{ $data->name }}">{{ $data->name }}</option>
-                    @endforeach
+                        @foreach($divisions as $data)
+                            <option value="{{ $data->name }}">{{ $data->name }}</option>
+                        @endforeach
                     </select>
+                    @error('division')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
 

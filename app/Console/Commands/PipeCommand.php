@@ -5,8 +5,6 @@ namespace App\Console\Commands;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 
 class PipeCommand extends Command
 {

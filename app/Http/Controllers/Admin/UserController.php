@@ -5,13 +5,17 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Enums\UserTypes;
 use App\Enums\UserStatus;
+use App\Pipes\User\StoreUser;
 use App\Services\UserService;
+use App\Pipes\User\UpdateUser;
+use App\Pipes\User\ChangePassword;
+use App\Pipes\User\ProfilePicture;
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
-use App\Services\UploadImageService;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Repositories\DivisionRepository;
+use Illuminate\Support\Facades\Pipeline;
 
 final class UserController extends Controller
 {
@@ -52,17 +56,23 @@ final class UserController extends Controller
     }
 
 
-   /**
-    * > The store function is used to store a new user in the database
-    *
-    * @param UserStoreRequest request The request object.
-    *
-    * @return The user is being returned to the previous page with a success message.
-    */
+
+    /**
+     * > The `store` function takes a `UserStoreRequest` object, sends it through a pipeline of
+     * classes, and then returns the data
+     *
+     * @param UserStoreRequest request The request object
+     *
+     * @return The user is being returned.
+     */
     public function store(UserStoreRequest $request)
     {
-        $data = $this->userService->isUserWantToChangeProfilePicture($request, new UploadImageService());
-        $this->userRepository->store($data);
+        Pipeline::send($request)
+            ->through([
+                ProfilePicture::class,
+                StoreUser::class,
+            ])->then(fn ($data) => $data);
+
         return back()->with('success', 'Success! User account created.');
     }
 
@@ -83,21 +93,24 @@ final class UserController extends Controller
     }
 
 
+
     /**
-     * If the user wants to change their profile picture, then upload the image and save the path to
-     * the database. If the user wants to change their password, then hash the password and save it to
-     * the database
+     * > The `update` function takes a `UserUpdateRequest` and a `User` model, and then sends the
+     * request through a pipeline of classes, and then returns the data
      *
      * @param UserUpdateRequest request The request object
-     * @param User account The account model instance.
+     * @param User account The account model
      *
      * @return The user is being returned.
      */
     public function update(UserUpdateRequest $request, User $account)
     {
-        $data = $this->userService->isUserWantToChangeProfilePicture($request, new UploadImageService());
-        $data = $this->userService->isUserWantToChangePassword($data);
-        $this->userRepository->update($account, $data);
+        Pipeline::send($request->merge(['account' => $account]))
+            ->through([
+                ProfilePicture::class,
+                ChangePassword::class,
+                UpdateUser::class,
+            ])->then(fn ($data) => $data);
 
         return back()->with('success', 'Success! account details have been updated.');
     }
@@ -112,7 +125,6 @@ final class UserController extends Controller
     public function destroy(User $account)
     {
         $this->userRepository->delete($account);
-
         return back()->with('success', 'Account successfully deleted.');
     }
 }

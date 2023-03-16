@@ -4,12 +4,12 @@ namespace App\Pipes\User;
 
 use Closure;
 use App\Contracts\Pipes\IPipeHandler;
-use App\Services\UploadImageService;
 use App\Services\UserService;
 
-final class ProfilePicture implements IPipeHandler
+final class ChangePassword implements IPipeHandler
 {
     private UserService $userService;
+
     public function __construct()
     {
         $this->userService = app()->make(UserService::class);
@@ -18,7 +18,7 @@ final class ProfilePicture implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        $payload = $this->userService->isUserWantToChangeProfilePicture($payload, new UploadImageService());
+        $payload = $this->userService->isUserWantToChangePassword($payload);
         return $next($payload);
     }
 }
