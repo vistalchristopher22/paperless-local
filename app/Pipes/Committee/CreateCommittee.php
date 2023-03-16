@@ -15,15 +15,15 @@ final class CreateCommittee implements IPipeHandler
         $this->committeeRepository = app()->make(CommitteeRepository::class);
     }
 
-    public function handle(mixed $data, Closure $next)
+    public function handle(mixed $payload, Closure $next)
     {
         $committee = $this->committeeRepository->store([
-            'priority_number'    => $data['priority_number'],
-            'name'               => $data['name'],
-            'lead_committee'     => $data['lead_committee'],
-            'expanded_committee' => $data['expanded_committee'],
-            'file_path'          => $data['file_path'],
-            'session_schedule'   => $data['schedule'],
+            'priority_number'    => $payload['priority_number'],
+            'name'               => $payload['name'],
+            'lead_committee'     => $payload['lead_committee'],
+            'expanded_committee' => $payload['expanded_committee'],
+            'file_path'          => $payload['file_path'],
+            'session_schedule'   => $payload['schedule'],
             'date'               => now(),
         ]);
 

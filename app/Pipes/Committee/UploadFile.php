@@ -16,9 +16,9 @@ final class UploadFile implements IPipeHandler
         $this->committeeService = app()->make(CommitteeService::class);
     }
 
-    public function handle(mixed $data, Closure $next)
+    public function handle(mixed $payload, Closure $next)
     {
-        $data = $this->committeeService->uploadFile($data, new UploadFileService());
+        $data = $this->committeeService->uploadFile($payload, new UploadFileService());
         return $next($data);
     }
 }

@@ -15,18 +15,18 @@ final class UpdateCommittee implements IPipeHandler
         $this->committeeRepository = app()->make(CommitteeRepository::class);
     }
 
-    public function handle(mixed $data, Closure $next)
+    public function handle(mixed $payload, Closure $next)
     {
-        $this->committeeRepository->update($data['committee'], [
-            'priority_number'    => $data['priority_number'],
-            'name'               => $data['name'],
-            'lead_committee'     => $data['lead_committee'],
-            'expanded_committee' => $data['expanded_committee'],
-            'file_path'          => $data['file_path'] ?? $data['committee']->file_path,
-            'session_schedule'   => $data['schedule'],
+        $this->committeeRepository->update($payload['committee'], [
+            'priority_number'    => $payload['priority_number'],
+            'name'               => $payload['name'],
+            'lead_committee'     => $payload['lead_committee'],
+            'expanded_committee' => $payload['expanded_committee'],
+            'file_path'          => $payload['file_path'] ?? $payload['committee']->file_path,
+            'session_schedule'   => $payload['schedule'],
             'date'               => now(),
         ]);
 
-        return $next($data['committee']);
+        return $next($payload['committee']);
     }
 }
