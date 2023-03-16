@@ -2,28 +2,26 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
-use App\Http\Requests\UserStoreRequest;
-use App\Contracts\Services\IUploadImageService;
+use App\Contracts\Services\IUploadService;
 
 final class UserService extends AccountService
 {
-
     public function __construct(private UserRepository $userRepository)
     {
     }
 
+
     /**
-     * If the request has an image, then upload the image and merge the file name into the request
+     * If the request has an image, upload it and merge the file name into the request
      *
      * @param Request request The request object
-     * @param IUploadImageService uploadService This is the service that will handle the image upload.
+     * @param IUploadService uploadService This is the service that will handle the upload.
      *
      * @return The request object with the profile_picture key added to it.
      */
-    public function isUserWantToChangeProfilePicture(Request $request, IUploadImageService $uploadService)
+    public function isUserWantToChangeProfilePicture(Request $request, IUploadService $uploadService)
     {
         if ($request->has('image')) {
             $fileName = $uploadService->handle($request->file('image'));
@@ -32,8 +30,4 @@ final class UserService extends AccountService
 
         return $request->all();
     }
-
-
-
-
 }

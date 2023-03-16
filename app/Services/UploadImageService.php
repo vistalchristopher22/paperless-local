@@ -4,9 +4,9 @@ namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use App\Contracts\Services\IUploadImageService;
+use App\Contracts\Services\IUploadService;
 
-final class UploadImageService implements IUploadImageService
+final class UploadImageService implements IUploadService
 {
     /**
      * This function takes an uploaded file, creates a unique filename, and then stores the file in the
@@ -21,7 +21,6 @@ final class UploadImageService implements IUploadImageService
         $filename = uniqid() . '.' . $file->getClientOriginalExtension();
 
         Storage::disk('public')->putFileAs('user-images', $file, $filename);
-
         return $filename;
     }
 }

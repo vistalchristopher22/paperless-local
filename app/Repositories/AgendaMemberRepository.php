@@ -24,4 +24,9 @@ final class AgendaMemberRepository extends BaseRepository implements IAgendaMemb
     {
         return $agenda->members()->saveMany($members);
     }
+
+    public function getMembers(Agenda $agenda): Agenda
+    {
+        return $agenda->load(['chairman_information', 'vice_chairman_information', 'members', 'members.sanggunian_member']);
+    }
 }

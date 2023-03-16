@@ -650,6 +650,7 @@
                                 <span class="menu-link">Maintenance</span></a>
                             <div class="collapse" id="collapseMaintenance">
                                 <ul class="submenu">
+                                    <li><a href="{{ route('committee.index') }}">Committee</a></li>
                                     <li><a href="{{ route('agendas.index') }}">Agendas</a></li>
                                     <li><a href="{{ route('division.index') }}">Division</a></li>
                                 </ul>
@@ -706,13 +707,15 @@
 
     </aside> <!-- / Page Aside-->
 
-    <!-- Theme JS -->
-    <!-- Vendor JS -->
     <script src="/assets/js/vendor.bundle.js"></script>
-
     <script src="/assets/js/theme.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"
+    integrity="sha512-AI5A3zIoeRSEEX9z3Vyir8NqSMC1pY7r5h2cE+9J6FLsoEmSSGLFaqMQw8SWvoONXogkfFrkQiJfLeHLz3+HOg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @stack('page-scripts')
-
+    <script>
+        let socket = io(`http://localhost:3030/`);
+    </script>
 </body>
 
 </html>

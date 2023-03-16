@@ -15,6 +15,7 @@ return new class () extends Migration {
             $table->string('fullname');
             $table->string('district');
             $table->string('sanggunian');
+            $table->string('profile_picture')->default('no_image.png');
             $table->timestamps();
             $table->softDeletes();
         });

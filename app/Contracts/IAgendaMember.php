@@ -9,4 +9,5 @@ interface IAgendaMember
 {
     public function removeExistingMembers(Agenda $agenda): mixed;
     public function addMembersToThis(Agenda $agenda, Collection|array $members = []): mixed;
+    public function getMembers(Agenda $agenda): Agenda;
 }

@@ -11,100 +11,198 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="keywords" content="">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"
+        integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
-    <link rel="mask-icon" href="/assets/images/favicon/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
-
-    <!-- Google Font-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-
-    <!-- Vendor CSS -->
-    <link rel="stylesheet" href="/assets/css/libs.bundle.css" />
-
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="/assets/css/theme.bundle.css" />
-
-    <!-- Fix for custom scrollbar if JS is disabled-->
-    <noscript>
-        <style>
-            /**
-          * Reinstate scrolling for non-JS clients
-          */
-            .simplebar-content-wrapper {
-                overflow: auto;
-            }
-        </style>
-    </noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- Page Title -->
     <title>{{ config('app.name') }}</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .main-wrapper {
+            background: red;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #tspHallBackground {
+            background: url("{{ asset('assets/tspHallCopy.png') }}") center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        #tspHallBackground::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            /* background-color: rgba(0, 0, 0, 0.5); */
+        }
+
+        .officeOfThe {
+            -webkit-font-smoothing: antialiased;
+            box-sizing: content-box;
+            transform: rotate(0.00deg);
+            transform-origin: center;
+            opacity: 1;
+            cursor: default;
+            margin-top: 0.00px;
+            margin-right: 0.00px;
+            margin-bottom: 0.00px;
+            margin-left: 0.00px;
+            padding-top: 0.00px;
+            padding-right: 0.00px;
+            padding-bottom: 0.00px;
+            padding-left: 0.00px;
+            background-color: rgba(255, 255, 255, 0);
+            text-align: left;
+            letter-spacing: 21.00px;
+            color: rgba(45, 45, 45, 1);
+            -webkit-text-stroke: 1.00px rgba(0, 0, 0, 0);
+            font-size: 35.00px;
+            font-weight: 700;
+            font-style: normal;
+            font-family: Inter, Arial;
+            text-decoration: none;
+            box-shadow: none;
+            overflow-x: unset;
+            overflow-y: unset;
+        }
+
+
+        .provincialCouncil {
+            -webkit-font-smoothing: antialiased;
+            box-sizing: content-box;
+            transform: rotate(0.00deg);
+            transform-origin: center;
+            opacity: 1;
+            cursor: default;
+            margin-top: 0.00px;
+            margin-right: 0.00px;
+            margin-bottom: 0.00px;
+            margin-left: 0.00px;
+            padding-top: 0.00px;
+            padding-right: 0.00px;
+            padding-bottom: 0.00px;
+            padding-left: 0.00px;
+            background-color: rgba(255, 255, 255, 0);
+            text-align: left;
+            letter-spacing: 0.00px;
+            color: rgba(45, 45, 45, 1);
+            -webkit-text-stroke: 1.00px rgba(0, 0, 0, 0);
+            font-size: 57.00px;
+            font-weight: 700;
+            font-style: normal;
+            font-family: Inter, Arial;
+            text-decoration: none;
+            box-shadow: none;
+            overflow-x: unset;
+            overflow-y: unset;
+        }
+
+        .input-group-text {
+            font-family: 'Inter', sans-serif;
+            --bs-gutter-x: 1.5rem;
+            --bs-gutter-y: 0;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: white;
+            text-align: center;
+            white-space: nowrap;
+            background-color: rgb(24 129 1);
+            border: var(--bs-border-width) solid var(--bs-border-color);
+            padding: 1rem !important;
+        }
+    </style>
 
 </head>
 
-<body class="">
-
-    <!-- Main Section-->
-    <section class="d-flex justify-content-center align-items-start vh-100 py-5 px-3 px-md-0">
-
-        <!-- Login Form-->
-        <div class="d-flex flex-column w-100 align-items-center">
-            <!-- Logo-->
-            <a href="/index.html" class="d-table mt-5 mb-4 mx-auto">
-                <div class="d-flex align-items-center">
-                </div>
-            </a>
-            <!-- Logo-->
-            <div class="shadow rounded p-4 p-sm-5 bg-white form">
-                <h3 class="fw-bold">Login</h3>
-                <p class="text-muted">Welcome back!</p>
-                <!-- Login Form-->
-                <form class="mt-4" method="POST" action="{{ route('login') }}">
-
-                    @if ($errors->any())
-                        <div class="text-center">
-                            <span class="text-center text-danger">Invalid Username or Password</span>
+<body>
+    <form action="{{ route('login') }}" method="POST">
+        @csrf
+        <div class="container-fluid vh-100">
+            <div class="row">
+                <div class="col-lg-6 vh-100">
+                    {{-- <div class="d-flex">
+                        <hr width="180px; ">
+                        <span class="mx-3"> or </span>
+                        <hr width="180px;">
+                    </div> --}}
+                    <div class="d-flex" style="padding : 85px;">
+                        <div class="container-fluid">
+    
+                            <div class="d-flex flex-column justify-content-center align-items-center p-3" style="margin-top : 80px;">
+                                <div class="officeOfThe">
+                                    OFFICE OF THE</div>
+                                <div class="provincialCouncil">PROVINCIAL
+                                    COUNCIL</div>
+                            </div>
+    
+    
+                            <div class="mt-5">
+                                <div class="form-group">
+                                    <label for="">USERNAME</label>
+                                    <div class="input-group input-group-lg">
+                                        
+                                        <input name="username" type="text" class="form-control form-control-lg p-3" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                                    </div>
+                                </div>
+                            </div>
+                            
+    
+    
+                            <div class="mt-5">
+                                <div class="form-group">
+                                    <label for="">PASSWORD</label>
+                                    <div class="input-group input-group-lg">
+                                        <input type="password" name="password" class="form-control form-control-lg p-3" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <button type="submit">Submit</button>
+                            
+    
+    
+    
+    
+    
+    
+                            {{-- <div class="mt-5">
+                                <div class="d-grid">
+                                    <button class="btn btn-success btn-lg p-3" style="background : rgb(24 129 1);">SIGN IN</button>
+                                </div>
+                            </div> --}}
+    
                         </div>
-                    @endif
-                    <div class="form-group">
-                        <label class="form-label" for="login-email">Username</label>
-                        <input type="text" name="username" class="form-control" value="admin" id="login-email"
-                            placeholder="Enter your username">
                     </div>
-                    <div class="form-group">
-                        <label for="login-password"
-                            class="form-label d-flex justify-content-between align-items-center">
-                            Password
-                            <a href="/forgot-password.html" class="text-muted small ms-2 text-decoration-underline"
-                                tabindex="-1">Forgotten
-                                password?</a>
-                        </label>
-                        <input type="password" class="form-control" id="login-password" name="password" value="password"
-                            placeholder="Enter your password">
-                    </div>
-                    <button type="submit" class="btn btn-primary d-block w-100 my-4">Login</button>
-                </form>
-                <!-- / Login Form -->
+    
+                </div>
+                <div class="col-lg-6 vh-100 d-flex align-items-center justify-content-center flex-column"
+                    id="tspHallBackground">
+                    <img src="{{ asset('assets/tsp.png') }}"
+                        style="width : 782px; height : 723px; position:absolute; z-index:9999;" alt="">
+                </div>
             </div>
+    
         </div>
-        <!-- / Login Form-->
-
-    </section>
-    <!-- / Main Section-->
-
-    <!-- Theme JS -->
-    <!-- Vendor JS -->
-    <script src="/assets/js/vendor.bundle.js"></script>
-
-    <!-- Theme JS -->
-    <script src="/assets/js/theme.bundle.js"></script>
+    </form>
 </body>
 
 </html>

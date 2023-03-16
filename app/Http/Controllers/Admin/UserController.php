@@ -15,7 +15,6 @@ use App\Repositories\DivisionRepository;
 
 final class UserController extends Controller
 {
-
     private $divisionRepository;
 
 
@@ -116,5 +115,4 @@ final class UserController extends Controller
 
         return back()->with('success', 'Account successfully deleted.');
     }
-
 }
