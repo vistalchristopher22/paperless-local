@@ -37,6 +37,14 @@ final class CommitteeController extends Controller
     }
 
 
+    /**
+     * > The `store` function takes a `StoreCommitteeRequest` object, sends it through a pipeline of
+     * classes, and then returns a success message
+     * 
+     * @param StoreCommitteeRequest request The request object.
+     * 
+     * @return The data from the pipeline.
+     */
     public function store(StoreCommitteeRequest $request)
     {
         Pipeline::send($request)
@@ -59,6 +67,16 @@ final class CommitteeController extends Controller
     }
 
 
+    /**
+     * > The `update` function takes a `UpdateCommitteeRequest` and a `Committee` model, and then sends
+     * the request and the committee model through a pipeline of classes, and then returns the user to
+     * the previous page with a success message
+     * 
+     * @param UpdateCommitteeRequest request The request object
+     * @param Committee committee The committee object that we're updating.
+     * 
+     * @return The updated committee.
+     */
     public function update(UpdateCommitteeRequest $request, Committee $committee)
     {
         Pipeline::send($request->merge(['committee' => $committee]))
