@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use Illuminate\Database\Seeder;
 
@@ -17,6 +16,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             SanggunianMemberSeeder::class,
             AgendaSeeder::class,
+            AgendaMemberSeeder::class,
+            CommitteeSeeder::class,
         ]);
     }
 }
