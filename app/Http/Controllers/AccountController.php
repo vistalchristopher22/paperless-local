@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\UserRepository;
-use App\Services\UploadImageService;
-use App\Services\UserService;
+use App\Http\Requests\UpdateAccountInformationRequest;
 use Illuminate\Http\Request;
+use App\Services\UserService;
+use App\Pipes\User\UpdateUser;
+use App\Pipes\User\ChangePassword;
+use App\Pipes\User\ProfilePicture;
+use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Pipeline;
 
 final class AccountController extends Controller
 {
@@ -30,16 +34,24 @@ final class AccountController extends Controller
 
 
 
+
     /**
-     * > The user wants to update their profile picture and/or password
+     * > The `update` function takes an `UpdateAccountInformationRequest` object, sends it through a
+     * pipeline of classes, and then returns a response
      *
-     * @param Request request The request object
+     * @param UpdateAccountInformationRequest request The request object
+     *
+     * @return The user is being returned.
      */
-    public function update(Request $request)
+    public function update(UpdateAccountInformationRequest $request)
     {
-        $data = $this->userService->isUserWantToChangeProfilePicture($request, new UploadImageService());
-        $data = $this->userService->isUserWantToChangePassword($request->except(['_token', 'image']));
-        $this->userRepository->update($this->userRepository->findBy('id', auth()->user()->id), $data);
+        Pipeline::send($request->merge(['account' => $this->userRepository->findBy('id', auth()->user()->id)]))
+            ->through([
+                ProfilePicture::class,
+                ChangePassword::class,
+                UpdateUser::class,
+            ])->then(fn ($data) => $data);
+
         return back()->with('success', 'Success! account details have been updated.');
     }
 }
