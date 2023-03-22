@@ -25,6 +25,7 @@ class SanggunianMemberUpdateRequest extends FormRequest
             'fullname' => 'required',
             'district' => 'required',
             'sanggunian' => 'required',
+            // 'image' => 'required'
         ];
     }
 }

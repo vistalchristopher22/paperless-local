@@ -73,6 +73,7 @@ final class UserController extends Controller
                 StoreUser::class,
             ])->then(fn ($data) => $data);
 
+
         return back()->with('success', 'Success! User account created.');
     }
 

@@ -121,7 +121,7 @@
                 <!-- Image File -->
                 <label for="">Image</label>
                 <div class="form-group">
-                    <input type="file" class="form-control" name="image">
+                    <input type="file" class="form-control" name="image" id="image">
                 </div>
 
                 <!-- Submit Button -->

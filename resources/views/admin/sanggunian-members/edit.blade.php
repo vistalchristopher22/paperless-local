@@ -13,7 +13,7 @@
             <h6 class="card-title m-0">Edit Sangguniang Panlalawigan Member</h6>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ route('sanggunian-members.update', $member) }}">
+            <form method="POST" action="{{ route('sanggunian-members.update', $member) }}" enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
                 <div class="form-group">
@@ -62,9 +62,20 @@
                     @enderror
                 </div> --}}
 
+
+                <img class="img-thumbnail mt-2" src="{{ asset('storage/user-images/' . $member->profile_picture)  }}" width="200px">
+                <br>
+                <br>
+
+                <div class="form-group">
+                    <label for="">Image</label>
+                    <input type="file" class="form-control" name="image">
+                </div>
+
                 <!-- Submit Button -->
-                <div>
-                    <button type="submit" class="btn btn-success text-white float-end mt-3">Submit</button>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <a href="{{ route('sanggunian-members.index') }}" class="text-decoration-underline fw-bold">Back</a>
+                    <button type="submit" class="btn btn-success text-white">Submit</button>
                 </div>
             </form>
         </div>

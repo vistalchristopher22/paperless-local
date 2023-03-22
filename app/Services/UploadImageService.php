@@ -18,7 +18,8 @@ final class UploadImageService implements IUploadService
      */
     public function handle(UploadedFile $file)
     {
-        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        // $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        $filename = uniqid() . '.' . $file->getClientOriginalName();
 
         Storage::disk('public')->putFileAs('user-images', $file, $filename);
         return $filename;

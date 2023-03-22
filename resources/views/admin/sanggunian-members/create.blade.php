@@ -13,7 +13,7 @@
             <h6 class="card-title m-0">New Sangguniang Member</h6>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ route('sanggunian-members.store') }}">
+            <form method="POST" action="{{ route('sanggunian-members.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label for="fullname">Fullname</label>
@@ -42,16 +42,22 @@
                 </div>
 
 
+                <label for="">Image</label>
+                <div class="form-group">
+                    <input type="file" class="form-control" name="image" id="image">
+                </div>
+
+
                 {{-- <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username" value="{{ old('username') }}" class="form-control">
                     @error('username')
                         <span class="text-danger"> {{ $message }}</span>
                     @enderror
-                </div> --}}
+                </div>
 
 
-                {{-- <div class="form-group">
+                <div class="form-group">
                     <label for="password">Password</label>
                     <input type="text" name="password" id="password" value="{{ old('password') }}"
                         class="form-control">
@@ -62,8 +68,9 @@
 
 
                 <!-- Submit Button -->
-                <div>
-                    <button type="submit" class="btn btn-primary float-end mt-3">Submit</button>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <a href="{{ route('sanggunian-members.index') }}" class="text-decoration-underline fw-bold">Back</a>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>
