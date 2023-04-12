@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\BoardSession;
 use Illuminate\Http\Request;
 use App\Services\UserService;
-use App\Enums\BoardSessionStatus;
 use App\Http\Requests\StoreRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Pipeline;
 use App\Pipes\BoardSession\GetBoardSession;
 use App\Pipes\BoardSession\DatatablesWrapper;
@@ -17,7 +15,6 @@ use App\Repositories\BoardSessionRespository;
 
 final class BoardSessionController extends Controller
 {
-
     public function __construct(private BoardSessionRespository $boardSessionRepository, private UserService $userService)
     {
         $this->middleware('verify.user')->only(['locked', 'unlocked', 'destroy']);

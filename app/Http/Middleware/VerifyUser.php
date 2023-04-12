@@ -10,8 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 class VerifyUser
 {
     public function __construct(private UserService $userService)
-    {}
-    
+    {
+    }
+
     /**
      * Handle an incoming request.
      *
