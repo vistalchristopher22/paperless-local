@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Contracts\IAgendaMember;
 use App\Models\Agenda;
 use App\Models\AgendaMember;
+use App\Models\SanggunianMember;
 use Illuminate\Support\Collection;
 
 final class AgendaMemberRepository extends BaseRepository implements IAgendaMember
@@ -18,6 +19,11 @@ final class AgendaMemberRepository extends BaseRepository implements IAgendaMemb
     {
         $agenda->members()->delete();
         return $this;
+    }
+
+    public function getAgendaOfMember(SanggunianMember $member): Collection
+    {
+        return $this->model->with(['agenda:id,title'])->where('member', $member->id)->get();
     }
 
     public function addMembersToThis(Agenda $agenda, Collection|array $members = []): mixed

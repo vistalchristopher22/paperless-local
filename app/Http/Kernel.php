@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'features' => EnsureFeaturesAreActive::class,
         'convert.id.to.models' => ConvertIdsToModelsMiddleware::class,
+        'verify.user' => \App\Http\Middleware\VerifyUser::class,
     ];
 }

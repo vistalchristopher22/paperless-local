@@ -42,6 +42,7 @@
                 <div class="form-group">
                     <label>Lead Committee</label>
                     <select type="text" class="form-select select2" name="lead_committee">
+                        <option value="">No Lead Committee</option>
                         @foreach ($agendas as $agenda)
                             <option value="{{ $agenda->id }}">{{ $agenda->title }}</option>
                         @endforeach

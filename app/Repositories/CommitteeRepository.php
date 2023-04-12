@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Committee;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 final class CommitteeRepository extends BaseRepository
 {
@@ -12,12 +13,19 @@ final class CommitteeRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    public function get(): Collection
+    public function get($columns = []): Collection
     {
         return $this->model->with(['lead_committee_information', 'expanded_committee_information'])
-                    ->orderBy('priority_number', 'ASC')
-                    ->whereNull('deleted_at')
-                    ->get();
+            ->whereNull('deleted_at')
+            ->get($columns);
+    }
+
+
+    public function prepareQuery()
+    {
+        return DB::table('committees')
+            ->whereNull('committees.deleted_at')
+            ->select('committees.*');
     }
 
     public function getNextPriorityNumber(): string

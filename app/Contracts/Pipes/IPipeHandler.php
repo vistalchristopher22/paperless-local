@@ -2,7 +2,6 @@
 
 namespace App\Contracts\Pipes;
 
-use App\Http\Requests\SanggunianMemberStoreRequest;
 use Closure;
 
 interface IPipeHandler

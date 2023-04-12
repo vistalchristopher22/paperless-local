@@ -6,10 +6,8 @@ use Closure;
 use App\Contracts\Pipes\IPipeHandler;
 use App\Repositories\SanggunianMemberRepository;
 
-
 final class StoreSanggunianMember implements IPipeHandler
 {
-
     private SanggunianMemberRepository $sanggunianMemberRepository;
 
     public function __construct()
@@ -20,7 +18,6 @@ final class StoreSanggunianMember implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-
         $this->sanggunianMemberRepository->store([
             'fullname' => $payload['fullname'],
             'district' => $payload['district'],

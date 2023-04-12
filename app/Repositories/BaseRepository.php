@@ -15,7 +15,7 @@ class BaseRepository implements IBaseRepository
 
     public function get(): Collection
     {
-        return $this->model->whereNull('deleted_at')->get();
+        return $this->model->whereNull('deleted_at')->oldest()->get();
     }
 
     public function findBy(string $column, mixed $value)

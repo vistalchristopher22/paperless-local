@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Enums\UserStatus;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -55,10 +55,21 @@ class User extends Authenticatable
         'status' => UserStatus::class,
     ];
 
+
     protected function password(): Attribute
     {
         return Attribute::make(
             set: fn (string $value) => bcrypt($value),
         );
+    }
+
+    public function division_information()
+    {
+        return $this->hasOne(Division::class, 'id', 'division');
+    }
+
+    public function access()
+    {
+        return $this->hasMany(UserAccess::class, 'user', 'id');
     }
 }

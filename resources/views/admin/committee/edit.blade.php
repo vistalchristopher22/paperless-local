@@ -43,7 +43,8 @@
                     <label>Lead Committee</label>
                     <select type="text" class="form-select select2" name="lead_committee">
                         @foreach ($agendas as $agenda)
-                            <option {{ old('lead_committee', $committee->lead_committee) == $agenda->id ? 'selected' : '' }} value="{{ $agenda->id }}">{{ $agenda->title }}</option>
+                            <option {{ old('lead_committee', $committee->lead_committee) == $agenda->id ? 'selected' : '' }}
+                                value="{{ $agenda->id }}">{{ $agenda->title }}</option>
                         @endforeach
                     </select>
                     @error('lead_committee')
@@ -55,7 +56,9 @@
                     <label>Expanded Committee</label>
                     <select type="text" class="form-select" name="expanded_committee">
                         @foreach ($agendas as $agenda)
-                            <option {{ old('expanded_committee', $committee->expanded_committee) == $agenda->id ? 'selected' : '' }} value="{{ $agenda->id }}">{{ $agenda->title }}</option>
+                            <option
+                                {{ old('expanded_committee', $committee->expanded_committee) == $agenda->id ? 'selected' : '' }}
+                                value="{{ $agenda->id }}">{{ $agenda->title }}</option>
                         @endforeach
                     </select>
                     @error('expanded_committee')
@@ -66,7 +69,8 @@
 
                 <div class="form-group">
                     <label>Schedule</label>
-                    <input type="text" class="form-control" name="schedule" value="{{ old('schedule', $committee->session_schedule) }}">
+                    <input type="text" class="form-control" name="schedule"
+                        value="{{ old('schedule', $committee->session_schedule) }}">
                     @error('schedule')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -74,7 +78,8 @@
 
 
                 <div class="form-group">
-                    <label>File <a href="#" class="fw-bold text-decoration-underline text-primary">({{ basename($committee->file_path) }})</a></label>
+                    <label>File <a href="#" class="fw-bold text-decoration-underline text-primary btn-edit"
+                            data-id="{{ $committee->id }}">({{ basename($committee->file_path) }})</a></label>
                     <input type="file" name="file" id="file" class="form-control mt-1">
                     @error('file')
                         <span class="text-danger"> {{ $message }}</span>
@@ -97,7 +102,17 @@
 
             $('select[name="expanded_committee"]').select2({
                 placeholder: 'Select Expanded Committee',
-                
+
+            });
+            
+            document.addEventListener('click', event => {
+                if (event.target.matches('.btn-edit')) {
+                    const id = event.target.getAttribute('data-id');
+                    fetch(`/committee-file/${id}/edit`)
+                        .then(response => response.json())
+                        .then(data => socket.emit('EDIT_FILE', data))
+                        .catch(error => console.error(error));
+                }
             });
         </script>
     @endpush

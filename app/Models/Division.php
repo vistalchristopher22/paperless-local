@@ -16,4 +16,9 @@ class Division extends Model
     protected $casts = [
         'deleted_at' => 'datetime',
     ];
+
+    public function board_member()
+    {
+        return $this->hasOne(SanggunianMember::class, 'id', 'board');
+    }
 }

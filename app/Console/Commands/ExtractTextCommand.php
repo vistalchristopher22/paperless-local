@@ -31,7 +31,8 @@ class ExtractTextCommand extends Command
         $path = str_replace('storage', 'public\\storage', $record->file_path);
         $data = shell_exec('"C:\\Program Files\\LibreOffice\\program\\soffice" --headless --cat ' . $path);
         $cleanString = preg_replace('/[\n\t]/', '', $data);
-        $record->content = Str::ascii(Str::of(strip_tags(nl2br($cleanString))));
+        $record->content = Str::ascii($cleanString);
+        // $record->content = Str::ascii(Str::of(strip_tags(nl2br($cleanString))));
         $record->save();
         $this->info('Successfully extract and saved all the text inside the file.');
     }

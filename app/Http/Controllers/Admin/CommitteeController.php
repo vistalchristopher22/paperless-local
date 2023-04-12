@@ -3,16 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Committee;
+use Illuminate\Support\Facades\DB;
 use App\Pipes\Committee\UploadFile;
 use App\Http\Controllers\Controller;
+use App\Pipes\Committee\GetCommittee;
 use App\Repositories\AgendaRepository;
+use App\Pipes\Committee\CacheCommittee;
 use App\Pipes\Committee\CreateCommittee;
 use App\Pipes\Committee\ExtractFileText;
 use App\Pipes\Committee\UpdateCommittee;
 use Illuminate\Support\Facades\Pipeline;
+use Yajra\DataTables\Facades\DataTables;
 use App\Repositories\CommitteeRepository;
+use Yajra\DataTables\Contracts\DataTable;
 use App\Http\Requests\StoreCommitteeRequest;
 use App\Http\Requests\UpdateCommitteeRequest;
+use App\Pipes\Committee\Filter\ContentFilter;
+use App\Pipes\Committee\Filter\LeadCommitteeFilter;
+use App\Pipes\Committee\Filter\ExpandedCommitteeFilter;
 
 final class CommitteeController extends Controller
 {
@@ -20,14 +28,43 @@ final class CommitteeController extends Controller
     {
     }
 
+    /**
+     * > The `list` function takes in a `lead` and `expanded` parameter, and returns a datatable of the
+     * filtered committees
+     *
+     * @param mixed lead * = all
+     * @param mixed expanded * = all
+     * @param mixed content The content to filter by.
+     *
+     * @return A datatable of the filtered data.
+     */
+    public function list(mixed $lead = '*', mixed $expanded = '*', mixed $content = null)
+    {
+        return Pipeline::send([$lead, $expanded, $content])
+            ->through([
+                GetCommittee::class,
+                LeadCommitteeFilter::class,
+                ExpandedCommitteeFilter::class,
+                ContentFilter::class
+            ])->then(fn ($data) => DataTables::of($data)->make(true));
+    }
+
+    /**
+     * It returns a view called `admin.committee.index` with a variable called `agendas` that contains
+     * the results of the `get()` function from the `AgendaRepository` class
+     *
+     * @return The view admin.committee.index and the agendas from the agendaRepository
+     */
     public function index()
     {
         return view('admin.committee.index', [
-            'committees' => $this->committeeRepository->get(),
+            'agendas' => $this->agendaRepository->get(),
         ]);
     }
 
-
+    /**
+     * It returns a view with a priority number and agendas
+     */
     public function create()
     {
         return view('admin.committee.create', [
@@ -35,6 +72,7 @@ final class CommitteeController extends Controller
             'agendas' => $this->agendaRepository->get(),
         ]);
     }
+
 
 
     /**
@@ -47,14 +85,17 @@ final class CommitteeController extends Controller
      */
     public function store(StoreCommitteeRequest $request)
     {
-        Pipeline::send($request)
-            ->through([
-                UploadFile::class,
-                CreateCommittee::class,
-                ExtractFileText::class,
-            ])->then(fn ($data) => $data);
+        return DB::transaction(function () use ($request) {
+            Pipeline::send($request)
+                ->through([
+                    UploadFile::class,
+                    CreateCommittee::class,
+                    ExtractFileText::class,
+                    CacheCommittee::class,
+                ])->then(fn ($data) => $data);
 
-        return back()->with('success', 'Successfully created a committee.');
+            return back()->with('success', 'Successfully created a committee.');
+        });
     }
 
 
@@ -79,13 +120,14 @@ final class CommitteeController extends Controller
      */
     public function update(UpdateCommitteeRequest $request, Committee $committee)
     {
-        Pipeline::send($request->merge(['committee' => $committee]))
-            ->through([
-                UploadFile::class,
-                UpdateCommittee::class,
-                ExtractFileText::class,
-            ])->then(fn ($data) => $data);
-
-        return back()->with('success', 'Committee updated successfully.');
+        return DB::transaction(function () use ($request, $committee) {
+            Pipeline::send($request->merge(['committee' => $committee]))
+                ->through([
+                    UploadFile::class,
+                    UpdateCommittee::class,
+                    ExtractFileText::class,
+                ])->then(fn ($data) => $data);
+            return back()->with('success', 'Committee updated successfully.');
+        });
     }
 }

@@ -22,16 +22,20 @@
     <meta name="theme-color" content="#ffffff">
 
     <!-- Google Font-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    {{-- <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+        rel="stylesheet"> --}}
 
     <!-- Vendor CSS -->
     <link rel="stylesheet" href="/assets/css/libs.bundle.css" />
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="/assets/css/theme.bundle.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     @routes
 
     <!-- Fix for custom scrollbar if JS is disabled-->
@@ -52,7 +56,7 @@
 
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/js/app.js'])
     @stack('page-css')
 
 </head>
@@ -289,7 +293,8 @@
                         <button class="btn btn-link p-0 position-relative" type="button" id="profileDropdown"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <picture>
-                                <img class="f-w-10 rounded-circle" src="{{ asset('/storage/user-images/' . auth()->user()->profile_picture) }}"
+                                <img class="f-w-10 rounded-circle"
+                                    src="{{ asset('/storage/user-images/' . auth()->user()->profile_picture) }}"
                                     alt="Profile Picture">
                             </picture>
                             <span
@@ -299,7 +304,8 @@
                         </button>
                         <ul class="dropdown-menu dropdown-md dropdown-menu-end" aria-labelledby="profileDropdown">
                             <li class="d-flex py-2 align-items-start">
-                                <button class="btn-icon bg-primary-faded text-primary fw-bolder me-3">{{ Str::substr(auth()->user()->first_name, 0, 1) }}</button>
+                                <button
+                                    class="btn-icon bg-primary-faded text-primary fw-bolder me-3">{{ Str::substr(auth()->user()->first_name, 0, 1) }}</button>
                                 <div class="d-flex align-items-start justify-content-between flex-grow-1">
                                     <div>
                                         <p class="lh-1 mb-2 fw-semibold text-body text-capitalize">
@@ -344,7 +350,7 @@
                         <li class="breadcrumb-item active" aria-current="page">@yield(
                             'page-title',
                             'Default Page
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            title'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    title'
                         )</li>
                     </ol>
                 </nav>
@@ -600,36 +606,38 @@
                         <!-- / Dashboard Menu Section-->
 
 
-                        <li class="menu-item">
-                            <a class="d-flex align-items-center collapsed"
-                                href="{{ route('sanggunian-members.index') }}">
-                                <span class="menu-icon">
-                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                        viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;"
-                                        xml:space="preserve">
-                                        <path fill="currentColor" opacity=".5"
-                                            d="M155.327,57.142c-51.531,0-93.454,44.45-93.454,99.086c0,54.636,41.923,99.086,93.454,99.086s93.455-44.45,93.455-99.086
+                        @feature('administrator')
+                            <li class="menu-item">
+                                <a class="d-flex align-items-center collapsed"
+                                    href="{{ route('sanggunian-members.index') }}">
+                                    <span class="menu-icon">
+                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                            viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;"
+                                            xml:space="preserve">
+                                            <path fill="currentColor" opacity=".5"
+                                                d="M155.327,57.142c-51.531,0-93.454,44.45-93.454,99.086c0,54.636,41.923,99.086,93.454,99.086s93.455-44.45,93.455-99.086
                                            C248.782,101.592,206.859,57.142,155.327,57.142z" />
 
-                                        <path fill="currentColor"
-                                            d="M367.798,71.321c-0.211,0-0.425,0.001-0.636,0.002c-21.626,0.179-41.826,9.31-56.878,25.713
+                                            <path fill="currentColor"
+                                                d="M367.798,71.321c-0.211,0-0.425,0.001-0.636,0.002c-21.626,0.179-41.826,9.31-56.878,25.713
                                            c-14.788,16.113-22.829,37.37-22.644,59.854c0.186,22.484,8.577,43.605,23.628,59.473c15.17,15.991,35.265,24.773,56.651,24.773
                                            c0.215,0,0.43-0.001,0.646-0.002c21.626-0.179,41.826-9.311,56.878-25.713c14.788-16.113,22.829-37.37,22.644-59.855
                                            C447.702,108.972,411.747,71.321,367.798,71.321z" />
 
-                                        <path fill="currentColor"
-                                            d="M371.74,257.358h-7.76c-36.14,0-69.12,13.74-94.02,36.26c6.23,4.78,12.16,9.99,17.78,15.61
+                                            <path fill="currentColor"
+                                                d="M371.74,257.358h-7.76c-36.14,0-69.12,13.74-94.02,36.26c6.23,4.78,12.16,9.99,17.78,15.61
                                            c16.58,16.58,29.6,35.9,38.7,57.42c8.2,19.38,12.88,39.8,13.97,60.83H512v-29.87C512,320.278,449.08,257.358,371.74,257.358z" />
 
-                                        <path fill="currentColor" opacity=".5"
-                                            d="M310.35,427.478c-2.83-45.59-25.94-85.69-60.43-111.39c-25.09-18.7-56.21-29.77-89.92-29.77h-9.34
+                                            <path fill="currentColor" opacity=".5"
+                                                d="M310.35,427.478c-2.83-45.59-25.94-85.69-60.43-111.39c-25.09-18.7-56.21-29.77-89.92-29.77h-9.34
                                            C67.45,286.319,0,353.768,0,436.978v17.88h310.65v-17.88C310.65,433.788,310.55,430.618,310.35,427.478z" />
 
-                                    </svg>
-                                </span>
-                                <span class="menu-link">SP Members</span></a>
-                        </li>
+                                        </svg>
+                                    </span>
+                                    <span class="menu-link">SP Members</span></a>
+                            </li>
+                        @endfeature
 
 
                         <!-- Dashboard Menu Section-->
@@ -651,9 +659,15 @@
                                 <span class="menu-link">Maintenance</span></a>
                             <div class="collapse" id="collapseMaintenance">
                                 <ul class="submenu">
-                                    <li><a href="{{ route('committee.index') }}">Committee</a></li>
-                                    <li><a href="{{ route('agendas.index') }}">Agendas</a></li>
-                                    <li><a href="{{ route('division.index') }}">Division</a></li>
+                                    @feature('user')
+                                        <li><a href="{{ route('user.committee.index') }}">Committee</a></li>
+                                    @endfeature
+                                    @feature('administrator')
+                                        <li><a href="{{ route('committee.index') }}">Committee</a></li>
+                                        <li><a href="{{ route('board-sessions.index') }}">Session</a></li>
+                                        <li><a href="{{ route('agendas.index') }}">Agendas</a></li>
+                                        <li><a href="{{ route('division.index') }}">Division</a></li>
+                                    @endfeature
                                 </ul>
                             </div>
                         </li>
@@ -694,7 +708,8 @@
                                     <span class="menu-link">Users</span></a>
                                 <div class="collapse" id="collapseMenuItemUsers">
                                     <ul class="submenu">
-                                        <li><a href="{{ route('account.index') }}">User Listing</a></li>
+                                        <li><a href="{{ route('account.index') }}">Listing</a></li>
+                                        <li><a href="{{ route('account-access-control.index') }}">Access Control</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -748,8 +763,8 @@
     <script src="/assets/js/vendor.bundle.js"></script>
     <script src="/assets/js/theme.bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"
-    integrity="sha512-AI5A3zIoeRSEEX9z3Vyir8NqSMC1pY7r5h2cE+9J6FLsoEmSSGLFaqMQw8SWvoONXogkfFrkQiJfLeHLz3+HOg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        integrity="sha512-AI5A3zIoeRSEEX9z3Vyir8NqSMC1pY7r5h2cE+9J6FLsoEmSSGLFaqMQw8SWvoONXogkfFrkQiJfLeHLz3+HOg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @stack('page-scripts')
     <script>
         let socket = io(`http://localhost:3030/`);

@@ -23,6 +23,13 @@
                 @csrf
                 @method('PUT')
                 <div class="form-group">
+                    <label>Index</label>
+                    <input type="text" class="form-control" name="index" value="{{ old('index', $agenda->index) }}">
+                    @error('title')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="form-group">
                     <label>Title</label>
                     <input type="text" class="form-control" name="title" value="{{ old('title', $agenda->title) }}">
                     @error('title')
@@ -58,10 +65,10 @@
                 </div>
                 <div class="form-group">
                     <label>Members</label>
-                    <select name="members[]" class="js-example-basic-multiple js-states form-select" multiple aria-label="multiple select example">
+                    <select name="members[]" class="js-example-basic-multiple js-states form-select" multiple
+                        aria-label="multiple select example">
                         @foreach ($members as $member)
-                            <option
-                                value="{{ $member->id }}">{{ $member->fullname }}</option>
+                            <option value="{{ $member->id }}">{{ $member->fullname }}</option>
                         @endforeach
                     </select>
                     @error('members')
@@ -93,11 +100,13 @@
     @push('page-scripts')
         <script>
             $(document).ready(function() {
-                let agendaMembers = "{{ json_encode($agendaMembers) }}"
+                let agendaMembers = @json($agendaMembers);
+
                 let multipleMembers = $('select[name="members[]"]').select2({
                     placeholder: 'Select members',
                 });
-                multipleMembers.val(JSON.parse(agendaMembers)).trigger('change');
+                multipleMembers.val(agendaMembers).trigger('change');
+
 
 
                 $('select[name="vice_chairman"]').select2({
@@ -108,6 +117,15 @@
                 $('select[name="chairman"]').select2({
                     placeholder: 'Select Chairman',
                     theme: "classic",
+                });
+
+                $("select").on("select2:select", function(evt) {
+                    var element = evt.params.data.element;
+                    var $element = $(element);
+
+                    $element.detach();
+                    $(this).append($element);
+                    $(this).trigger("change");
                 });
             });
         </script>

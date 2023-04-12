@@ -2,23 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DivisionStoreRequest;
-use App\Http\Requests\DivisionUpdateRequest;
 use App\Models\Division;
 use App\Repositories\DivisionRepository;
+use App\Http\Requests\DivisionStoreRequest;
+use App\Http\Requests\DivisionUpdateRequest;
+use App\Repositories\SanggunianMemberRepository;
 
 class DivisionController extends Controller
 {
-    public function __construct(private DivisionRepository $divisionRepository)
+    public function __construct(private DivisionRepository $divisionRepository, private SanggunianMemberRepository $sanggunianMemberRepository)
     {
     }
 
-    /**
-     * It returns a view called `admin.division.index` with a variable called `division` that contains
-     * the result of the `get()` function in the `divisionRepository` class
-     *
-     * @return The view admin.division.index and the division variable is being passed to the view.
-     */
     public function index()
     {
         return view('admin.division.index', [
@@ -28,14 +23,11 @@ class DivisionController extends Controller
 
     public function create()
     {
-        return view('admin.division.create');
+        return view('admin.division.create', [
+            'members' => $this->sanggunianMemberRepository->get(),
+        ]);
     }
 
-    /**
-     * It stores a new division in the database
-     *
-     * @param DivisionStoreRequest request The request object.
-     */
     public function store(DivisionStoreRequest $request)
     {
         $this->divisionRepository->store($request->all());
@@ -48,29 +40,14 @@ class DivisionController extends Controller
         //
     }
 
-
-   /**
-    * It returns the view of the edit page.
-    *
-    * @param Division division The division object that was passed to the controller.
-    *
-    * @return A view with the division object
-    */
     public function edit(Division $division)
     {
         return view('admin.division.edit', [
             'division' => $division,
+            'members' => $this->sanggunianMemberRepository->get(),
         ]);
     }
 
-    /**
-     * It updates a division
-     *
-     * @param DivisionUpdateRequest request The request object.
-     * @param Division division The model that we are updating.
-     *
-     * @return A view with a success message.
-     */
     public function update(DivisionUpdateRequest $request, Division $division)
     {
         $this->divisionRepository->update($division, $request->all());
@@ -78,14 +55,6 @@ class DivisionController extends Controller
         return back()->with('success', 'You have successfully updated a division.');
     }
 
-    /**
-     * The function takes a division object as a parameter, and then deletes the division object from
-     * the database
-     *
-     * @param Division division This is the model that we are using.
-     *
-     * @return A view with a success message.
-     */
     public function destroy(Division $division)
     {
         $this->divisionRepository->delete($division);

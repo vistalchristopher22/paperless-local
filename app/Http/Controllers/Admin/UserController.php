@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Enums\UserTypes;
 use App\Enums\UserStatus;
+use Illuminate\Http\Request;
 use App\Pipes\User\StoreUser;
 use App\Services\UserService;
 use App\Pipes\User\UpdateUser;
@@ -36,7 +37,7 @@ final class UserController extends Controller
     public function index()
     {
         return view('admin.account.index', [
-            'users' => $this->userRepository->get(),
+            'users' => $this->userRepository->getWithDivision(),
             'divisions' => $this->divisionRepository->get()
         ]);
     }
@@ -117,15 +118,20 @@ final class UserController extends Controller
     }
 
 
+
     /**
-     * > The destroy function is used to delete a user account
-     *
-     * @param User account The account object that is being deleted.
-     * @return The user is being returned.
+     * Delete a user account.
+     * @param \Illuminate\Http\Request $request The HTTP request object.
+     * @param \App\Models\User $account The user account to delete.
+     * @return \Illuminate\Http\JsonResponse Returns a JSON response indicating whether the operation was successful or not.
      */
-    public function destroy(User $account)
+    public function destroy(Request $request, User $account)
     {
-        $this->userRepository->delete($account);
-        return back()->with('success', 'Account successfully deleted.');
+        if ($this->userService->verify($request->key, auth()->user())) {
+            $this->userRepository->delete($account);
+            return response()->json(['success' => true, 'message' => 'Account deleted successfully, this page will automatically refresh after 5 seconds to apply the changes.']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'The credentials you provide is invalid.'], 422);
     }
 }

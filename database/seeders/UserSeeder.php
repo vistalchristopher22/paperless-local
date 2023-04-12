@@ -21,7 +21,6 @@ class UserSeeder extends Seeder
             'password' => 'password',
             'account_type' => UserTypes::ADMIN->value,
             'status' => UserStatus::Active,
-            'division' => 'Provincial Government'
         ]);
     }
 }

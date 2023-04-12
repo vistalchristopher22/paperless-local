@@ -87,7 +87,7 @@
                     <label for="account_type">Account Type</label>
                     <select name="account_type" id="account_type" class="form-control">
                         @foreach ($types as $type)
-                            <option {{ old('account_type', $account->account_type) == $type ? 'selected' : '' }}
+                            <option {{ old('account_type', $account->account_type) == $type->value ? 'selected' : '' }}
                                 value="{{ $type }}">{{ $type }}</option>
                         @endforeach
                     </select>
@@ -100,9 +100,9 @@
                 <div class="form-group">
                     <label for="status">Status</label>
                     <select name="status" id="status" class="form-control">
-                        @foreach ($status as $status)
-                            <option {{ old('status', $account->status) == $status->value ? 'selected' : '' }}
-                                value="{{ $status->value }}">{{ $status->name }}</option>
+                        @foreach ($status as $s)
+                            <option {{ old('status', $account->status->value) == $s->value ? 'selected' : '' }}
+                                value="{{ $s->value }}">{{ $s->name }}</option>
                         @endforeach
                     </select>
                     @error('status')
@@ -110,22 +110,20 @@
                     @enderror
                 </div>
 
-                  <!-- Division -->
+                <!-- Division -->
                 <div class="form-group">
                     <label for="">Division</label>
 
                     <select class="form-control" name="division" id="division">
-                        <option value="{{ $account->division }}">{{ $account->division }}</option>
-                    @foreach($divisions as $data)
-                        @if($data->name != $account->division)
-                            <option value="{{ $data->name }}">{{ $data->name }}</option>
-                        @endif
-                    @endforeach
+                        @foreach ($divisions as $division)
+                            <option value="{{ old('division', $division->id) }}" {{ $division->id == $account->id }} >{{ $division->name }}</option>
+                        @endforeach
                     </select>
                 </div>
 
                 <!-- Image File -->
-                <img class="img-thumbnail mt-2" src="{{ asset('storage/user-images/' . $account->profile_picture )  }}" width="200px">
+                <img class="img-thumbnail mt-2" src="{{ asset('storage/user-images/' . $account->profile_picture) }}"
+                    width="200px">
                 <br>
                 <br>
                 <label for="">Image</label>

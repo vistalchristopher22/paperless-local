@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 abstract class AccountService
 {
     public function isUserWantToChangePassword(array $data = []): mixed
@@ -11,5 +14,10 @@ abstract class AccountService
         }
 
         return $data;
+    }
+
+    public function verify(string $key, User $account)
+    {
+        return Hash::check($key, $account->password);
     }
 }

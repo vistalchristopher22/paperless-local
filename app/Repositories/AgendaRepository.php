@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Agenda;
+use App\Models\SanggunianMember;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -78,6 +79,24 @@ final class AgendaRepository extends BaseRepository
     public function getMembersId(Agenda $agenda): array
     {
         return $agenda->members->pluck('member')->toArray();
+    }
+
+    /**
+     * Retrieve agendas based on a given SanggunianMember.
+     * @param SanggunianMember $member The SanggunianMember object to retrieve agendas for.
+     * @return array Returns an array containing the agendas, separated by chairman, vice_chairman, and member.
+     */
+    public function getAgendasByMember(SanggunianMember $member): array
+    {
+        $chairmanInAgenda = $this->model->where('chairman', $member->id)->get();
+        $viceChairmanInAgenda = $this->model->where('vice_chairman', $member->id)->get();
+        $memberInAgenda = $this->agendaMemberRepository->getAgendaOfMember($member);
+
+        return [
+            'chairman'      => $chairmanInAgenda,
+            'vice_chairman' => $viceChairmanInAgenda,
+            'member'        => $memberInAgenda,
+        ];
     }
 
     /**

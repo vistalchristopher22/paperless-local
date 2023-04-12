@@ -32,7 +32,7 @@ final class UserStoreRequest extends FormRequest
             'password' => 'nullable|min:8',
             'account_type' => 'required',
             'status' => ['required'],
-            'division' => 'required',
+            'division' => ['required', 'exists:divisions,id'],
         ];
     }
 }

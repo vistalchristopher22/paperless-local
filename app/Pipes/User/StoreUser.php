@@ -10,11 +10,11 @@ final class StoreUser implements IPipeHandler
 {
     private UserRepository $userRepository;
 
-   /**
-    * The `__construct()` function is a special function that is called when an object is created.
-    *
-    * The `__construct()` function is used to initialize the object's properties upon object creation
-    */
+    /**
+     * The `__construct()` function is a special function that is called when an object is created.
+     *
+     * The `__construct()` function is used to initialize the object's properties upon object creation
+     */
     public function __construct()
     {
         $this->userRepository = app()->make(UserRepository::class);

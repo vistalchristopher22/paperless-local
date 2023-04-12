@@ -107,9 +107,9 @@
                     <label for="">Division</label>
 
                     <select class="form-control" name="division" id="division">
-                        <option default>--Please Select--</option>
+                        <option default value="">-- Select--</option>
                         @foreach($divisions as $data)
-                            <option value="{{ $data->name }}">{{ $data->name }}</option>
+                            <option value="{{ $data->id }}">{{ $data->name }}</option>
                         @endforeach
                     </select>
                     @error('division')

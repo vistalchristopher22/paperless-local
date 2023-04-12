@@ -9,7 +9,6 @@ use App\Repositories\SanggunianMemberRepository;
 
 final class UpdateSanggunianMember implements IPipeHandler
 {
-
     private SanggunianMemberRepository $sangguninanMemberRepository;
     // private SanggunianMember $sanggunianMember;
 
@@ -22,7 +21,7 @@ final class UpdateSanggunianMember implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        $this->sangguninanMemberRepository->update($payload['sanggunianMember'],[
+        $this->sangguninanMemberRepository->update($payload['sanggunianMember'], [
             'fullname' => $payload['fullname'],
             'district' => $payload['district'],
             'sanggunian' => $payload['sanggunian'],
@@ -33,5 +32,4 @@ final class UpdateSanggunianMember implements IPipeHandler
 
         return $next($payload);
     }
-
 }

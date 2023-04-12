@@ -14,10 +14,10 @@ return new class () extends Migration {
             $table->id();
             $table->string('name');
             $table->string('session_schedule');
-            $table->string('priority_number')->unique();
-            $table->unsignedBigInteger('lead_committee');
+            $table->bigInteger('priority_number')->unique();
+            $table->unsignedBigInteger('lead_committee')->nullable();
             $table->foreign('lead_committee')->references('id')->on('agendas');
-            $table->unsignedBigInteger('expanded_committee');
+            $table->unsignedBigInteger('expanded_committee')->nullable();
             $table->foreign('expanded_committee')->references('id')->on('agendas');
             $table->string('file_path');
             $table->longText('content')->charset('utf8mb4')->nullable();

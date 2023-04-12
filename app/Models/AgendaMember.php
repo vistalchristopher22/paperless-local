@@ -15,4 +15,9 @@ class AgendaMember extends Model
     {
         return $this->hasMany(SanggunianMember::class, 'id', 'member');
     }
+
+    public function agenda()
+    {
+        return $this->belongsTo(Agenda::class);
+    }
 }

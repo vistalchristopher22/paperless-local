@@ -1,7 +1,11 @@
 @extends('layouts.app')
-
+@prepend('page-css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@endprepend
 @section('content')
-
     @if (Session::has('success'))
         <div class="card mb-2 bg-success shadow-sm text-white">
             <div class="card-body">
@@ -21,7 +25,8 @@
                 @csrf
                 <div class="form-group">
                     <label for="">Name</label>
-                    <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $division->name) }}">
+                    <input type="text" class="form-control" name="name" id="name"
+                        value="{{ old('name', $division->name) }}">
                     @error('name')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -35,6 +40,18 @@
                     @enderror
                 </div>
 
+                <div class="form-group">
+                    <label>Board</label>
+                    <select name="board" class="form-select" id="select-board">
+                        @foreach ($members as $member)
+                            <option {{ old('board', $division->board) == $member->id ? 'selected' : '' }} value="{{ $member->id }}">{{ $member->fullname }}</option>
+                        @endforeach
+                    </select>
+                    @error('board')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <a href="{{ route('division.index') }}" class="text-decoration-underline fw-bold">Back</a>
                     <button class="btn btn-primary">Update</button>
@@ -42,5 +59,12 @@
             </form>
         </div>
     </div>
-
+    @push('page-scripts')
+        <script>
+            $('select[name="board"]').select2({
+                placeholder: 'Select members',
+                theme: "classic",
+            });
+        </script>
+    @endpush
 @endsection

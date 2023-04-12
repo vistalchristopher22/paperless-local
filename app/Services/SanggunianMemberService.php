@@ -24,15 +24,12 @@ final class SanggunianMemberService extends AccountService
     */
     public function isUserWantToChangeProfilePicture(Request $request, IUploadService $iUploadService)
     {
-        if ($request->has('image'))
-        {
+        if ($request->has('image')) {
             $fileName = $iUploadService->handle($request->file('image'));
 
             $request->merge(['profile_picture' => $fileName]);
         }
 
-    return $request->all();
+        return $request->all();
     }
-
-
 }

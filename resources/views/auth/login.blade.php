@@ -176,13 +176,9 @@
                                 </div>
                             </div>
     
-                            <button type="submit">Submit</button>
-                            
-    
-    
-    
-    
-    
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success btn-block btn-lg mt-5">SIGN IN</button>
+                              </div>
     
                             {{-- <div class="mt-5">
                                 <div class="d-grid">

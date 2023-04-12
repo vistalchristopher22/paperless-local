@@ -23,10 +23,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Model::preventAccessingMissingAttributes();
+        Model::preventSilentlyDiscardingAttributes();
         Model::preventLazyLoading(! app()->isProduction());
+
         Feature::purge();
+
         Feature::define('administrator', function (User $user) {
             return $user->account_type == UserTypes::ADMIN->value;
         });
+
+        Feature::define('user', function (User $user) {
+            return $user->account_type == UserTypes::USER->value;
+        });
+
+
     }
 }
