@@ -24,15 +24,7 @@ final class UserStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required',
-            'middle_name' => 'nullable|min:2',
-            'last_name' => 'required',
-            'suffix' => 'nullable|min:2',
-            'username' => 'required|unique:users,username',
-            'password' => 'nullable|min:8',
-            'account_type' => 'required',
-            'status' => ['required'],
-            'division' => ['required', 'exists:divisions,id'],
+            
         ];
     }
 }

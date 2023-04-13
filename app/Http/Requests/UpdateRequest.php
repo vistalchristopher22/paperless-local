@@ -2,16 +2,29 @@
 
 namespace App\Http\Requests;
 
+use App\Contracts\FormRules\DiscoverRules;
+use App\FormRules\UserFormRules;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRequest extends FormRequest
+class UpdateRequest extends FormRequest implements DiscoverRules
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
+    }
+
+    public function getBaseRule(): string
+    {
+        return request()->route()->getAction()['base_rule'] ?? "";
+    }
+
+    public function getRules(string $type): array
+    {
+        $model = (app()->make(request()->route()->getAction()['model']));
+        return $model::rules()[$this->getBaseRule()][$type] ?? $model::rules()[$type];
     }
 
     /**
@@ -21,8 +34,6 @@ class UpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+      return $this->getRules('PUT');
     }
 }

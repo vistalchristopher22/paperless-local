@@ -51,7 +51,7 @@
     </noscript>
 
     <!-- Page Title -->
-    <title>{{ config('app.name') }}</title>
+    <title>{{ config('app.name') }} | @yield('page-title')</title>
     <!-- CSRF Token -->
 
 

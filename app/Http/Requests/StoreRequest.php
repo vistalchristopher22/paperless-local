@@ -17,13 +17,13 @@ class StoreRequest extends FormRequest implements DiscoverRules
 
     public function getBaseRule(): string
     {
-        return request()->route()->getAction()['base_rule'];
+        return request()->route()->getAction()['base_rule'] ?? "";
     }
 
     public function getRules(string $type): array
     {
         $model = (app()->make(request()->route()->getAction()['model']));
-        return $model::RULES[$this->getBaseRule()][$type];
+        return $model::rules()[$this->getBaseRule()][$type] ?? $model::rules()[$type];
     }
 
     /**

@@ -12,6 +12,8 @@ use App\Pipes\User\UpdateUser;
 use App\Pipes\User\ChangePassword;
 use App\Pipes\User\ProfilePicture;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRequest;
+use App\Http\Requests\UpdateRequest;
 use App\Repositories\UserRepository;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -25,6 +27,7 @@ final class UserController extends Controller
 
     public function __construct(private UserRepository $userRepository, private UserService $userService)
     {
+        $this->middleware('verify.user')->only('destroy');
         $this->divisionRepository = app()->make(DivisionRepository::class);
     }
 
@@ -66,7 +69,7 @@ final class UserController extends Controller
      *
      * @return The user is being returned.
      */
-    public function store(UserStoreRequest $request)
+    public function store(StoreRequest $request)
     {
         Pipeline::send($request)
             ->through([
@@ -105,7 +108,7 @@ final class UserController extends Controller
      *
      * @return The user is being returned.
      */
-    public function update(UserUpdateRequest $request, User $account)
+    public function update(UpdateRequest $request, User $account)
     {
         Pipeline::send($request->merge(['account' => $account]))
             ->through([
@@ -127,11 +130,7 @@ final class UserController extends Controller
      */
     public function destroy(Request $request, User $account)
     {
-        if ($this->userService->verify($request->key, auth()->user())) {
-            $this->userRepository->delete($account);
-            return response()->json(['success' => true, 'message' => 'Account deleted successfully, this page will automatically refresh after 5 seconds to apply the changes.']);
-        }
-
-        return response()->json(['success' => false, 'message' => 'The credentials you provide is invalid.'], 422);
+        $this->userRepository->delete($account);
+        return response()->json(['success' => true, 'message' => 'Account deleted successfully, this page will automatically refresh after 5 seconds to apply the changes.']);
     }
 }

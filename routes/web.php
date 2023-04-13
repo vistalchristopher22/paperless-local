@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\CommitteeFileController;
 use App\Http\Controllers\Admin\SanggunianMemberController;
 use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
 use App\Http\Controllers\User\CommitteeController as UserCommitteeController;
+use App\Models\User;
 
 Route::redirect('/', '/login');
 
@@ -25,7 +26,7 @@ Route::get('home', [HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'features:administrator'], function () {
-        Route::resource('account', UserController::class);
+        Route::group(['model' => User::class], fn () => Route::resource('account', UserController::class));
         Route::resource('account-access-control', UserAccessController::class);
 
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
@@ -34,7 +35,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('agendas', AgendaController::class);
 
         Route::resource('division', DivisionController::class);
-
 
         Route::resource('committee-file', CommitteeFileController::class);
         Route::get('committee-list/{lead?}/{expanded?}/{content?}', [CommitteeController::class, 'list'])->name('committee.list');
@@ -48,10 +48,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['model' => BoardSession::class], function () {
             Route::group(['base_rule' => 'announcement'], fn () => Route::post('board-session/announcement/store', [BoardSessionController::class, 'announcementStore'])
                 ->name('board-session.announcement.store'));
-
             Route::group(['base_rule' => 'unassigned_business'], fn () => Route::post('board-session/unassigned-business/store', [BoardSessionController::class, 'unassignedBusinessStore'])
                 ->name('board-session.unassigned-business.store'));
-
             Route::group(['base_rule' => 'order_business'], fn () => Route::resource('board-sessions', BoardSessionController::class));
         });
 
