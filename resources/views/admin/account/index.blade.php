@@ -2,13 +2,6 @@
 @section('page-title', 'User Management')
 @prepend('page-css')
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
-        <!-- JavaScript -->
-        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-
-        <!-- CSS -->
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
-        <!-- Default theme -->
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
     <style>
         .dataTables_filter input {
             margin-bottom: 10px;

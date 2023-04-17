@@ -30,7 +30,7 @@ final class BoardSessionController extends Controller
             ->through([
                 GetBoardSession::class,
                 DatatablesWrapper::class,
-            ])->then(fn ($data) => $data);
+            ])->then(fn($data) => $data);
     }
 
     public function index()
@@ -49,7 +49,7 @@ final class BoardSessionController extends Controller
             ->through([
                 StoreBoardSession::class,
                 FileUpload::class,
-            ])->then(fn ($data) => redirect()->back()->with('success', 'Board session created successfully'));
+            ])->then(fn($data) => redirect()->back()->with('success', 'Board session created successfully'));
     }
 
     public function show(string $id)
@@ -69,7 +69,7 @@ final class BoardSessionController extends Controller
             ->through([
                 UpdateBoardSession::class,
                 FileUpload::class,
-            ])->then(fn ($data) => redirect()->back()->with('success', 'Board session updated successfully'));
+            ])->then(fn($data) => redirect()->back()->with('success', 'Board session updated successfully'));
     }
 
     public function destroy(BoardSession $board_session)
@@ -79,19 +79,19 @@ final class BoardSessionController extends Controller
                 DeleteBoardSession::class,
                 DeleteFileUpload::class
             ])
-            ->then(fn ($data) => $data);
-        return response()->json(['success' => 'Board session deleted successfully']);
+            ->then(fn($data) => $data);
+        return response()->json(['success' => true, 'message' => 'Board session deleted successfully']);
     }
 
     public function locked(BoardSession $board_session)
     {
         $this->boardSessionRepository->locked($board_session);
-        return response()->json(['success' => 'Board session locked successfully']);
+        return response()->json(['success' => true, 'message' => 'Board session locked successfully']);
     }
 
     public function unlocked(BoardSession $board_session)
     {
         $this->boardSessionRepository->unlocked($board_session);
-        return response()->json(['success' => 'Board session unlocked successfully']);
+        return response()->json(['success' => true, 'message' => 'Board session unlocked successfully']);
     }
 }

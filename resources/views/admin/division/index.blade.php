@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('page-title', 'Division List')
 @prepend('page-css')
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
 
@@ -22,9 +22,9 @@
 
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h6>Division's List</h6>
+            <span class="fw-bold">@yield('page-title')</span>
             <div class="dropdown">
-                <a href="{{ route('division.create') }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('division.create') }}" class="btn btn-primary">
                     Add New Division
                 </a>
             </div>
@@ -37,26 +37,26 @@
                 <table class="table table-striped border" id="division-table">
                     <thead>
                         <tr>
-                            <th class="text-center">Name</th>
-                            <th class="text-center">Description</th>
-                            <th class="text-center">Board</th>
-                            <th class="text-center">Action</th>
+                            <th class="text-center border">Name</th>
+                            <th class="text-center border">Description</th>
+                            <th class="text-center border">Board</th>
+                            <th class="text-center border">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($division as $data)
                             <tr>
-                                <td class="text-center">{{ $data->name }}</td>
-                                <td class="text-center">{{ $data->description }}</td>
-                                <td class="text-center text-dark">{{ $data->board_member->fullname }}</td>
-                                <td class="align-middle text-center">
+                                <td class="text-center border">{{ $data->name }}</td>
+                                <td class="text-center border">{{ $data->description }}</td>
+                                <td class="text-center text-dark border">{{ $data->board_member->fullname }}</td>
+                                <td class="align-middle text-center border">
                                     <form action="{{ route('division.destroy', $data) }}" method="POST">
                                         @method('DELETE')
                                         @csrf
                                         <a href="{{ route('division.edit', $data)  }}" class="btn btn-sm btn-success text-white">
-                                            Edit
+                                            <i class="fas fa-pen"></i>
                                         </a>
-                                        <button class="btn btn-danger btn-sm text-white">Delete</button>
+                                        <button class="btn btn-danger btn-sm text-white"><i class="fas fa-trash text-white"></i></button>
                                     </form>
 
                                     {{-- <button type="button" class="btn btn-sm btn-danger text-white" data-bs-toggle="modal" data-bs-target="#deleteBtn">Delete</button>

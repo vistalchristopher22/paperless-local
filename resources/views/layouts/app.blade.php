@@ -655,13 +655,13 @@
                         <div class="collapse" id="collapseMaintenance">
                             <ul class="submenu">
                                 @feature('user')
-                                <li><a href="{{ route('user.committee.index') }}">Committee</a></li>
+                                <li><a href="{{ route('user.committee.index') }}">Committees</a></li>
                                 @endfeature
                                 @feature('administrator')
-                                <li><a href="{{ route('committee.index') }}">Committee</a></li>
-                                <li><a href="{{ route('board-sessions.index') }}">Session</a></li>
+                                <li><a href="{{ route('committee.index') }}">Committees</a></li>
+                                <li><a href="{{ route('board-sessions.index') }}">Sessions</a></li>
                                 <li><a href="{{ route('agendas.index') }}">Agendas</a></li>
-                                <li><a href="{{ route('division.index') }}">Division</a></li>
+                                <li><a href="{{ route('division.index') }}">Divisions</a></li>
                                 @endfeature
                             </ul>
                         </div>
