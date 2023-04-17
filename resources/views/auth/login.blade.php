@@ -146,49 +146,63 @@
                     </div> --}}
                     <div class="d-flex" style="padding : 85px;">
                         <div class="container-fluid">
-    
-                            <div class="d-flex flex-column justify-content-center align-items-center p-3" style="margin-top : 80px;">
+
+                            <div class="d-flex flex-column justify-content-center align-items-center p-3"
+                                style="margin-top : 80px;">
                                 <div class="officeOfThe">
                                     OFFICE OF THE</div>
                                 <div class="provincialCouncil">PROVINCIAL
                                     COUNCIL</div>
                             </div>
-    
-    
-                            <div class="mt-5">
-                                <div class="form-group">
-                                    <label for="">USERNAME</label>
-                                    <div class="input-group input-group-lg">
-                                        
-                                        <input name="username" type="text" class="form-control form-control-lg p-3" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+
+                            {{-- add a error message --}}
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    Invalid Username or Password
+                                </div>
+                            @endif
+
+                                <div class="mt-5">
+                                    <div class="form-group">
+                                        <label for="">USERNAME</label>
+                                        <div class="input-group input-group-lg">
+
+                                            <input name="username" type="text"
+                                                class="form-control form-control-lg p-3 @error('username') is-invalid @enderror"
+                                                aria-label="Sizing example input"
+                                                aria-describedby="inputGroup-sizing-lg" value="{{ old('username') }}">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-    
-    
-                            <div class="mt-5">
-                                <div class="form-group">
-                                    <label for="">PASSWORD</label>
-                                    <div class="input-group input-group-lg">
-                                        <input type="password" name="password" class="form-control form-control-lg p-3" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+
+
+
+                                <div class="mt-5">
+                                    <div class="form-group">
+                                        <label for="">PASSWORD</label>
+                                        <div class="input-group input-group-lg">
+                                            <input type="password" name="password"
+                                                class="form-control form-control-lg p-3"
+                                                aria-label="Sizing example input"
+                                                aria-describedby="inputGroup-sizing-lg">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-    
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-success btn-block btn-lg mt-5">SIGN IN</button>
-                              </div>
-    
-                            {{-- <div class="mt-5">
+
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-success btn-block btn-lg mt-5">SIGN
+                                        IN</button>
+                                </div>
+
+                                {{-- <div class="mt-5">
                                 <div class="d-grid">
                                     <button class="btn btn-success btn-lg p-3" style="background : rgb(24 129 1);">SIGN IN</button>
                                 </div>
                             </div> --}}
-    
+
                         </div>
                     </div>
-    
+
                 </div>
                 <div class="col-lg-6 vh-100 d-flex align-items-center justify-content-center flex-column"
                     id="tspHallBackground">
@@ -196,7 +210,7 @@
                         style="width : 782px; height : 723px; position:absolute; z-index:9999;" alt="">
                 </div>
             </div>
-    
+
         </div>
     </form>
 </body>

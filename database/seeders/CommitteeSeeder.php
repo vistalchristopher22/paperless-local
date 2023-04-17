@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Agenda;
-use App\Models\Committee;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CommitteeSeeder extends Seeder
 {
@@ -28,7 +28,8 @@ class CommitteeSeeder extends Seeder
                  'updated_at' => now(),
              ];
 
-            Committee::create($data);
+
+            DB::table('committees')->insert($data);
         }
     }
 }

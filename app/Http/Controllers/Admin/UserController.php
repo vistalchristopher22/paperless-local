@@ -128,7 +128,7 @@ final class UserController extends Controller
      * @param \App\Models\User $account The user account to delete.
      * @return \Illuminate\Http\JsonResponse Returns a JSON response indicating whether the operation was successful or not.
      */
-    public function destroy(Request $request, User $account)
+    public function destroy(User $account)
     {
         $this->userRepository->delete($account);
         return response()->json(['success' => true, 'message' => 'Account deleted successfully, this page will automatically refresh after 5 seconds to apply the changes.']);

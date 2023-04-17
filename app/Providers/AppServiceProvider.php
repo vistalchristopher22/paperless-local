@@ -23,8 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::preventAccessingMissingAttributes();
-        Model::preventSilentlyDiscardingAttributes();
+        //        Model::preventAccessingMissingAttributes();
+        //        Model::preventSilentlyDiscardingAttributes();
         Model::preventLazyLoading(! app()->isProduction());
 
         Feature::purge();

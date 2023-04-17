@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @prepend('page-css')
-
     @endpush
     @section('page-title', 'New Ordered Business')
     @section('content')
@@ -24,9 +23,9 @@
                 </div>
             </div>
         @endif
-        <form action="{{ route('board-sessions.store') }}" id="orderBusinessForm" method="POST"
+        <form action="{{ route('board-sessions.update', $boardSession) }}" id="orderBusinessForm" method="POST"
               enctype="multipart/form-data">
-
+            @method('PUT')
             <div class="card shadow-none mb-5">
                 <div class="card-header d-flex flex-row justify-content-between align-items-center">
                     <span class="fw-bold">Ordered Business</span>
@@ -37,7 +36,8 @@
                         <div class="mb-3">
                             <label for="title" class="form-label">Order Business title</label>
                             <input type="text" class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}"
-                                   value="{{ old('title') }}" id="title" title="title" name="title"
+                                   value="{{ old('title', $boardSession->title) }}" id="title" title="title"
+                                   name="title"
                                    placeholder="Enter title">
                             @error('title')
                             <div class="text-danger">{{ $message }}</div>
@@ -62,7 +62,8 @@
                             <label for="unassigned_title" class="form-label">Unassigned Business title</label>
                             <input type="text"
                                    class="form-control {{ $errors->has('unassigned_title') ? 'is-invalid' : '' }}"
-                                   value="{{ old('unassigned_title') }}" id="unassigned_title" name="unassigned_title"
+                                   value="{{ old('unassigned_title', $boardSession->unassigned_title) }}"
+                                   id="unassigned_title" name="unassigned_title"
                                    placeholder="Enter title">
                             @error('unassigned_title')
                             <div class="text-danger">{{ $message }}</div>
@@ -73,7 +74,8 @@
                             <label for="unassigned_business" class="form-label">Content</label>
                             <textarea class="form-control {{ $errors->has('unassigned_business') ? 'is-invalid' : '' }}"
                                       id="unassigned_business"
-                                      name="unassigned_business" rows="3">{{ old('unassigned_business') }}</textarea>
+                                      name="unassigned_business"
+                                      rows="3">{{ old('unassigned_business', $boardSession->unassigned_business) }}</textarea>
                             @error('unassigned_business')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -89,7 +91,8 @@
                         <div class="mb-3">
                             <label for="announcement_title" class="form-label">Announcement title</label>
                             <input type="text" class="form-control @error('announcement_title') is-invalid @enderror"
-                                   value="{{ old('announcement_title') }}" id="announcement_title"
+                                   value="{{ old('announcement_title', $boardSession->announcement_title) }}"
+                                   id="announcement_title"
                                    name="announcement_title" placeholder="Enter title">
                             @error('announcement_title')
                             <div class="text-danger">{{ $message }}</div>
@@ -99,14 +102,16 @@
                             <label for="announcement_content" class="form-label">Announcement Content</label>
                             <textarea class="form-control @error('announcement_content') is-invalid @enderror"
                                       id="announcement_content"
-                                      name="announcement_content" rows="3">{{ old('announcement_content') }}</textarea>
+                                      name="announcement_content"
+                                      rows="3">{{ old('announcement_content', $boardSession->announcement_content) }}</textarea>
                             @error('announcement_content')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="publishedCheckbox" name="published">
+                            <input class="form-check-input" type="checkbox" id="publishedCheckbox"
+                                   name="published" {{ $boardSession->is_published == 1 ? "checked" : "" }}>
                             <label class="form-check-label" for="publishedCheckbox">Published</label>
                             @error('published')
                             <div class="text-danger">{{ $message }}</div>
@@ -122,8 +127,9 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <a href="{{ route('board-sessions.index') }}"
                            class="btn btn-default text-primary text-decoration-underline fw-bold">Back</a>
+
                         <button type="submit" id="btnSubmit"
-                                class="btn btn-primary float-end">Submit
+                                class="btn btn-success text-white float-end">Update
                         </button>
                     </div>
                 </div>
@@ -135,30 +141,26 @@
         @push('page-scripts')
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             <script>
+                (function () {
+                    if (localStorage.getItem('tab')) {
+                        // If it does, set the active tab to the tab in localStorage
+                        $(`#${localStorage.getItem('tab')}`).trigger('click');
+
+                        // Remove the tab from localStorage
+                        localStorage.removeItem('tab');
+                    }
+                })();
+
                 $(document).ready(function () {
-                    const ALLOWED_FILE_EXTENSIONS = ['pdf', 'docx', 'doc'];
-
-
-                    $('#btnSubmit').click(function (e) {
-                        e.preventDefault();
-                        alertify.confirm("Are you sure you want to perform this action?",
-                            function () {
-                                $('#orderBusinessForm').submit();
-                            },
-                            function () {
-                            }).set({
-                            labels: {
-                                ok: 'Yes',
-                                cancel: 'No',
-                            }
-                        }).setHeader('Confirm Dialog');
-                    });
                     $('#file_path').change(function () {
-                        if ($.inArray($(this).val().split('.').pop().toLowerCase(), ALLOWED_FILE_EXTENSIONS) === -1) {
+                        // Check file extension
+                        var fileExtension = ['pdf', 'docx', 'doc'];
+                        if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
                             $(this).val('');
+                            // display an error message at the bottom if there's an error and also add a is-invalid in the input
                             $(this).addClass('is-invalid');
                             $(this).after(
-                                `<div class="invalid-feedback">Only formats are allowed : ${ALLOWED_FILE_EXTENSIONS.join(', ')}
+                                `<div class="invalid-feedback">Only formats are allowed : ${fileExtension.join(', ')}
                             </div>`
                             );
                         }

@@ -14,13 +14,13 @@ return new class () extends Migration {
         Schema::create('board_sessions', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
-            $table->text('content')->nullable();
             $table->string('file_path')->nullable();
             $table->string('unassigned_title')->nullable();
             $table->text('unassigned_business')->nullable();
             $table->string('announcement_title')->nullable();
             $table->text('announcement_content')->nullable();
             $table->enum('status', BoardSessionStatus::values())->default(BoardSessionStatus::UNLOCKED->value);
+            $table->unsignedBigInteger('locked_by')->nullable();
             $table->unsignedBigInteger('is_published')->default(0);
             $table->timestamps();
             $table->softDeletes();

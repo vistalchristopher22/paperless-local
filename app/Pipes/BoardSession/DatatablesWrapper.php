@@ -15,6 +15,10 @@ final class DatatablesWrapper implements IPipeHandler
     public function handle(mixed $payload, Closure $next)
     {
         $payload = datatables()->of($payload)
+            ->addIndexColumn()
+            ->editColumn('created_at', function ($boardSession) {
+                return $boardSession->created_at->format('F d, Y h:i A');
+            })
             ->addColumn('action', function ($boardSession) {
                 $editButton = '<a href="' . route('board-sessions.edit', $boardSession->id) . '" class="btn btn-sm btn-success text-white shadow"><i class="fas fa-pen"></i></a>';
                 $showButton = '<a href="' . route('board-sessions.show', $boardSession->id) . '" class="btn btn-sm btn-info text-white shadow"><i class="fas fa-eye"></i></a>';

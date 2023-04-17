@@ -40,10 +40,10 @@ class Committee extends Model
         return basename($this->file_path);
     }
 
-    public function toSearchableArray()
-    {
-        return [
-            'content' => $this->content,
-        ];
-    }
+    // public function toSearchableArray()
+    // {
+    //     return [
+    //         'content' => $this->content,
+    //     ];
+    // }
 }

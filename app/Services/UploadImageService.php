@@ -16,7 +16,7 @@ final class UploadImageService implements IUploadService
      *
      * @return The filename of the image.
      */
-    public function handle(UploadedFile $file)
+    public function handle(UploadedFile $file, string $directoryName = "committees")
     {
         // $filename = uniqid() . '.' . $file->getClientOriginalExtension();
         $filename = uniqid() . '.' . $file->getClientOriginalName();

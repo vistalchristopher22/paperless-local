@@ -1,22 +1,22 @@
 <?php
 
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\AgendaController;
+use App\Http\Controllers\Admin\Archieve\FileController;
+use App\Http\Controllers\Admin\BoardSessionController;
+use App\Http\Controllers\Admin\CommitteeController;
+use App\Http\Controllers\Admin\CommitteeFileController;
+use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
+use App\Http\Controllers\Admin\SanggunianMemberController;
+use App\Http\Controllers\Admin\UserAccessController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\User\CommitteeController as UserCommitteeController;
 use App\Models\BoardSession;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AccountController;
-use App\Http\Controllers\DivisionController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\AgendaController;
-use App\Http\Controllers\Admin\CommitteeController;
-use App\Http\Controllers\Admin\UserAccessController;
-use App\Http\Controllers\Admin\BoardSessionController;
-use App\Http\Controllers\Admin\Archieve\FileController;
-use App\Http\Controllers\Admin\CommitteeFileController;
-use App\Http\Controllers\Admin\SanggunianMemberController;
-use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
-use App\Http\Controllers\User\CommitteeController as UserCommitteeController;
-use App\Models\User;
 
 Route::redirect('/', '/login');
 
@@ -41,17 +41,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('committee', CommitteeController::class);
 
         Route::get('board-sessions/list', [BoardSessionController::class, 'list'])->name('board-sessions.list');
-
         Route::post('board-sessions/locked/{board_session}', [BoardSessionController::class, 'locked'])->name('board-sessions.locked');
         Route::post('board-sessions/unlocked/{board_session}', [BoardSessionController::class, 'unlocked'])->name('board-sessions.unlocked');
 
-        Route::group(['model' => BoardSession::class], function () {
-            Route::group(['base_rule' => 'announcement'], fn () => Route::post('board-session/announcement/store', [BoardSessionController::class, 'announcementStore'])
-                ->name('board-session.announcement.store'));
-            Route::group(['base_rule' => 'unassigned_business'], fn () => Route::post('board-session/unassigned-business/store', [BoardSessionController::class, 'unassignedBusinessStore'])
-                ->name('board-session.unassigned-business.store'));
-            Route::group(['base_rule' => 'order_business'], fn () => Route::resource('board-sessions', BoardSessionController::class));
-        });
+        Route::group(['base_rule' => 'order_business', 'model' => BoardSession::class], fn () => Route::resource('board-sessions', BoardSessionController::class));
 
 
         Route::post('files/get', [FileController::class, 'getFiles']);

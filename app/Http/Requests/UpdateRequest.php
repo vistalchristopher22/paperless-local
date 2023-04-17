@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Contracts\FormRules\DiscoverRules;
-use App\FormRules\UserFormRules;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRequest extends FormRequest implements DiscoverRules
@@ -34,6 +33,6 @@ class UpdateRequest extends FormRequest implements DiscoverRules
      */
     public function rules(): array
     {
-      return $this->getRules('PUT');
+        return $this->getRules('PUT');
     }
 }

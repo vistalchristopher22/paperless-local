@@ -4,38 +4,18 @@ namespace App\FormRules;
 
 trait BoardSessionFormRules
 {
-    public const RULES = [
-        'order_business' => [
-            'POST' => [
-                'title'     => 'required|string|max:255',
-                'content'   => 'required|string',
-                'published' => 'nullable|min:2',
-            ],
-
-            'PUT' => [
-                'title'     => 'required|string|max:255',
-                'content'   => 'required|string',
-                'published' => 'nullable|min:2',
-            ],
-        ],
-
-        'unassigned_business' => [
-            'POST' => [
-                'unassigned_title' => 'required|string|max:255',
-                'unassigned_business' => 'required|string',
-            ],
-
-            'PUT' => [
-                'unassigned_title' => 'required|string|max:255',
-                'unassigned_business' => 'required|string',
-            ],
-        ],
-
-        'announcement' => [
-            'POST' => [
-                'announcement_title' => 'required|string|max:255',
-                'announcement_content' => 'required|string',
-            ],
-        ]
-    ];
+    protected static function rules(): array
+    {
+        return [
+            "POST" => [
+                'title' => ['required', 'string', 'max:255'],
+                'published' => ['nullable', 'min:2'],
+                'file_path' => ['required'],
+                'unassigned_title' => ['nullable', 'min:2', 'string', 'max:255'],
+                'unassigned_business' => ['nullable', 'min:2', 'string'],
+                'announcement_title' => ['nullable', 'min:2', 'string', 'max:255'],
+                'announcement_content' => ['nullable', 'min:2', 'string'],
+            ]
+        ];
+    }
 }

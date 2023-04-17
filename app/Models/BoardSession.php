@@ -2,15 +2,27 @@
 
 namespace App\Models;
 
+use App\Enums\BoardSessionStatus;
 use App\FormRules\BoardSessionFormRules;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BoardSession extends Model
 {
     use HasFactory;
     use SoftDeletes;
     use BoardSessionFormRules;
+
     protected $guarded = [];
+
+    public static function boot()
+    {
+        parent::boot();
+        parent::updating(function ($boardSession) {
+            if ($boardSession->status == BoardSessionStatus::LOCKED->value) {
+                return false;
+            }
+        });
+    }
 }

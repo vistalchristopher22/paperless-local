@@ -14,10 +14,10 @@ final class UploadFileService implements IUploadService
      *
      * @param UploadedFile file The name of the file input field in the form
      */
-    public function handle(UploadedFile $file)
+    public function handle(UploadedFile $file, string $directoryName = "committees")
     {
         $filename = time() . '_' .  $file->getClientOriginalName();
-        Storage::disk('public')->putFileAs('committees', $file, $filename);
-        return storage_path() . DIRECTORY_SEPARATOR . 'committees' . DIRECTORY_SEPARATOR . $filename;
+        Storage::disk('public')->putFileAs($directoryName, $file, $filename);
+        return storage_path() . DIRECTORY_SEPARATOR . $directoryName . DIRECTORY_SEPARATOR . $filename;
     }
 }

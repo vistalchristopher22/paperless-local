@@ -31,15 +31,19 @@
             <table class="table border" id="order-business-table">
                 <thead>
                     <tr>
-                        <th class="p-3 text-center border text-dark">Order Business Title</th>
-                        <th class="p-3 text-center border text-dark">Order Business Content</th>
-                        <th class="p-3 text-center border text-dark">Unassigned Title</th>
-                        <th class="p-3 text-center border text-dark">Unassigned Content</th>
-                        <th class="p-3 text-center border text-dark">Announcement Title</th>
-                        <th class="p-3 text-center border text-dark">Announcement Content</th>
-                        <th class="p-3 text-center border text-dark">Published</th>
-                        <th class="p-3 text-center border text-dark">Status</th>
-                        <th class="p-3 text-center border text-dark">Action</th>
+                        <th class="p-3 text-center border text-dark">
+                            <small>
+                                Order Business Title
+                            </small>
+                        </th>
+                        <th class="p-3 text-center border text-dark"><small>Unassigned Title</small></th>
+                        <th class="p-3 text-center border text-dark"><small>Unassigned Content</small></th>
+                        <th class="p-3 text-center border text-dark"><small>Announcement Title</small></th>
+                        <th class="p-3 text-center border text-dark"><small>Announcement Content</small></th>
+                        <th class="p-3 text-center border text-dark"><small>Published</small></th>
+                        <th class="p-3 text-center border text-dark"><small>Status</small></th>
+                        <th class="p-3 text-center border text-dark"><small>Created At</small></th>
+                        <th class="p-3 text-center border text-dark"><small>Action</small></th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -57,17 +61,14 @@
                 let tableUrl = route('board-sessions.list');
                 $('#order-business-table').DataTable({
                     serverSide: true,
-                    processing : true,
                     ajax: tableUrl,
                     columns: [{
-                            className: 'border',
+                            className: 'border text-center',
                             data: 'title',
-                            name: 'title'
-                        },
-                        {
-                            className: 'border',
-                            data: 'content',
-                            name: 'content'
+                            name: 'title',
+                            render: function(data,_, row) {
+                                return `<span class="text-decoration-underline fw-medium text-capitalize text-primary cursor-pointer btn-view-file" data-path="${row.file_path}" data-id="${row.id}">${data}</span>`;
+                            }
                         },
                         {
                             className: 'border',
@@ -98,6 +99,11 @@
                             className: 'border text-center',
                             data: 'status',
                             name: 'status'
+                        },
+                        {
+                            className: 'border text-center',
+                            data: 'created_at',
+                            name: 'created_at'
                         },
                         {
                             className: 'border text-center',
@@ -210,7 +216,7 @@
                             cancel: "Cancel",
                             confirm: "Delete",
                         },
-                        dangerMode : true,
+                        dangerMode: true,
                     }).then((value) => {
                         if (value) {
                             $.ajax({
@@ -237,6 +243,11 @@
                     });
                 });
 
+                $(document).on('click', '.btn-view-file', function() {
+                    let id = $(this).attr('data-id');
+                    let path = $(this).attr('data-path');
+                    socket.emit('EDIT_FILE', { file_path : path});
+                });
             });
         </script>
     @endpush

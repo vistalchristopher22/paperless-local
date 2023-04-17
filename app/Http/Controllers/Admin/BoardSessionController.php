@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\BoardSession;
-use Illuminate\Http\Request;
-use App\Services\UserService;
-use App\Http\Requests\StoreRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Pipeline;
-use App\Pipes\BoardSession\GetBoardSession;
+use App\Http\Requests\StoreRequest;
+use App\Models\BoardSession;
 use App\Pipes\BoardSession\DatatablesWrapper;
+use App\Pipes\BoardSession\DeleteBoardSession;
+use App\Pipes\BoardSession\DeleteFileUpload;
+use App\Pipes\BoardSession\FileUpload;
+use App\Pipes\BoardSession\GetBoardSession;
 use App\Pipes\BoardSession\StoreBoardSession;
+use App\Pipes\BoardSession\UpdateBoardSession;
 use App\Repositories\BoardSessionRespository;
+use App\Services\UserService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Pipeline;
 
 final class BoardSessionController extends Controller
 {
@@ -19,7 +23,6 @@ final class BoardSessionController extends Controller
     {
         $this->middleware('verify.user')->only(['locked', 'unlocked', 'destroy']);
     }
-
 
     public function list()
     {
@@ -35,43 +38,48 @@ final class BoardSessionController extends Controller
         return view('admin.board-sessions.index');
     }
 
-
     public function create()
     {
         return view('admin.board-sessions.create');
     }
-
 
     public function store(StoreRequest $request)
     {
         return Pipeline::send($request->all())
             ->through([
                 StoreBoardSession::class,
+                FileUpload::class,
             ])->then(fn ($data) => redirect()->back()->with('success', 'Board session created successfully'));
     }
 
-
     public function show(string $id)
     {
-        //
+        return $this->boardSessionRepository->findBy('id', $id);
     }
-
 
     public function edit(int $id)
     {
-        //
+        $boardSession = $this->boardSessionRepository->findBy('id', $id);
+        return view('admin.board-sessions.edit', compact('boardSession'));
     }
 
-
-    public function update(Request $request, string $id)
+    public function update(Request $request, BoardSession $board_session)
     {
-        //
+        return Pipeline::send($request->merge(['boardSession' => $board_session])->all())
+            ->through([
+                UpdateBoardSession::class,
+                FileUpload::class,
+            ])->then(fn ($data) => redirect()->back()->with('success', 'Board session updated successfully'));
     }
-
 
     public function destroy(BoardSession $board_session)
     {
-        $this->boardSessionRepository->delete($board_session);
+        Pipeline::send($board_session)
+            ->through([
+                DeleteBoardSession::class,
+                DeleteFileUpload::class
+            ])
+            ->then(fn ($data) => $data);
         return response()->json(['success' => 'Board session deleted successfully']);
     }
 
@@ -85,19 +93,5 @@ final class BoardSessionController extends Controller
     {
         $this->boardSessionRepository->unlocked($board_session);
         return response()->json(['success' => 'Board session unlocked successfully']);
-    }
-
-    public function unassignedBusinessStore(StoreRequest $request)
-    {
-        $this->boardSessionRepository->createUnassignedBusiness($request->all());
-        return redirect()->back()->with('success', 'Unassigned business created successfully');
-    }
-
-
-
-    public function announcementStore(StoreRequest $request)
-    {
-        $this->boardSessionRepository->createAnnouncement($request->all());
-        return redirect()->back()->with('success', 'Announcement created successfully');
     }
 }
