@@ -48,7 +48,8 @@
                             <tr>
                                 <td class="text-center border">{{ $data->name }}</td>
                                 <td class="text-center border">{{ $data->description }}</td>
-                                <td class="text-center text-dark border">{{ $data->board_member->fullname }}</td>
+                                {{-- <td class="text-center text-dark border">{{ $data->board_member->fullname }}</td> --}}
+                                <td class="text-center text-dark border">{{ $data->fullname }}</td>
                                 <td class="align-middle text-center border">
                                     <form action="{{ route('division.destroy', $data) }}" method="POST">
                                         @method('DELETE')

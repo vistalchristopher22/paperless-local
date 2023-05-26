@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Division;
+use App\Http\Controllers\Controller;
 use App\Repositories\DivisionRepository;
 use App\Http\Requests\DivisionStoreRequest;
 use App\Http\Requests\DivisionUpdateRequest;

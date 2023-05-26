@@ -37,6 +37,9 @@ class AppServiceProvider extends ServiceProvider
             return $user->account_type == UserTypes::USER->value;
         });
 
+        Feature::define('sb-member', function (User $user) {
+            return $user->account_type == UserTypes::SP_MEMBER->value;
+        });
 
     }
 }

@@ -24,7 +24,6 @@
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span class="fw-bold">Ordered Business</span>
-            <a href="{{ route('board-sessions.create') }}" class="btn btn-primary">New Ordered Business</a>
         </div>
 
         <div class="card-body">
@@ -58,7 +57,7 @@
         <script src="//cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
         <script>
             $(document).ready(function () {
-                let tableUrl = route('board-sessions.list');
+                let tableUrl = route('user.sessions.list');
                 $('#order-business-table').DataTable({
                     serverSide: true,
                     ajax: tableUrl,
