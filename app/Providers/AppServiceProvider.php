@@ -49,5 +49,9 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('onReviewData', $data);
             }
         );
+        Feature::define('sb-member', function (User $user) {
+            return $user->account_type == UserTypes::SP_MEMBER->value;
+        });
+
     }
 }

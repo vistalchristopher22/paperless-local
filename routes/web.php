@@ -12,18 +12,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AgendaController;
-use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\CommitteeController;
 use App\Http\Controllers\Admin\UserAccessController;
 use App\Http\Controllers\Admin\BoardSessionController;
 use App\Http\Controllers\Admin\Archieve\FileController;
 use App\Http\Controllers\Admin\CommitteeFileController;
-use App\Http\Controllers\Admin\CommitteeMeetingController;
+use App\Http\Controllers\SPMember\SPMCommitteeController;
 use App\Http\Controllers\Admin\SanggunianMemberController;
 use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
+use App\Http\Controllers\User\AgendaController as UserAgendaController;
+use App\Http\Controllers\User\SessionController as UserSessionController;
+use App\Http\Controllers\User\DivisionController as UserDivisionController;
 use App\Http\Controllers\User\CommitteeController as UserCommitteeController;
 
 Route::redirect('/', '/login');
@@ -136,8 +138,31 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 
+
+// SB MEMBER
+Route::group(['prefix' => 'sb-member', 'middleware' => ['auth', 'features:sb-member']], function () {
+    Route::get('sbm-committees', [SPMCommitteeController::class, 'index'])->name('sbm.committee.index');
+    Route::get('sbm-committees', [SPMCommitteeController::class, 'index'])->name('sbm.committee.index');
+    Route::get('sbm-committees', [SPMCommitteeController::class, 'index'])->name('sbm.committee.index');
+
+});
+
+
+// USER
 Route::group(['prefix' => 'user', 'middleware' => ['auth', 'features:user']], function () {
     Route::get('user-committees', [UserCommitteeController::class, 'index'])->name('user.committee.index');
+    Route::get('committee', [UserCommitteeController::class, 'list']);
+
+
+    Route::get('user-sessions', [UserSessionController::class, 'index'])->name('user.sessions.index');
+    Route::get('sessions', [UserSessionController::class, 'list'])->name('user.sessions.list');
+
+
+    Route::get('user-agendas', [UserAgendaController::class, 'index'])->name('user.agendas.index');
+
+
+    Route::get('user-divisions', [UserDivisionController::class, 'index'])->name('user.divisions.index');
+
 });
 
 Route::get('sample', function () {
