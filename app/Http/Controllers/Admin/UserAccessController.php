@@ -37,7 +37,7 @@ final class UserAccessController extends Controller
     public function store(Request $request)
     {
         $this->userAccessRepository->grantAccess($request->agendas, $this->userRepository->findBy('id', $request->user));
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'message' => "Access granted successfully!"]);
     }
 
 

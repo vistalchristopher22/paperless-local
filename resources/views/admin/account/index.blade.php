@@ -32,8 +32,8 @@
                 <table class="table border" id="users-table">
                     <thead>
                         <tr>
-                            <th class="text-dark text-center"><small>Name</small></th>
-                            <th class="text-dark text-center"><small>Username</small></th>
+                            <th class="text-dark border text-center"><small>Name</small></th>
+                            <th class="text-dark border text-center"><small>Username</small></th>
                             <th class="text-dark border text-center"><small>Role</small></th>
                             <th class="text-dark border text-center"><small>Division</small></th>
                             <th class="text-dark border text-center"><small>Joined</small></th>
@@ -44,7 +44,7 @@
                     <tbody>
                         @foreach ($users as $user)
                             <tr class="align-middle">
-                                <td class="text-start text-dark border">
+                                <td class="text-start text-dark border text-capitalize">
                                     <span class="mx-3"></span>
                                     {{ $user->last_name }}, {{ $user->first_name }}
                                 </td>

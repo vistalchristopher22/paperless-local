@@ -1,4 +1,4 @@
-$('#filterByContent').val('');
+cre$('#filterByContent').val('');
 
 let limitString = (str, limit) => {
     if (str.length <= limit) {

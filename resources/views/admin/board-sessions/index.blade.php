@@ -13,10 +13,10 @@
 
 @section('content')
 
-    @if (Session::has('success'))
+    @if (session()->has('success'))
         <div class="card mb-2 bg-success shadow-sm text-white">
             <div class="card-body">
-                {{ Session::get('success') }}
+                {{ session()->get('success') }}
             </div>
         </div>
     @endif

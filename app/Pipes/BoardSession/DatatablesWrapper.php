@@ -2,9 +2,9 @@
 
 namespace App\Pipes\BoardSession;
 
-use Closure;
-use App\Enums\BoardSessionStatus;
 use App\Contracts\Pipes\IPipeHandler;
+use App\Enums\BoardSessionStatus;
+use Closure;
 
 final class DatatablesWrapper implements IPipeHandler
 {
@@ -20,25 +20,45 @@ final class DatatablesWrapper implements IPipeHandler
                 return $boardSession->created_at->format('F d, Y h:i A');
             })
             ->addColumn('action', function ($boardSession) {
-                $editButton = '<a href="' . route('board-sessions.edit', $boardSession->id) . '" class="btn btn-sm btn-success text-white shadow"><i class="fas fa-pen"></i></a>';
-                $showButton = '<a href="' . route('board-sessions.show', $boardSession->id) . '" class="btn btn-sm btn-info text-white shadow"><i class="fas fa-eye"></i></a>';
-                $lockedButton = '<button data-id=' . $boardSession->id . ' class="btn btn-sm btn-warning text-dark shadow btn-lock-session"><i class="fas fa-lock"></i></button>';
-                $unlockedButton = '<button data-id=' . $boardSession->id . ' class="btn btn-sm btn-primary text-white shadow btn-unlock-session"><i class="fas fa-unlock"></i></button>';
-                $deleteButton = '<button data-id=' . $boardSession->id . ' class="btn btn-sm btn-danger text-white shadow btn-delete-session"><i class="fas fa-trash"></i></button>';
+                $editButton = '<a href="' . route('board-sessions.edit', $boardSession->id) . '" class="dropdown-item text-primary text-center fw-medium cursor-pointer">Edit</a>';
+                $showButton = '<a href="' . route('board-sessions.show', $boardSession->id) . '" class="dropdown-item text-primary text-center fw-medium cursor-pointer">View</a>';
+                $lockedButton = '<a data-id=' . $boardSession->id . ' class="dropdown-item text-primary btn-lock-session text-center fw-medium cursor-pointer">Lock</a>';
+                $unlockedButton = '<a data-id=' . $boardSession->id . ' class="dropdown-item text-primary btn-unlock-session text-center fw-medium cursor-pointer"> Unlock</a>';
+                $deleteButton = '<a data-id=' . $boardSession->id . ' class="dropdown-item text-danger btn-delete-session text-center fw-medium cursor-pointer"> Delete</a>';
                 if ($boardSession->status == BoardSessionStatus::LOCKED->value) {
-                    return $showButton . ' ' . $unlockedButton;
+                    return '<div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownAction" data-bs-toggle="dropdown" aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownAction" style="">
+                                <li>' . $showButton . '</li>
+                                <li class="dropdown-divider"></li>
+                                <li>' . $unlockedButton . ' </li>
+                            </ul>
+                        </div>';
                 } else {
-                    return $editButton . ' ' . $showButton . ' ' . $lockedButton . ' ' . $deleteButton;
+                    return '<div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownAction" data-bs-toggle="dropdown" aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownAction" style="">
+                                <li>' . $editButton . '</li>
+                                <li class="dropdown-divider"></li>
+                                <li>' . $showButton . ' </li>
+                                <li class="dropdown-divider"></li>
+                                <li>' . $lockedButton . ' </li>
+                                <li class="dropdown-divider"></li>
+                                <li>' . $deleteButton . ' </li>
+                            </ul>
+                        </div>';
                 }
             })
             ->addColumn('status', function ($boardSession) {
-                // add span badge for status
                 if ($boardSession->status == BoardSessionStatus::LOCKED->value) {
                     return '<span class="badge bg-danger">' . $boardSession->status . '</span>';
                 } else {
                     return '<span class="badge bg-primary">' . $boardSession->status . '</span>';
                 }
-                return $boardSession->status;
             })
             ->addColumn('published', function ($boardSession) {
                 if ($boardSession->is_published == 1) {

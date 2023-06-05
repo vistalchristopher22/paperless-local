@@ -13,7 +13,7 @@ trait UserFormRules
                 'last_name' => ['required'],
                 'suffix' => ['nullable', 'min:2'],
                 'username' => ['required', 'unique:users,username'],
-                'password' => ['nullable', 'min:8'],
+                'password' => ['required', 'min:8'],
                 'account_type' => ['required' ],
                 'status' => ['required'],
                 'division' => ['required', 'exists:divisions,id'],

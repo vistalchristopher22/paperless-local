@@ -74,4 +74,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserAccess::class, 'user', 'id');
     }
+
+    public function committee()
+    {
+        return $this->hasOne(User::class, 'submitted_by', 'id');
+    }
 }

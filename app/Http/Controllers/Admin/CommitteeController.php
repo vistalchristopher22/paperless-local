@@ -18,6 +18,7 @@ use App\Repositories\CommitteeRepository;
 use Yajra\DataTables\Contracts\DataTable;
 use App\Http\Requests\StoreCommitteeRequest;
 use App\Http\Requests\UpdateCommitteeRequest;
+use App\Models\SanggunianMember;
 use App\Pipes\Committee\Filter\ContentFilter;
 use App\Pipes\Committee\Filter\LeadCommitteeFilter;
 use App\Pipes\Committee\Filter\ExpandedCommitteeFilter;
@@ -57,8 +58,43 @@ final class CommitteeController extends Controller
      */
     public function index()
     {
+
+        $commitees = Committee::with([
+            'lead_committee_information', 'expanded_committee_information', 'lead_committee_information.chairman_information', 'lead_committee_information.vice_chairman_information', 'lead_committee_information.members', 'lead_committee_information.members.sanggunian_member',
+            'expanded_committee_information.chairman_information', 'expanded_committee_information.vice_chairman_information', 'expanded_committee_information.members', 'expanded_committee_information.members.sanggunian_member'
+        ]);
+
+        if (array_key_exists('l', request()->query())) {
+            $commitees->where('lead_committee', request()->query('l'));
+        }
+
+        if (array_key_exists('e', request()->query())) {
+            $commitees->where('expanded_committee', request()->query('e'));
+        }
+
+
+
+        $commitees = $commitees->paginate(8);
+
+
+        $maxYear = DB::table('committees')
+            ->select(DB::raw('YEAR(MAX(date)) as max_year'))
+            ->pluck('max_year')
+            ->first();
+
+        $minYear = DB::table('committees')
+            ->select(DB::raw('YEAR(MIN(date)) as min_year'))
+            ->pluck('min_year')
+            ->first();
+
+        $sangguniangMembers = SanggunianMember::get();
+
         return view('admin.committee.index', [
             'agendas' => $this->agendaRepository->get(),
+            'committees' => $commitees,
+            'sangguniangMembers' => $sangguniangMembers,
+            'minYear' => $minYear,
+            'maxYear' => $maxYear,
         ]);
     }
 

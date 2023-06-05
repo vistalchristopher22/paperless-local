@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Str;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class ConvertDocxToPDFCommand extends Command
 {
@@ -25,10 +27,19 @@ class ConvertDocxToPDFCommand extends Command
      */
     public function handle(): void
     {
-        $directory = dirname($this->argument('path'));
-        $directory = str_replace("public\\", "", $directory);
-        $directory = str_replace("storage\\", "storage\\app\\public\\", $directory);
-        shell_exec('"C:\\Program Files\\LibreOffice\\program\\soffice" --headless --convert-to pdf ' . $this->argument('path') .  ' --outdir ' .  $directory);
-        $this->info('Converted Successfully');
+        $outputDirectory = base_path() . '/storage/app/public/board-sessions/';
+
+        $baseName = basename($this->argument('path'));
+
+        $inputDirectory = base_path() . '/storage/app/public/board-sessions/' . $baseName;
+
+        $inputDirectory = str_replace('/', '\\', $inputDirectory);
+
+        $result = shell_exec('"C:\Program Files\LibreOffice\program\soffice" --headless --convert-to pdf "' .$inputDirectory .'" --outdir ' . $outputDirectory);
+        if(Str::contains($result, "convert")) {
+            $this->info("File converted successfully");
+        } else {
+            Log::info($result);
+        }
     }
 }

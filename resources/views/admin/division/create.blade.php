@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('page-title', 'Create Division')
 @prepend('page-css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"
@@ -16,7 +17,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h6 class="card-title m-0">Create Division</h6>
+            <h6 class="card-title m-0">@yield('page-title')</h6>
         </div>
 
         <div class="card-body">
@@ -52,7 +53,7 @@
 
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <a href="{{ route('division.index') }}" class="text-decoration-underline fw-bold">Back</a>
-                    <button class="btn btn-primary">Save</button>
+                    <button class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>

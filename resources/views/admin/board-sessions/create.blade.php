@@ -35,7 +35,7 @@
                 <div class="card-body p-0 mb-0">
                     <div class="p-4">
                         <div class="mb-3">
-                            <label for="title" class="form-label">Order Business title</label>
+                            <label for="title" class="form-label">Order Business Title</label>
                             <input type="text" class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}"
                                    value="{{ old('title') }}" id="title" title="title" name="title"
                                    placeholder="Enter title">
@@ -58,8 +58,9 @@
                         <div class="card-title">Unassigned Business</div>
                     </div>
                     <div class="p-3">
+
                         <div class="mb-3">
-                            <label for="unassigned_title" class="form-label">Unassigned Business title</label>
+                            <label for="unassigned_title" class="form-label">Unassigned Business Title</label>
                             <input type="text"
                                    class="form-control {{ $errors->has('unassigned_title') ? 'is-invalid' : '' }}"
                                    value="{{ old('unassigned_title') }}" id="unassigned_title" name="unassigned_title"
@@ -87,7 +88,7 @@
 
                     <div class="p-3">
                         <div class="mb-3">
-                            <label for="announcement_title" class="form-label">Announcement title</label>
+                            <label for="announcement_title" class="form-label">Announcement Title</label>
                             <input type="text" class="form-control @error('announcement_title') is-invalid @enderror"
                                    value="{{ old('announcement_title') }}" id="announcement_title"
                                    name="announcement_title" placeholder="Enter title">

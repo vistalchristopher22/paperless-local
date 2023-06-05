@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('page-title', 'Complete Listing of Agendas')
 @prepend('page-css')
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.dataTables.min.css">
@@ -9,10 +10,10 @@
     </style>
 @endprepend
 @section('content')
-    @if (Session::has('success'))
+    @if (session()->has('success'))
         <div class="card mb-2 bg-success shadow-sm text-white">
             <div class="card-body">
-                {{ Session::get('success') }}
+                {{ session()->get('success') }}
             </div>
         </div>
     @else
@@ -24,9 +25,9 @@
     @endif
     <div class="card mb-4">
         <div class="card-header justify-content-between align-items-center d-flex">
-            <h6 class="card border-0 m-0 ">Complete Listing of Agendas</h6>
+            <h6 class="card border-0 m-0 fw-bold">@yield('page-title')</h6>
             <div class="dropdown">
-                <a href="{{ route('agendas.create') }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('agendas.create') }}" class="btn btn-primary">
                     Add New Agenda
                 </a>
             </div>
@@ -71,7 +72,7 @@
                                     <a class="btn btn-sm btn-success text-white" title="Edit Agenda" data-bs-toggle="tooltip"
                                         data-bs-placement="top" data-bs-original-title="Edit Agenda"
                                         href="{{ route('agendas.edit', $agenda) }}">
-                                        <i class="fa-solid fa-user-pen"></i>
+                                        <i class="fas fa-pen"></i>
                                     </a>
                                     {{-- <a class="btn btn-sm btn-success text-white"
                                         href="{{ route('agendas.edit', $agenda) }}">Edit</a> --}}

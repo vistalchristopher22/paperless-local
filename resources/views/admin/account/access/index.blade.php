@@ -17,15 +17,24 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
+            {{-- generate a card for short information about the page process --}}
+            <div class="card bg-primary mb-2 text-white">
+                <div class="card-body">
+                    <i class="fas fa-info-circle fa-1x me-2"></i>
+                    Select a user to view the access control of the user or grant access to the user.
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header fw-bold">Assign Access Control</div>
                 <div class="card-body">
-                    <label class="fw-bold">User</label>
+                    <label class="fw-bold">User <span class="text-danger fw-bold">*</span></label>
                     <select name="user" id="user" class="form-select">
                         <option value="" selected disabled>Select a user</option>
                         @foreach ($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->last_name }}, {{ $user->first_name }}
-                                {{ $user->middle_name }}</option>
+                            <option value="{{ $user->id }}">{{ Str::ucfirst($user->last_name) }},
+                                {{ Str::ucfirst($user->first_name) }}
+                                {{ Str::ucfirst($user->middle_name) }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -39,7 +48,7 @@
             <div class="card">
                 <div class="card-header fw-bold d-flex flex-row align-items-center justify-content-between">
                     <span class="">Agendas <span id="totalAccess">(Total Access - 0)</span></span>
-                    <button class="btn btn-primary text-white shadow btn-sm" id="btnBulkAction">Checked All</button>
+                    <button class="btn btn-info text-white shadow" id="btnBulkAction">Checked All</button>
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -60,7 +69,8 @@
                             </li>
                         @endforeach
                     </ul>
-                    <button class="btn btn-primary btn-sm my-3 float-end" id="btnGrantBulkAccess">Grant Bulk Access</button>
+                    <button class="btn btn-primary my-3 float-end" id="btnGrantBulkAccess">Grant Bulk Access <span
+                            id="numberOfAccess">(0)</span></button>
                 </div>
             </div>
         </div>
@@ -100,6 +110,7 @@
                 $.ajax({
                     url: route('account-access-control.show', id),
                     success: function(response) {
+                        newAccessSet.clear();
                         const checkboxes = $('.agenda-access-checkbox input[type="checkbox"]');
                         checkboxes.prop('checked', false);
                         response.access.forEach((access) => {
@@ -112,6 +123,7 @@
                         });
                         let count = $('.agenda-access-checkbox input[type="checkbox"]:checked').length;
                         $('#totalAccess').text(``).text(`(Total Access - ${count})`);
+                        $('#numberOfAccess').text(``).text(`(${count})`);
                     },
                 });
             });
@@ -131,13 +143,11 @@
                         <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.chairman_information.profile_picture}" alt="${agenda.chairman_information.fullname}">
                     </picture>
                 `);
-
                 $('#pictures').prepend(`
                     <picture class="avatar-group-img">
                         <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" alt="${agenda.vice_chairman_information.fullname}">
                     </picture>
                 `);
-
                 if (agenda.members) {
                     $('#leadCommitteeContent').html(``);
 
@@ -218,37 +228,44 @@
                 }
                 let count = $('.agenda-access-checkbox input[type="checkbox"]:checked').length;
                 $('#totalAccess').text(``).text(`(Total Access - ${count})`);
+                $('#numberOfAccess').text(``).text(`(${count})`);
             });
-
-
 
             $('#btnGrantBulkAccess').click(function() {
                 let newAccessArray = Array.from(newAccessSet);
                 let user = $('#user').val();
 
-                $.ajax({
-                    url: route('account-access-control.store'),
-                    method: 'POST',
-                    data: {
-                        key: `password`,
-                        user: user,
-                        agendas: newAccessArray
-                    },
-                    success: function(response) {
-                        if (response.success) {
+                if (newAccessArray.length === 0 || user === null) {
+                    alertify.error(`Please select a user and/or agenda to grant access.`);
+                    return;
+                }
 
-                        }
-                    },
-                    error: function(response) {
-                        if (response.status == 422) {
-                            alertify.error(response.responseJSON.message);
-                        }
-                    }
-                });
+                alertify.confirm("Are you sure you want to grant access?",
+                    function() {
+                        $.ajax({
+                            url: route('account-access-control.store'),
+                            method: 'POST',
+                            data: {
+                                key: `password`,
+                                user: user,
+                                agendas: newAccessArray
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    alertify.success(response.message);
+
+                                    // clear all access set
+                                    newAccessSet.clear();
+                                }
+                            },
+                            error: function(response) {
+                                if (response.status == 422) {
+                                    alertify.error(response.responseJSON.message);
+                                }
+                            }
+                        });
+                    });
             });
-
-
-
 
             $(document).on('click', '.agenda-access-checkbox', function() {
                 let id = $(this).attr('data-id');
@@ -264,6 +281,7 @@
 
                 let count = $('.agenda-access-checkbox input[type="checkbox"]:checked').length;
                 $('#totalAccess').text(``).text(`(Total Access - ${count})`);
+                $('#numberOfAccess').text(``).text(`(${count})`);
             });
 
 

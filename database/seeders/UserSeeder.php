@@ -22,5 +22,23 @@ class UserSeeder extends Seeder
             'account_type' => UserTypes::ADMIN->value,
             'status' => UserStatus::Active,
         ]);
+
+        User::create([
+            'first_name' => 'Christopher',
+            'last_name' => 'Vistal',
+            'username' => 'tooshort01',
+            'password' => 'password',
+            'account_type' => UserTypes::USER->value,
+            'status' => UserStatus::Active,
+        ]);
+
+        User::create([
+            'first_name' => 'Juan',
+            'last_name' => 'Cruz',
+            'username' => 'tooshort02',
+            'password' => 'password',
+            'account_type' => UserTypes::USER->value,
+            'status' => UserStatus::Active,
+        ]);
     }
 }

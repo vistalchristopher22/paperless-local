@@ -20,10 +20,21 @@ class Committee extends Model
         'file'
     ];
 
+    public $casts = [
+        'date' => 'date',
+        'session_schedule' => 'date',
+    ];
+
     public function lead_committee_information()
     {
         return $this->hasOne(Agenda::class, 'id', 'lead_committee');
     }
+
+    public function submitted()
+    {
+        return $this->belongsTo(User::class, 'submitted_by', 'id');
+    }
+
 
     public function expanded_committee_information()
     {
@@ -40,10 +51,4 @@ class Committee extends Model
         return basename($this->file_path);
     }
 
-    // public function toSearchableArray()
-    // {
-    //     return [
-    //         'content' => $this->content,
-    //     ];
-    // }
 }

@@ -5,14 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Enums\UserTypes;
 use App\Enums\UserStatus;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Pipes\User\StoreUser;
 use App\Services\UserService;
 use App\Pipes\User\UpdateUser;
 use App\Pipes\User\ChangePassword;
 use App\Pipes\User\ProfilePicture;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRequest;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateRequest;
 use App\Repositories\UserRepository;
 use App\Http\Requests\UserStoreRequest;
@@ -77,8 +78,7 @@ final class UserController extends Controller
                 StoreUser::class,
             ])->then(fn ($data) => $data);
 
-
-        return back()->with('success', 'Success! User account created.');
+        return back()->with('success', "Success! " . Str::ucfirst($request->last_name) . ", " . Str::ucfirst($request->first_name) . " has been created.");
     }
 
 

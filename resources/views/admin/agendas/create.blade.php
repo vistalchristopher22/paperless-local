@@ -56,10 +56,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Members <span class="text-primary">(Use the <span class="fw-bold">CTRL or SHIFT</span> key on
-                            your
-                            keyboard to select
-                            multiple)</span></label>
+                    <label>Members</label>
                     <select name="members[]" class="form-select" multiple aria-label="multiple select example">
                         @foreach ($members as $member)
                             <option value="{{ $member->id }}">{{ $member->fullname }}</option>

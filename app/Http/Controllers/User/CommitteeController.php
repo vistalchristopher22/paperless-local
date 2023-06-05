@@ -9,7 +9,6 @@ final class CommitteeController extends Controller
 {
     public function index()
     {
-        //
     }
 
 

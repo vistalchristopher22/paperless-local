@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Enums\UserTypes;
+use App\Models\Committee;
 use Laravel\Pennant\Feature;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,9 +25,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //        Model::preventAccessingMissingAttributes();
-        //        Model::preventSilentlyDiscardingAttributes();
-        Model::preventLazyLoading(! app()->isProduction());
+        Paginator::useBootstrap();
+        Model::preventAccessingMissingAttributes();
+        Model::preventSilentlyDiscardingAttributes();
+        Model::preventLazyLoading(!app()->isProduction());
 
         Feature::purge();
 
@@ -37,6 +40,14 @@ class AppServiceProvider extends ServiceProvider
             return $user->account_type == UserTypes::USER->value;
         });
 
-
+        view()->composer(
+            ['layouts.app'],
+            function ($view) {
+                $data = Committee::with(['lead_committee_information', 'lead_committee_information.chairman_information', 'submitted', 'submitted.division_information'])
+                    ->whereNull('schedule_id')
+                    ->get();
+                $view->with('onReviewData', $data);
+            }
+        );
     }
 }

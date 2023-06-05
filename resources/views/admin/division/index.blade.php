@@ -37,17 +37,17 @@
                 <table class="table table-striped border" id="division-table">
                     <thead>
                         <tr>
-                            <th class="text-center border">Name</th>
-                            <th class="text-center border">Description</th>
-                            <th class="text-center border">Board</th>
-                            <th class="text-center border">Action</th>
+                            <th class="text-center text-dark border">Name</th>
+                            <th class="text-center text-dark border">Description</th>
+                            <th class="text-center text-dark border">Board</th>
+                            <th class="text-center text-dark border">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($division as $data)
                             <tr>
-                                <td class="text-center border">{{ $data->name }}</td>
-                                <td class="text-center border">{{ $data->description }}</td>
+                                <td class="text-center text-dark border">{{ $data->name }}</td>
+                                <td class="text-center text-dark border">{{ $data->description }}</td>
                                 <td class="text-center text-dark border">{{ $data->board_member->fullname }}</td>
                                 <td class="align-middle text-center border">
                                     <form action="{{ route('division.destroy', $data) }}" method="POST">

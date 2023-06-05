@@ -13,15 +13,21 @@ use App\Pipes\BoardSession\GetBoardSession;
 use App\Pipes\BoardSession\StoreBoardSession;
 use App\Pipes\BoardSession\UpdateBoardSession;
 use App\Repositories\BoardSessionRespository;
+use App\Services\DocumentService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Pipeline;
 
 final class BoardSessionController extends Controller
 {
-    public function __construct(private BoardSessionRespository $boardSessionRepository, private UserService $userService)
+    private DocumentService $documentService;
+
+    public function __construct(private BoardSessionRespository $boardSessionRepository, private readonly UserService $userService)
     {
+        $this->documentService = app()->make(DocumentService::class);
         $this->middleware('verify.user')->only(['locked', 'unlocked', 'destroy']);
+
     }
 
     public function list()
@@ -30,7 +36,7 @@ final class BoardSessionController extends Controller
             ->through([
                 GetBoardSession::class,
                 DatatablesWrapper::class,
-            ])->then(fn($data) => $data);
+            ])->then(fn ($data) => $data);
     }
 
     public function index()
@@ -49,12 +55,18 @@ final class BoardSessionController extends Controller
             ->through([
                 StoreBoardSession::class,
                 FileUpload::class,
-            ])->then(fn($data) => redirect()->back()->with('success', 'Board session created successfully'));
+            ])->then(fn ($data) => redirect()->back()->with('success', 'Board session created successfully'));
     }
 
-    public function show(string $id)
+    public function show(int $id)
     {
-        return $this->boardSessionRepository->findBy('id', $id);
+        $boardSession = $this->boardSessionRepository->findBy('id', $id);
+
+        if(!$this->documentService->isPDF($boardSession->file_path)) {
+            Artisan::call('convert:path', ['path' => $boardSession->file_path]);
+        }
+
+        return view('admin.board-sessions.show', compact('boardSession'));
     }
 
     public function edit(int $id)
@@ -69,7 +81,7 @@ final class BoardSessionController extends Controller
             ->through([
                 UpdateBoardSession::class,
                 FileUpload::class,
-            ])->then(fn($data) => redirect()->back()->with('success', 'Board session updated successfully'));
+            ])->then(fn ($data) => redirect()->back()->with('success', 'Board session updated successfully'));
     }
 
     public function destroy(BoardSession $board_session)
@@ -79,7 +91,7 @@ final class BoardSessionController extends Controller
                 DeleteBoardSession::class,
                 DeleteFileUpload::class
             ])
-            ->then(fn($data) => $data);
+            ->then(fn ($data) => $data);
         return response()->json(['success' => true, 'message' => 'Board session deleted successfully']);
     }
 

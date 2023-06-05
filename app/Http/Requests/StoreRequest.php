@@ -26,6 +26,8 @@ class StoreRequest extends FormRequest implements DiscoverRules
         return $model::rules()[$this->getBaseRule()][$type] ?? $model::rules()[$type];
     }
 
+
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -35,4 +37,5 @@ class StoreRequest extends FormRequest implements DiscoverRules
     {
         return $this->getRules('POST');
     }
+
 }
