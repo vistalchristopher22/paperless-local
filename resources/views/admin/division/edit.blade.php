@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('page-title', 'Edit Division')
+@extends('layouts.app-2')
+@section('tab-title', 'Edit Division')
 @prepend('page-css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"
@@ -16,8 +16,8 @@
     @endif
 
     <div class="card">
-        <div class="card-header">
-            <h6 class="card-title m-0">@yield('page-title')</h6>
+        <div class="card-header bg-dark">
+            <h6 class="card-title text-white h6 m-0">Edit Division</h6>
         </div>
 
         <div class="card-body">
@@ -25,7 +25,7 @@
                 @method('PUT')
                 @csrf
                 <div class="form-group">
-                    <label for="">Name</label>
+                    <label class="form-label">Name</label>
                     <input type="text" class="form-control" name="name" id="name"
                         value="{{ old('name', $division->name) }}">
                     @error('name')
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Descrption</label>
+                    <label class="form-label">Descrption</label>
                     <textarea name="description" class="form-control" rows="2" id="description">{{ old('description', $division->description) }}</textarea>
                     @error('description')
                         <span class="text-danger">{{ $message }}</span>
@@ -42,10 +42,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Board</label>
+                    <label class="form-label">Board</label>
                     <select name="board" class="form-select" id="select-board">
                         @foreach ($members as $member)
-                            <option {{ old('board', $division->board) == $member->id ? 'selected' : '' }} value="{{ $member->id }}">{{ $member->fullname }}</option>
+                            <option {{ old('board', $division->board) == $member->id ? 'selected' : '' }}
+                                value="{{ $member->id }}">{{ $member->fullname }}</option>
                         @endforeach
                     </select>
                     @error('board')

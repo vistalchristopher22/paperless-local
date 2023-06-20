@@ -15,9 +15,24 @@ final class CommitteeRepository extends BaseRepository
 
     public function get($columns = []): Collection
     {
-        return $this->model->with(['lead_committee_information', 'expanded_committee_information'])
+        return $this->model->with(['lead_committee_information', 'expanded_committee_information', 'submitted'])
             ->whereNull('deleted_at')
             ->get($columns);
+    }
+
+    public function approvedOrLocked($columns = [])
+    {
+        return $this->model->with(['lead_committee_information', 'expanded_committee_information', 'submitted'])
+            ->whereNull('deleted_at')
+            ->where('status', '!=', 'review')
+            ->get($columns);
+    }
+
+
+    public function prepare()
+    {
+        return $this->model->with(['lead_committee_information', 'expanded_committee_information'])
+            ->whereNull('deleted_at');
     }
 
 

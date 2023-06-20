@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 final class {{class}} extends BaseRepository
 {
-    // Change the modal
+    // Change the model
     public function __construct(Model $model)
     {
         parent::__construct($model);

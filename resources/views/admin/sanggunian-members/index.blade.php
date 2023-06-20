@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('page-title', 'Sangguniang Panlalawigan Members')
+@extends('layouts.app-2')
+@section('tab-title', 'Sanggunian Members')
 @prepend('page-css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css"
         integrity="sha512-ZKX+BvQihRJPA8CROKBhDNvoc2aDMOdAlcm7TUQY+35XYtrd3yh95QOOhsPDQY9QnKE0Wqag9y38OIgEvb88cA=="
@@ -46,10 +46,10 @@
     @endif
 
     <div class="card mb-4 ">
-        <div class="card-header justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0">Sangguniang Panlalawigan Members</h6>
+        <div class="card-header justify-content-between align-items-center d-flex bg-dark">
+            <h6 class="card-title m-0 h6 text-white">Sangguniang Panlalawigan Members</h6>
             <div class="dropdown">
-                <a href="{{ route('sanggunian-members.create') }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('sanggunian-members.create') }}" class="btn btn-light fw-bold">
                     Add New Member
                 </a>
             </div>
@@ -60,12 +60,12 @@
                 <table class="table border" id="members-table">
                     <thead>
                         <tr>
-                            <th class="text-center text-dark border">Picture</th>
-                            <th class="text-center text-dark border">Fullname</th>
-                            <th class="text-center text-dark border">District</th>
-                            <th class="text-dark text-center border">Sanggunian</th>
-                            <th class="text-dark text-center border">Joined</th>
-                            <th class="text-dark text-center border">Actions</th>
+                            <th class="p-3 text-center text-dark border bg-light">Picture</th>
+                            <th class="p-3 text-center text-dark border bg-light">Fullname</th>
+                            <th class="p-3 text-center text-dark border bg-light">District</th>
+                            <th class="p-3 text-dark text-center border bg-light">Sanggunian</th>
+                            <th class="p-3 text-dark text-center border bg-light">Created At</th>
+                            <th class="p-3 text-dark text-center border bg-light">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,18 +89,20 @@
                                 </td>
                                 <td class="text-dark text-center border">{{ $member->district }}</td>
                                 <td class="text-dark text-center border">{{ $member->sanggunian }}</td>
-                                <td class="text-dark text-center border">{{ $member->created_at->format('jS M, Y h:i A') }}</td>
+                                <td class="text-dark text-center border">{{ $member->created_at->format('jS M, Y h:i A') }}
+                                </td>
                                 <td class="text-dark text-center border">
-                                    <a class="btn btn-sm btn-success text-white" title="Edit User" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-original-title="Edit Sanggunian Member"
+                                    <a class="btn btn-success text-white" title="Edit Sanggunian Member"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-original-title="Edit Sanggunian Member"
                                         href="{{ route('sanggunian-members.edit', $member) }}">
-                                        <i class="fa-solid fa-user-pen"></i>
+                                        <i class="mdi mdi-pencil-outline"></i>
                                     </a>
-                                    <button class="btn btn-sm btn-danger text-white btn-remove-sanggunian"
+                                    <button class="btn btn-danger text-white btn-remove-sanggunian"
                                         data-id="{{ $member->id }}" title="Remove Sanggunian Member"
                                         data-bs-toggle="tooltip" data-bs-placement="top"
                                         data-bs-original-title="Remove Sanggunian Member">
-                                        <i class="fa-solid fa-user-xmark"></i>
+                                        <i class="mdi mdi-trash-can-outline"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -111,18 +113,17 @@
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offCanvasAgendas" aria-labelledby="offCanvasAgendasTitle">
+    <div class="offcanvas offcanvas-end" style="width:380px;" tabindex="-1" id="offCanvasAgendas"
+        aria-labelledby="offCanvasAgendasTitle">
         <div class="offcanvas-header position-relative">
-            <div class="d-flex flex-column w-100">
-                <h5 class="offcanvas-title mb-3" id="offCanvasAgendasTitle">Agendas</h5>
+            <div class="d-flex flex-row align-items-center justify-content-center">
+                <h5 class="offcanvas-title" id="offCanvasAgendasTitle">Agendas</h5>
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="avatar-group me-4" id="pictures">
                         <span class="small fw-bolder ms-2 text-muted text-dark" id="picturesDescription"></span>
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn-close text-reset position-absolute top-20 end-5" data-bs-dismiss="offcanvas"
-                aria-label="Close"></button>
         </div>
         <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
             <div class="overflow-auto py-2">
@@ -158,7 +159,7 @@
                                 },
                                 error: function(response) {
                                     if (response.status == 422) {
-                                        alertify.error(response.responseJSON.message);
+                                        notyf.error(response.responseJSON.message)
                                         showDeleteConfirmation(id);
                                     }
                                 }
@@ -197,7 +198,7 @@
                             $('#leadCommitteeContent').empty();
 
                             $('#leadCommitteeContent').append(
-                                `<h5 class="bg-primary text-white p-2 mb-2 shadow rounded text-center">Chairman on agenda</h5>`
+                                `<h5 class="text-dark bg-dark text-white p-2 mb-2 text-center">Chairman on Agenda</h5>`
                             );
                             // Check if there's a record
                             if (chairman.length == 0) {
@@ -213,12 +214,12 @@
                             }
 
                             $('#leadCommitteeContent').append(
-                                `<div class="border border-bottom border-primary my-2"></div>`);
+                                `<div class="border border-bottom border-light my-2"></div>`);
 
                             // vice chairman render
                             let viceChairman = response.vice_chairman;
                             $('#leadCommitteeContent').append(
-                                `<h5 class="bg-primary text-white p-2 mb-2 shadow rounded text-center">Vice Chairman on Agenda</h5>`
+                                `<h5 class="text-dark bg-dark text-white p-2 mb-2 text-center">Vice Chairman on Agenda</h5>`
                             );
 
                             if (viceChairman.length == 0) {
@@ -234,11 +235,11 @@
                             }
 
                             $('#leadCommitteeContent').append(
-                                `<div class="border border-bottom border-primary my-2"></div>`);
+                                `<div class="border border-bottom border-light my-2"></div>`);
 
                             let members = response.member;
                             $('#leadCommitteeContent').append(
-                                `<h5 class="bg-primary text-white p-2 mb-2 shadow rounded text-center">Members on Agenda</h5>`
+                                `<h5 class="text-dark bg-dark text-white p-2 mb-2 text-center">Member on Agenda</h5>`
                             );
 
                             if (members.length == 0) {
@@ -254,7 +255,7 @@
                             }
 
                             $('#leadCommitteeContent').append(
-                                `<div class="border border-bottom border-primary my-2"></div>`);
+                                `<div class="border border-bottom border-light my-2"></div>`);
                         },
                     });
                 });

@@ -27,15 +27,11 @@ class ConvertDocxToPDFCommand extends Command
      */
     public function handle(): void
     {
-        $outputDirectory = base_path() . '/storage/app/public/board-sessions/';
+        $outputDirectory = base_path() . '/storage/app/public/committees/';
 
-        $baseName = basename($this->argument('path'));
-
-        $inputDirectory = base_path() . '/storage/app/public/board-sessions/' . $baseName;
-
-        $inputDirectory = str_replace('/', '\\', $inputDirectory);
-
+        $inputDirectory = $this->argument('path');
         $result = shell_exec('"C:\Program Files\LibreOffice\program\soffice" --headless --convert-to pdf "' .$inputDirectory .'" --outdir ' . $outputDirectory);
+
         if(Str::contains($result, "convert")) {
             $this->info("File converted successfully");
         } else {

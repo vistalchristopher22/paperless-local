@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('page-title', 'New Sangguniang Member')
+@extends('layouts.app-2')
+@section('tab-title', 'New Sangguniang Member')
 @section('content')
     @if (Session::has('success'))
         <div class="card mb-2 bg-success shadow-sm text-white">
@@ -9,8 +9,8 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0">New Sangguniang Member</h6>
+        <div class="card-header justify-content-between align-items-center d-flex bg-dark">
+            <h6 class="card-title h6 text-white">New Sangguniang Member Form</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('sanggunian-members.store') }}" enctype="multipart/form-data">
@@ -46,25 +46,6 @@
                 <div class="form-group">
                     <input type="file" class="form-control" name="image" id="image">
                 </div>
-
-
-                {{-- <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" id="username" value="{{ old('username') }}" class="form-control">
-                    @error('username')
-                        <span class="text-danger"> {{ $message }}</span>
-                    @enderror
-                </div>
-
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="text" name="password" id="password" value="{{ old('password') }}"
-                        class="form-control">
-                    @error('password')
-                        <span class="text-danger"> {{ $message }}</span>
-                    @enderror
-                </div> --}}
 
 
                 <!-- Submit Button -->

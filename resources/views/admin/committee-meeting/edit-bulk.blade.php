@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('page-title', 'Modify Schedule')
+@extends('layouts.app-2')
+@section('tab-title', 'Modify Schedule')
 @prepend('page-css')
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <style>
@@ -22,7 +22,6 @@
         .kanban-column h2 {
             margin-top: 0;
             font-size: 1.2rem;
-            font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             margin-bottom: 10px;
@@ -41,7 +40,6 @@
         .kanban-card h3 {
             margin-top: 0;
             font-size: 1.1rem;
-            font-weight: bold;
             margin-bottom: 5px;
         }
 
@@ -52,7 +50,7 @@
         }
 
         .kanban-card-placeholder {
-            border: 2px dashed #07073d;
+            border: 1px dashed #07073d;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
             height: 100px;
@@ -61,8 +59,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.1rem;
-            font-weight: bold;
             color: #999;
         }
 
@@ -74,22 +70,33 @@
 @endprepend
 @section('content')
     <div class="card">
-        <div class="card-header bg-dark">
-            <a href="{{ route('schedule-meeting.merge.print', $dates) }}" class="btn btn-light btn-sm float-end">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer-fill" viewBox="0 0 16 16">
-                    <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2H5zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1z"/>
-                    <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2V7zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
-                  </svg>
-                <span class="mx-2">
-                    Print Committee Meeting
-                </span>
+        <div class="card-header">
+            <div class="btn-group float-end" role="group">
 
-            </a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-light dropdown-toggle" id="uploadGroupDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i data-feather="align-justify"></i>
+                    </button>
+
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="uploadGroupDropdown">
+                        <a class="dropdown-item d-flex flex-row align-items-center" target="_blank" href="{{ route('display.published.meeting', $dates) }}">
+                                <i class="mdi mdi-eye mdi-18px mx-2"></i>
+                                View
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" target="_blank" href="{{ route('schedule-meeting.merge.print', $dates) }}">
+                                <i class="mdi mdi-printer mdi-18px mx-2"></i>
+                                Print
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div
                 class="header d-flex flex-row align-items-center justify-content-center border border-start-0 border-end-0 border-top-0 border-5 border-dark mb-3">
-                <img width="13%" src="{{ asset('session/logo.png') }}" alt="" class="me-auto">
+                <img width="10%" src="{{ asset('session/logo.png') }}" alt="" class="me-auto">
                 <div class="d-flex flex-column align-items-center">
                     <h5 class="text-dark">Republic of the Philippines</h5>
                     <h5 class="fw-bold text-dark">PROVINCE OF SURIGAO DEL SUR</h5>
@@ -97,7 +104,7 @@
                     <h3 class="fw-bold text-dark">TANGGAPAN NG SANGGUNIANG PANLALAWIGAN</h3>
                     <h5 class="text-dark">(Office of the Provincial Council)</h5>
                 </div>
-                <img width="14.5%" src="{{ asset('assets/tsp.png') }}" alt="" class="ms-auto">
+                <img width="11.5%" src="{{ asset('assets/tsp.png') }}" alt="" class="ms-auto">
             </div>
             <div class="text-center">
                 <h4 class="fw-medium" style="letter-spacing : 1.8px;">
@@ -135,14 +142,17 @@
                                         <li class="kanban-card shadow-lg" data-id="{{ $committee->id }}">
                                             <span class="text-white">
                                                 <span class="count-index">{{ $countIndex }}. </span>
-                                                {{ $committee->lead_committee_information->title }} / {{ $committee->expanded_committee_information->title }}
+                                                {{ $committee->lead_committee_information->title }} /
+                                                {{ $committee->expanded_committee_information->title }}
                                             </span>
                                             @php $countIndex++; @endphp
                                         </li>
                                     @endforeach
                                     <div style="pointer-events: none;"
-                                        class="shadow-lg kanban-card-placeholder text-uppercase d-flex flex-column justify-content-center align-items-center fw-medium">
-                                        Drop committees here
+                                        class="shadow-lg kanban-card-placeholder text-uppercase d-flex flex-column justify-content-center align-items-center">
+                                        <span class="text-muted fw-medium">
+                                            Drop committees here
+                                        </span>
                                     </div>
                                 </ol>
                             </div>
@@ -156,14 +166,17 @@
                                         <li class="kanban-card shadow-lg" data-id="{{ $committee->id }}">
                                             <span class="text-white">
                                                 <span class="count-index">{{ $countIndex }}. </span>
-                                                {{ $committee->lead_committee_information->title }} / {{ $committee->expanded_committee_information->title }}
+                                                {{ $committee->lead_committee_information->title }} /
+                                                {{ $committee->expanded_committee_information->title }}
                                             </span>
                                             @php $countIndex++; @endphp
                                         </li>
                                     @endforeach
                                     <div style="pointer-events: none;"
                                         class="shadow-lg kanban-card-placeholder d-flex flex-column justify-content-center align-items-center text-uppercase fw-medium">
-                                        Drop committees here
+                                        <div class="text-muted fw-medium">
+                                            Drop committees here
+                                        </div>
                                     </div>
                                 </ol>
                             </div>

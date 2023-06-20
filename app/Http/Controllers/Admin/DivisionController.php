@@ -31,7 +31,7 @@ class DivisionController extends Controller
 
     public function store(DivisionStoreRequest $request)
     {
-        $this->divisionRepository->store($request->all());
+        $this->divisionRepository->store($request->except('_token'));
 
         return back()->with('success', 'You have successfully added new division.');
     }
@@ -51,8 +51,7 @@ class DivisionController extends Controller
 
     public function update(DivisionUpdateRequest $request, Division $division)
     {
-        $this->divisionRepository->update($division, $request->all());
-
+        $this->divisionRepository->update($division, $request->except(['_token', '_method']));
         return back()->with('success', 'You have successfully updated a division.');
     }
 

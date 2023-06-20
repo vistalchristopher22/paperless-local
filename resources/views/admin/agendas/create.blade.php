@@ -1,11 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.app-2')
+@section('tab-title', 'Create Agenda')
 @prepend('page-css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endprepend
-@section('page-title', 'Create Agenda')
 @section('content')
     @if (Session::has('success'))
         <div class="card mb-2 bg-success shadow-sm text-white">
@@ -15,8 +12,8 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0">Create Agenda</h6>
+        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
+            <h6 class="card-title h6 text-white">New Agenda Form</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('agendas.store') }}">
@@ -75,25 +72,26 @@
         </div>
     </div>
     @push('page-scripts')
-    <script>
-        $(document).ready(function() {
-            
-            $('select[name="members[]"]').select2({
-                placeholder: 'Select members',
-                theme: "classic",
-            });
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            $(document).ready(function() {
 
-            $('select[name="vice_chairman"]').select2({
-                placeholder: 'Select Vice chairman',
-                theme: "classic",
-            });
+                $('select[name="members[]"]').select2({
+                    placeholder: 'Select members',
+                    theme: "classic",
+                });
 
-            $('select[name="chairman"]').select2({
-                placeholder: 'Select Chairman',
-                theme: "classic",
+                $('select[name="vice_chairman"]').select2({
+                    placeholder: 'Select Vice chairman',
+                    theme: "classic",
+                });
+
+                $('select[name="chairman"]').select2({
+                    placeholder: 'Select Chairman',
+                    theme: "classic",
+                });
+
             });
-   
-        });
-    </script>
+        </script>
     @endpush
 @endsection

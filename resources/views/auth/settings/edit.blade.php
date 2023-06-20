@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('page-title', 'Edit Information')
+@extends('layouts.app-2')
+@section('tab-title', 'Edit Information')
 @section('content')
     @if (Session::has('success'))
         <div class="card mb-2 bg-success shadow-sm text-white">
@@ -15,8 +15,8 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0">Edit Information</h6>
+        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
+            <h6 class="card-title m-0 h6 text-white">Edit Information</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('information.update') }}" enctype="multipart/form-data">
@@ -93,7 +93,10 @@
 
                 <!-- Submit Button -->
                 <div>
-                    <button type="submit" class="btn btn-primary float-end mt-3">Update</button>
+                    <button type="submit" class="btn btn-success float-end mt-3">
+                        <i class="mdi mdi-pencil"></i>
+                        Update
+                    </button>
                 </div>
             </form>
         </div>

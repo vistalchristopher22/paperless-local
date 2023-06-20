@@ -8,12 +8,8 @@ use App\Repositories\AgendaRepository;
 
 final class SanggunianMemberAgendaController extends Controller
 {
-    public function __construct(private AgendaRepository $agendaRepository)
+    public function __invoke(AgendaRepository $agendaRepository, SanggunianMember $member)
     {
-    }
-
-    public function __invoke(SanggunianMember $member)
-    {
-        return $this->agendaRepository->getAgendasByMember($member);
+        return $agendaRepository->getAgendasByMember($member);
     }
 }

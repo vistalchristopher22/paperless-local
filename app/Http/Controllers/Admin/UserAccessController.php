@@ -13,6 +13,7 @@ final class UserAccessController extends Controller
     private UserRepository $userRepository;
     private AgendaRepository $agendaRepository;
     private UserAccessRepository $userAccessRepository;
+
     public function __construct()
     {
         $this->userRepository = app()->make(UserRepository::class);

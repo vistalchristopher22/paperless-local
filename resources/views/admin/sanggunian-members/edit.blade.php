@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('page-title', 'Edit Sangguniang Panlalawigan Member')
+@extends('layouts.app-2')
+@section('tab-title', 'Edit Sangguniang Panlalawigan Member')
 @section('content')
     @if (Session::has('success'))
         <div class="card mb-2 bg-success shadow-sm text-white">
@@ -9,8 +9,8 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0">Edit Sangguniang Panlalawigan Member</h6>
+        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
+            <h6 class="card-title h6 text-white">Edit {{ $member->fullname }}</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('sanggunian-members.update', $member) }}" enctype="multipart/form-data">

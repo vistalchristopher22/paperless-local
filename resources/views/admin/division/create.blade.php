@@ -1,10 +1,7 @@
-@extends('layouts.app')
-@section('page-title', 'Create Division')
+@extends('layouts.app-2')
+@section('tab-title', 'Create Division')
 @prepend('page-css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endprepend
 @section('content')
     @if (Session::has('success'))
@@ -16,15 +13,15 @@
     @endif
 
     <div class="card">
-        <div class="card-header">
-            <h6 class="card-title m-0">@yield('page-title')</h6>
+        <div class="card-header bg-dark">
+            <h6 class="card-title m-0 text-white h6">Create Division Form</h6>
         </div>
 
         <div class="card-body">
             <form action="{{ route('division.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="">Name</label>
+                    <label class="form-label">Name</label>
                     <input type="text" class="form-control" name="name" id="name">
                     @error('name')
                         <span class="text-danger">{{ $message }}</span>
@@ -32,7 +29,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Descrption</label>
+                    <label class="form-label">Descrption</label>
                     <textarea name="description" class="form-control" rows="2" id="description"></textarea>
                     @error('description')
                         <span class="text-danger">{{ $message }}</span>
@@ -40,7 +37,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Board</label>
+                    <label class="form-label">Board</label>
                     <select name="board" class="form-select" id="select-board">
                         @foreach ($members as $member)
                             <option value="{{ $member->id }}">{{ $member->fullname }}</option>
@@ -59,6 +56,7 @@
         </div>
     </div>
     @push('page-scripts')
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script>
             $('select[name="board"]').select2({
                 placeholder: 'Select members',

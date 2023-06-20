@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\ConvertIdsToModelsMiddleware;
+use App\Http\Middleware\GlobalFileAttachmentMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 
@@ -23,6 +24,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        // GlobalFileAttachmentMiddleware::class,
     ];
 
     /**
@@ -69,4 +71,6 @@ class Kernel extends HttpKernel
         'convert.id.to.models' => ConvertIdsToModelsMiddleware::class,
         'verify.user' => \App\Http\Middleware\VerifyUser::class,
     ];
+
+
 }

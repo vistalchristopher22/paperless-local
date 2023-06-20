@@ -2,35 +2,38 @@
 
 namespace App\Http\Controllers\User;
 
-use Illuminate\Http\Request;
+use App\Models\Committee;
+use Illuminate\Support\Facades\DB;
+use App\Pipes\Committee\UploadFile;
 use App\Http\Controllers\Controller;
 use App\Pipes\Committee\GetCommittee;
 use App\Repositories\AgendaRepository;
+use App\Pipes\Committee\CreateCommittee;
+use App\Pipes\Committee\ExtractFileText;
+use App\Pipes\Committee\UpdateCommittee;
 use Illuminate\Support\Facades\Pipeline;
-use Yajra\DataTables\Facades\DataTables;
-use App\Pipes\Committee\Filter\ContentFilter;
-use App\Pipes\Committee\Filter\LeadCommitteeFilter;
-use App\Pipes\Committee\Filter\ExpandedCommitteeFilter;
+use App\Repositories\CommitteeRepository;
+use App\Http\Requests\StoreCommitteeRequest;
+use App\Http\Requests\UpdateCommitteeRequest;
+use App\Pipes\Committee\User\DatatablesWrapper;
+use App\Pipes\Notification\NotifyCreatedCommittee;
+use App\Pipes\Notification\NotifyUpdatedCommittee;
+use App\Repositories\UserRepository;
 
 final class CommitteeController extends Controller
 {
-
-    public function __construct(private AgendaRepository $agendaRepository)
+    public function __construct(private AgendaRepository $agendaRepository, private CommitteeRepository $committeeRepository)
     {
     }
 
-
-    public function list(mixed $lead = '*', mixed $expanded = '*', mixed $content = null)
+    public function list()
     {
-        return Pipeline::send([$lead, $expanded, $content])
+        return Pipeline::send([])
             ->through([
                 GetCommittee::class,
-                LeadCommitteeFilter::class,
-                ExpandedCommitteeFilter::class,
-                ContentFilter::class
-            ])->then(fn ($data) => DataTables::of($data)->make(true));
+                DataTablesWrapper::class,
+            ])->then(fn ($data) => $data);
     }
-
 
     public function index()
     {
@@ -42,36 +45,48 @@ final class CommitteeController extends Controller
 
     public function create()
     {
-        //
+        return view('user.committee.create', [
+            'agendas' => $this->agendaRepository->getByIDs(UserRepository::accessibleAgendas(auth()->user())),
+        ]);
     }
 
 
-    public function store(Request $request)
+    public function store(StoreCommitteeRequest $request)
     {
-        //
+        return DB::transaction(function () use ($request) {
+            $request->merge(['submitted_by' => auth()->user()->id]);
+            Pipeline::send($request)
+                ->through([
+                    UploadFile::class,
+                    CreateCommittee::class,
+                    ExtractFileText::class,
+                    NotifyCreatedCommittee::class,
+                ])->then(fn ($data) => $data);
+
+            return back()->with('success', 'Successfully created a committee.');
+        });
     }
 
 
-    public function show(string $id)
+    public function edit(Committee $committee)
     {
-        //
+        return view('user.committee.edit', [
+            'agendas' => $this->agendaRepository->getByIDs(UserRepository::accessibleAgendas(auth()->user())),
+            'committee' => $committee,
+        ]);
     }
 
-
-    public function edit(string $id)
+    public function update(UpdateCommitteeRequest $request, Committee $committee)
     {
-        //
-    }
-
-
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-
-    public function destroy(string $id)
-    {
-        //
+        return DB::transaction(function () use ($request, $committee) {
+            Pipeline::send($request->merge(['committee' => $committee]))
+                ->through([
+                    UploadFile::class,
+                    UpdateCommittee::class,
+                    ExtractFileText::class,
+                    NotifyUpdatedCommittee::class,
+                ])->then(fn ($data) => $data);
+            return back()->with('success', 'Committee updated successfully.');
+        });
     }
 }

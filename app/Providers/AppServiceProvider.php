@@ -4,11 +4,13 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Enums\UserTypes;
-use App\Models\Committee;
 use Laravel\Pennant\Feature;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use App\ViewComposers\CommitteeViewComposer;
+use App\ViewComposers\NotificationViewComposer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,11 +28,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
+
+        View::composer(['layouts.app', 'layouts.app-2'], CommitteeViewComposer::class);
+        View::composer(['layouts.app', 'layouts.app-2'], NotificationViewComposer::class);
+
         Model::preventAccessingMissingAttributes();
         Model::preventSilentlyDiscardingAttributes();
         Model::preventLazyLoading(!app()->isProduction());
 
-        Feature::purge();
 
         Feature::define('administrator', function (User $user) {
             return $user->account_type == UserTypes::ADMIN->value;
@@ -40,18 +45,8 @@ class AppServiceProvider extends ServiceProvider
             return $user->account_type == UserTypes::USER->value;
         });
 
-        view()->composer(
-            ['layouts.app'],
-            function ($view) {
-                $data = Committee::with(['lead_committee_information', 'lead_committee_information.chairman_information', 'submitted', 'submitted.division_information'])
-                    ->whereNull('schedule_id')
-                    ->get();
-                $view->with('onReviewData', $data);
-            }
-        );
         Feature::define('sb-member', function (User $user) {
             return $user->account_type == UserTypes::SP_MEMBER->value;
         });
-
     }
 }

@@ -39,9 +39,11 @@
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
 
 
     @routes
@@ -56,10 +58,10 @@
     </style> --}}
 
     <!-- Scripts -->
-
-    @vite(['resources/js/app.js'])
-
     @stack('page-css')
+
+    {{-- @vite(['resources/js/app.js']) --}}
+
 
     <style>
         <style>.kanban-board {
@@ -170,14 +172,95 @@
 
                 <!-- Right Side Widgets-->
                 <div class="d-flex align-items-center">
-
+                    <div class="d-none d-sm-flex dropdown mx-1">
+                        <button class="btn-action text-muted" type="button" id="notificationsDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="true">
+                            <span class="f-w-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="w-100">
+                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                </svg>
+                            </span>
+                            @if ($notifications->count() !== 0)
+                                <span
+                                    class="position-absolute top-0 start-50 p-1 bg-success border border-3 border-white rounded-circle mt-n1">
+                                    <span class="visually-hidden">New alerts</span>
+                                </span>
+                            @endif
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-lg "
+                            aria-labelledby="notificationsDropdown" data-bs-popper="none">
+                            <div class="dropdown-header d-flex justify-content-between align-items-center">
+                                <p class="fw-bolder m-0 text-body">Notifications</p>
+                                <span id="notification-count"
+                                    class="badge bg-success-faded text-success rounded-pill">
+                                    <span id="notification-number">{{ $notifications->count() }}</span>
+                                    New</span>
+                            </div>
+                            <div class="simplebar-wrapper">
+                                <div data-pixr-simplebar="" data-simplebar="init">
+                                    <div class="simplebar-wrapper" style="margin: 0px;">
+                                        <div class="simplebar-height-auto-observer-wrapper">
+                                            <div class="simplebar-height-auto-observer"></div>
+                                        </div>
+                                        <div class="simplebar-mask">
+                                            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                                <div class="simplebar-content-wrapper"
+                                                    style="height: 100%; overflow: hidden scroll;">
+                                                    <div class="simplebar-content" id="notification-content"
+                                                        style="padding: 0px;">
+                                                        <ul class="list-unstyled m-0 pb-4">
+                                                            @foreach ($notifications as $notification)
+                                                                <li
+                                                                    class="d-flex py-1 align-items-start cursor-pointer">
+                                                                    <button
+                                                                        class="btn-icon bg-primary-faded text-primary fw-bolder me-3 p-3">{{ $notification?->sender_information?->first_name[0] }}</button>
+                                                                    <div
+                                                                        class="d-flex align-items-start justify-content-between flex-grow-1">
+                                                                        <div>
+                                                                            <p class="lh-1 mb-2 fw-semibold text-body">
+                                                                                {{ $notification->sender_information->first_name }}
+                                                                                {{ $notification->sender_information->last_name }}
+                                                                            </p>
+                                                                            <p class="text-muted lh-1 mb-2 small">
+                                                                                {{ $notification->description }} </p>
+                                                                        </div>
+                                                                        <small
+                                                                            class="text-muted fw-bold fs-xs">{{ $notification->created_at->diffForHumans() }}</small>
+                                                                    </div>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="simplebar-placeholder" style="width: auto; height: 352px;"></div>
+                                    </div>
+                                    <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                        <div class="simplebar-scrollbar simplebar-visible"
+                                            style="width: 0px; display: none;"></div>
+                                    </div>
+                                    <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+                                        <div class="simplebar-scrollbar simplebar-visible"
+                                            style="height: 82px; display: block; transform: translate3d(0px, 0px, 0px);">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div><a class="dropdown-item text-primary fw-bolder text-center border-top pt-3"
+                                    href="#">See more →</a></div>
+                        </div>
+                    </div>
 
                     <!-- Messages-->
                     <button class="btn-action mx-3" type="button" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasSubmittedAgenda" aria-controls="offcanvasSubmittedAgenda">
 
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="feather feather-message-square">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         </svg>
@@ -253,7 +336,7 @@
                         <li class="breadcrumb-item active" aria-current="page">@yield(
                             'page-title',
                             'Default Page
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            title'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    title'
                         )</li>
                     </ol>
                 </nav>
@@ -346,7 +429,7 @@
                     <div class="d-flex flex-row w-100 justify-content-between align-items-center">
                         <h6 class="offcanvas-title text-uppercase text-dark fw-bold"
                             id="offcanvasSubmittedAgendaLabel">
-                            Submitted Agenda</h6>
+                            Approved Agenda</h6>
                         <a class="cursor-pointer text-danger" data-bs-dismiss="offcanvas" aria-label="Close">
                             <i class="fas fa-times fa-2x"></i>
                         </a>
@@ -502,7 +585,7 @@
                                         <li><a href="{{ route('user.committee.index') }}">Committees</a></li>
                                     @endfeature
                                     @feature('administrator')
-                                        <li><a href="{{ route('committee-meeting.index') }}">Schedules</a></li>
+                                        <li><a href="{{ route('schedules.index') }}">Schedules</a></li>
                                         <li><a href="{{ route('committee.index') }}">Committees</a></li>
                                         <li><a href="{{ route('board-sessions.index') }}">Sessions</a></li>
                                         <li><a href="{{ route('agendas.index') }}">Agendas</a></li>
@@ -511,34 +594,6 @@
                                 </ul>
                             </div>
                         </li>
-                            <span class="menu-link">Maintenance</span></a>
-                        <div class="collapse" id="collapseMaintenance">
-                            <ul class="submenu">
-
-                                @feature('administrator')
-                                <li><a href="{{ route('committee.index') }}">Committees</a></li>
-                                <li><a href="{{ route('board-sessions.index') }}">Sessions</a></li>
-                                <li><a href="{{ route('agendas.index') }}">Agendas</a></li>
-                                <li><a href="{{ route('division.index') }}">Divisions</a></li>
-                                @endfeature
-
-                                @feature('sb-member')
-                                <li><a href="#">Committees</a></li>
-                                <li><a href="#">Sessions</a></li>
-                                <li><a href="#">Agendas</a></li>
-                                <li><a href="#">Divisions</a></li>
-                                @endfeature
-
-                                @feature('user')
-                                <li><a href="{{ route('user.committee.index') }}">Committees</a></li>
-                                <li><a href="{{ route('user.sessions.index') }}">Sessions</a></li>
-                                <li><a href="{{ route('user.agendas.index') }}">Agendas</a></li>
-                                <li><a href="{{ route('user.divisions.index') }}">Divisions</a></li>
-                                @endfeature
-
-                            </ul>
-                        </div>
-                    </li>
 
 
                         <!-- Pages Menu Section-->
@@ -610,106 +665,99 @@
                                     </span>
                                     <span class="menu-link">Source</span></a>
                                 <div class="collapse" id="collapseMenuArchieves">
+                                    <ul class="submenu">
                                         <li><a href="{{ route('files.index') }}">File Manager</a></li>
                                     </ul>
                                 </div>
                             </li>
                         @endfeature
+
+                        {{-- SB MEMBER ACCESS --}}
+                        @feature('sb-member')
+                            <li class="menu-section mt-4">Archieves</li>
+                            <li class="menu-item"><a class="d-flex align-items-center collapsed" href="#"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseMenuArchieves"
+                                    aria-expanded="false" aria-controls="collapseMenuArchieves">
+                                    <span class="menu-icon">
+                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px"
+                                            y="0px" viewBox="0 0 512 512"
+                                            style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                                            <path fill="currentColor" opacity=".5"
+                                                d="M155.327,57.142c-51.531,0-93.454,44.45-93.454,99.086c0,54.636,41.923,99.086,93.454,99.086s93.455-44.45,93.455-99.086
+                                           C248.782,101.592,206.859,57.142,155.327,57.142z" />
+
+                                            <path fill="currentColor"
+                                                d="M367.798,71.321c-0.211,0-0.425,0.001-0.636,0.002c-21.626,0.179-41.826,9.31-56.878,25.713
+                                           c-14.788,16.113-22.829,37.37-22.644,59.854c0.186,22.484,8.577,43.605,23.628,59.473c15.17,15.991,35.265,24.773,56.651,24.773
+                                           c0.215,0,0.43-0.001,0.646-0.002c21.626-0.179,41.826-9.311,56.878-25.713c14.788-16.113,22.829-37.37,22.644-59.855
+                                           C447.702,108.972,411.747,71.321,367.798,71.321z" />
+
+                                            <path fill="currentColor"
+                                                d="M371.74,257.358h-7.76c-36.14,0-69.12,13.74-94.02,36.26c6.23,4.78,12.16,9.99,17.78,15.61
+                                           c16.58,16.58,29.6,35.9,38.7,57.42c8.2,19.38,12.88,39.8,13.97,60.83H512v-29.87C512,320.278,449.08,257.358,371.74,257.358z" />
+
+                                            <path fill="currentColor" opacity=".5"
+                                                d="M310.35,427.478c-2.83-45.59-25.94-85.69-60.43-111.39c-25.09-18.7-56.21-29.77-89.92-29.77h-9.34
+                                           C67.45,286.319,0,353.768,0,436.978v17.88h310.65v-17.88C310.65,433.788,310.55,430.618,310.35,427.478z" />
+
+                                        </svg>
+                                    </span>
+                                    <span class="menu-link">Source</span></a>
+                                <div class="collapse" id="collapseMenuArchieves">
+                                    <ul class="submenu">
+                                        <li><a href="#">File Manager</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        @endfeature
+
+                        {{-- NORMAL USERS ACCESS --}}
+                        @feature('user')
+                            <li class="menu-section mt-4">Archieves</li>
+                            <li class="menu-item"><a class="d-flex align-items-center collapsed" href="#"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseMenuArchieves"
+                                    aria-expanded="false" aria-controls="collapseMenuArchieves">
+                                    <span class="menu-icon">
+                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px"
+                                            y="0px" viewBox="0 0 512 512"
+                                            style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                                            <path fill="currentColor" opacity=".5"
+                                                d="M155.327,57.142c-51.531,0-93.454,44.45-93.454,99.086c0,54.636,41.923,99.086,93.454,99.086s93.455-44.45,93.455-99.086
+                                           C248.782,101.592,206.859,57.142,155.327,57.142z" />
+
+                                            <path fill="currentColor"
+                                                d="M367.798,71.321c-0.211,0-0.425,0.001-0.636,0.002c-21.626,0.179-41.826,9.31-56.878,25.713
+                                           c-14.788,16.113-22.829,37.37-22.644,59.854c0.186,22.484,8.577,43.605,23.628,59.473c15.17,15.991,35.265,24.773,56.651,24.773
+                                           c0.215,0,0.43-0.001,0.646-0.002c21.626-0.179,41.826-9.311,56.878-25.713c14.788-16.113,22.829-37.37,22.644-59.855
+                                           C447.702,108.972,411.747,71.321,367.798,71.321z" />
+
+                                            <path fill="currentColor"
+                                                d="M371.74,257.358h-7.76c-36.14,0-69.12,13.74-94.02,36.26c6.23,4.78,12.16,9.99,17.78,15.61
+                                           c16.58,16.58,29.6,35.9,38.7,57.42c8.2,19.38,12.88,39.8,13.97,60.83H512v-29.87C512,320.278,449.08,257.358,371.74,257.358z" />
+
+                                            <path fill="currentColor" opacity=".5"
+                                                d="M310.35,427.478c-2.83-45.59-25.94-85.69-60.43-111.39c-25.09-18.7-56.21-29.77-89.92-29.77h-9.34
+                                           C67.45,286.319,0,353.768,0,436.978v17.88h310.65v-17.88C310.65,433.788,310.55,430.618,310.35,427.478z" />
+
+                                        </svg>
+                                    </span>
+                                    <span class="menu-link">Source</span></a>
+                                <div class="collapse" id="collapseMenuArchieves">
+                                    <ul class="submenu">
+                                        <li><a href="#">File Manager</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        @endfeature
                         <!-- / Pages Menu Section-->
-                            <span class="menu-link">Source</span></a>
-                        <div class="collapse" id="collapseMenuArchieves">
-                                <li><a href="{{ route('files.index') }}">File Manager</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    @endfeature
-
-                    {{-- SB MEMBER ACCESS --}}
-                    @feature('sb-member')
-                    <li class="menu-section mt-4">Archieves</li>
-                    <li class="menu-item"><a class="d-flex align-items-center collapsed" href="#"
-                                             data-bs-toggle="collapse" data-bs-target="#collapseMenuArchieves"
-                                             aria-expanded="false" aria-controls="collapseMenuArchieves">
-                                    <span class="menu-icon">
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                             x="0px" y="0px"
-                                             viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;"
-                                             xml:space="preserve">
-                                            <path fill="currentColor" opacity=".5"
-                                                  d="M155.327,57.142c-51.531,0-93.454,44.45-93.454,99.086c0,54.636,41.923,99.086,93.454,99.086s93.455-44.45,93.455-99.086
-                                           C248.782,101.592,206.859,57.142,155.327,57.142z"/>
-
-                                            <path fill="currentColor"
-                                                  d="M367.798,71.321c-0.211,0-0.425,0.001-0.636,0.002c-21.626,0.179-41.826,9.31-56.878,25.713
-                                           c-14.788,16.113-22.829,37.37-22.644,59.854c0.186,22.484,8.577,43.605,23.628,59.473c15.17,15.991,35.265,24.773,56.651,24.773
-                                           c0.215,0,0.43-0.001,0.646-0.002c21.626-0.179,41.826-9.311,56.878-25.713c14.788-16.113,22.829-37.37,22.644-59.855
-                                           C447.702,108.972,411.747,71.321,367.798,71.321z"/>
-
-                                            <path fill="currentColor"
-                                                  d="M371.74,257.358h-7.76c-36.14,0-69.12,13.74-94.02,36.26c6.23,4.78,12.16,9.99,17.78,15.61
-                                           c16.58,16.58,29.6,35.9,38.7,57.42c8.2,19.38,12.88,39.8,13.97,60.83H512v-29.87C512,320.278,449.08,257.358,371.74,257.358z"/>
-
-                                            <path fill="currentColor" opacity=".5"
-                                                  d="M310.35,427.478c-2.83-45.59-25.94-85.69-60.43-111.39c-25.09-18.7-56.21-29.77-89.92-29.77h-9.34
-                                           C67.45,286.319,0,353.768,0,436.978v17.88h310.65v-17.88C310.65,433.788,310.55,430.618,310.35,427.478z"/>
-
-                                        </svg>
-                                    </span>
-                            <span class="menu-link">Source</span></a>
-                        <div class="collapse" id="collapseMenuArchieves">
-                            <ul class="submenu">
-                                <li><a href="#">File Manager</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    @endfeature
-
-                    {{-- NORMAL USERS ACCESS --}}
-                    @feature('user')
-                    <li class="menu-section mt-4">Archieves</li>
-                    <li class="menu-item"><a class="d-flex align-items-center collapsed" href="#"
-                                             data-bs-toggle="collapse" data-bs-target="#collapseMenuArchieves"
-                                             aria-expanded="false" aria-controls="collapseMenuArchieves">
-                                    <span class="menu-icon">
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                             x="0px" y="0px"
-                                             viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;"
-                                             xml:space="preserve">
-                                            <path fill="currentColor" opacity=".5"
-                                                  d="M155.327,57.142c-51.531,0-93.454,44.45-93.454,99.086c0,54.636,41.923,99.086,93.454,99.086s93.455-44.45,93.455-99.086
-                                           C248.782,101.592,206.859,57.142,155.327,57.142z"/>
-
-                                            <path fill="currentColor"
-                                                  d="M367.798,71.321c-0.211,0-0.425,0.001-0.636,0.002c-21.626,0.179-41.826,9.31-56.878,25.713
-                                           c-14.788,16.113-22.829,37.37-22.644,59.854c0.186,22.484,8.577,43.605,23.628,59.473c15.17,15.991,35.265,24.773,56.651,24.773
-                                           c0.215,0,0.43-0.001,0.646-0.002c21.626-0.179,41.826-9.311,56.878-25.713c14.788-16.113,22.829-37.37,22.644-59.855
-                                           C447.702,108.972,411.747,71.321,367.798,71.321z"/>
-
-                                            <path fill="currentColor"
-                                                  d="M371.74,257.358h-7.76c-36.14,0-69.12,13.74-94.02,36.26c6.23,4.78,12.16,9.99,17.78,15.61
-                                           c16.58,16.58,29.6,35.9,38.7,57.42c8.2,19.38,12.88,39.8,13.97,60.83H512v-29.87C512,320.278,449.08,257.358,371.74,257.358z"/>
-
-                                            <path fill="currentColor" opacity=".5"
-                                                  d="M310.35,427.478c-2.83-45.59-25.94-85.69-60.43-111.39c-25.09-18.7-56.21-29.77-89.92-29.77h-9.34
-                                           C67.45,286.319,0,353.768,0,436.978v17.88h310.65v-17.88C310.65,433.788,310.55,430.618,310.35,427.478z"/>
-
-                                        </svg>
-                                    </span>
-                            <span class="menu-link">Source</span></a>
-                        <div class="collapse" id="collapseMenuArchieves">
-                            <ul class="submenu">
-                                <li><a href="#">File Manager</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    @endfeature
-                    <!-- / Pages Menu Section-->
 
                     </ul>
+                </div>
             </div>
         </div>
 
     </aside> <!-- / Page Aside-->
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"
         integrity="sha512-AI5A3zIoeRSEEX9z3Vyir8NqSMC1pY7r5h2cE+9J6FLsoEmSSGLFaqMQw8SWvoONXogkfFrkQiJfLeHLz3+HOg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -717,9 +765,187 @@
     <script src="/assets/js/theme.bundle.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
         integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-    <script>
-        let socket = io(`http://localhost:3030/`);
-    </script>
+    @feature('administrator')
+        <script>
+            var socket = io(`http://localhost:3030/`);
+            let notifications = {
+                'committee_created': function(data) {
+                    console.log(data);
+                    $.ajax({
+                        url: '/api/notifications/push-notification',
+                        method: 'POST',
+                        data: data,
+                        success: function(response) {
+                            var notyf = new Notyf({
+                                duration: 0,
+                                dismissible: true,
+                            });
+
+                            notyf.success(response?.description);
+
+
+                            $('#notification-content').prepend(`
+                            <li class="d-flex py-2 align-items-start">
+                                <button
+                                    class="btn-icon bg-primary-faded text-primary fw-bolder me-3 p-3">${response?.sender?.first_name[0]}</button>
+                                <div
+                                    class="d-flex align-items-start justify-content-between flex-grow-1">
+                                    <div>
+                                        <p class="lh-1 mb-2 fw-semibold text-body">${response?.sender?.first_name} ${response?.sender?.last_name}</p>
+                                        <p class="text-muted lh-1 mb-2 small">${response?.description}</p>
+                                    </div>
+                                    <small
+                                        class="text-muted fw-bold fs-xs">${response?.created_at}</small>
+                                </div>
+                            </li>
+                        `);
+
+                            let currentNotificationCount = parseInt($('#notification-count').text());
+                            $('#notification-number').text(++currentNotificationCount);
+                        },
+                    });
+                },
+                'committee_update': function(data) {
+                    $.ajax({
+                        url: '/api/notifications/push-notification',
+                        method: 'POST',
+                        data: data,
+                        success: function(response) {
+                            var notyf = new Notyf({
+                                duration: 0,
+                                dismissible: true,
+                            });
+
+                            notyf.success(response?.description);
+
+                            $('#notification-content').prepend(`
+                            <li class="d-flex py-2 align-items-start">
+                                <button
+                                    class="btn-icon bg-primary-faded text-primary fw-bolder me-3 p-3">${response?.sender?.first_name[0]}</button>
+                                <div
+                                    class="d-flex align-items-start justify-content-between flex-grow-1">
+                                    <div>
+                                        <p class="lh-1 mb-2 fw-semibold text-body">${response?.sender?.first_name} ${response?.sender?.last_name}</p>
+                                        <p class="text-muted lh-1 mb-2 small">${response?.description}</p>
+                                    </div>
+                                    <small
+                                        class="text-muted fw-bold fs-xs">${response?.created_at}</small>
+                                </div>
+                            </li>
+                        `);
+
+                            let currentNotificationCount = parseInt($('#notification-count').text());
+                            $('#notification-number').text(++currentNotificationCount);
+                        },
+                    });
+                },
+            };
+            socket.on('NOTIFY_ADMINISTRATOR', (data) => {
+                notifications[data.event](data);
+            });
+        </script>
+    @endfeature
+
+    @feature('user')
+        <script>
+            var socket = io(`http://localhost:3030/`);
+            $(document).ready(function() {
+                let notyf = new Notyf({
+                    duration: 0,
+                    dismissible: true,
+                });
+
+                let selectedDate = null;
+                let selectedEvent = null;
+                let type = null;
+
+                let selectedDates = [];
+
+                let calendar = $('#calendar').fullCalendar({
+                    height: 'auto',
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,agendaWeek,agendaDay'
+                    },
+                    defaultView: 'month',
+                    selectable: true,
+                    selectHelper: true,
+                    eventSources: [{
+                        url: `/api/schedules`,
+                        failure: function() {
+                            alert(
+                                'there was an error while fetching events try to reload the page.'
+                            );
+                        },
+                    }],
+                    eventClick: function(info) {
+                        selectedDate = $.fullCalendar.formatDate(info.start, "MM/DD/YYYY");
+                        selectedEvent = info;
+                        $.ajax({
+                            url: `/api/schedule/${info.id}`,
+                            success: function(response) {
+                                type = 'PUT';
+                                $('#addScheduleModalLabel').text('VIEW SCHEDULE');
+                                $('#name').val(response.name);
+                                $('#time').val(response.time);
+                                $('#shortDescription').val(response.description);
+                                $('#venue').val(response.venue);
+                                $('#id').val(response.id);
+                                if (response.with_invited_guest == 1) {
+                                    $('#withGuests').attr('checked', true);
+                                    $('#withGuests').val(response.with_invited_guest);
+                                } else {
+                                    $('#withGuests').removeAttr('checked');
+                                    $('#withGuests').val(0);
+                                }
+                                $('#scheduleModal').modal('toggle');
+                            }
+                        });
+                    },
+                    select: function(start, end, allDay) {
+                        var allDates = [];
+                        var currentDate = start.clone();
+                        while (currentDate < end) {
+                            allDates.push(currentDate.format('YYYY-MM-DD'));
+                            currentDate.add(1, 'days');
+                        }
+
+                        if (allDates.length !== 1) {
+                            window.location.href = `/user/schedule-merge-committee/${allDates.join('&')}`;
+                            return false;
+                        }
+                    },
+                });
+
+
+                socket.on('NOTIFY_USER', (data) => {
+                    $.ajax({
+                        url: '/api/notifications/user/push-notification',
+                        method: 'POST',
+                        data: data,
+                        success: function(response) {
+                            notyf.success(response?.description);
+                            $('#notification-content').prepend(`
+                                <li class="d-flex py-2 align-items-start">
+                                    <button class="btn-icon bg-primary-faded text-primary fw-bolder me-3 p-3">${response?.sender?.first_name[0]}</button>
+                                    <div class="d-flex align-items-start justify-content-between flex-grow-1">
+                                        <div>
+                                            <p class="lh-1 mb-2 fw-semibold text-body">${response?.sender?.first_name} ${response?.sender?.last_name}</p>
+                                            <p class="text-muted lh-1 mb-2 small">${response?.description}</p>
+                                        </div>
+                                        <small class="text-muted fw-bold fs-xs">${response?.created_at}</small>
+                                    </div>
+                                </li>
+                            `);
+                        }
+                    });
+
+                });
+
+            });
+        </script>
+    @endfeature
     @stack('page-scripts')
 </body>
 

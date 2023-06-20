@@ -44,8 +44,10 @@ final class AgendaRepository extends BaseRepository
     public function store(array $data = []): mixed
     {
         return DB::transaction(function () use ($data) {
+            $data['index'] = (int) $this->model->max('index');
+            $data['index'] = ++$data['index'];
             $newlyStoredAgenda = parent::store(Arr::except($data, 'members'));
-            return $this->agendaMemberRepository->addMembersToThis(agenda: $newlyStoredAgenda, members: $data['members']);
+            return $this->agendaMemberRepository->addMembersToThis(agendaID: $newlyStoredAgenda->id, members: $data['members']);
         });
     }
 
@@ -64,7 +66,7 @@ final class AgendaRepository extends BaseRepository
         DB::transaction(function () use ($agenda, $data) {
             parent::update($agenda, Arr::except($data, 'members'));
             $this->agendaMemberRepository->removeExistingMembers($agenda);
-            $this->agendaMemberRepository->addMembersToThis($agenda, $data['members']);
+            $this->agendaMemberRepository->addMembersToThis($agenda->id, $data['members']);
         });
         return true;
     }
@@ -111,5 +113,10 @@ final class AgendaRepository extends BaseRepository
         return $this->findBy('id', $data['id'])->update([
             'index' => $data['index'],
         ]);
+    }
+
+    public function getByIDs($agendas = [])
+    {
+        return $this->model->whereIn('id', $agendas)->get();
     }
 }

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateAccountInformationRequest;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Pipes\User\UpdateUser;
 use App\Pipes\User\ChangePassword;
 use App\Pipes\User\ProfilePicture;
+use Illuminate\Support\Facades\DB;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Pipeline;
+use App\Http\Requests\UpdateAccountInformationRequest;
 
 final class AccountController extends Controller
 {
@@ -45,12 +46,14 @@ final class AccountController extends Controller
      */
     public function update(UpdateAccountInformationRequest $request)
     {
-        Pipeline::send($request->merge(['account' => $this->userRepository->findBy('id', auth()->user()->id)]))
-            ->through([
-                ProfilePicture::class,
-                ChangePassword::class,
-                UpdateUser::class,
-            ])->then(fn ($data) => $data);
+        DB::transaction(function () use ($request) {
+            Pipeline::send($request->merge(['account' => $this->userRepository->findBy('id', auth()->user()->id)]))
+                ->through([
+                    ProfilePicture::class,
+                    ChangePassword::class,
+                    UpdateUser::class,
+                ])->then(fn ($data) => $data);
+        });
 
         return back()->with('success', 'Success! account details have been updated.');
     }

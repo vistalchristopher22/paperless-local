@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
 use App\Models\Committee;
+use App\Models\SanggunianMember;
 use Illuminate\Support\Facades\DB;
 use App\Pipes\Committee\UploadFile;
 use App\Http\Controllers\Controller;
 use App\Pipes\Committee\GetCommittee;
 use App\Repositories\AgendaRepository;
-use App\Pipes\Committee\CacheCommittee;
 use App\Pipes\Committee\CreateCommittee;
 use App\Pipes\Committee\ExtractFileText;
 use App\Pipes\Committee\UpdateCommittee;
@@ -18,7 +19,6 @@ use App\Repositories\CommitteeRepository;
 use Yajra\DataTables\Contracts\DataTable;
 use App\Http\Requests\StoreCommitteeRequest;
 use App\Http\Requests\UpdateCommitteeRequest;
-use App\Models\SanggunianMember;
 use App\Pipes\Committee\Filter\ContentFilter;
 use App\Pipes\Committee\Filter\LeadCommitteeFilter;
 use App\Pipes\Committee\Filter\ExpandedCommitteeFilter;
@@ -44,9 +44,9 @@ final class CommitteeController extends Controller
         return Pipeline::send([$lead, $expanded, $content])
             ->through([
                 GetCommittee::class,
-                LeadCommitteeFilter::class,
-                ExpandedCommitteeFilter::class,
-                ContentFilter::class
+                // LeadCommitteeFilter::class,
+                // ExpandedCommitteeFilter::class,
+                // ContentFilter::class
             ])->then(fn ($data) => DataTables::of($data)->make(true));
     }
 
@@ -61,7 +61,7 @@ final class CommitteeController extends Controller
 
         $commitees = Committee::with([
             'lead_committee_information', 'expanded_committee_information', 'lead_committee_information.chairman_information', 'lead_committee_information.vice_chairman_information', 'lead_committee_information.members', 'lead_committee_information.members.sanggunian_member',
-            'expanded_committee_information.chairman_information', 'expanded_committee_information.vice_chairman_information', 'expanded_committee_information.members', 'expanded_committee_information.members.sanggunian_member'
+            'expanded_committee_information.chairman_information', 'expanded_committee_information.vice_chairman_information', 'expanded_committee_information.members', 'expanded_committee_information.members.sanggunian_member', 'submitted'
         ]);
 
         if (array_key_exists('l', request()->query())) {
@@ -122,13 +122,17 @@ final class CommitteeController extends Controller
     public function store(StoreCommitteeRequest $request)
     {
         return DB::transaction(function () use ($request) {
-            Pipeline::send($request)
+            $request->merge(['submitted_by' => auth()->user()->id]);
+            try {
+                Pipeline::send($request)
                 ->through([
                     UploadFile::class,
                     CreateCommittee::class,
                     ExtractFileText::class,
-                    CacheCommittee::class,
                 ])->then(fn ($data) => $data);
+            } catch(Exception $e) {
+                dd($e->getMessage());
+            }
 
             return back()->with('success', 'Successfully created a committee.');
         });

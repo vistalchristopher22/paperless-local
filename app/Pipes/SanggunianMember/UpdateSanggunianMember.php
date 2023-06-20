@@ -25,7 +25,7 @@ final class UpdateSanggunianMember implements IPipeHandler
             'fullname' => $payload['fullname'],
             'district' => $payload['district'],
             'sanggunian' => $payload['sanggunian'],
-            'profile_picture' => $payload['profile_picture']
+            'profile_picture' => $payload['profile_picture'] ?? $payload['sanggunianMember']['profile_picture']
         ]);
 
         // dd($data);

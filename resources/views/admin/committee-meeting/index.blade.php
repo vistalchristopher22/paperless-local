@@ -1,12 +1,12 @@
-@extends('layouts.app')
-@section('page-title', 'Schedules')
+@extends('layouts.app-2')
+@section('tab-title', 'Schedules')
 @prepend('page-css')
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.css' />
 @endprepend
 @section('content')
     <div class="card">
         <div class="card-header bg-dark">
-            <div class="card-title text-white h6 text-uppercase">
+            <div class="card-title text-white h6">
                 Schedules
             </div>
         </div>
@@ -59,7 +59,7 @@
 
                 </div>
                 <div class="modal-footer border">
-                    <button type="button" class="btn btn-danger btn-sm text-white shadow" id="btnDeleteSchedule">
+                    <button type="button" class="btn btn-danger text-white shadow" id="btnDeleteSchedule">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-trash" viewBox="0 0 16 16">
                             <path
@@ -72,7 +72,7 @@
                             Delete
                         </span>
                     </button>
-                    <button type="button" class="btn btn-dark btn-sm align-middle shadow" id="btnSaveSchedule">
+                    <button type="button" class="btn btn-dark align-middle shadow" id="btnSaveSchedule">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-save2-fill" viewBox="0 0 16 16">
                             <path
@@ -172,7 +172,7 @@
                             },
                             success: function(response) {
                                 if (response.success) {
-                                    alertify.success(`Schedule successfully moved!`);
+                                    notyf.success('Schedule successfully moved!');
                                 }
                             }
                         });
@@ -197,7 +197,7 @@
                         data: schedule,
                         success: function(response) {
                             if (response.success) {
-                                alertify.success('Well done!');
+                                notyf.success('Successfully set new committee meeting');
                                 $('#calendar').fullCalendar('refetchEvents');
                                 $('#scheduleModal').modal('toggle');
                             }
@@ -213,6 +213,7 @@
                                 method: 'DELETE',
                                 success: function(response) {
                                     if (response.success) {
+                                        notyf.success('Committee Meeting deleted successfully');
                                         $('#calendar').fullCalendar('refetchEvents');
                                         $('#scheduleModal').modal('toggle');
                                     }

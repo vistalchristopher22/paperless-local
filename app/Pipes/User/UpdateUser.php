@@ -19,7 +19,7 @@ final class UpdateUser implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        $this->userRepository->update($payload['account'], Arr::except($payload, ['account', '_token', '_method']));
+        $this->userRepository->update($payload['account'], Arr::except($payload, ['account', '_token', '_method', 'image']));
         return $next($payload);
     }
 }

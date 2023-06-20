@@ -1,8 +1,7 @@
-@extends('layouts.app')
-@section('page-title', 'Division List')
+@extends('layouts.app-2')
+@section('tab-title', 'Division List')
 @prepend('page-css')
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
-
     <style>
         .dataTables_filter input {
             margin-bottom: 10px;
@@ -21,46 +20,46 @@
     @endif
 
     <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <span class="fw-bold">@yield('page-title')</span>
-            <div class="dropdown">
-                <a href="{{ route('division.create') }}" class="btn btn-primary">
-                    Add New Division
-                </a>
-            </div>
+        <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+            <h6 class="fw-bold h6 text-white">Complete Listing of Divisions</h6>
+            <a href="{{ route('division.create') }}" class="btn btn-light fw-bold">
+                Add New Division
+            </a>
         </div>
 
         <div class="card-body">
 
             <!-- Divison Listing Table -->
             <div class="table-responsive">
-                <table class="table table-striped border" id="division-table">
+                <table class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline" style="border-color: transparent" id="division-table">
                     <thead>
                         <tr>
-                            <th class="text-center text-dark border">Name</th>
-                            <th class="text-center text-dark border">Description</th>
-                            <th class="text-center text-dark border">Board</th>
-                            <th class="text-center text-dark border">Action</th>
+                            <th class="text-center text-dark border bg-light">Name</th>
+                            <th class="text-center text-dark border bg-light">Description</th>
+                            <th class="text-center text-dark border bg-light">Board</th>
+                            <th class="text-center text-dark border bg-light">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($division as $data)
                             <tr>
-                                <td class="text-center border">{{ $data->name }}</td>
-                                <td class="text-center border">{{ $data->description }}</td>
-                                {{-- <td class="text-center text-dark border">{{ $data->board_member->fullname }}</td> --}}
-                                <td class="text-center text-dark border">{{ $data->fullname }}</td>
-                                <td class="align-middle text-center border">
+                                <td class="text-center ">{{ $data->name }}</td>
+                                <td class="text-center ">{{ $data->description }}</td>
+                                <td class="text-center text-dark ">{{ $data->board_member->fullname }}</td>
+                                <td class="align-middle text-center ">
                                     <form action="{{ route('division.destroy', $data) }}" method="POST">
                                         @method('DELETE')
                                         @csrf
-                                        <a href="{{ route('division.edit', $data)  }}" class="btn btn-sm btn-success text-white">
-                                            <i class="fas fa-pen"></i>
+                                        <a href="{{ route('division.edit', $data) }}" class="btn btn-success text-white"
+                                            title="Edit Division" data-bs-toggle="tooltip" data-bs-placement="top">
+                                            <i class="mdi mdi-pencil-outline"></i>
                                         </a>
-                                        <button class="btn btn-danger btn-sm text-white"><i class="fas fa-trash text-white"></i></button>
+                                        <button class="btn btn-danger text-white" title="Delete Division"
+                                            data-bs-toggle="tooltip" data-bs-placement="top"><i
+                                                class="mdi mdi-trash-can-outline"></i></button>
                                     </form>
 
-                                    {{-- <button type="button" class="btn btn-sm btn-danger text-white" data-bs-toggle="modal" data-bs-target="#deleteBtn">Delete</button>
+                                    {{-- <button type="button" class="btn btn-danger text-white" data-bs-toggle="modal" data-bs-target="#deleteBtn">Delete</button>
 
                                     <div class="modal fade" id="deleteBtn" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -96,8 +95,6 @@
 
 
     @push('page-scripts')
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
         <script src="//cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
         <script>
             $(document).ready(function() {

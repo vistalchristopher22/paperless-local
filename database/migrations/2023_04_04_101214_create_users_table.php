@@ -25,6 +25,7 @@ return new class () extends Migration {
             $table->string('profile_picture')->default('no_image.png');
             $table->unsignedBigInteger('division')->nullable();
             $table->foreign('division')->references('id')->on('divisions');
+            $table->boolean('is_online')->default(0);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

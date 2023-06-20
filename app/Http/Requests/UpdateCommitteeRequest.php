@@ -22,9 +22,7 @@ class UpdateCommitteeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'priority_number'    => ['required', 'unique:committees,priority_number,' . request()->committee->id],
             'name'               => ['required'],
-            'schedule'           => ['required'],
             'file'               => ['nullable', 'mimes:doc,docx,pdf'],
             'lead_committee'     => ['required', 'exists:agendas,id'],
             'expanded_committee' => ['required', 'exists:agendas,id'],

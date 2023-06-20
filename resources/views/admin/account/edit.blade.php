@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('page-title', 'Edit Information')
+@extends('layouts.app-2')
+@section('page-title', 'Edit User Account')
 @prepend('page-css')
     <style>
         .required::after {
@@ -23,8 +23,8 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0">Edit Information</h6>
+        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
+            <h6 class="card-title m-0 text-white">User Details</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('account.update', $account->id) }}" enctype="multipart/form-data">

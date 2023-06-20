@@ -1,13 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.app-2')
 @section('page-title', 'User Access Control')
 @prepend('page-css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <style>
         .agenda-access-checkbox:hover {
-            transform: scale(1.03);
+            transform: scale(1.01);
             transition-duration: 0.3s;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
             z-index: 9999;
@@ -20,15 +18,19 @@
             {{-- generate a card for short information about the page process --}}
             <div class="card bg-primary mb-2 text-white">
                 <div class="card-body">
-                    <i class="fas fa-info-circle fa-1x me-2"></i>
-                    Select a user to view the access control of the user or grant access to the user.
+                    <i class="mdi mdi-information me-2"></i>
+                    Please choose a user to review their access control settings or grant them access.
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header fw-bold">Assign Access Control</div>
+            <div class="card mb-0">
+                <div class="card-header bg-dark">
+                    <h6 class="text-white h6 m-0 card-title">
+                        select user
+                    </h6>
+                </div>
                 <div class="card-body">
-                    <label class="fw-bold">User <span class="text-danger fw-bold">*</span></label>
+                    <label class="fw-bold">Account<span class="text-danger fw-bold">*</span></label>
                     <select name="user" id="user" class="form-select">
                         <option value="" selected disabled>Select a user</option>
                         @foreach ($users as $user)
@@ -43,12 +45,13 @@
     </div>
 
 
-    <div class="row my-1">
+    <div class="row rounded-0">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header fw-bold d-flex flex-row align-items-center justify-content-between">
+                <div
+                    class="card-header bg-dark text-white d-flex flex-row align-items-center justify-content-between">
                     <span class="">Agendas <span id="totalAccess">(Total Access - 0)</span></span>
-                    <button class="btn btn-info text-white shadow" id="btnBulkAction">Checked All</button>
+                    <button class="btn btn-info text-white shadow fw-bold" id="btnBulkAction">Checked All</button>
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -97,6 +100,9 @@
         </div>
     </div>
     @push('page-scripts')
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script>
             let newAccessSet = new Set();
 
@@ -236,7 +242,7 @@
                 let user = $('#user').val();
 
                 if (newAccessArray.length === 0 || user === null) {
-                    alertify.error(`Please select a user and/or agenda to grant access.`);
+                    notyf.error(`Please select a user and/or agenda to grant access.`);
                     return;
                 }
 
@@ -252,7 +258,7 @@
                             },
                             success: function(response) {
                                 if (response.success) {
-                                    alertify.success(response.message);
+                                    notyf.success(response.message);
 
                                     // clear all access set
                                     newAccessSet.clear();
@@ -260,11 +266,13 @@
                             },
                             error: function(response) {
                                 if (response.status == 422) {
-                                    alertify.error(response.responseJSON.message);
+                                    notyf.error(response.responseJSON.message);
                                 }
                             }
                         });
-                    });
+                    }).set({
+                    title: 'Grant Access Confirmation'
+                });
             });
 
             $(document).on('click', '.agenda-access-checkbox', function() {

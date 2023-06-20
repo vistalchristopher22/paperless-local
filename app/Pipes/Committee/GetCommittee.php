@@ -18,7 +18,7 @@ final class GetCommittee implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        $data = $this->commiteRepository->prepareQuery();
+        $data = $this->commiteRepository->get(['*']);
         return $next($data);
     }
 }

@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Laravel\Scout\Searchable;
 
 class Committee extends Model
 {
@@ -17,13 +18,21 @@ class Committee extends Model
     protected $guarded = [];
     public $appends = [
         'file_name',
-        'file'
+        'file',
+        'submitted_at'
     ];
 
     public $casts = [
         'date' => 'date',
         'session_schedule' => 'date',
     ];
+
+    protected function submittedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($_) => $this->created_at->format('F d, Y h:i A'),
+        );
+    }
 
     public function lead_committee_information()
     {

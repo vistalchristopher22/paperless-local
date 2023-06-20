@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('page-title', 'Edit Information')
+@extends('layouts.app-2')
+@section('tab-title', 'Settings')
 @section('content')
 
     @if(session()->has('success'))
@@ -10,14 +10,14 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header">
-            <h6 class="fw-bold">Application Settingss</h6>
+        <div class="card-header bg-dark">
+            <h6 class="fw-bold h6 text-white">Application Settingss</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('settings.update') }}">
                 @csrf
                 @method('PUT')
-                <h5 class="card-title text-muted">Committee Report</h5>
+                <h5 class="card-title text-dark">Committee Report</h5>
                 <div class="card-text">
                     <div class="form-group row">
                         <label for="name" class="col-md-2 col-form-label text-md-right">Prepared By</label>
@@ -47,9 +47,9 @@
 
                 <hr>
 
-                <h5 class="card-title text-muted">Third-Parties</h5>
+                <h5 class="card-title text-dark">Third-Parties</h5>
                 <div class="form-group row">
-                    <label for="name" class="col-md-2 col-form-label text-md-right">LibreOffice Path</label>
+                    <label for="name" class="col-md-2 col-form-label text-md-right">Libreoffice Path</label>
                     <div class="col-md-10">
                         <input type="text" name="libre_office_path" id="libre_office_path" class="form-control"
                             placeholder="C:\ProgramFiles\LibreOffice\" value="{{ $settings?->where('name', 'libre_office_path')?->first()?->value }}">

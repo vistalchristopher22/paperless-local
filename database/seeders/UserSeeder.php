@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Enums\UserStatus;
-use App\Enums\UserTypes;
 use App\Models\User;
+use App\Enums\UserTypes;
+use App\Enums\UserStatus;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
@@ -18,7 +19,7 @@ class UserSeeder extends Seeder
             'first_name' => 'Administrator',
             'last_name' => 'Account',
             'username' => 'admin',
-            'password' => 'password',
+            'password' => 'christopher',
             'account_type' => UserTypes::ADMIN->value,
             'status' => UserStatus::Active,
         ]);
@@ -27,18 +28,45 @@ class UserSeeder extends Seeder
             'first_name' => 'Christopher',
             'last_name' => 'Vistal',
             'username' => 'tooshort01',
-            'password' => 'password',
+            'password' => 'christopher',
             'account_type' => UserTypes::USER->value,
             'status' => UserStatus::Active,
         ]);
 
-        User::create([
+        $user = User::create([
             'first_name' => 'Juan',
             'last_name' => 'Cruz',
             'username' => 'tooshort02',
-            'password' => 'password',
+            'password' => 'christopher',
             'account_type' => UserTypes::USER->value,
             'status' => UserStatus::Active,
         ]);
+
+        DB::table('user_accesses')->insert([
+            'user' => $user->id,
+            'agenda' => 1,
+        ]);
+
+        DB::table('user_accesses')->insert([
+            'user' => $user->id,
+            'agenda' => 2,
+        ]);
+
+        DB::table('user_accesses')->insert([
+            'user' => $user->id,
+            'agenda' => 3,
+        ]);
+
+        DB::table('user_accesses')->insert([
+            'user' => $user->id,
+            'agenda' => 4,
+        ]);
+
+        DB::table('user_accesses')->insert([
+            'user' => $user->id,
+            'agenda' => 5,
+        ]);
+
+
     }
 }

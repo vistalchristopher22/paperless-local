@@ -4,16 +4,20 @@ use App\Models\User;
 use App\Models\Setting;
 use App\Models\Schedule;
 use App\Models\Committee;
+use Illuminate\Support\Str;
 use App\Models\BoardSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AgendaController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\CommitteeController;
 use App\Http\Controllers\Admin\UserAccessController;
@@ -21,12 +25,9 @@ use App\Http\Controllers\Admin\BoardSessionController;
 use App\Http\Controllers\Admin\Archieve\FileController;
 use App\Http\Controllers\Admin\CommitteeFileController;
 use App\Http\Controllers\SPMember\SPMCommitteeController;
+use App\Http\Controllers\Admin\CommitteeMeetingController;
 use App\Http\Controllers\Admin\SanggunianMemberController;
 use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
-use App\Http\Controllers\User\AgendaController as UserAgendaController;
-use App\Http\Controllers\User\SessionController as UserSessionController;
-use App\Http\Controllers\User\DivisionController as UserDivisionController;
-use App\Http\Controllers\User\CommitteeController as UserCommitteeController;
 
 Route::redirect('/', '/login');
 
@@ -73,7 +74,7 @@ Route::group(['middleware' => 'auth'], function () {
                 ->setPaper('legal')
                 ->setOption('enable-local-file-access', true)
                 ->setOrientation('portrait');
-                
+
             return $pdf->stream();
         })->name('schedule-meeting.merge.print');
 
@@ -114,8 +115,8 @@ Route::group(['middleware' => 'auth'], function () {
             return response()->json(['success' => true]);
         });
 
-        Route::resource('committee-meeting', CommitteeMeetingController::class);
-        Route::resource('committee-file', CommitteeFileController::class);
+        Route::resource('schedules', CommitteeMeetingController::class)->only('index');
+        Route::resource('committee-file', CommitteeFileController::class)->only(['show', 'edit']);
         Route::get('committee-list/{lead?}/{expanded?}/{content?}', [CommitteeController::class, 'list'])->name('committee.list');
 
         Route::resource('committee', CommitteeController::class);
@@ -126,7 +127,14 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::group(['base_rule' => 'order_business', 'model' => BoardSession::class], fn () => Route::resource('board-sessions', BoardSessionController::class));
 
-        Route::post('files/get', [FileController::class, 'getFiles']);
+        Route::post('/admin/archive/process/show-in-explorer', [FileController::class, 'show']);
+        Route::post('/admin/archive/process/upload', [FileController::class, 'upload']);
+        Route::post('/admin/archive/process/details', [FileController::class, 'getFileInformation']);
+        Route::post('/admin/archive/process/preview', [FileController::class, 'preview']);
+        Route::get('/admin/archive/files/get-files', [FileController::class, 'getFiles']);
+        Route::post('/admin/archive/file/rename', [FileController::class, 'renameFile']);
+        Route::delete('/admin/archive/file/delete', [FileController::class, 'deleteFile']);
+        Route::delete('/admin/archive/file/delete/bulk', [FileController::class, 'deleteBulk']);
         Route::resource('files', FileController::class);
 
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
@@ -141,30 +149,66 @@ Route::group(['middleware' => 'auth'], function () {
 
 // SB MEMBER
 Route::group(['prefix' => 'sb-member', 'middleware' => ['auth', 'features:sb-member']], function () {
-    Route::get('sbm-committees', [SPMCommitteeController::class, 'index'])->name('sbm.committee.index');
-    Route::get('sbm-committees', [SPMCommitteeController::class, 'index'])->name('sbm.committee.index');
-    Route::get('sbm-committees', [SPMCommitteeController::class, 'index'])->name('sbm.committee.index');
-
+    // Route::get('sbm-committees', [SPMCommitteeController::class, 'index'])->name('sbm.committee.index');
+    // Route::get('sbm-committees', [SPMCommitteeController::class, 'index'])->name('sbm.committee.index');
+    // Route::get('sbm-committees', [SPMCommitteeController::class, 'index'])->name('sbm.committee.index');
 });
 
+Route::get('show-attachment/{file}/{location}', function (string $file, string $location) {
+    $location = str_replace("..", DIRECTORY_SEPARATOR, $location);
 
-// USER
-Route::group(['prefix' => 'user', 'middleware' => ['auth', 'features:user']], function () {
-    Route::get('user-committees', [UserCommitteeController::class, 'index'])->name('user.committee.index');
-    Route::get('committee', [UserCommitteeController::class, 'list']);
+    $extension = pathinfo($file, PATHINFO_EXTENSION);
+
+    $originalExtension = Str::reverse($extension);
+
+    $fileName = str_replace($extension, $originalExtension, $file);
+
+    if (!Str::contains($location, "C:")) {
+        $location = "C:{$location}";
+    }
+
+    $completePath = str_replace($file, $fileName, $location);
+
+    $toConvertExtension = ['xls', 'xlsx', 'doc', 'docx', 'jpg', 'jpeg', 'png', 'gif'];
+
+    if (in_array($originalExtension, $toConvertExtension)) {
+        Log::info('convert => ' . $fileName . ' to PDF');
+
+        shell_exec('"C:\Program Files\LibreOffice\program\soffice" --headless --convert-to pdf "' . $completePath . '" --outdir ' . public_path("storage\\copy-files\\"));
+
+        $viewPath  = "storage" . DIRECTORY_SEPARATOR . "copy-files" . DIRECTORY_SEPARATOR . str_replace($originalExtension, "pdf", $fileName);
+    } else {
+        // Using this complete path we can now copy the file and paste to copy-files directory in public/storage for viewing purposes.
+        if (File::exists($completePath)) {
+            File::copy($completePath, public_path("storage/copy-files/" . $fileName));
+            $viewPath  = "storage" . DIRECTORY_SEPARATOR . "copy-files" . DIRECTORY_SEPARATOR . $fileName;
+        } else {
+            throw new Exception("File on {$completePath} not found!");
+        }
+    }
 
 
-    Route::get('user-sessions', [UserSessionController::class, 'index'])->name('user.sessions.index');
-    Route::get('sessions', [UserSessionController::class, 'list'])->name('user.sessions.list');
+    return view('testing', [
+        'filePathForView' => $viewPath,
+    ]);
+})->name('show-attachment');
 
 
-    Route::get('user-agendas', [UserAgendaController::class, 'index'])->name('user.agendas.index');
+Route::get('display-schedule-merge-committee/{dates}', function (string $dates) {
+    $dates = explode("&", $dates);
+    $schedules = Schedule::with(['committees', 'committees.lead_committee_information', 'committees.expanded_committee_information'])
+        ->whereIn(DB::raw('CONVERT(date, date_and_time)'), $dates)
+        ->orderBy('with_invited_guest', 'DESC')
+        ->orderBy('date_and_time', 'ASC')
+        ->get()
+        ->groupBy(function ($record) {
+            return $record->date_and_time->format('Y-m-d');
+        });
 
-
-    Route::get('user-divisions', [UserDivisionController::class, 'index'])->name('user.divisions.index');
-
-});
-
-Route::get('sample', function () {
-    return view('testing');
-});
+    // $settings = Setting::whereIn('name', ['prepared_by', 'noted_by'])->get();
+    return view('committee-meeting', [
+        'schedules' => $schedules,
+        // 'settings' => $settings,
+        'dates' => implode('&', $dates),
+    ]);
+})->name('display.published.meeting');

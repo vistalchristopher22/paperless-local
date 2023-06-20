@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.app-2')
+@section('tab-title', 'Add new Committee')
 @prepend('page-css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"
         integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
 
     {{-- tempus dominos --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
@@ -20,7 +20,6 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.7/dist/css/tempus-dominus.css" />
 @endprepend
-@section('page-title', 'Add new Committee')
 @section('content')
     @if (Session::has('success'))
         <div class="card mb-2 bg-success shadow-sm text-white">
@@ -30,14 +29,13 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0">@yield('page-title')</h6>
+        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
+            <h6 class="card-title h6 text-white m-0">New Committee Form</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('committee.store') }}" enctype="multipart/form-data">
                 @csrf
-
-                <div class="form-group">
+                <div class="form-group d-none">
                     <label>Priority Number</label>
                     <input type="text" class="form-control" name="priority_number"
                         value="{{ old('priority_number', $priority_number) }}" readonly>

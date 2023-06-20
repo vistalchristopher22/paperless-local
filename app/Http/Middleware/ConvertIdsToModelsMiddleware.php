@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\AgendaMemberService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,8 +15,6 @@ class ConvertIdsToModelsMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $members = AgendaMemberService::convertIdsToModel($request->input('members'));
-        $request->merge(['members' => $members]);
         return $next($request);
     }
 }

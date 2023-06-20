@@ -14,9 +14,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SanggunianMemberSeeder::class,
             DivisionSeeder::class,
-            UserSeeder::class,
             AgendaSeeder::class,
             AgendaMemberSeeder::class,
+            SettingSeeder::class,
+            UserSeeder::class,
         //    CommitteeSeeder::class,
         ]);
     }

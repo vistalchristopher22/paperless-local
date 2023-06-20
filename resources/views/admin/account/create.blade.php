@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('page-title', 'Create User')
+@extends('layouts.app-2')
+@section('page-title', 'Add New User')
 @prepend('page-css')
     <style>
         .required:after {
@@ -23,8 +23,8 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0">@yield('page-title')</h6>
+        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
+            <h6 class="card-title m-0 text-white">User Details</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('account.store') }}" enctype="multipart/form-data">
@@ -110,7 +110,7 @@
                 <div class="form-group">
                     <label for="status" class="required form-label">Status</label>
                     <select name="status" id="status"
-                        class="form-control {{ $errors->has('status') ? 'is-invalid' : '' }}">
+                        class="form-select {{ $errors->has('status') ? 'is-invalid' : '' }}">
                         @foreach ($status as $status)
                             <option {{ old('status') == $status->value ? 'selected' : '' }} value="{{ $status->value }}">
                                 {{ $status->name }}</option>
@@ -124,7 +124,7 @@
                 <!-- Division -->
                 <div class="form-group">
                     <label for="division" class="required form-label">Division</label>
-                    <select class="form-control {{ $errors->has('division') ? 'is-invalid' : '' }}" name="division"
+                    <select class="form-select {{ $errors->has('division') ? 'is-invalid' : '' }}" name="division"
                         id="division">
                         <option default value="">-- Select--</option>
                         @foreach ($divisions as $data)
@@ -146,7 +146,7 @@
 
                 <!-- Submit Button -->
                 <div class="d-flex justify-content-between align-items-center mt-4">
-                    <a href="{{ route('account.index') }}" class="text-decoration-underline fw-bold">Back</a>
+                    <a href="{{ route('account.index') }}" class="text-decoration-underline fw-bold text-primary">Back</a>
                     <button type="submit" class="btn btn-primary float-end mt-3">Submit</button>
                 </div>
             </form>

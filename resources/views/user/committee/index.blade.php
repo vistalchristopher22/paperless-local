@@ -1,10 +1,10 @@
-@extends('layouts.app')
-@section('page-title', 'Sangguniang Panlalawigan Members')
+@extends('layouts.app-2')
+@section('tab-title', 'List of Committees')
 @prepend('page-css')
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
     <style>
         .dataTables_filter input {
             margin-bottom: 10px;
@@ -20,8 +20,7 @@
         </div>
     @endif
 
-
-    <div class="card mb-3">
+    <div class="card mb-3 d-none">
         <div class="card-header">
             <h6>What are you looking for?</h6>
         </div>
@@ -62,36 +61,31 @@
         </div>
     </div>
     <div class="card">
+        <div class="card-header bg-dark d-flex flex-row justify-content-between align-items-center">
+            <h6 class="card-title m-0 text-white h6">
+                Committees
+            </h6>
+            <a class="btn btn-light fw-bold" href="{{ route('user.committee.create') }}">Submit Committee</a>
+        </div>
         <div class="card-body">
-            <table class="table table-striped border" id="committees-table" width="100%">
+            <table class="table table-striped border datatable" id="committees-table" width="100%">
                 <thead>
-                    <tr>
-                        <th class="text-center text-dark">&nbsp;</th>
-                        <th class="text-center text-dark">Priority Number</th>
-                        <th class="text-dark">Name</th>
-                        <th class="text-dark">Schedule</th>
-                        <th class="text-dark">Lead Committee</th>
-                        <th class="text-dark">Expanded Committee</th>
-                        <th class="text-dark text-center">Created At</th>
-                        <th class="text-center text-dark">Actions</th>
+                    <tr class="bg-light">
+                        <th class="text-dark border">Name</th>
+                        <th class="text-dark border">Submitted By</th>
+                        <th class="text-dark border">Lead Committee</th>
+                        <th class="text-dark border">Expanded Committee</th>
+                        <th class="text-dark border">Status</th>
+                        <th class="text-dark border text-center">Submitted At</th>
+                        <th class="text-center border text-dark">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <th class="text-center text-dark">&nbsp;</th>
-                        <th class="text-dark">&nbsp;</th>
-                        <th class="text-dark">&nbsp;</th>
-                        <th class="text-dark">&nbsp;</th>
-                        <th class="text-dark">&nbsp;</th>
-                        <th class="text-dark text-center">&nbsp;</th>
-                        <th class="text-center text-dark">&nbsp;</th>
-                    </tr>
-                </tbody>
             </table>
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offCanvasCommittee" aria-labelledby="offCanvasCommitteeTitle">
+    <div class="offcanvas offcanvas-end border-0" style="width:450px;" tabindex="-1" id="offCanvasCommittee"
+        aria-labelledby="offCanvasCommitteeTitle">
         <div class="offcanvas-header position-relative">
             <div class="d-flex flex-column w-100">
                 <h5 class="offcanvas-title mb-3" id="offCanvasCommitteeTitle"></h5>
@@ -101,8 +95,6 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn-close text-reset position-absolute top-20 end-5" data-bs-dismiss="offcanvas"
-                aria-label="Close"></button>
         </div>
         <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
             <div class="overflow-auto py-2">
@@ -113,11 +105,9 @@
     </div>
 
     @push('page-scripts')
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-        <script src="//cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+        <script src="{{ asset('/assets-2/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
         <script>
             $('select#filterLeadCommitee, select#filterExpandedCommittee').select2({
                 theme: "classic"
@@ -125,72 +115,56 @@
         </script>
 
         <script>
-            $('#filterByContent').val('');
+            let key = "{{ auth()->user()->id }}";
 
-            let limitString = (str, limit) => {
-                if (str.length <= limit) {
-                    return str;
+            String.prototype.limit = function(limit) {
+                let text = this.trim();
+                if (text.length > limit) {
+                    text = text.substring(0, limit).trim() + '...';
                 }
-
-                return str.substr(0, limit) + '...';
-            }
-
-
-            /* Formatting function for row details - modify as you need */
-            function format(d) {
-                // `d` is the original data object for the row
-                return (
-                    '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-                    '<tr>' +
-                    '<td>Content: </td>' +
-                    '<td>' +
-                    d.content +
-                    '</td>' +
-                    '</tr>' +
-                    '</table>'
-                );
-            }
+                return text;
+            };
 
 
             let table = $('#committees-table').DataTable({
-                order: [[0, "asc"]],
+                order: [
+                    [0, "asc"]
+                ],
                 destroy: true,
                 serverSide: true,
                 processing: true,
                 language: {
                     processing: '<span class="sr-only mt-2">&nbsp;</span> '
                 },
-                ajax: `/user/committee`,
-                columns: [
-                    {
-                        className: 'text-center dt-control',
-                        name: 'id',
-                        data: 'id',
-                        render: () => ``,
-                    },
-                    {
-                        className: 'text-center fw-bold',
-                        name: 'priority_number',
-                        data: 'priority_number',
-                    },
-                    {
+                ajax: route('user.committee.list'),
+                columns: [{
                         name: 'name',
                         data: 'name',
+                        render : function (raw) {
+                            return `<span class"mx-5">&nbsp;${raw}</span>`;
+                        }
                     },
                     {
-                        name: 'session_schedule',
-                        data: 'session_schedule',
+                        className : 'text-center',
+                        name: 'submitted_by',
+                        data: 'submitted_by',
+                        render: function (raw, _, data) {
+                            if(data.submitted.id == key) {
+                                return `<span class="badge badge-soft-primary">You</span>`;
+                            } 
+                            return raw;
+                        }
                     },
                     {
                         name: 'lead_committee_information.title',
                         data: 'lead_committee_information.title',
-                        render: function (rowData, _, row) {
+                        render: function(rowData, _, row) {
                             return `
                                 <a data-bs-toggle="offcanvas" data-bs-target="#offCanvasCommittee"
                                 aria-controls="offCanvasCommittee"
                                 data-expanded-committee="${row.lead_committee}"
                                 class="cursor-pointer text-primary view-expanded-comittees text-decoration-underline fw-medium">
-                                    ${rowData || ''}
+                                    ${rowData.limit(50) || ''}
                                 </a>
                             `;
                         }
@@ -198,57 +172,44 @@
                     {
                         name: 'expanded_committee_information.title',
                         data: 'expanded_committee_information.title',
-                        render: function (rowData, _, row) {
+                        render: function(rowData, _, row) {
                             return `
                                 <a data-bs-toggle="offcanvas" data-bs-target="#offCanvasCommittee"
                                 aria-controls="offCanvasCommittee"
                                 data-expanded-committee="${row.expanded_committee}"
                                 class="cursor-pointer text-primary view-expanded-comittees text-decoration-underline fw-medium">
-                                    ${rowData || ''}
+                                    ${rowData.limit(50) || ''}
                                 </a>
                             `;
                         },
                     },
                     {
+                        name: 'status',
                         className: 'text-center',
-                        name: 'created_at',
-                        data: 'created_at',
+                        data: 'status',
+                        render: function(raw) {
+                            if (raw == 'review') {
+                                return `<span class="badge badge-soft-primary text-uppercase">${raw}</span>`;
+                            } else if (raw == 'approved') {
+                                return `<span class="badge badge-soft-success text-uppercase">${raw}</span>`;
+                            } else if (raw == 'returned') {
+                                return `<span class="badge badge-soft-danger text-uppercase">${raw}</span>`;
+                            } else {
+                                return `<span class="badge badge-soft-warning text-uppercase">${raw}</span>`;
+                            }
+                        }
                     },
                     {
-                        name: 'id',
-                        data: 'id',
-                        render: function (id, _, row) {
-                            return `
-                            <div class="dropdown">
-                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Actions
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
-                                    <li><a href="${route('committee-file.show', id)}"
-                                            class="dropdown-item">Show File</a></li>
-
-                                </ul>
-                            </div>
-                            `;
-                        },
+                        className: 'text-center',
+                        name: 'submitted_at',
+                        data: 'submitted_at',
+                    },
+                    {
+                        className : 'text-center',
+                        name: 'actions',
+                        data: 'actions',
                     },
                 ],
-            });
-
-
-            table.on('draw', function () {
-                if ($('#filterByContent').val()) {
-                    var rows = table.rows({ search: 'applied' }).nodes();
-
-                    $.each(rows, function (index) {
-                        var tr = $(this).closest('tr');
-                        var row = table.row(tr);
-
-                        row.child(format(row.data())).show();
-                        tr.addClass('shown');
-                    });
-                }
             });
 
 
@@ -257,28 +218,28 @@
             const searchInput = $('#committees-table_filter input');
             const delay = 300; // Set delay time in milliseconds
 
-            searchInput.off().on('keyup', function () {
+            searchInput.off().on('keyup', function() {
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
                     table.search($(this).val()).draw();
                 }, delay);
             });
 
-            $('#filterLeadCommitee').change(function () {
+            $('#filterLeadCommitee').change(function() {
                 let lead = $('#filterLeadCommitee').val();
                 let expanded = $('#filterExpandedCommittee').val();
                 let content = $('#filterByContent').val();
                 table.ajax.url(`/committee-list/${lead}/${expanded}/${content}`).load(null, false);
             });
 
-            $('#filterExpandedCommittee').change(function () {
+            $('#filterExpandedCommittee').change(function() {
                 let lead = $('#filterLeadCommitee').val();
                 let expanded = $('#filterExpandedCommittee').val();
                 let content = $('#filterByContent').val();
                 table.ajax.url(`/committee-list/${lead}/${expanded}/${content}`).load(null, false);
             });
 
-            $('#filterByContent').keyup(function (e) {
+            $('#filterByContent').keyup(function(e) {
                 if (e.keyCode == 13) {
                     let lead = $('#filterLeadCommitee').val();
                     let expanded = $('#filterExpandedCommittee').val();
@@ -288,22 +249,6 @@
 
             });
 
-
-            // Add event listener for opening and closing details
-            $('#committees-table tbody').on('click', 'td.dt-control', function () {
-                var tr = $(this).closest('tr');
-                var row = table.row(tr);
-
-                if (row.child.isShown()) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-                } else {
-                    // Open this row
-                    row.child(format(row.data())).show();
-                    tr.addClass('shown');
-                }
-            });
 
 
             const loadCanvasContent = (response) => {
@@ -317,14 +262,14 @@
 
                 $('#pictures').find('picture').remove();
                 $('#pictures').prepend(`
-                    <picture class="avatar-group-img">
-                        <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.chairman_information.profile_picture}" alt="${agenda.chairman_information.fullname}">
+                    <picture class="user-avatar user-avatar-group">
+                        <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.chairman_information.profile_picture}" >
                     </picture>
                 `);
 
                 $('#pictures').prepend(`
-                    <picture class="avatar-group-img">
-                        <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" alt="${agenda.vice_chairman_information.fullname}">
+                    <picture class="user-avatar user-avatar-group">
+                        <img class="thumb-lg rounded-circle" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" alt="${agenda.vice_chairman_information.fullname}">
                     </picture>
                 `);
 
@@ -334,8 +279,9 @@
                     $('#leadCommitteeContent').prepend(`
                         <div class="card mb-3">
                                 <div class="card-body fw-medium">
-                                    <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}"
-                                    alt="${agenda.vice_chairman_information.fullname}">
+                                    <div class="user-avatar">
+                                        <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" alt="${agenda.vice_chairman_information.fullname}">
+                                    </div>
                                     <span>${agenda.vice_chairman_information.fullname}</span>
                                     <br>
                                     <span>${agenda.vice_chairman_information.district}</span>
@@ -351,8 +297,9 @@
                     $('#leadCommitteeContent').prepend(`
                         <div class="card mb-3">
                                 <div class="card-body fw-medium">
-                                    <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.chairman_information.profile_picture}"
-                                    alt="${agenda.chairman_information.fullname}">
+                                    <div class="user-avatar">
+                                        <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.chairman_information.profile_picture}" alt="${agenda.chairman_information.fullname}">
+                                    </div>
                                     <span>${agenda.chairman_information.fullname}</span>
                                     <br>
                                     <span>${agenda.chairman_information.district}</span>
@@ -371,17 +318,17 @@
                         } = member;
                         let [memberInformation] = sanggunian_member;
                         $('#pictures').prepend(`
-                            <picture class="avatar-group-img">
-                                <img class="f-w-10 rounded-circle" src="/storage/user-images/${memberInformation.profile_picture}"
-                                    alt="${memberInformation.fullname}">
+                            <picture class="user-avatar user-avatar-group">
+                                <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${memberInformation.profile_picture}" alt="${memberInformation.fullname}">
                             </picture>
                         `);
 
                         $('#leadCommitteeContent').append(`
                             <div class="card mb-3">
                                 <div class="card-body fw-medium">
-                                    <img class="f-w-10 rounded-circle" src="/storage/user-images/${memberInformation.profile_picture}"
-                                    alt="${memberInformation.fullname}">
+                                    <div class="user-avatar">
+                                        <img class="thumb-lg rounded-circle" src="/storage/user-images/${memberInformation.profile_picture}" alt="${memberInformation.fullname}">
+                                    </div>
                                     <span class="fw-medium">${memberInformation.fullname}</span>
                                     <br>
                                     <span>${memberInformation.district}</span>
@@ -420,7 +367,6 @@
                         .catch(error => console.error(error));
                 }
             });
-
         </script>
     @endpush
 @endsection

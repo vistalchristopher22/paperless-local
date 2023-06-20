@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Committee;
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
 
@@ -11,18 +10,23 @@ class CommitteeFileController extends Controller
 {
     public function show(Committee $committee_file)
     {
-        $originalFile = str_replace("storage", "public\storage", $committee_file->file_path);
-        $file = str_replace("\\", "\\\\", $originalFile);
-        Artisan::call('convert:path ' . $file);
+        $file = basename($committee_file->file_path);
+        // build a path for this committee
 
-        $newFile = str_replace("\\public\\", "", $file);
-        $newFile = str_replace(".docx", ".pdf", $newFile);
-        $filePathForView = str_replace(str_replace("\\", "\\\\", dirname(app_path())), "", $newFile);
-        $filePathForView = Str::replaceFirst("\\\\", '', $filePathForView);
+        $fullPath = public_path("storage/committees/{$file}");
+        $filePathForView = "storage" . DIRECTORY_SEPARATOR . "committees" . DIRECTORY_SEPARATOR . $file;
 
-        return view('admin.committee.show', [
-            'filePathForView' => $filePathForView,
-        ]);
+        $filePath = str_replace("\\", "/", $fullPath);
+        Artisan::call("convert:path \"" . $filePath . "\"");
+        // Artisan::call("convert:path " . str_replace("\\", "/", $fullPath));
+
+        $extension = pathinfo($file, PATHINFO_EXTENSION);
+
+        $newFilename = str_replace($extension, 'pdf', $file);
+
+        $filePathForView = str_replace($file, $newFilename, $filePathForView);
+
+        return view('admin.committee.show', compact('filePathForView'));
     }
 
 

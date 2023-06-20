@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('page-title', 'Complete Listing of Agendas')
+@extends('layouts.app-2')
+@section('tab-title', 'Complete Listing of Agendas')
 @prepend('page-css')
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.dataTables.min.css">
@@ -19,15 +19,15 @@
     @else
         <div class="card bg-primary text-white mb-3">
             <div class="card-body alert-dismissible fade show" role="alert">
-                You can reorder the rows by dragging and dropping them.
+                You can rearrange the order of the rows by dragging and dropping them. Simply click and hold on a row, then drag it to the desired position and release the mouse button to drop it. This allows you to easily customize the order of the rows to suit your needs.
             </div>
         </div>
     @endif
     <div class="card mb-4">
-        <div class="card-header justify-content-between align-items-center d-flex">
-            <h6 class="card border-0 m-0 fw-bold">@yield('page-title')</h6>
+        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
+            <h6 class="text-white h6">Complete Listing of Agendas</h6>
             <div class="dropdown">
-                <a href="{{ route('agendas.create') }}" class="btn btn-primary">
+                <a href="{{ route('agendas.create') }}" class="btn btn-light fw-bold">
                     Add New Agenda
                 </a>
             </div>
@@ -36,15 +36,15 @@
 
             <!-- User Listing Table-->
             <div class="table-responsive">
-                <table class="table table-striped border" id="agendas-table">
+                <table class="table table-striped" id="agendas-table">
                     <thead>
                         <tr>
-                            <th class="text-center">Order</th>
-                            <th class="text-center">Title</th>
-                            <th class="text-center">Chairman</th>
-                            <th class="text-center">Vice Chairman</th>
-                            <th class="text-center">Members</th>
-                            <th class="text-center">Actions</th>
+                            <th class="text-center bg-light border">Order</th>
+                            <th class="text-center bg-light border">Title</th>
+                            <th class="text-center bg-light border">Chairman</th>
+                            <th class="text-center bg-light border">Vice Chairman</th>
+                            <th class="text-center bg-light border">Members</th>
+                            <th class="text-center bg-light border">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,27 +57,23 @@
                                     <span class="mx-3">
                                         {{ Str::limit($agenda->title, 50, '...') }}</span>
                                 </td>
-                                {{-- <td class="text-truncate">{{ $agenda->chairman_information->fullname }}</td> --}}
-                                <td class="text-truncate">{{ $agenda->fullname }}</td>
-                                {{-- <td>{{ $agenda->vice_chairman_information->fullname }}</td> --}}
-                                <td>{{ $agenda->fullname }}</td>
+                                <td class="text-truncate">{{ $agenda->chairman_information->fullname }}</td>
+                                <td>{{ $agenda->vice_chairman_information->fullname }}</td>
                                 <td class="text-center">
                                     @if ($agenda->members->count() > 0)
-                                        <a class="text-primary fw-medium view-lead-committees cursor-pointer text-decoration-underline" data-bs-toggle="offcanvas"
-                                            data-bs-target="#offCanvasCommittee" aria-controls="offCanvasCommittee"
-                                            data-lead-committee="{{ $agenda->id }}">
+                                        <a class="text-primary fw-medium view-lead-committees cursor-pointer text-decoration-underline"
+                                            data-bs-toggle="offcanvas" data-bs-target="#offCanvasCommittee"
+                                            aria-controls="offCanvasCommittee" data-lead-committee="{{ $agenda->id }}">
                                             View Members</a>
                                     @endif
 
                                 </td>
                                 <td class="align-middle text-center">
-                                    <a class="btn btn-sm btn-success text-white" title="Edit Agenda" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-original-title="Edit Agenda"
-                                        href="{{ route('agendas.edit', $agenda) }}">
-                                        <i class="fas fa-pen"></i>
+                                    <a class="btn btn-success text-white" title="Edit Agenda"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-original-title="Edit Agenda" href="{{ route('agendas.edit', $agenda) }}">
+                                        <i class="mdi mdi-pencil-outline"></i>
                                     </a>
-                                    {{-- <a class="btn btn-sm btn-success text-white"
-                                        href="{{ route('agendas.edit', $agenda) }}">Edit</a> --}}
                                 </td>
                             </tr>
                         @endforeach
@@ -87,7 +83,7 @@
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offCanvasCommittee" aria-labelledby="offCanvasCommitteeTitle">
+    <div class="offcanvas offcanvas-end" style="width:450px;" tabindex="-1" id="offCanvasCommittee" aria-labelledby="offCanvasCommitteeTitle">
         <div class="offcanvas-header position-relative">
             <div class="d-flex flex-column w-100">
                 <h5 class="offcanvas-title mb-3" id="offCanvasCommitteeTitle"></h5>
@@ -97,8 +93,6 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn-close text-reset position-absolute top-20 end-5" data-bs-dismiss="offcanvas"
-                aria-label="Close"></button>
         </div>
         <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
             <div class="overflow-auto py-2">
@@ -134,7 +128,6 @@
                         let [orderCell] = row.node.children;
                         orderCell.innerText = `${row.newPosition + 1}`;
 
-
                         $.ajax({
                             url: '/re-order/agenda',
                             method: 'POST',
@@ -143,7 +136,11 @@
                                 index: `${row.newPosition + 1}`,
                             },
                         });
-                    })
+                    });
+
+                    if(changes.nodes.length !== 0) {
+                        notyf.success('Re-order successfully!');
+                    }
                 });
             });
         </script>
@@ -156,54 +153,55 @@
                 } = response;
 
                 $('#offCanvasCommitteeTitle').text(agenda.title);
-                $('#picturesDescription').text(`${agenda.members.length + chairmanAndViceChairmanCount} Members`);
+                $('#picturesDescription').html(`<br>${agenda.members.length + chairmanAndViceChairmanCount} Members`);
 
                 $('#pictures').find('picture').remove();
                 $('#pictures').prepend(`
-        <picture class="avatar-group-img">
-            <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.chairman_information.profile_picture}" alt="${agenda.chairman_information.fullname}">
-        </picture>
-    `);
+                    <picture class="user-avatar user-avatar-group me-4">
+                        <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.chairman_information.profile_picture}" >
+                    </picture>
+                `);
 
                 $('#pictures').prepend(`
-        <picture class="avatar-group-img">
-            <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" alt="${agenda.vice_chairman_information.fullname}">
-        </picture>
-    `);
+                    <picture class="user-avatar user-avatar-group">
+                        <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" >
+                    </picture>
+                `);
 
                 if (agenda.members) {
                     $('#leadCommitteeContent').html(``);
-
                     $('#leadCommitteeContent').prepend(`
-            <div class="card mb-3">
-                    <div class="card-body fw-medium">
-                        <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}"
-                        alt="${agenda.vice_chairman_information.fullname}">
-                        <span>${agenda.vice_chairman_information.fullname}</span>
-                        <br>
-                        <span>${agenda.vice_chairman_information.district}</span>
-                        <br>
-                        <span>${agenda.vice_chairman_information.sanggunian}</span>
-                    </div>
-            </div>
-        `);
+                        <div class="card mb-3">
+                                <div class="card-body fw-medium">
+                                    <div class="user-avatar">
+                                        <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" alt="${agenda.vice_chairman_information.fullname}">
+                                    </div>
+                                    <span>${agenda.vice_chairman_information.fullname}</span>
+                                    <br>
+                                    <span>${agenda.vice_chairman_information.district}</span>
+                                    <br>
+                                    <span>${agenda.vice_chairman_information.sanggunian}</span>
+                                </div>
+                        </div>
+                    `);
 
                     $('#leadCommitteeContent').prepend(`<span class="fw-bold">Vice Chairman</span>`);
 
 
                     $('#leadCommitteeContent').prepend(`
-            <div class="card mb-3">
-                    <div class="card-body fw-medium">
-                        <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.chairman_information.profile_picture}"
-                        alt="${agenda.chairman_information.fullname}">
-                        <span>${agenda.chairman_information.fullname}</span>
-                        <br>
-                        <span>${agenda.chairman_information.district}</span>
-                        <br>
-                        <span>${agenda.chairman_information.sanggunian}</span>
-                    </div>
-            </div>
-        `);
+                        <div class="card mb-3">
+                                <div class="card-body fw-medium">
+                                    <div class="user-avatar">
+                                        <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.chairman_information.profile_picture}" alt="${agenda.chairman_information.fullname}">
+                                    </div>
+                                    <span>${agenda.chairman_information.fullname}</span>
+                                    <br>
+                                    <span>${agenda.chairman_information.district}</span>
+                                    <br>
+                                    <span>${agenda.chairman_information.sanggunian}</span>
+                                </div>
+                        </div>
+                    `);
 
                     $('#leadCommitteeContent').prepend(`<span class="fw-bold">Chairman</span>`);
                     $('#leadCommitteeContent').append(`<span class="fw-bold">Members</span>`);
@@ -214,25 +212,26 @@
                         } = member;
                         let [memberInformation] = sanggunian_member;
                         $('#pictures').prepend(`
-                <picture class="avatar-group-img">
-                    <img class="f-w-10 rounded-circle" src="/storage/user-images/${memberInformation.profile_picture}"
-                        alt="${memberInformation.fullname}">
-                </picture>
-            `);
+                            <picture class="user-avatar user-avatar-group">
+                                <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${memberInformation.profile_picture}" alt="${memberInformation.fullname}">
+                            </picture>
+                        `);
+
 
                         $('#leadCommitteeContent').append(`
-                <div class="card mb-3">
-                    <div class="card-body fw-medium">
-                        <img class="f-w-10 rounded-circle" src="/storage/user-images/${memberInformation.profile_picture}"
-                        alt="${memberInformation.fullname}">
-                        <span class="fw-medium">${memberInformation.fullname}</span>
-                        <br>
-                        <span>${memberInformation.district}</span>
-                        <br>
-                        <span>${memberInformation.sanggunian}</span>
-                    </div>
-                </div>
-            `);
+                        <div class="card mb-3">
+                            <div class="card-body fw-medium">
+                                <div class="user-avatar">
+                                    <img class="thumb-lg rounded-circle" src="/storage/user-images/${memberInformation.profile_picture}" alt="${memberInformation.fullname}">
+                                </div>
+                                <span class="fw-medium">${memberInformation.fullname}</span>
+                                <br>
+                                <span>${memberInformation.district}</span>
+                                <br>
+                                <span>${memberInformation.sanggunian}</span>
+                            </div>
+                        </div>
+                    `);
                     });
                 }
             };

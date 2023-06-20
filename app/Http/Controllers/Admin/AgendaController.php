@@ -42,8 +42,7 @@ class AgendaController extends Controller
      */
     public function store(AgendaStoreRequest $request)
     {
-        $this->agendaRepository->store($request->all());
-
+        $this->agendaRepository->store($request->except('_token'));
         return back()->with('success', 'Successfully add new committee agenda.');
     }
 
@@ -70,7 +69,7 @@ class AgendaController extends Controller
      */
     public function update(UpdateAgendaRequest $request, Agenda $agenda)
     {
-        $this->agendaRepository->update($agenda, $request->all());
+        $this->agendaRepository->update($agenda, $request->except(['_token', '_method']));
         return back()->with('success', 'Comittee agenda successfully update.');
     }
 

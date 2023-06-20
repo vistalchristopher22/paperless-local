@@ -28,4 +28,8 @@ final class UserRepository extends BaseRepository
         return parent::get()->load('division_information');
     }
 
+    public static function accessibleAgendas(User $user)
+    {
+        return $user->access()->pluck('agenda')->toArray();
+    }
 }

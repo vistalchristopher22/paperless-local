@@ -23,9 +23,9 @@ class StoreCommitteeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'priority_number'    => ['required', Rule::unique('committees')->ignore($this->user)->whereNull('deleted_at')],
+            // 'priority_number'    => ['required', Rule::unique('committees')->ignore($this->user)->whereNull('deleted_at')],
             'name'               => ['required'],
-            'schedule'           => ['required'],
+            // 'schedule'           => ['required'],
             'file'               => ['nullable', 'mimes:doc,docx,pdf'],
             'lead_committee'     => ['required', 'exists:agendas,id'],
             'expanded_committee' => ['required', 'exists:agendas,id'],

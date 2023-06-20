@@ -1,29 +1,11 @@
-cre$('#filterByContent').val('');
-
-let limitString = (str, limit) => {
-    if (str.length <= limit) {
-        return str;
+$('#filterByContent').val('');
+String.prototype.limit = function (limit) {
+    let text = this.trim();
+    if (text.length > limit) {
+        text = text.substring(0, limit).trim() + '...'; 
     }
-
-    return str.substr(0, limit) + '...';
-}
-
-
-/* Formatting function for row details - modify as you need */
-function format(d) {
-    // `d` is the original data object for the row
-    return (
-        '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-        '<tr>' +
-        '<td>Content: </td>' +
-        '<td>' +
-        d.content +
-        '</td>' +
-        '</tr>' +
-        '</table>'
-    );
-}
-
+    return text;
+};
 
 let table = $('#committees-table').DataTable({
     order: [[0, "asc"]],
@@ -36,23 +18,12 @@ let table = $('#committees-table').DataTable({
     ajax: `/committee-list`,
     columns: [
         {
-            className: 'text-center dt-control',
-            name: 'id',
-            data: 'id',
-            render: () => ``,
-        },
-        {
-            className: 'text-center fw-bold',
-            name: 'priority_number',
-            data: 'priority_number',
-        },
-        {
             name: 'name',
             data: 'name',
         },
         {
-            name: 'session_schedule',
-            data: 'session_schedule',
+            name: 'submitted.fullname',
+            data: 'submitted.fullname',
         },
         {
             name: 'lead_committee_information.title',
@@ -63,7 +34,7 @@ let table = $('#committees-table').DataTable({
                     aria-controls="offCanvasCommittee"
                     data-expanded-committee="${row.lead_committee}"
                     class="cursor-pointer text-primary view-expanded-comittees text-decoration-underline fw-medium">
-                        ${rowData || ''}
+                        ${rowData.limit(50) || ''}
                     </a>
                 `;
             }
@@ -77,15 +48,31 @@ let table = $('#committees-table').DataTable({
                     aria-controls="offCanvasCommittee"
                     data-expanded-committee="${row.expanded_committee}"
                     class="cursor-pointer text-primary view-expanded-comittees text-decoration-underline fw-medium">
-                        ${rowData || ''}
+                        ${rowData.limit(50) || ''}
                     </a>
                 `;
             },
         },
         {
+            name : 'status',
+            className : 'text-center',
+            data : 'status',
+            render : function (raw) {
+                if(raw == 'review') {
+                    return `<span class="badge badge-soft-primary text-uppercase">${raw}</span>`;
+                } else if(raw == 'approved') {
+                    return `<span class="badge badge-soft-success text-uppercase">${raw}</span>`;
+                } else if(raw == 'returned') {
+                    return `<span class="badge badge-soft-danger text-uppercase">${raw}</span>`;
+                } else {
+                    return `<span class="badge badge-soft-warning text-uppercase">${raw}</span>`;
+                }
+            }
+        },
+        {
             className: 'text-center',
-            name: 'created_at',
-            data: 'created_at',
+            name: 'submitted_at',
+            data: 'submitted_at',
         },
         {
             name: 'id',
@@ -93,16 +80,16 @@ let table = $('#committees-table').DataTable({
             render: function (id, _, row) {
                 return `
                 <div class="dropdown">
-                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                    <button class="btn btn-primary dropdown-toggle" type="button"
                         id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         Actions
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
                         <li><a class="dropdown-item"
-                                href="${route('committee.edit', id)}">Edit</a></li>
+                                href="${route('committee.edit', id)}">Edit Committee</a></li>
                         <li class="dropdown-divider"></li>
                         <li><a href="${route('committee-file.show', id)}"
-                                class="dropdown-item">Show File</a></li>
+                                class="dropdown-item">View File</a></li>
                         <li><button class="dropdown-item btn-edit" data-id="${id}">Edit
                                 File</button></li>
                         <li><a  class="dropdown-item" download href="/storage/committees/${row.file}">Download File</a></li>
@@ -114,20 +101,6 @@ let table = $('#committees-table').DataTable({
     ],
 });
 
-
-table.on('draw', function () {
-    if ($('#filterByContent').val()) {
-        var rows = table.rows({ search: 'applied' }).nodes();
-
-        $.each(rows, function (index) {
-            var tr = $(this).closest('tr');
-            var row = table.row(tr);
-
-            row.child(format(row.data())).show();
-            tr.addClass('shown');
-        });
-    }
-});
 
 
 // Add debounce for searching
@@ -167,22 +140,6 @@ $('#filterByContent').keyup(function (e) {
 });
 
 
-// Add event listener for opening and closing details
-$('#committees-table tbody').on('click', 'td.dt-control', function () {
-    var tr = $(this).closest('tr');
-    var row = table.row(tr);
-
-    if (row.child.isShown()) {
-        // This row is already open - close it
-        row.child.hide();
-        tr.removeClass('shown');
-    } else {
-        // Open this row
-        row.child(format(row.data())).show();
-        tr.addClass('shown');
-    }
-});
-
 
 const loadCanvasContent = (response) => {
     let chairmanAndViceChairmanCount = 2;
@@ -195,14 +152,14 @@ const loadCanvasContent = (response) => {
 
     $('#pictures').find('picture').remove();
     $('#pictures').prepend(`
-        <picture class="avatar-group-img">
-            <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.chairman_information.profile_picture}" alt="${agenda.chairman_information.fullname}">
+        <picture class="user-avatar user-avatar-group">
+            <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.chairman_information.profile_picture}" >
         </picture>
     `);
 
     $('#pictures').prepend(`
-        <picture class="avatar-group-img">
-            <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" alt="${agenda.vice_chairman_information.fullname}">
+        <picture class="user-avatar user-avatar-group">
+            <img class="thumb-lg rounded-circle" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" alt="${agenda.vice_chairman_information.fullname}">
         </picture>
     `);
 
@@ -212,8 +169,9 @@ const loadCanvasContent = (response) => {
         $('#leadCommitteeContent').prepend(`
             <div class="card mb-3">
                     <div class="card-body fw-medium">
-                        <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}"
-                        alt="${agenda.vice_chairman_information.fullname}">
+                        <div class="user-avatar">
+                            <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" alt="${agenda.vice_chairman_information.fullname}">
+                        </div>
                         <span>${agenda.vice_chairman_information.fullname}</span>
                         <br>
                         <span>${agenda.vice_chairman_information.district}</span>
@@ -225,12 +183,12 @@ const loadCanvasContent = (response) => {
 
         $('#leadCommitteeContent').prepend(`<span class="fw-bold">Vice Chairman</span>`);
 
-
         $('#leadCommitteeContent').prepend(`
             <div class="card mb-3">
                     <div class="card-body fw-medium">
-                        <img class="f-w-10 rounded-circle" src="/storage/user-images/${agenda.chairman_information.profile_picture}"
-                        alt="${agenda.chairman_information.fullname}">
+                        <div class="user-avatar">
+                            <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.chairman_information.profile_picture}" alt="${agenda.chairman_information.fullname}">
+                        </div>
                         <span>${agenda.chairman_information.fullname}</span>
                         <br>
                         <span>${agenda.chairman_information.district}</span>
@@ -249,17 +207,18 @@ const loadCanvasContent = (response) => {
             } = member;
             let [memberInformation] = sanggunian_member;
             $('#pictures').prepend(`
-                <picture class="avatar-group-img">
-                    <img class="f-w-10 rounded-circle" src="/storage/user-images/${memberInformation.profile_picture}"
-                        alt="${memberInformation.fullname}">
-                </picture>
-            `);
+            <picture class="user-avatar user-avatar-group">
+                <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${memberInformation.profile_picture}" alt="${memberInformation.fullname}">
+            </picture>
+        `);
+
 
             $('#leadCommitteeContent').append(`
                 <div class="card mb-3">
                     <div class="card-body fw-medium">
-                        <img class="f-w-10 rounded-circle" src="/storage/user-images/${memberInformation.profile_picture}"
-                        alt="${memberInformation.fullname}">
+                        <div class="user-avatar">
+                            <img class="thumb-lg rounded-circle" src="/storage/user-images/${memberInformation.profile_picture}" alt="${memberInformation.fullname}">
+                        </div>
                         <span class="fw-medium">${memberInformation.fullname}</span>
                         <br>
                         <span>${memberInformation.district}</span>

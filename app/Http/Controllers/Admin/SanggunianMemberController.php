@@ -66,7 +66,7 @@ final class SanggunianMemberController extends Controller
 
     public function destroy(SanggunianMember $sanggunianMember, Request $request)
     {
-        if ($this->userService->verify($request->key, auth()->user())) {
+        if (!is_null($request->key) && $this->userService->verify($request->key, auth()->user())) {
             $this->sanggunianMemberRepository->delete($sanggunianMember);
             return response()->json(['success' => true, 'message' => 'Record deleted successfully, this page will automatically refresh after 5 seconds to apply the changes.']);
         }

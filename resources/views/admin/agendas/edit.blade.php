@@ -1,11 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.app-2')
 @prepend('page-css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endprepend
-@section('page-title', 'Edit Agenda')
+@section('tab-title', 'Edit Agenda')
 @section('content')
     @if (Session::has('success'))
         <div class="card mb-2 bg-success shadow-sm text-white">
@@ -15,22 +12,18 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0">Edit Agenda</h6>
+        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
+            <h6 class="card-title h6 text-white m-0">Edit Agenda Details</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('agendas.update', $agenda) }}">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
-                    <label>Index</label>
-                    <input type="text" class="form-control" name="index" value="{{ old('index', $agenda->index) }}">
-                    @error('title')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
+                    <input type="text" class="form-control d-none"  name="index" value="{{ old('index', $agenda->index) }}">
                 </div>
                 <div class="form-group">
-                    <label>Title</label>
+                    <label class="form-label">Title</label>
                     <input type="text" class="form-control" name="title" value="{{ old('title', $agenda->title) }}">
                     @error('title')
                         <span class="text-danger">{{ $message }}</span>
@@ -39,7 +32,7 @@
 
 
                 <div class="form-group">
-                    <label>Chairman</label>
+                    <label class="form-label">Chairman</label>
                     <select name="chairman" class="form-select">
                         @foreach ($members as $member)
                             <option {{ $agenda->chairman == $member->id ? 'selected' : '' }} value="{{ $member->id }}">
@@ -52,7 +45,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Vice Chairman</label>
+                    <label class="form-label">Vice Chairman</label>
                     <select name="vice_chairman" class="form-select">
                         @foreach ($members as $member)
                             <option {{ $agenda->vice_chairman == $member->id ? 'selected' : '' }}
@@ -64,7 +57,7 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label>Members</label>
+                    <label class="form-label">Members</label>
                     <select name="members[]" class="js-example-basic-multiple js-states form-select" multiple
                         aria-label="multiple select example">
                         @foreach ($members as $member)
@@ -75,29 +68,16 @@
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
-                {{-- <div class="form-group">
-                    <label>Members <span class="text-primary">(Use the <span class="fw-bold">CTRL or SHIFT</span> key on
-                            your
-                            keyboard to select
-                            multiple)</span></label>
-                    <select name="members[]" class="form-select" multiple aria-label="multiple select example">
-                        @foreach ($members as $member)
-                            <option {{ in_array($member->id, $agendaMembers) ? 'selected' : '' }} value="{{ $member->id }}">{{ $member->fullname }}</option>
-                        @endforeach
-                    </select>
-                    @error('members')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div> --}}
 
                 <!-- Submit Button -->
                 <div>
-                    <button type="submit" class="btn btn-primary float-end mt-3">Save</button>
+                    <button type="submit" class="btn btn-success float-end mt-3">Update</button>
                 </div>
             </form>
         </div>
     </div>
     @push('page-scripts')
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script>
             $(document).ready(function() {
                 let agendaMembers = @json($agendaMembers);

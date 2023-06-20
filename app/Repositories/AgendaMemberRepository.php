@@ -26,9 +26,16 @@ final class AgendaMemberRepository extends BaseRepository implements IAgendaMemb
         return $this->model->with(['agenda:id,title'])->where('member', $member->id)->get();
     }
 
-    public function addMembersToThis(Agenda $agenda, Collection|array $members = []): mixed
+    public function addMembersToThis(int $agendaID, array $members = []): mixed
     {
-        return $agenda->members()->saveMany($members);
+        foreach ($members as $member) {
+            parent::store([
+                'agenda_id' => $agendaID,
+                'member' => $member,
+            ]);
+        }
+
+        return true;
     }
 
     public function getMembers(Agenda $agenda): Agenda

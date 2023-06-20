@@ -53,7 +53,7 @@
 
 <body>
     <div class="header">
-        <img class="logo" src="file:///laragon/www/TSP_LegislateSys/public/session/logo.png" alt="Logo">
+        <img class="logo" src="file:///laragon/www/paperless/public/session/logo.png" alt="Logo">
         <div class="text">
             <p>Republic of the Philippines</p>
             <p class="fw-bold">PROVINCE OF SURIGAO DEL SUR</p>
@@ -61,7 +61,7 @@
             <p class="fw-bold">TANGGAPAN NG SANGGUNIANG PANLALAWIGAN</p>
             <p>(Office of the Provincial Council)</p>
         </div>
-        <img class="logo-2" src="file:///laragon/www/TSP_LegislateSys/public/session/tsp.png" alt="Logo">
+        <img class="logo-2" src="file:///laragon/www/paperless/public/session/tsp.png" alt="Logo">
     </div>
 </body>
 
