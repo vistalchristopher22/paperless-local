@@ -122,6 +122,7 @@
             <table class="table table-striped datatable table-bordered border">
                 <thead>
                     <tr class="bg-light">
+                        <th class="fw-medium text-center">&nbsp;</th>
                         <th class="fw-medium text-center">User</th>
                         <th class="fw-medium text-center">Account Type</th>
                         <th class="fw-medium text-center">IP Address</th>
@@ -132,7 +133,12 @@
                 <tbody>
                     @foreach ($loginHistories as $history)
                         <tr>
-                            <td class="text-dark">
+                            <td class="text-center">
+                                <img class="rounded-circle thumb-lg"
+                                    src="{{ asset('/storage/user-images/' . $history->user->profile_picture) }}"
+                                    alt="Profile Picture">
+                            </td>
+                            <td class="text-dark text-center">
                                 <span class="mx-1"></span>{{ $history->user->fullname }}
                             </td>
                             <td class="text-dark text-center">
