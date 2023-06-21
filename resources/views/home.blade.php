@@ -113,6 +113,32 @@
         </div>
         <!--end col-->
     </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-dark">
+                    <h6 class="card-title text-white h6">
+                        Committees
+                    </h6>
+                </div>
+                <div class="card-body d-flex align-items-center justify-content-center">
+                    <div id="pieChart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-dark">
+                    <h6 class="card-title text-white h6">
+                        Committees Past 7 Days
+                    </h6>
+                </div>
+                <div class="card-body d-flex align-items-center justify-content-center">
+                    <div id="barChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="card">
         <div class="card-header bg-dark justify-content-between align-items-center d-flex">
@@ -230,10 +256,117 @@
     @push('page-scripts')
         <script src="{{ asset('/assets-2/plugins/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.js') }}"></script>
+        <script src="{{ asset('/assets-2/plugins/apex-charts/apexcharts.min.js') }}"></script>
         <script>
             $('.datatable').DataTable({});
 
             let userID = "{{ auth()->user()->id }}";
+            let committeeStatus = @json($committeeStatus);
+            let committeeStatusValues = @json($committeeStatusValues);
+
+            committeeStatus = committeeStatus.map((value) => value.toUpperCase());
+            committeeStatusValues = committeeStatusValues.map((value) => parseInt(value));
+
+            let committeePastSevenDaysLabels = @json($committeePastSevenDaysLabels);
+            let committeePastSevenDaysValues = @json($committeePastSevenDaysValues);
+
+            let options = {
+                series: committeeStatusValues,
+                chart: {
+                    fontFamily: 'Inter, sans-serif',
+                    width: 500,
+                    height: 500,
+                    type: 'pie',
+                },
+                labels: committeeStatus,
+            };
+
+            let chart = new ApexCharts(document.querySelector("#pieChart"), options);
+            chart.render();
+
+            let barChartOptions = {
+                series: [{
+                    name: 'Committees',
+                    data: committeePastSevenDaysValues,
+                }],
+                chart: {
+                    height: 333,
+                    width: 1150,
+                    type: 'bar',
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 10,
+                        dataLabels: {
+                            position: 'top',
+                        },
+                    }
+                },
+                dataLabels: {
+                    enabled: false,
+                    formatter: function(val) {
+                        return parseInt(val);
+                    },
+                    offsetY: -20,
+                    style: {
+                        fontSize: '12px',
+                        colors: ["#304758"]
+                    }
+                },
+
+                xaxis: {
+                    categories: committeePastSevenDaysLabels,
+                    position: 'bottom',
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                    crosshairs: {
+                        fill: {
+                            type: 'gradient',
+                            gradient: {
+                                colorFrom: '#D8E3F0',
+                                colorTo: '#BED1E6',
+                                stops: [0, 100],
+                                opacityFrom: 0.4,
+                                opacityTo: 0.5,
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                    }
+                },
+                yaxis: {
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    labels: {
+                        show: false,
+                        formatter: function(val) {
+                            return parseInt(val);
+                        }
+                    }
+
+                },
+                title: {
+                    text: 'Committees in Past 7 Days',
+                    floating: true,
+                    offsetY: 330,
+                    align: 'center',
+                    style: {
+                        color: '#444'
+                    }
+                },
+            };
+
+            let barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
+            barChart.render();
 
             $(document).on('click', '.btn-approve', function() {
                 let id = $(this).attr('data-id');
