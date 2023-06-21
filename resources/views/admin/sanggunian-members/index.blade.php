@@ -4,7 +4,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css"
         integrity="sha512-ZKX+BvQihRJPA8CROKBhDNvoc2aDMOdAlcm7TUQY+35XYtrd3yh95QOOhsPDQY9QnKE0Wqag9y38OIgEvb88cA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet"
+        type="text/css" />
     <!-- JavaScript -->
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <!-- CSS -->
@@ -12,10 +15,6 @@
     <!-- Default theme -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
     <style>
-        .dataTables_filter input {
-            margin-bottom: 10px;
-        }
-
         .fade-in {
             opacity: 0;
             transition: opacity 0.8s ease-in-out;
@@ -55,17 +54,16 @@
             </div>
         </div>
         <div class="card-body">
-
             <div class="table-responsive">
-                <table class="table border" id="members-table">
+                <table class="table table-striped table-bordered" id="members-table">
                     <thead>
-                        <tr>
-                            <th class="p-3 text-center text-dark border bg-light">Picture</th>
-                            <th class="p-3 text-center text-dark border bg-light">Fullname</th>
-                            <th class="p-3 text-center text-dark border bg-light">District</th>
-                            <th class="p-3 text-dark text-center border bg-light">Sanggunian</th>
-                            <th class="p-3 text-dark text-center border bg-light">Created At</th>
-                            <th class="p-3 text-dark text-center border bg-light">Actions</th>
+                        <tr class="bg-light">
+                            <th class="fw-bold text-center">Picture</th>
+                            <th class="fw-bold text-center">Fullname</th>
+                            <th class="fw-bold text-center">District</th>
+                            <th class="fw-bold text-center">Sanggunian</th>
+                            <th class="fw-bold text-center">Created At</th>
+                            <th class="fw-bold text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -133,12 +131,11 @@
         </div>
     </div>
     @push('page-scripts')
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"
             integrity="sha512-Ixzuzfxv1EqafeQlTCufWfaC6ful6WFqIz4G+dWvK0beHw0NVJwvCKSgafpy5gwNqKmgUfIBraVwkKI+Cz0SEQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="//cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+        <script src="{{ asset('/assets-2/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.js') }}"></script>
         <script>
             $(document).ready(function() {
                 $('#members-table').DataTable({});

@@ -1,14 +1,10 @@
 @extends('layouts.app-2')
-@section('page-title', 'Ordered Business')
+@section('tab-title', 'Ordered Business')
 @prepend('page-css')
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-    <style>
-        .dataTables_filter input {
-            margin-bottom: 10px;
-        }
-    </style>
 @endprepend
 
 @section('content')
@@ -22,28 +18,26 @@
     @endif
 
     <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <span class="fw-bold">Ordered Business</span>
-            <a href="{{ route('board-sessions.create') }}" class="btn btn-primary">New Ordered Business</a>
+        <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+            <h6 class="fw-medium text-white h6 card-title">Ordered Business</h6>
+            <a href="{{ route('board-sessions.create') }}" class="btn btn-light fw-bold shadow">New Ordered Business</a>
         </div>
 
         <div class="card-body">
             <table class="table border" id="order-business-table">
                 <thead>
-                    <tr>
-                        <th class="p-3 text-center border text-dark">
-                            <small>
-                                Order Business Title
-                            </small>
+                    <tr class="bg-light">
+                        <th class="fw-medium text-center border text-dark">
+                            Order Business Title
                         </th>
-                        <th class="p-3 text-center border text-dark">Unassigned Title</th>
-                        <th class="p-3 text-center border text-dark">Unassigned Content</th>
-                        <th class="p-3 text-center border text-dark">Announcement Title</th>
-                        <th class="p-3 text-center border text-dark">Announcement Content</th>
-                        <th class="p-3 text-center border text-dark">Published</th>
-                        <th class="p-3 text-center border text-dark">Status</th>
-                        <th class="p-3 text-center border text-dark">Created At</th>
-                        <th class="p-3 text-center border text-dark">Action</th>
+                        <th class="fw-medium text-center border text-dark">Unassigned Title</th>
+                        <th class="fw-medium text-center border text-dark">Unassigned Content</th>
+                        <th class="fw-medium text-center border text-dark">Announcement Title</th>
+                        <th class="fw-medium text-center border text-dark">Announcement Content</th>
+                        <th class="fw-medium text-center border text-dark">Published</th>
+                        <th class="fw-medium text-center border text-dark">Status</th>
+                        <th class="fw-medium text-center border text-dark">Created At</th>
+                        <th class="fw-medium text-center border text-dark">Action</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -53,9 +47,8 @@
 
 
     @push('page-scripts')
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-        <script src="//cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+        <script src="{{ asset('/assets-2/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.js') }}"></script>
         <script>
             $(document).ready(function() {
                 let tableUrl = route('board-sessions.list');

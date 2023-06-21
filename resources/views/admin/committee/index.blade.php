@@ -1,15 +1,10 @@
 @extends('layouts.app-2')
 @section('tab-title', 'Sangguniang Panlalawigan Members')
 @prepend('page-css')
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-    <style>
-        .dataTables_filter input {
-            margin-bottom: 10px;
-        }
-    </style>
 @endprepend
 @section('content')
     @if (Session::has('success'))
@@ -105,7 +100,8 @@
     </div>
 
     @push('page-scripts')
-        <script src="//cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+        <script src="{{ asset('/assets-2/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="{{ asset('assets/js/custom/committee.js') }}"></script>
         <script>

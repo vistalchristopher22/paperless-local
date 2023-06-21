@@ -1,7 +1,9 @@
 @extends('layouts.app-2')
 @section('tab-title', 'Division List')
 @prepend('page-css')
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
     <style>
         .dataTables_filter input {
             margin-bottom: 10px;
@@ -31,7 +33,8 @@
 
             <!-- Divison Listing Table -->
             <div class="table-responsive">
-                <table class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline" style="border-color: transparent" id="division-table">
+                <table class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline"
+                    style="border-color: transparent" id="division-table">
                     <thead>
                         <tr>
                             <th class="text-center text-dark border bg-light">Name</th>
@@ -95,7 +98,8 @@
 
 
     @push('page-scripts')
-        <script src="//cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+        <script src="{{ asset('/assets-2/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.js') }}"></script>
         <script>
             $(document).ready(function() {
                 $('#division-table').DataTable({});

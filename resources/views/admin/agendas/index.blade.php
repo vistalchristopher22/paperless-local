@@ -1,7 +1,10 @@
 @extends('layouts.app-2')
 @section('tab-title', 'Complete Listing of Agendas')
 @prepend('page-css')
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+
     <link rel="stylesheet" href="//cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.dataTables.min.css">
     <style>
         .dataTables_filter input {
@@ -19,7 +22,9 @@
     @else
         <div class="card bg-primary text-white mb-3">
             <div class="card-body alert-dismissible fade show" role="alert">
-                You can rearrange the order of the rows by dragging and dropping them. Simply click and hold on a row, then drag it to the desired position and release the mouse button to drop it. This allows you to easily customize the order of the rows to suit your needs.
+                You can rearrange the order of the rows by dragging and dropping them. Simply click and hold on a row, then
+                drag it to the desired position and release the mouse button to drop it. This allows you to easily customize
+                the order of the rows to suit your needs.
             </div>
         </div>
     @endif
@@ -36,7 +41,7 @@
 
             <!-- User Listing Table-->
             <div class="table-responsive">
-                <table class="table table-striped" id="agendas-table">
+                <table class="table table-striped border" id="agendas-table">
                     <thead>
                         <tr>
                             <th class="text-center bg-light border">Order</th>
@@ -69,9 +74,9 @@
 
                                 </td>
                                 <td class="align-middle text-center">
-                                    <a class="btn btn-success text-white" title="Edit Agenda"
-                                        data-bs-toggle="tooltip" data-bs-placement="top"
-                                        data-bs-original-title="Edit Agenda" href="{{ route('agendas.edit', $agenda) }}">
+                                    <a class="btn btn-success text-white" title="Edit Agenda" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" data-bs-original-title="Edit Agenda"
+                                        href="{{ route('agendas.edit', $agenda) }}">
                                         <i class="mdi mdi-pencil-outline"></i>
                                     </a>
                                 </td>
@@ -83,7 +88,8 @@
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-end" style="width:450px;" tabindex="-1" id="offCanvasCommittee" aria-labelledby="offCanvasCommitteeTitle">
+    <div class="offcanvas offcanvas-end" style="width:450px;" tabindex="-1" id="offCanvasCommittee"
+        aria-labelledby="offCanvasCommitteeTitle">
         <div class="offcanvas-header position-relative">
             <div class="d-flex flex-column w-100">
                 <h5 class="offcanvas-title mb-3" id="offCanvasCommitteeTitle"></h5>
@@ -103,9 +109,8 @@
     </div>
 
     @push('page-scripts')
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-        <script src="//cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+        <script src="{{ asset('/assets-2/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.js') }}"></script>
         <script src="//cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js"></script>
         <script>
             $(document).ready(function() {
@@ -138,7 +143,7 @@
                         });
                     });
 
-                    if(changes.nodes.length !== 0) {
+                    if (changes.nodes.length !== 0) {
                         notyf.success('Re-order successfully!');
                     }
                 });

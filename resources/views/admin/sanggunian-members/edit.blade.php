@@ -1,5 +1,7 @@
 @extends('layouts.app-2')
 @section('tab-title', 'Edit Sangguniang Panlalawigan Member')
+@prepend('page-css')
+@endprepend
 @section('content')
     @if (Session::has('success'))
         <div class="card mb-2 bg-success shadow-sm text-white">
