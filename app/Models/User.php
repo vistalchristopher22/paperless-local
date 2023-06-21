@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\UserStatus;
+use App\Models\LoginHistory;
 use App\FormRules\UserFormRules;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
@@ -93,5 +94,10 @@ class User extends Authenticatable
     public function committee()
     {
         return $this->hasOne(User::class, 'submitted_by', 'id');
+    }
+
+    public function login_histories()
+    {
+        return $this->hasOne(LoginHistory::class);
     }
 }

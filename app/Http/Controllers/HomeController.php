@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Schedule;
 use App\Models\Committee;
+use App\Models\LoginHistory;
 use App\Enums\CommitteeStatus;
 
 class HomeController extends Controller
@@ -28,16 +29,17 @@ class HomeController extends Controller
             $reviewCommittees = Committee::where('status', CommitteeStatus::REVIEW->value)->count();
             $returnedCommittees = Committee::where('status', CommitteeStatus::RETURN->value)->count();
             $todaysSchedule = Schedule::where('type', 'committee')
-                                    ->whereDate('date_and_time', Carbon::today())
-                                    ->count();
+                ->whereDate('date_and_time', Carbon::today())
+                ->count();
             $activeUsers = User::where('is_online', true)->get()
-                                    ->except(auth()->user()->id)
-                                    ->count();
+                ->except(auth()->user()->id)
+                ->count();
             $committees = Committee::with(['lead_committee_information', 'expanded_committee_information', 'submitted'])->where('status', 'review')->get();
+            $loginHistories = LoginHistory::with('user')->get();
         }
 
         return match (true) {
-            $user && $user->active('administrator') => view('home', compact('committees', 'reviewCommittees', 'returnedCommittees', 'todaysSchedule', 'activeUsers')),
+            $user && $user->active('administrator') => view('home', compact('committees', 'reviewCommittees', 'returnedCommittees', 'todaysSchedule', 'activeUsers', 'loginHistories')),
             $user && $user->active('user') => view('user.dashboard'),
             default => abort(404),
         };

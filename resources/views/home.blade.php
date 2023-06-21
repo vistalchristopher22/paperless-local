@@ -113,6 +113,54 @@
         </div>
         <!--end col-->
     </div>
+
+    <div class="card">
+        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
+            <h6 class="card-title m-0 text-white h6">Login History</h6>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped datatable table-bordered border">
+                <thead>
+                    <tr class="bg-light">
+                        <th class="fw-medium text-center">User</th>
+                        <th class="fw-medium text-center">Account Type</th>
+                        <th class="fw-medium text-center">IP Address</th>
+                        <th class="fw-medium text-center">Type</th>
+                        <th class="fw-medium text-center">Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($loginHistories as $history)
+                        <tr>
+                            <td class="text-dark">
+                                <span class="mx-1"></span>{{ $history->user->fullname }}
+                            </td>
+                            <td class="text-dark text-center">
+                                <span class="badge badge-soft-primary">
+                                    {{ $history->user->account_type }}
+                                </span>
+                            </td>
+                            <td class="text-dark text-center">
+                                {{ $history->ip_address }}
+                            </td>
+                            <td class="text-dark text-center">
+                                <span @class([
+                                    'badge badge-soft-danger' => $history->type === 'logged_out',
+                                    'badge badge-soft-primary' => $history->type === 'logged_in',
+                                ])>
+                                    {{ Str::headline($history->type) }}
+                                </span>
+                            </td>
+                            <td class="text-dark text-center">
+                                <span class="mx-1"></span>{{ $history->logged_in_at->format('F d, Y h:i A') }}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-header bg-dark justify-content-between align-items-center d-flex">
             <h6 class="card-title m-0 text-white h6">Submitted Committees</h6>
