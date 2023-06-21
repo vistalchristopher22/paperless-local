@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
-use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,7 +12,6 @@ class Committee extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    use Searchable;
 
     protected $guarded = [];
     public $appends = [
