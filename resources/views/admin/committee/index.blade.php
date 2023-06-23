@@ -62,16 +62,16 @@
             </a>
         </div>
         <div class="card-body">
-            <table class="table table-striped border" id="committees-table" width="100%">
+            <table class="table table-striped table-bordered" id="committees-table" width="100%">
                 <thead>
                     <tr class="bg-light">
-                        <th class="border text-dark">Name</th>
-                        <th class="border text-dark">Submitted By</th>
-                        <th class="border text-dark">Lead Committee</th>
-                        <th class="border text-dark">Expanded Committee</th>
-                        <th class="border text-dark text-center">Status</th>
-                        <th class="border text-dark text-center">Submitted At</th>
-                        <th class="border text-center text-dark">Actions</th>
+                        <th class="p-3 border text-dark">Name</th>
+                        <th class="p-3 border text-dark">Submitted By</th>
+                        <th class="p-3 border text-dark">Lead Committee</th>
+                        <th class="p-3 border text-dark">Expanded Committee</th>
+                        <th class="p-3 border text-dark text-center">Status</th>
+                        <th class="p-3 border text-dark text-center">Submitted At</th>
+                        <th class="p-3 border text-center text-dark">Actions</th>
                     </tr>
                 </thead>
 

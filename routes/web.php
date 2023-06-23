@@ -36,6 +36,7 @@ Auth::routes();
 Route::get('home', [HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
+
     Route::group(['middleware' => 'features:administrator'], function () {
         Route::group(['model' => User::class], fn () => Route::resource('account', UserController::class));
 
@@ -117,7 +118,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('schedules', CommitteeMeetingController::class)->only('index');
         Route::resource('committee-file', CommitteeFileController::class)->only(['show', 'edit']);
-        Route::get('committee-list/{lead?}/{expanded?}/{content?}', [CommitteeController::class, 'list'])->name('committee.list');
+   
 
         Route::resource('committee', CommitteeController::class);
 

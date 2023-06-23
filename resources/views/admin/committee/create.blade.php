@@ -35,14 +35,6 @@
         <div class="card-body">
             <form method="POST" action="{{ route('committee.store') }}" enctype="multipart/form-data">
                 @csrf
-                <div class="form-group d-none">
-                    <label>Priority Number</label>
-                    <input type="text" class="form-control" name="priority_number"
-                        value="{{ old('priority_number', $priority_number) }}" readonly>
-                    @error('priority_number')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
 
                 <div class="form-group">
                     <label class="form-label">Name</label>

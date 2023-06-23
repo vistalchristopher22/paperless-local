@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="" name="author" />
+    <meta content="{{ csrf_token() }}" name="csrf-token" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     @routes
@@ -135,14 +136,15 @@
     <!-- Left Sidenav -->
     <div class="left-sidenav">
         <!-- LOGO -->
-        <div class="brand">
-            <a href="index.html" class="logo">
+        <div class="brand bg-dark">
+            <a href="{{ route('home') }}" class="logo">
                 <span>
-                    <img src="{{ asset('/assets-2/images/logo-sm.png') }}" alt="logo-small" class="logo-sm">
+                    <img src="{{ asset('/paperless-logo.png') }}" alt="logo-large" width="36px;">
                 </span>
-                <span>
-                    <img src="{{ asset('/assets-2/images/logo.png') }}" alt="logo-large" class="logo-lg logo-light">
-                    <img src="{{ asset('/assets-2/images/logo-dark.png') }}" alt="logo-large" class="logo-lg logo-dark">
+                <span class="text-center">
+                    <span class="h3 fw-bold text-white p-2 align-middle">
+                        PAPERLESS
+                    </span>
                 </span>
             </a>
         </div>
@@ -531,6 +533,13 @@
 
     <script src="{{ asset('/assets-2/js/jquery.core.js') }}"></script>
     <script src="{{ asset('/assets-2/js/app.js') }}"></script>
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
+    </script>
     <script>
         let socket = io(`http://localhost:3030/`);
 

@@ -13,6 +13,9 @@ class Committee extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public $connection = 'sqlsrv';
+    public $table = 'committees';
+
     protected $guarded = [];
     public $appends = [
         'file_name',
@@ -31,7 +34,7 @@ class Committee extends Model
             get: fn ($_) => $this->created_at->format('F d, Y h:i A'),
         );
     }
-
+    
     public function lead_committee_information()
     {
         return $this->hasOne(Agenda::class, 'id', 'lead_committee');
@@ -57,5 +60,4 @@ class Committee extends Model
     {
         return basename($this->file_path);
     }
-
 }

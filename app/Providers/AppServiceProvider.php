@@ -34,8 +34,7 @@ class AppServiceProvider extends ServiceProvider
 
         Model::preventAccessingMissingAttributes();
         Model::preventSilentlyDiscardingAttributes();
-        Model::preventLazyLoading(!app()->isProduction());
-
+        // Model::preventLazyLoading(!app()->isProduction());
 
         Feature::define('administrator', function (User $user) {
             return $user->account_type == UserTypes::ADMIN->value;

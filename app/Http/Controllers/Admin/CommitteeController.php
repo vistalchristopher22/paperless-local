@@ -10,6 +10,7 @@ use App\Pipes\Committee\UploadFile;
 use App\Http\Controllers\Controller;
 use App\Pipes\Committee\GetCommittee;
 use App\Repositories\AgendaRepository;
+use Freshbitsweb\Laratables\Laratables;
 use App\Pipes\Committee\CreateCommittee;
 use App\Pipes\Committee\ExtractFileText;
 use App\Pipes\Committee\UpdateCommittee;
@@ -22,6 +23,7 @@ use App\Http\Requests\UpdateCommitteeRequest;
 use App\Pipes\Committee\Filter\ContentFilter;
 use App\Pipes\Committee\Filter\LeadCommitteeFilter;
 use App\Pipes\Committee\Filter\ExpandedCommitteeFilter;
+use App\Transformers\CommitteeLaraTables;
 
 final class CommitteeController extends Controller
 {
@@ -39,15 +41,16 @@ final class CommitteeController extends Controller
      *
      * @return A datatable of the filtered data.
      */
-    public function list(mixed $lead = '*', mixed $expanded = '*', mixed $content = null)
+    public function list()
     {
-        return Pipeline::send([$lead, $expanded, $content])
-            ->through([
-                GetCommittee::class,
-                // LeadCommitteeFilter::class,
-                // ExpandedCommitteeFilter::class,
-                // ContentFilter::class
-            ])->then(fn ($data) => DataTables::of($data)->make(true));
+        return Laratables::recordsOf(Committee::class, CommitteeLaraTables::class);
+        // return Pipeline::send()
+        //     ->through([
+        //         GetCommittee::class,
+        //         // LeadCommitteeFilter::class,
+        //         // ExpandedCommitteeFilter::class,
+        //         // ContentFilter::class
+        //     ])->then(fn ($data) => DataTables::of($data)->make(true));
     }
 
     /**
@@ -59,42 +62,9 @@ final class CommitteeController extends Controller
     public function index()
     {
 
-        $commitees = Committee::with([
-            'lead_committee_information', 'expanded_committee_information', 'lead_committee_information.chairman_information', 'lead_committee_information.vice_chairman_information', 'lead_committee_information.members', 'lead_committee_information.members.sanggunian_member',
-            'expanded_committee_information.chairman_information', 'expanded_committee_information.vice_chairman_information', 'expanded_committee_information.members', 'expanded_committee_information.members.sanggunian_member', 'submitted'
-        ]);
-
-        if (array_key_exists('l', request()->query())) {
-            $commitees->where('lead_committee', request()->query('l'));
-        }
-
-        if (array_key_exists('e', request()->query())) {
-            $commitees->where('expanded_committee', request()->query('e'));
-        }
-
-
-
-        $commitees = $commitees->paginate(8);
-
-
-        $maxYear = DB::table('committees')
-            ->select(DB::raw('YEAR(MAX(date)) as max_year'))
-            ->pluck('max_year')
-            ->first();
-
-        $minYear = DB::table('committees')
-            ->select(DB::raw('YEAR(MIN(date)) as min_year'))
-            ->pluck('min_year')
-            ->first();
-
-        $sangguniangMembers = SanggunianMember::get();
 
         return view('admin.committee.index', [
             'agendas' => $this->agendaRepository->get(),
-            'committees' => $commitees,
-            'sangguniangMembers' => $sangguniangMembers,
-            'minYear' => $minYear,
-            'maxYear' => $maxYear,
         ]);
     }
 
@@ -104,7 +74,6 @@ final class CommitteeController extends Controller
     public function create()
     {
         return view('admin.committee.create', [
-            'priority_number' => $this->committeeRepository->getNextPriorityNumber(),
             'agendas' => $this->agendaRepository->get(),
         ]);
     }
@@ -125,12 +94,12 @@ final class CommitteeController extends Controller
             $request->merge(['submitted_by' => auth()->user()->id]);
             try {
                 Pipeline::send($request)
-                ->through([
-                    UploadFile::class,
-                    CreateCommittee::class,
-                    ExtractFileText::class,
-                ])->then(fn ($data) => $data);
-            } catch(Exception $e) {
+                    ->through([
+                        UploadFile::class,
+                        CreateCommittee::class,
+                        ExtractFileText::class,
+                    ])->then(fn ($data) => $data);
+            } catch (Exception $e) {
                 dd($e->getMessage());
             }
 

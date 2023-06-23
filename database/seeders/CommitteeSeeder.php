@@ -15,14 +15,14 @@ class CommitteeSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (range(1, 10) as $range) {
+        foreach (range(1, 20000) as $range) {
             echo "Insert #{$range} committee record\n";
             $user = User::where('account_type', UserTypes::USER->value)->get()->random()->first()->id;
             $data = [
                  'name' => "Test #{$range}",
-                 'priority_number' => $range,
-                 'lead_committee' => Agenda::get()->random()->id,
-                 'expanded_committee' => Agenda::get()->random()->id,
+                //  'priority_number' => $range,
+                 'lead_committee' => 1,
+                 'expanded_committee' => 1,
                  'file_path' => null,
                  'date' => now(),
                  'created_at' => now(),

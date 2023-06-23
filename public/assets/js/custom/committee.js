@@ -1,68 +1,59 @@
+let token = $("meta[name='token']").content;
+
 $('#filterByContent').val('');
 String.prototype.limit = function (limit) {
     let text = this.trim();
     if (text.length > limit) {
-        text = text.substring(0, limit).trim() + '...'; 
+        text = text.substring(0, limit).trim() + '...';
     }
     return text;
 };
 
 let table = $('#committees-table').DataTable({
-    order: [[0, "asc"]],
-    destroy: true,
     serverSide: true,
+    ajax: {
+        url: '/api/committee-list',
+        // "error": function () {
+        //     location.reload();
+        // },
+    },
     processing: true,
     language: {
-        processing: '<span class="sr-only mt-2">&nbsp;</span> '
+        processing: '<div class="spinner-border text-primary" role="status"></div>'
     },
-    ajax: `/committee-list`,
     columns: [
         {
             name: 'name',
-            data: 'name',
+            render : (data) => `<span class="mx-2">${data}</span>`,
         },
         {
             name: 'submitted.fullname',
-            data: 'submitted.fullname',
+            searchable: false,
+            orderable : false,
+            render : (data) => `<span class="mx-2">${data}</span>`,
         },
         {
-            name: 'lead_committee_information.title',
-            data: 'lead_committee_information.title',
-            render: function (rowData, _, row) {
-                return `
-                    <a data-bs-toggle="offcanvas" data-bs-target="#offCanvasCommittee"
-                    aria-controls="offCanvasCommittee"
-                    data-expanded-committee="${row.lead_committee}"
-                    class="cursor-pointer text-primary view-expanded-comittees text-decoration-underline fw-medium">
-                        ${rowData.limit(50) || ''}
-                    </a>
-                `;
-            }
+            name: 'lead_committee',
+            searchable: false,
+            orderable: false,
+            render : (data) => `<span class="mx-2">${data}</span>`,
         },
         {
-            name: 'expanded_committee_information.title',
-            data: 'expanded_committee_information.title',
-            render: function (rowData, _, row) {
-                return `
-                    <a data-bs-toggle="offcanvas" data-bs-target="#offCanvasCommittee"
-                    aria-controls="offCanvasCommittee"
-                    data-expanded-committee="${row.expanded_committee}"
-                    class="cursor-pointer text-primary view-expanded-comittees text-decoration-underline fw-medium">
-                        ${rowData.limit(50) || ''}
-                    </a>
-                `;
-            },
+
+            name: 'expanded_committee',
+            searchable: false,
+            orderable: false,
+            render : (data) => `<span class="mx-2">${data}</span>`,
         },
         {
-            name : 'status',
-            className : 'text-center',
-            data : 'status',
-            render : function (raw) {
-                if(raw == 'review') {
+            name: 'status',
+            className: 'text-center',
+            render: function (raw) {
+                if (raw == 'review') {
                     return `<span class="badge badge-soft-primary text-uppercase">${raw}</span>`;
-                } else if(raw == 'approved') {
+                } else if (raw == 'approved') {
                     return `<span class="badge badge-soft-success text-uppercase">${raw}</span>`;
-                } else if(raw == 'returned') {
+                } else if (raw == 'returned') {
                     return `<span class="badge badge-soft-danger text-uppercase">${raw}</span>`;
                 } else {
                     return `<span class="badge badge-soft-warning text-uppercase">${raw}</span>`;
@@ -71,32 +62,12 @@ let table = $('#committees-table').DataTable({
         },
         {
             className: 'text-center',
-            name: 'submitted_at',
-            data: 'submitted_at',
+            name: 'created_at',
         },
         {
-            name: 'id',
-            data: 'id',
-            render: function (id, _, row) {
-                return `
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button"
-                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        Actions
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
-                        <li><a class="dropdown-item"
-                                href="${route('committee.edit', id)}">Edit Committee</a></li>
-                        <li class="dropdown-divider"></li>
-                        <li><a href="${route('committee-file.show', id)}"
-                                class="dropdown-item">View File</a></li>
-                        <li><button class="dropdown-item btn-edit" data-id="${id}">Edit
-                                File</button></li>
-                        <li><a  class="dropdown-item" download href="/storage/committees/${row.file}">Download File</a></li>
-                    </ul>
-                </div>
-                `;
-            },
+            name: 'action',
+            orderable: false,
+            searchable: false,
         },
     ],
 });
