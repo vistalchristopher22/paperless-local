@@ -11,6 +11,6 @@
     </style>
   </head>
   <body>
-    <iframe src="/{{ $filePathForView }}" style="min-height : 100vh; min-width : 100vw;"></iframe>
+    <iframe src="{{ $filePathForView }}" style="min-height : 100vh; min-width : 100vw;"></iframe>
   </body>
 </html>

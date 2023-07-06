@@ -7,11 +7,13 @@ use App\Models\Committee;
 use App\Models\UserNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Freshbitsweb\Laratables\Laratables;
 use App\Http\Resources\ScheduleResource;
 use App\Http\Controllers\Admin\Api\AgendaMemberController;
 use App\Http\Controllers\Admin\CommitteeController as AdminCommitteeController;
 
-Route::get('committee-list', [AdminCommitteeController::class, 'list'])->name('committee.list');
+
+Route::get('committee-list/{lead?}/{expanded?}/{ids?}', [AdminCommitteeController::class, 'list'])->name('committee.list');
 
 Route::get('agenda-members/{agenda}', [AgendaMemberController::class, 'members']);
 

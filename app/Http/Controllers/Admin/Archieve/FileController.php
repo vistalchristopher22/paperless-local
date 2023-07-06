@@ -20,6 +20,165 @@ final class FileController extends Controller
         ]);
     }
 
+    public function getFileByTypes(Request $request)
+    {
+        $fileTypes =  [
+            'word_file' => [
+                '*.doc',
+                '*.docx',
+                '*.odt',
+                '*.rtf',
+                '*.txt',
+            ],
+            'excel_file' => [
+                '*.xls',
+                '*.xlsx',
+                '*.ods',
+                '*.csv'
+            ],
+            'powerpoint_file' => [
+                '*.ppt',
+                '*.pptx',
+                '*.odp'
+            ],
+            'pictures_file' => [
+                '*.jpg',
+                '*.jpeg',
+                '*.png',
+                '*.gif',
+                '*.bmp',
+                '*.tif',
+                '*.tiff'
+            ],
+            'pdf_file' => [
+                '*.pdf'
+            ],
+            'video_file' => [
+                '*.mp4',
+                '*.avi',
+                '*.mov',
+                '*.wmv',
+                '*.flv',
+                '*.mkv',
+                '*.mpeg',
+            ],
+            'folder_file' => [
+                '*'
+            ],
+            'shortcut_file' => [
+                '*.lnk',
+            ],
+            'audio_file' => [
+                '*.mp3',
+                '*.wav',
+                '*.aac',
+                '*.flac',
+                '*.ogg',
+                '*.wma'
+            ],
+            'archives_file' => [
+                '*.zip',
+                '*.rar',
+                '*.7z',
+                '*.tar'
+            ],
+        ];
+
+        $finder = new Finder();
+
+        if ($request->type == 'folder') {
+            $finder = new Finder();
+            $directories = iterator_to_array($finder->in($request->directory)->directories());
+
+            $rootDirectories = [];
+            $rootFiles = [];
+
+            foreach ($finder as $item) {
+                $itemData = [
+                    'basename' => $item->getBasename(),
+                    'type' => $item->getType(),
+                    'extension' => $item->getExtension(),
+                    'path' => $item->getRealPath(),
+                    'size' => $item->getSize(),
+                    'cTime' => $item->getCTime(),
+                    'aTime' => $item->getATime(),
+                    'mTime' => $item->getMTime(),
+                ];
+
+                if ($item->isDir()) {
+                    $subDirectories = [];
+                    $subFiles = [];
+
+                    $subFinder = new Finder();
+                    $subFinder->depth('== 0')->in($itemData['path'])->sortByModifiedTime();
+
+                    foreach ($subFinder as $subItem) {
+                        $subItemData = [
+                            'basename' => $subItem->getBasename(),
+                            'type' => $subItem->getType(),
+                            'extension' => $subItem->getExtension(),
+                            'path' => $subItem->getRealPath(),
+                            'size' => $subItem->getSize(),
+                            'cTime' => $subItem->getCTime(),
+                            'aTime' => $subItem->getATime(),
+                            'mTime' => $subItem->getMTime(),
+                        ];
+
+                        if ($subItem->isDir()) {
+                            $subDirectories[] = $subItemData;
+                        } else {
+                            $subFiles[] = $subItemData;
+                        }
+                    }
+
+                    $itemData['directories'] = $subDirectories;
+                    $itemData['files'] = $subFiles;
+
+                    $rootDirectories[] = $itemData;
+                } else {
+                    $rootFiles[] = $itemData;
+                }
+            }
+
+            return response()->json([
+                'path' => $request->directory,
+                'directories' => $rootDirectories,
+                'files' => $rootFiles,
+                'currentDirectory' => basename($request->directory),
+            ]);
+        } else {
+            $types = $fileTypes[$request->type];
+
+            $files = $finder->in($request->directory)
+                ->files()
+                ->name($types)
+                ->sortByModifiedTime();
+
+            $files = iterator_to_array($files);
+            $filteredFiles = [];
+            foreach ($files as $item) {
+                $filteredFiles[] = [
+                    'basename' => $item->getBasename(),
+                    'type' => $item->getType(),
+                    'extension' => $item->getExtension(),
+                    'path' => $item->getRealPath(),
+                    'size' => $item->getSize(),
+                    'cTime' => $item->getCTime(),
+                    'aTime' => $item->getATime(),
+                    'mTime' => $item->getMTime(),
+                    'directory' => dirname($item->getRealPath()),
+                ];
+            }
+
+            return response()->json([
+                'path' => $request->directory,
+                'directories' => [],
+                'files' => $filteredFiles,
+                'currentDirectory' => basename($request->directory),
+            ]);
+        }
+    }
+
     public function getFileInformation(Request $request)
     {
         $finder = new Finder();

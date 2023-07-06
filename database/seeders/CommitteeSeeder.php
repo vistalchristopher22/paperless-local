@@ -15,24 +15,24 @@ class CommitteeSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (range(1, 20000) as $range) {
+        $agendaCount = Agenda::count();
+        foreach (range(1, 5000) as $range) {
             echo "Insert #{$range} committee record\n";
-            $user = User::where('account_type', UserTypes::USER->value)->get()->random()->first()->id;
-            $data = [
-                 'name' => "Test #{$range}",
-                //  'priority_number' => $range,
-                 'lead_committee' => 1,
-                 'expanded_committee' => 1,
-                 'file_path' => null,
-                 'date' => now(),
-                 'created_at' => now(),
-                 'updated_at' => now(),
-                 'status' => 'review',
-                 'submitted_by' => $user,
-             ];
-
-
-            DB::table('committees')->insert($data);
+            $user = User::inRandomOrder()->limit(1)->first()->id;
+            $leadCommittee = Agenda::inRandomOrder()->limit(rand(1, $agendaCount))->first()->id;
+            $expandedCommittee = Agenda::inRandomOrder()->limit(rand(1, $agendaCount))->first()->id;
+            DB::table('committees')->insert([
+                'name' => fake()->word,
+                'content' => fake()->paragraph(2000),
+                'lead_committee' => $leadCommittee,
+                'expanded_committee' => $expandedCommittee,
+                'file_path' => null,
+                'date' => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
+                'status' => 'review',
+                'submitted_by' => $user
+            ]);
         }
     }
 }

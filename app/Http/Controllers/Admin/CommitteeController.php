@@ -4,26 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Models\Committee;
-use App\Models\SanggunianMember;
+use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Pipes\Committee\UploadFile;
 use App\Http\Controllers\Controller;
-use App\Pipes\Committee\GetCommittee;
 use App\Repositories\AgendaRepository;
 use Freshbitsweb\Laratables\Laratables;
 use App\Pipes\Committee\CreateCommittee;
 use App\Pipes\Committee\ExtractFileText;
 use App\Pipes\Committee\UpdateCommittee;
 use Illuminate\Support\Facades\Pipeline;
-use Yajra\DataTables\Facades\DataTables;
 use App\Repositories\CommitteeRepository;
-use Yajra\DataTables\Contracts\DataTable;
+use App\Transformers\CommitteeLaraTables;
 use App\Http\Requests\StoreCommitteeRequest;
 use App\Http\Requests\UpdateCommitteeRequest;
-use App\Pipes\Committee\Filter\ContentFilter;
-use App\Pipes\Committee\Filter\LeadCommitteeFilter;
-use App\Pipes\Committee\Filter\ExpandedCommitteeFilter;
-use App\Transformers\CommitteeLaraTables;
+use App\Pipes\Committee\MongoStoreInCollection;
 
 final class CommitteeController extends Controller
 {
@@ -44,14 +40,8 @@ final class CommitteeController extends Controller
     public function list()
     {
         return Laratables::recordsOf(Committee::class, CommitteeLaraTables::class);
-        // return Pipeline::send()
-        //     ->through([
-        //         GetCommittee::class,
-        //         // LeadCommitteeFilter::class,
-        //         // ExpandedCommitteeFilter::class,
-        //         // ContentFilter::class
-        //     ])->then(fn ($data) => DataTables::of($data)->make(true));
     }
+
 
     /**
      * It returns a view called `admin.committee.index` with a variable called `agendas` that contains
@@ -61,8 +51,6 @@ final class CommitteeController extends Controller
      */
     public function index()
     {
-
-
         return view('admin.committee.index', [
             'agendas' => $this->agendaRepository->get(),
         ]);
@@ -98,6 +86,7 @@ final class CommitteeController extends Controller
                         UploadFile::class,
                         CreateCommittee::class,
                         ExtractFileText::class,
+                        MongoStoreInCollection::class,
                     ])->then(fn ($data) => $data);
             } catch (Exception $e) {
                 dd($e->getMessage());

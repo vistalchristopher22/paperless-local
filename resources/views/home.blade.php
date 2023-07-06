@@ -40,7 +40,7 @@
                     <div class="row d-flex justify-content-center">
                         <div class="col">
                             <p class="text-dark mb-0 fw-semibold">Returned Committees</p>
-                            <h3 class="m-0">{{ $returnedCommittees }}</h3>
+                            <h3 class="m-0" id="returnedCommitteesCount">{{ $returnedCommittees }}</h3>
                         </div>
                         <div class="col-auto align-self-center">
                             <div class="report-main-icon bg-light-alt">
@@ -130,13 +130,75 @@
             <div class="card">
                 <div class="card-header bg-dark">
                     <h6 class="card-title text-white h6">
-                        Committees Past 7 Days
+                        New Committees Past 7 Days
                     </h6>
                 </div>
                 <div class="card-body d-flex align-items-center justify-content-center">
                     <div id="barChart"></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
+            <h6 class="card-title m-0 text-white h6">Submitted Committees
+                <span class="text-warning">
+                    <small>(review)</small>
+                </span>
+            </h6>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover border" id="committees-table" width="100%">
+                <thead>
+                    <tr class="bg-light">
+                        <th class="border text-dark">Name</th>
+                        <th class="border text-dark">Lead Committee</th>
+                        <th class="border text-dark">Expanded Committee</th>
+                        <th class="border text-dark text-center text-capitalize">submitted at</th>
+                        <th class="border text-dark text-center text-capitalize">submitted by</th>
+                        <th class="border text-center text-dark">Actions</th>
+                    </tr>
+                </thead>
+                {{-- <tbody>
+                    @foreach ($committees as $committee)
+                        <tr id="row-{{ $committee->id }}">
+                            <td class="border text-center text-dark">{{ $committee->name }}</td>
+                            <td class="border text-dark">{{ $committee->lead_committee_information->title }}</td>
+                            <td class="border text-dark">{{ $committee->expanded_committee_information->title }}</td>
+                            <td class="text-dark text-center">{{ $committee->created_at->format('F d, Y h:i A') }}</td>
+                            <td class="border text-dark text-center">{{ $committee->submitted->last_name }}
+                                {{ $committee->submitted->first_name }}</td>
+                            <td class="border text-center text-dark">
+                                <div class="dropdown">
+                                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
+                                        <li><a class="dropdown-item"
+                                                href="{{ route('committee.edit', $committee->id) }}">Edit</a></li>
+                                        <li><a class="dropdown-item btn-approve cursor-pointer"
+                                                data-id="{{ $committee->id }}">Approve</a></li>
+                                        <li><a class="dropdown-item btn-disapprove cursor-pointer"
+                                                data-id="{{ $committee->id }}">Return</a></li>
+                                        <li class="dropdown-divider"></li>
+                                        <li><a href="{{ route('committee-file.show', $committee->id) }}"
+                                                class="dropdown-item">Show
+                                                File</a></li>
+                                        <li><button class="dropdown-item btn-edit" data-id="{{ $committee->id }}">Edit
+                                                File</button></li>
+                                        <li><a class="dropdown-item" target="_blank" download
+                                                href="/storage/committees/{{ basename($committee->file_path) }}">Download
+                                                File</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody> --}}
+            </table>
         </div>
     </div>
 
@@ -193,63 +255,23 @@
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0 text-white h6">Submitted Committees</h6>
+    <div class="offcanvas offcanvas-end border-0" style="width:450px;" tabindex="-1" id="offCanvasCommittee"
+        aria-labelledby="offCanvasCommitteeTitle">
+        <div class="offcanvas-header position-relative">
+            <div class="d-flex flex-column w-100">
+                <h5 class="offcanvas-title mb-3" id="offCanvasCommitteeTitle"></h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="avatar-group me-4" id="pictures">
+                        <span class="small fw-bolder ms-2 text-muted text-dark" id="picturesDescription"></span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <table class="table table-hover datatable border" id="committees-table" width="100%">
-                <thead>
-                    <tr class="bg-light">
-                        <th class="border text-dark">
-                            <span class="ms-5">Name</span>
-                        </th>
-                        <th class="border text-dark">Lead Committee</th>
-                        <th class="border text-dark">Expanded Committee</th>
-                        <th class="border text-dark text-center text-capitalize">submitted by</th>
-                        <th class="border text-dark text-center text-capitalize">submitted at</th>
-                        <th class="border text-center text-dark">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($committees as $committee)
-                        <tr id="row-{{ $committee->id }}">
-                            <td class="border text-center text-dark">{{ $committee->name }}</td>
-                            <td class="border text-dark">{{ $committee->lead_committee_information->title }}</td>
-                            <td class="border text-dark">{{ $committee->expanded_committee_information->title }}</td>
-                            <td class="text-dark text-center">{{ $committee->created_at->format('F d, Y h:i A') }}</td>
-                            <td class="border text-dark text-center">{{ $committee->submitted->last_name }}
-                                {{ $committee->submitted->first_name }}</td>
-                            <td class="border text-center text-dark">
-                                <div class="dropdown">
-                                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        Actions
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
-                                        <li><a class="dropdown-item"
-                                                href="{{ route('committee.edit', $committee->id) }}">Edit</a></li>
-                                        <li><a class="dropdown-item btn-approve cursor-pointer"
-                                                data-id="{{ $committee->id }}">Approve</a></li>
-                                        <li><a class="dropdown-item btn-disapprove cursor-pointer"
-                                                data-id="{{ $committee->id }}">Return</a></li>
-                                        <li class="dropdown-divider"></li>
-                                        <li><a href="{{ route('committee-file.show', $committee->id) }}"
-                                                class="dropdown-item">Show
-                                                File</a></li>
-                                        <li><button class="dropdown-item btn-edit" data-id="{{ $committee->id }}">Edit
-                                                File</button></li>
-                                        <li><a class="dropdown-item" target="_blank" download
-                                                href="/storage/committees/{{ basename($committee->file_path) }}">Download
-                                                File</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
+            <div class="overflow-auto py-2">
+                <div class="overflow-hidden" id="leadCommitteeContent">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -259,6 +281,164 @@
         <script src="{{ asset('/assets-2/plugins/apex-charts/apexcharts.min.js') }}"></script>
         <script>
             $('.datatable').DataTable({});
+            let table = $('#committees-table').DataTable({
+                serverSide: true,
+                ajax: {
+                    url: '/submitted-committee/list',
+                },
+                processing: true,
+                language: {
+                    processing: '<div class="spinner-border text-primary" role="status"></div>'
+                },
+                columns: [{
+                        name: 'name',
+                        render: (data) => `<span class="mx-2">${data}</span>`,
+                    },
+                    {
+                        name: 'lead_committee',
+                        searchable: false,
+                        orderable: false,
+                        render: (data) => `<span class="mx-2">${data}</span>`,
+                    },
+                    {
+                        name: 'expanded_committee',
+                        searchable: false,
+                        orderable: false,
+                        render: (data) => `<span class="mx-2">${data}</span>`,
+                    },
+                    {
+                        name: 'created_at',
+                        className: 'text-center',
+                        searchable: false,
+                        orderable: false,
+                        render: (data) => `<span class="mx-2">${data}</span>`,
+                    },
+                    {
+                        className: 'text-center',
+                        name: 'submitted.fullname',
+                        searchable: false,
+                        orderable: false,
+                        render: (data) => `<span class="mx-2">${data}</span>`,
+                    },
+                    {
+                        className: 'text-center',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                    },
+                ]
+            });
+
+            const loadCanvasContent = (response) => {
+                let chairmanAndViceChairmanCount = 2;
+                let {
+                    agenda
+                } = response;
+
+                $('#offCanvasCommitteeTitle').text(agenda.title);
+                $('#picturesDescription').text(`${agenda.members.length + chairmanAndViceChairmanCount} Members`);
+
+                $('#pictures').find('picture').remove();
+                $('#pictures').prepend(`
+                        <picture class="user-avatar user-avatar-group">
+                            <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.chairman_information.profile_picture}" >
+                        </picture>
+                    `);
+
+                $('#pictures').prepend(`
+                        <picture class="user-avatar user-avatar-group">
+                            <img class="thumb-lg rounded-circle" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" alt="${agenda.vice_chairman_information.fullname}">
+                        </picture>
+                    `);
+
+                if (agenda.members) {
+                    $('#leadCommitteeContent').html(``);
+
+                    $('#leadCommitteeContent').prepend(`
+                            <div class="card mb-3">
+                                    <div class="card-body fw-medium">
+                                        <div class="user-avatar">
+                                            <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" alt="${agenda.vice_chairman_information.fullname}">
+                                        </div>
+                                        <span>${agenda.vice_chairman_information.fullname}</span>
+                                        <br>
+                                        <span>${agenda.vice_chairman_information.district}</span>
+                                        <br>
+                                        <span>${agenda.vice_chairman_information.sanggunian}</span>
+                                    </div>
+                            </div>
+                        `);
+
+                    $('#leadCommitteeContent').prepend(`<span class="fw-bold">Vice Chairman</span>`);
+
+                    $('#leadCommitteeContent').prepend(`
+                            <div class="card mb-3">
+                                    <div class="card-body fw-medium">
+                                        <div class="user-avatar">
+                                            <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.chairman_information.profile_picture}" alt="${agenda.chairman_information.fullname}">
+                                        </div>
+                                        <span>${agenda.chairman_information.fullname}</span>
+                                        <br>
+                                        <span>${agenda.chairman_information.district}</span>
+                                        <br>
+                                        <span>${agenda.chairman_information.sanggunian}</span>
+                                    </div>
+                            </div>
+                        `);
+
+                    $('#leadCommitteeContent').prepend(`<span class="fw-bold">Chairman</span>`);
+                    $('#leadCommitteeContent').append(`<span class="fw-bold">Members</span>`);
+
+                    agenda.members.forEach((member) => {
+                        let {
+                            sanggunian_member
+                        } = member;
+                        let [memberInformation] = sanggunian_member;
+                        $('#pictures').prepend(`
+                            <picture class="user-avatar user-avatar-group">
+                                <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${memberInformation.profile_picture}" alt="${memberInformation.fullname}">
+                            </picture>
+                        `);
+
+
+                        $('#leadCommitteeContent').append(`
+                                <div class="card mb-3">
+                                    <div class="card-body fw-medium">
+                                        <div class="user-avatar">
+                                            <img class="thumb-lg rounded-circle" src="/storage/user-images/${memberInformation.profile_picture}" alt="${memberInformation.fullname}">
+                                        </div>
+                                        <span class="fw-medium">${memberInformation.fullname}</span>
+                                        <br>
+                                        <span>${memberInformation.district}</span>
+                                        <br>
+                                        <span>${memberInformation.sanggunian}</span>
+                                    </div>
+                                </div>
+                            `);
+                    });
+                }
+            };
+
+            document.addEventListener('click', event => {
+                if (event.target.matches('.view-lead-committees')) {
+                    const agenda = event.target.getAttribute('data-lead-committee');
+                    fetch(`/api/agenda-members/${agenda}`)
+                        .then(response => response.json())
+                        .then(data => loadCanvasContent(data))
+                        .catch(error => console.error(error));
+                }
+
+                if (event.target.matches('.view-expanded-comittees')) {
+                    const agenda = event.target.getAttribute('data-expanded-committee');
+                    fetch(`/api/agenda-members/${agenda}`)
+                        .then(response => response.json())
+                        .then(data => loadCanvasContent(data))
+                        .catch(error => console.error(error));
+                }
+            });
+
+
+
 
             let userID = "{{ auth()->user()->id }}";
             let committeeStatus = @json($committeeStatus);
@@ -381,6 +561,8 @@
                         notyf.success('Committee successfully approved!');
                         $(`#row-${id}`).remove();
 
+                        table.ajax.reload();
+
                         socket.emit('NOTIFY_APPROVED_COMMITTEE', {
                             committee: response.committee,
                             administrator: userID,
@@ -406,6 +588,13 @@
                                         notyf.success(
                                             'Successfully returned to the user who submit it.');
                                         $(`#row-${committeeID}`).remove();
+
+                                        table.ajax.reload();
+
+                                        let currentCountOfReturnedCommittees = $(
+                                            '#returnedCommitteesCount').text()
+                                        $('#returnedCommitteesCount').text(++
+                                            currentCountOfReturnedCommittees);
 
                                         // socket emit for return
                                         socket.emit('NOTIFY_RETURNED_COMMITTEE', {

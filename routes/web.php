@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use App\Utilities\CommitteeFileUtility;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\UserController;
@@ -27,16 +30,17 @@ use App\Http\Controllers\Admin\CommitteeFileController;
 use App\Http\Controllers\SPMember\SPMCommitteeController;
 use App\Http\Controllers\Admin\CommitteeMeetingController;
 use App\Http\Controllers\Admin\SanggunianMemberController;
+use App\Http\Controllers\Admin\SubmittedCommitteeController;
 use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
 
 Route::redirect('/', '/login');
 
 Auth::routes();
 
+Route::get('submitted-committee/list', SubmittedCommitteeController::class);
 Route::get('home', [HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
-
     Route::group(['middleware' => 'features:administrator'], function () {
         Route::group(['model' => User::class], fn () => Route::resource('account', UserController::class));
 
@@ -118,7 +122,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('schedules', CommitteeMeetingController::class)->only('index');
         Route::resource('committee-file', CommitteeFileController::class)->only(['show', 'edit']);
-   
+
 
         Route::resource('committee', CommitteeController::class);
 
@@ -128,15 +132,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::group(['base_rule' => 'order_business', 'model' => BoardSession::class], fn () => Route::resource('board-sessions', BoardSessionController::class));
 
-        Route::post('/admin/archive/process/show-in-explorer', [FileController::class, 'show']);
-        Route::post('/admin/archive/process/upload', [FileController::class, 'upload']);
-        Route::post('/admin/archive/process/details', [FileController::class, 'getFileInformation']);
-        Route::post('/admin/archive/process/preview', [FileController::class, 'preview']);
-        Route::get('/admin/archive/files/get-files', [FileController::class, 'getFiles']);
-        Route::post('/admin/archive/file/rename', [FileController::class, 'renameFile']);
-        Route::delete('/admin/archive/file/delete', [FileController::class, 'deleteFile']);
-        Route::delete('/admin/archive/file/delete/bulk', [FileController::class, 'deleteBulk']);
-        Route::resource('files', FileController::class);
+
 
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('settings/update', [SettingController::class, 'update'])->name('settings.update');
@@ -155,42 +151,25 @@ Route::group(['prefix' => 'sb-member', 'middleware' => ['auth', 'features:sb-mem
     // Route::get('sbm-committees', [SPMCommitteeController::class, 'index'])->name('sbm.committee.index');
 });
 
-Route::get('show-attachment/{file}/{location}', function (string $file, string $location) {
-    $location = str_replace("..", DIRECTORY_SEPARATOR, $location);
-
+Route::get('show-attachment/{url}/{location}', function (string $file, string $location) {
+    $location = str_replace("-", "/", $location);
     $extension = pathinfo($file, PATHINFO_EXTENSION);
-
-    $originalExtension = Str::reverse($extension);
-
-    $fileName = str_replace($extension, $originalExtension, $file);
-
-    if (!Str::contains($location, "C:")) {
-        $location = "C:{$location}";
-    }
-
-    $completePath = str_replace($file, $fileName, $location);
-
-    $toConvertExtension = ['xls', 'xlsx', 'doc', 'docx', 'jpg', 'jpeg', 'png', 'gif'];
-
-    if (in_array($originalExtension, $toConvertExtension)) {
-        Log::info('convert => ' . $fileName . ' to PDF');
-
-        shell_exec('"C:\Program Files\LibreOffice\program\soffice" --headless --convert-to pdf "' . $completePath . '" --outdir ' . public_path("storage\\copy-files\\"));
-
-        $viewPath  = "storage" . DIRECTORY_SEPARATOR . "copy-files" . DIRECTORY_SEPARATOR . str_replace($originalExtension, "pdf", $fileName);
+    $path = $location . "/" .  $file;
+    $path = CommitteeFileUtility::fixTemporaryForwardSlashSeparator($path);
+    $outputDirectory = CommitteeFileUtility::publicDirectoryForViewing();
+    if (in_array($extension, CommitteeFileUtility::CONVERTIBLE_FILE_EXTENSIONS)) {
+        Artisan::call("convert:path \"" . $path . "\" --output=\"" . $outputDirectory . "\"");
     } else {
-        // Using this complete path we can now copy the file and paste to copy-files directory in public/storage for viewing purposes.
-        if (File::exists($completePath)) {
-            File::copy($completePath, public_path("storage/copy-files/" . $fileName));
-            $viewPath  = "storage" . DIRECTORY_SEPARATOR . "copy-files" . DIRECTORY_SEPARATOR . $fileName;
-        } else {
-            throw new Exception("File on {$completePath} not found!");
-        }
+        copy($path, $outputDirectory . $file);
     }
 
+    $pathForView = CommitteeFileUtility::generatePathForViewing($outputDirectory, $file);
+    $basePath = base_path();
+    $escaped_path = escapeshellarg(CommitteeFileUtility::publicDirectoryForViewing() .  CommitteeFileUtility::changeExtension($file));
+    shell_exec("python.exe $basePath\\reader.py -f $escaped_path");
 
     return view('testing', [
-        'filePathForView' => $viewPath,
+        'filePathForView' => $pathForView,
     ]);
 })->name('show-attachment');
 
@@ -213,3 +192,16 @@ Route::get('display-schedule-merge-committee/{dates}', function (string $dates) 
         'dates' => implode('&', $dates),
     ]);
 })->name('display.published.meeting');
+
+
+
+Route::post('/admin/archive/process/show-in-explorer', [FileController::class, 'show']);
+Route::post('/admin/archive/process/upload', [FileController::class, 'upload']);
+Route::post('/admin/archive/process/details', [FileController::class, 'getFileInformation']);
+Route::post('/admin/archive/process/preview', [FileController::class, 'preview']);
+Route::post('/admin/files/filter/type', [FileController::class, 'getFileByTypes']);
+Route::get('/admin/archive/files/get-files', [FileController::class, 'getFiles']);
+Route::post('/admin/archive/file/rename', [FileController::class, 'renameFile']);
+Route::delete('/admin/archive/file/delete', [FileController::class, 'deleteFile']);
+Route::delete('/admin/archive/file/delete/bulk', [FileController::class, 'deleteBulk']);
+Route::resource('files', FileController::class);

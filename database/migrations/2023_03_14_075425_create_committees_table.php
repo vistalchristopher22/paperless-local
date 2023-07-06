@@ -28,7 +28,6 @@ return new class () extends Migration {
             $table->text('returned_message')->nullable();
             $table->foreignIdFor(User::class, 'submitted_by')->nullable();
             $table->foreignIdFor(Schedule::class)->nullable();
-
             $table->date('date')->default(now());
             $table->softDeletes();
             $table->timestamps();

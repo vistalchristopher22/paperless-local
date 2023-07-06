@@ -1,7 +1,6 @@
 <?php
 
-function addNumberSuffix($num)
-{
+function addNumberSuffix($num) {
     if ($num % 100 >= 11 && $num % 100 <= 13) {
         return $num . 'th';
     } else {
@@ -14,3 +13,6 @@ function addNumberSuffix($num)
         };
     }
 }
+
+
+

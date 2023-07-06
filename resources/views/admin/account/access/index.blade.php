@@ -2,7 +2,6 @@
 @section('page-title', 'User Access Control')
 @prepend('page-css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
     <style>
         .agenda-access-checkbox:hover {
             transform: scale(1.01);
@@ -100,8 +99,6 @@
         </div>
     </div>
     @push('page-scripts')
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script>
             let newAccessSet = new Set();
@@ -259,9 +256,6 @@
                             success: function(response) {
                                 if (response.success) {
                                     notyf.success(response.message);
-
-                                    // clear all access set
-                                    newAccessSet.clear();
                                 }
                             },
                             error: function(response) {

@@ -3,8 +3,9 @@
 namespace App\Transformers;
 
 use Carbon\Carbon;
+use App\Enums\CommitteeStatus;
 
-class CommitteeLaraTables
+class SubmittedLaraTables
 {
     public static function laratablesAdditionalColumns()
     {
@@ -29,7 +30,7 @@ class CommitteeLaraTables
 
     public static function laratablesCustomAction($committee)
     {
-        return view('admin.committee.includes.action', compact('committee'))->render();
+        return view('admin.committee.includes.committee-dashboard-action', compact('committee'))->render();
     }
 
 
@@ -50,18 +51,6 @@ class CommitteeLaraTables
 
     public static function laratablesQueryConditions($query)
     {
-        if(request()->lead !== '*' && request()->expanded !== '*') {
-            $query = $query->where('lead_committee', request()->lead)->where('expanded_committee', request()->expanded);
-        } elseif(request()->lead === '*' && request()->expanded !== '*') {
-            $query = $query->where('expanded_committee', request()->expanded);
-        } elseif(request()->lead !== '*' && request()->expanded === '*') {
-            $query = $query->where('lead_committee', request()->lead);
-        }
-
-        if(request()->ids !== '*') {
-            return $query->whereIn('id', explode(",", request()->ids));
-        }
-
-        return $query;
+        return $query->where('status', CommitteeStatus::REVIEW->value);
     }
 }

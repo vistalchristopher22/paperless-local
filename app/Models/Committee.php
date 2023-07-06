@@ -34,7 +34,7 @@ class Committee extends Model
             get: fn ($_) => $this->created_at->format('F d, Y h:i A'),
         );
     }
-    
+
     public function lead_committee_information()
     {
         return $this->hasOne(Agenda::class, 'id', 'lead_committee');

@@ -6,6 +6,7 @@ use App\Models\Committee;
 use Illuminate\Support\Facades\DB;
 use App\Pipes\Committee\UploadFile;
 use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
 use App\Pipes\Committee\GetCommittee;
 use App\Repositories\AgendaRepository;
 use App\Pipes\Committee\CreateCommittee;
@@ -15,10 +16,10 @@ use Illuminate\Support\Facades\Pipeline;
 use App\Repositories\CommitteeRepository;
 use App\Http\Requests\StoreCommitteeRequest;
 use App\Http\Requests\UpdateCommitteeRequest;
+use App\Pipes\Committee\MongoStoreInCollection;
 use App\Pipes\Committee\User\DatatablesWrapper;
 use App\Pipes\Notification\NotifyCreatedCommittee;
 use App\Pipes\Notification\NotifyUpdatedCommittee;
-use App\Repositories\UserRepository;
 
 final class CommitteeController extends Controller
 {
@@ -61,6 +62,7 @@ final class CommitteeController extends Controller
                     CreateCommittee::class,
                     ExtractFileText::class,
                     NotifyCreatedCommittee::class,
+                    MongoStoreInCollection::class,
                 ])->then(fn ($data) => $data);
 
             return back()->with('success', 'Successfully created a committee.');

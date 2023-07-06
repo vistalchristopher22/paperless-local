@@ -25,7 +25,7 @@ class ExtractTextCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): void
+    public function handle()
     {
         $record = Committee::find($this->argument('id'));
         $path = str_replace('storage', 'public\\storage', $record->file_path);

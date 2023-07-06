@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\UserStatus;
-use App\Models\LoginHistory;
 use App\FormRules\UserFormRules;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;

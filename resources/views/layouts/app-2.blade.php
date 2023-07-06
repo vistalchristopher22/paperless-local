@@ -503,7 +503,7 @@
             <footer class="footer text-center text-sm-start">
                 {{ date('Y', strtotime('-1 year', time())) }} - {{ date('Y') }} &copy;
                 {{ config('app.name') }} <span class="text-muted d-none d-sm-inline-block float-end">Powered by <i
-                        class="mdi mdi-heart text-danger"></i> by PADMO-ITU</span>
+                    class="mdi mdi-heart text-danger"></i> PADMO-ITU</span>
             </footer>
             <!--end footer-->
         </div>
