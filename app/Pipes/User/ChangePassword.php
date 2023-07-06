@@ -2,9 +2,9 @@
 
 namespace App\Pipes\User;
 
-use Closure;
 use App\Contracts\Pipes\IPipeHandler;
 use App\Services\UserService;
+use Closure;
 
 final class ChangePassword implements IPipeHandler
 {
@@ -15,10 +15,10 @@ final class ChangePassword implements IPipeHandler
         $this->userService = app()->make(UserService::class);
     }
 
-
     public function handle(mixed $payload, Closure $next)
     {
         $payload = $this->userService->isUserWantToChangePassword($payload);
+
         return $next($payload);
     }
 }

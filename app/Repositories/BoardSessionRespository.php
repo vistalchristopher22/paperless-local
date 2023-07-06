@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Models\BoardSession;
 use App\Enums\BoardSessionStatus;
+use App\Models\BoardSession;
 
 final class BoardSessionRespository extends BaseRepository
 {
@@ -28,7 +28,6 @@ final class BoardSessionRespository extends BaseRepository
         ]);
     }
 
-
     public function locked(BoardSession $boardSession): BoardSession
     {
         $boardSession->update([
@@ -46,5 +45,4 @@ final class BoardSessionRespository extends BaseRepository
 
         return $boardSession;
     }
-
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Api;
 
-use App\Models\Agenda;
 use App\Http\Controllers\Controller;
+use App\Models\Agenda;
 use App\Repositories\AgendaMemberRepository;
 
 final class AgendaMemberController extends Controller

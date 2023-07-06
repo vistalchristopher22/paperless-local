@@ -10,7 +10,7 @@ final class AgendaController extends Controller
     public function __invoke(AgendaRepository $agendaRepository)
     {
         return view('user.agendas.index', [
-            'agendas' => $agendaRepository->get()
+            'agendas' => $agendaRepository->get(),
         ]);
     }
 }

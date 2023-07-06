@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\User;
 
-use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
 use App\Repositories\ScheduleRepository;
 use App\Repositories\SettingRepository;
+use Illuminate\Support\Facades\App;
 
 final class DisplaySchedulePrintController extends Controller
 {
     public function __invoke(SettingRepository $settingRepository, ScheduleRepository $scheduleRepository, string $dates)
     {
-        $dates = explode("&", $dates);
+        $dates = explode('&', $dates);
 
         $pdf = App::make('snappy.pdf.wrapper');
         $pdf->setOption('header-html', view('admin.committee-meeting.print-header'));

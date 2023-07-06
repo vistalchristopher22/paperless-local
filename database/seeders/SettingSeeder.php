@@ -27,7 +27,7 @@ class SettingSeeder extends Seeder
             ],
         ];
 
-        foreach($settings as $setting) {
+        foreach ($settings as $setting) {
             Setting::create([
                 'name' => $setting['name'],
                 'value' => $setting['value'],

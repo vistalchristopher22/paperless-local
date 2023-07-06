@@ -22,9 +22,9 @@ class UpdateCommitteeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'               => ['required'],
-            'file'               => ['nullable', 'mimes:doc,docx,pdf'],
-            'lead_committee'     => ['required', 'exists:agendas,id'],
+            'name' => ['required'],
+            'file' => ['nullable', 'mimes:doc,docx,pdf'],
+            'lead_committee' => ['required', 'exists:agendas,id'],
             'expanded_committee' => ['required', 'exists:agendas,id'],
         ];
     }

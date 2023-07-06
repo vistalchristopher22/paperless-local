@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
 use App\Enums\UserTypes;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
 final class UserRepository extends BaseRepository
@@ -15,8 +15,6 @@ final class UserRepository extends BaseRepository
 
     /**
      * Get all users where account type is normal user.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getAllNormalUsers(): Collection
     {

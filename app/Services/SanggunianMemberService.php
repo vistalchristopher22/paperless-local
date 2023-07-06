@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Request;
 use App\Contracts\Services\IUploadService;
 use App\Repositories\SanggunianMemberRepository;
+use Illuminate\Support\Facades\Request;
 
 final class SanggunianMemberService extends AccountService
 {
@@ -12,16 +12,14 @@ final class SanggunianMemberService extends AccountService
     {
     }
 
-
-   /**
-    * It checks if the request has an image, if it does, it uploads it and then merges the file name
-    * into the request
-    *
-    * @param Request request The request object
-    * @param IUploadService iUploadService This is the service that will handle the upload.
-    *
-    * @return The request object with the profile_picture key added to it.
-    */
+    /**
+     * It checks if the request has an image, if it does, it uploads it and then merges the file name
+     * into the request
+     *
+     * @param Request request The request object
+     * @param IUploadService iUploadService This is the service that will handle the upload.
+     * @return The request object with the profile_picture key added to it.
+     */
     public function isUserWantToChangeProfilePicture(Request $request, IUploadService $iUploadService)
     {
         if ($request->has('image')) {

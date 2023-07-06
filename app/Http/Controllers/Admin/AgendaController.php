@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Agenda;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\AgendaRepository;
 use App\Http\Requests\AgendaStoreRequest;
 use App\Http\Requests\UpdateAgendaRequest;
+use App\Models\Agenda;
+use App\Repositories\AgendaRepository;
 use App\Repositories\SanggunianMemberRepository;
+use Illuminate\Http\Request;
 
 class AgendaController extends Controller
 {
@@ -42,6 +42,7 @@ class AgendaController extends Controller
     public function store(AgendaStoreRequest $request)
     {
         $this->agendaRepository->store($request->except('_token'));
+
         return back()->with('success', 'Successfully add new committee agenda.');
     }
 
@@ -53,12 +54,11 @@ class AgendaController extends Controller
     public function edit(Agenda $agenda)
     {
         return view('admin.agendas.edit', [
-            'members'       => $this->sanggunianMemberRepository->get(),
+            'members' => $this->sanggunianMemberRepository->get(),
             'agendaMembers' => $this->agendaRepository->getMembersId($agenda),
-            'agenda'        => $agenda,
+            'agenda' => $agenda,
         ]);
     }
-
 
     /**
      * It updates the agenda.
@@ -69,6 +69,7 @@ class AgendaController extends Controller
     public function update(UpdateAgendaRequest $request, Agenda $agenda)
     {
         $this->agendaRepository->update($agenda, $request->except(['_token', '_method']));
+
         return back()->with('success', 'Comittee agenda successfully update.');
     }
 
@@ -76,13 +77,13 @@ class AgendaController extends Controller
      * The function reOrder() takes a request object as a parameter, and returns a json response
      *
      * @param Request request The request object
-     *
      * @return A JSON object with a key of success and a value of the result of the reOrderIndex
      * method.
      */
     public function reOrder(Request $request)
     {
         $result = $this->agendaRepository->reOrderIndex($request->all());
+
         return response()->json(['success' => $result]);
     }
 }

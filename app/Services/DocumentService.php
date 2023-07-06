@@ -9,7 +9,7 @@ final class DocumentService
     public function isPDF(string $file_path): bool
     {
         $fileExtension = pathinfo($file_path, PATHINFO_EXTENSION);
-        return Str::upper($fileExtension) === "PDF";
-    }
 
+        return Str::upper($fileExtension) === 'PDF';
+    }
 }

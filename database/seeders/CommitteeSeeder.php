@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Agenda;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -30,7 +30,7 @@ class CommitteeSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
                 'status' => 'review',
-                'submitted_by' => $user
+                'submitted_by' => $user,
             ]);
         }
     }

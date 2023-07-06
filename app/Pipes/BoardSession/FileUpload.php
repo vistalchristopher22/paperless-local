@@ -15,13 +15,13 @@ final class FileUpload implements IPipeHandler
         $this->service = app()->make(UploadFileService::class);
     }
 
-
     public function handle(mixed $payload, Closure $next)
     {
         if (request()->has('file_path')) {
             $session = $payload['boardSession'] ?? $payload['session'];
             $session->file_path = $this->service->handle($payload['file_path'], 'board-sessions');
             $session->save();
+
             return $next($payload);
         }
 

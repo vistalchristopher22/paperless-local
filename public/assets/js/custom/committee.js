@@ -107,7 +107,7 @@ $('#filterByContent').keyup(function (e) {
             table.ajax.url(`/api/committee-list/${lead}/${expanded}/*`).load(null, false);
         } else {
             $.ajax({
-                url: 'http://192.168.0.78:3030/api/committee-content/search',
+                url: 'http://localhost:3030/api/committee-content/search',
                 method: 'POST',
                 data: {
                     key: content,

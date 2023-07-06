@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Committee;
+use App\Utilities\CommitteeFileUtility;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 
@@ -28,10 +29,13 @@ class ExtractTextCommand extends Command
     public function handle()
     {
         $record = Committee::find($this->argument('id'));
-        $path = str_replace('storage', 'public\\storage', $record->file_path);
-        $data = shell_exec('"C:\\Program Files\\LibreOffice\\program\\soffice" --headless --cat ' . $path);
-        $cleanString = preg_replace('/[\n\t]/', '', $data);
-        $record->content = Str::ascii($cleanString);
+        $escaped_path = escapeshellarg(CommitteeFileUtility::draftCommitteesDirectory() .  basename($record->file_path));
+        $data = shell_exec(' ' . escapeshellarg(env('LIBRE_DIRECTORY')) . ' --headless --cat ' . $escaped_path);
+        $data = preg_replace('/[\n\t]/', '', $data);
+        $content = Str::of($data)->remove("\n")
+                             ->remove("\t")
+                             ->ascii($data);
+        $record->content = $content;
         $record->save();
         $this->info('Successfully extract and saved all the text inside the file.');
     }

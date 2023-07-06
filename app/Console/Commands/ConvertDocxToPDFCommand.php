@@ -3,9 +3,9 @@
 namespace App\Console\Commands;
 
 use Exception;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ConvertDocxToPDFCommand extends Command
 {
@@ -32,18 +32,18 @@ class ConvertDocxToPDFCommand extends Command
             $outputDirectory = $this->option('output');
             $inputDirectory = $this->argument('path');
 
-            if (!$outputDirectory) {
+            if (! $outputDirectory) {
                 throw new Exception('Output directory not specified');
             }
 
-            if (!$inputDirectory) {
+            if (! $inputDirectory) {
                 throw new Exception('Input directory not specified');
             }
 
-            $result = shell_exec('"C:\Program Files\LibreOffice\program\soffice" --headless --convert-to pdf "' . $inputDirectory . '" --outdir ' . $outputDirectory);
+            $result = shell_exec('"C:\Program Files\LibreOffice\program\soffice" --headless --convert-to pdf "'.$inputDirectory.'" --outdir '.$outputDirectory);
 
-            if (Str::contains($result, "convert")) {
-                $this->info("File converted successfully");
+            if (Str::contains($result, 'convert')) {
+                $this->info('File converted successfully');
             } else {
                 Log::info($result);
             }

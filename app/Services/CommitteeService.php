@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use App\Contracts\Services\IUploadService;
+use Illuminate\Http\Request;
 
 final class CommitteeService
 {

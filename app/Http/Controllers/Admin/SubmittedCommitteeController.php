@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Committee;
 use App\Http\Controllers\Controller;
-use Freshbitsweb\Laratables\Laratables;
+use App\Models\Committee;
 use App\Transformers\SubmittedLaraTables;
+use Freshbitsweb\Laratables\Laratables;
 
 final class SubmittedCommitteeController extends Controller
 {

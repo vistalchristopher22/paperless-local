@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Services\UserService;
-use App\Models\SanggunianMember;
-use App\Pipes\User\ProfilePicture;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Pipeline;
-use App\Services\SanggunianMemberService;
-use App\Repositories\SanggunianMemberRepository;
 use App\Http\Requests\SanggunianMemberStoreRequest;
 use App\Http\Requests\SanggunianMemberUpdateRequest;
+use App\Models\SanggunianMember;
 use App\Pipes\SanggunianMember\StoreSanggunianMember;
 use App\Pipes\SanggunianMember\UpdateSanggunianMember;
+use App\Pipes\User\ProfilePicture;
+use App\Repositories\SanggunianMemberRepository;
+use App\Services\SanggunianMemberService;
+use App\Services\UserService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Pipeline;
 
 final class SanggunianMemberController extends Controller
 {
@@ -66,10 +66,12 @@ final class SanggunianMemberController extends Controller
 
     public function destroy(SanggunianMember $sanggunianMember, Request $request)
     {
-        if (!is_null($request->key) && $this->userService->verify($request->key, auth()->user())) {
+        if (! is_null($request->key) && $this->userService->verify($request->key, auth()->user())) {
             $this->sanggunianMemberRepository->delete($sanggunianMember);
+
             return response()->json(['success' => true, 'message' => 'Record deleted successfully, this page will automatically refresh after 5 seconds to apply the changes.']);
         }
+
         return response()->json(['success' => false, 'message' => 'The credentials you provide is invalid.'], 422);
     }
 }

@@ -16,7 +16,6 @@ class CommitteeLaraTables
         return view('admin.committee.includes.lead_committee', compact('committee'))->render();
     }
 
-
     public static function laratablesCreatedAt($committee)
     {
         return Carbon::parse($committee->created_at)->format('F d, Y h:i A');
@@ -32,14 +31,12 @@ class CommitteeLaraTables
         return view('admin.committee.includes.action', compact('committee'))->render();
     }
 
-
     public static function laratablesLeadCommitteeRelationQuery()
     {
         return function ($query) {
             $query->with('lead_committee_information');
         };
     }
-
 
     public static function laratablesExpandedCommitteeRelationQuery()
     {
@@ -50,16 +47,16 @@ class CommitteeLaraTables
 
     public static function laratablesQueryConditions($query)
     {
-        if(request()->lead !== '*' && request()->expanded !== '*') {
+        if (request()->lead !== '*' && request()->expanded !== '*') {
             $query = $query->where('lead_committee', request()->lead)->where('expanded_committee', request()->expanded);
-        } elseif(request()->lead === '*' && request()->expanded !== '*') {
+        } elseif (request()->lead === '*' && request()->expanded !== '*') {
             $query = $query->where('expanded_committee', request()->expanded);
-        } elseif(request()->lead !== '*' && request()->expanded === '*') {
+        } elseif (request()->lead !== '*' && request()->expanded === '*') {
             $query = $query->where('lead_committee', request()->lead);
         }
 
-        if(request()->ids !== '*') {
-            return $query->whereIn('id', explode(",", request()->ids));
+        if (request()->ids !== '*') {
+            return $query->whereIn('id', explode(',', request()->ids));
         }
 
         return $query;

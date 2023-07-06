@@ -19,6 +19,7 @@ final class UploadFile implements IPipeHandler
     public function handle(mixed $payload, Closure $next)
     {
         $data = $this->committeeService->uploadFile($payload, new UploadFileService());
+
         return $next($data);
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Committee extends Model
 {
@@ -14,13 +14,15 @@ class Committee extends Model
     use SoftDeletes;
 
     public $connection = 'sqlsrv';
+
     public $table = 'committees';
 
     protected $guarded = [];
+
     public $appends = [
         'file_name',
         'file',
-        'submitted_at'
+        'submitted_at',
     ];
 
     public $casts = [
@@ -45,7 +47,6 @@ class Committee extends Model
         return $this->belongsTo(User::class, 'submitted_by', 'id');
     }
 
-
     public function expanded_committee_information()
     {
         return $this->hasOne(Agenda::class, 'id', 'expanded_committee');
@@ -53,7 +54,7 @@ class Committee extends Model
 
     public function getFileNameAttribute()
     {
-        return Str::afterLast(basename($this->file_path), "_");
+        return Str::afterLast(basename($this->file_path), '_');
     }
 
     public function getFileAttribute()

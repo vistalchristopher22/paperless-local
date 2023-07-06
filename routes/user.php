@@ -1,13 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\AgendaController;
-use App\Http\Controllers\User\SessionController;
-use App\Http\Controllers\User\DivisionController;
 use App\Http\Controllers\User\CommitteeController;
 use App\Http\Controllers\User\DisplayScheduleController;
 use App\Http\Controllers\User\DisplaySchedulePrintController;
+use App\Http\Controllers\User\DivisionController;
 use App\Http\Controllers\User\SanggunianMemberController as BoardMembersController;
+use App\Http\Controllers\User\SessionController;
+use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'user', 'middleware' => ['auth', 'features:user']], function () {
     Route::get('committees', [CommitteeController::class, 'list'])->name('user.committee.list');

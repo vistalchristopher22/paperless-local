@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\UserRepository;
 use App\Repositories\AgendaRepository;
 use App\Repositories\UserAccessRepository;
+use App\Repositories\UserRepository;
+use Illuminate\Http\Request;
 
 final class UserAccessController extends Controller
 {
     private UserRepository $userRepository;
+
     private AgendaRepository $agendaRepository;
+
     private UserAccessRepository $userAccessRepository;
 
     public function __construct()
@@ -34,31 +36,27 @@ final class UserAccessController extends Controller
         //
     }
 
-
     public function store(Request $request)
     {
         $this->userAccessRepository->grantAccess($request->agendas, $this->userRepository->findBy('id', $request->user));
-        return response()->json(['success' => true, 'message' => "Access granted successfully!"]);
-    }
 
+        return response()->json(['success' => true, 'message' => 'Access granted successfully!']);
+    }
 
     public function show(int $id)
     {
         return $this->userAccessRepository->getAllAccessByUser($this->userRepository->findBy('id', $id));
     }
 
-
     public function edit(string $id)
     {
         //
     }
 
-
     public function update(Request $request, string $id)
     {
         //
     }
-
 
     public function destroy(string $id)
     {

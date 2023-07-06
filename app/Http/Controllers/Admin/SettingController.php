@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 final class SettingController extends Controller
 {
     public function index()
     {
         $settings = Setting::get();
+
         return view('admin.settings.index', [
             'settings' => $settings,
         ]);
@@ -23,7 +24,7 @@ final class SettingController extends Controller
         foreach ($data as $setting => $value) {
             Setting::updateOrCreate(
                 [
-                    'name' => $setting
+                    'name' => $setting,
                 ],
                 [
                     'name' => $setting,
@@ -32,6 +33,6 @@ final class SettingController extends Controller
             );
         }
 
-        return to_route("settings.index")->with("success", "Settings updated successfully!");
+        return to_route('settings.index')->with('success', 'Settings updated successfully!');
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Archieve;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Symfony\Component\Finder\Finder;
 use App\Services\ArchieveFileService;
+use Illuminate\Http\Request;
+use Symfony\Component\Finder\Finder;
 
 final class FileController extends Controller
 {
@@ -22,7 +22,7 @@ final class FileController extends Controller
 
     public function getFileByTypes(Request $request)
     {
-        $fileTypes =  [
+        $fileTypes = [
             'word_file' => [
                 '*.doc',
                 '*.docx',
@@ -34,12 +34,12 @@ final class FileController extends Controller
                 '*.xls',
                 '*.xlsx',
                 '*.ods',
-                '*.csv'
+                '*.csv',
             ],
             'powerpoint_file' => [
                 '*.ppt',
                 '*.pptx',
-                '*.odp'
+                '*.odp',
             ],
             'pictures_file' => [
                 '*.jpg',
@@ -48,10 +48,10 @@ final class FileController extends Controller
                 '*.gif',
                 '*.bmp',
                 '*.tif',
-                '*.tiff'
+                '*.tiff',
             ],
             'pdf_file' => [
-                '*.pdf'
+                '*.pdf',
             ],
             'video_file' => [
                 '*.mp4',
@@ -63,7 +63,7 @@ final class FileController extends Controller
                 '*.mpeg',
             ],
             'folder_file' => [
-                '*'
+                '*',
             ],
             'shortcut_file' => [
                 '*.lnk',
@@ -74,13 +74,13 @@ final class FileController extends Controller
                 '*.aac',
                 '*.flac',
                 '*.ogg',
-                '*.wma'
+                '*.wma',
             ],
             'archives_file' => [
                 '*.zip',
                 '*.rar',
                 '*.7z',
-                '*.tar'
+                '*.tar',
             ],
         ];
 
@@ -219,15 +219,15 @@ final class FileController extends Controller
     private function formatSizeUnits($bytes)
     {
         if ($bytes >= 1073741824) {
-            $bytes = number_format($bytes / 1073741824, 2) . ' GB';
+            $bytes = number_format($bytes / 1073741824, 2).' GB';
         } elseif ($bytes >= 1048576) {
-            $bytes = number_format($bytes / 1048576, 2) . ' MB';
+            $bytes = number_format($bytes / 1048576, 2).' MB';
         } elseif ($bytes >= 1024) {
-            $bytes = number_format($bytes / 1024, 2) . ' KB';
+            $bytes = number_format($bytes / 1024, 2).' KB';
         } elseif ($bytes > 1) {
-            $bytes = $bytes . ' bytes';
+            $bytes = $bytes.' bytes';
         } elseif ($bytes == 1) {
-            $bytes = $bytes . ' byte';
+            $bytes = $bytes.' byte';
         } else {
             $bytes = '0 bytes';
         }
@@ -292,7 +292,6 @@ final class FileController extends Controller
             }
         }
 
-
         return response()->json([
             'path' => $path,
             'directories' => $directories,
@@ -312,6 +311,7 @@ final class FileController extends Controller
             $response = ['message' => $e->getMessage()];
             $code = 422;
         }
+
         return response()->json($response, $code);
     }
 
@@ -321,7 +321,7 @@ final class FileController extends Controller
             $file = $request->file('file');
             $filename = $file->getClientOriginalName();
             $path = $file->storeAs('source', $filename);
-            $filePath = storage_path('app/source/' . $filename);
+            $filePath = storage_path('app/source/'.$filename);
             $mTime = filemtime($filePath);
             $fileSize = filesize($filePath);
             $response = [
@@ -329,7 +329,7 @@ final class FileController extends Controller
                 'path' => storage_path('app/source/'),
                 'fileName' => $filename,
                 'mTime' => $mTime,
-                'fileSize' => $fileSize
+                'fileSize' => $fileSize,
             ];
             $code = 200;
         } catch (\Exception $e) {
@@ -342,7 +342,7 @@ final class FileController extends Controller
 
     public function deleteFile(Request $request)
     {
-        $path = $request->directory . DIRECTORY_SEPARATOR . $request->path;
+        $path = $request->directory.DIRECTORY_SEPARATOR.$request->path;
         try {
             $this->archieveFileService->deleteFile($path);
             $response = ['message' => 'File deleted successfully'];
@@ -359,7 +359,7 @@ final class FileController extends Controller
     {
         $data = array_filter($request->all());
         foreach ($data as $file) {
-            $path = $file['directory'] . DIRECTORY_SEPARATOR . $file['name'];
+            $path = $file['directory'].DIRECTORY_SEPARATOR.$file['name'];
             $this->archieveFileService->deleteFile($path);
         }
 
@@ -368,12 +368,12 @@ final class FileController extends Controller
 
     public function preview(Request $request)
     {
-        $currentDirectory = $request->path . DIRECTORY_SEPARATOR . $request->fileName;
-        $destination  = public_path("storage/previews/{$request->fileName}");
+        $currentDirectory = $request->path.DIRECTORY_SEPARATOR.$request->fileName;
+        $destination = public_path("storage/previews/{$request->fileName}");
 
         try {
             $this->archieveFileService->copyFile($currentDirectory, $destination);
-            $response = ['message' => 'File copied successfully', 'destination' =>  url('/') . "/storage/previews/{$request->fileName}"];
+            $response = ['message' => 'File copied successfully', 'destination' => url('/')."/storage/previews/{$request->fileName}"];
             $code = 200;
         } catch (\Exception $e) {
             $response = ['message' => $e->getMessage()];
@@ -385,10 +385,11 @@ final class FileController extends Controller
 
     public function show(Request $request)
     {
-        $path = $request->directory . DIRECTORY_SEPARATOR . $request->name;
+        $path = $request->directory.DIRECTORY_SEPARATOR.$request->name;
         $basePath = base_path();
         $escaped_path = escapeshellarg($path);
         shell_exec("python.exe $basePath\\explorer.py $escaped_path");
+
         return response()->json(['success' => true]);
     }
 }

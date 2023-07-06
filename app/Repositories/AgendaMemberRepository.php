@@ -18,6 +18,7 @@ final class AgendaMemberRepository extends BaseRepository implements IAgendaMemb
     public function removeExistingMembers(Agenda $agenda): mixed
     {
         $agenda->members()->delete();
+
         return $this;
     }
 

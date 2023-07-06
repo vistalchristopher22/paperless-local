@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreCommitteeRequest extends FormRequest
 {
@@ -24,10 +24,10 @@ class StoreCommitteeRequest extends FormRequest
     {
         return [
             // 'priority_number'    => ['required', Rule::unique('committees')->ignore($this->user)->whereNull('deleted_at')],
-            'name'               => ['required'],
+            'name' => ['required'],
             // 'schedule'           => ['required'],
-            'file'               => ['nullable', 'mimes:doc,docx,pdf'],
-            'lead_committee'     => ['required', 'exists:agendas,id'],
+            'file' => ['nullable', 'mimes:doc,docx,pdf'],
+            'lead_committee' => ['required', 'exists:agendas,id'],
             'expanded_committee' => ['required', 'exists:agendas,id'],
         ];
     }

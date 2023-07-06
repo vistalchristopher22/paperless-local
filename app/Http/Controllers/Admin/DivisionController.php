@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Division;
 use App\Http\Controllers\Controller;
-use App\Repositories\DivisionRepository;
 use App\Http\Requests\DivisionStoreRequest;
 use App\Http\Requests\DivisionUpdateRequest;
+use App\Models\Division;
+use App\Repositories\DivisionRepository;
 use App\Repositories\SanggunianMemberRepository;
 
 class DivisionController extends Controller
@@ -52,12 +52,14 @@ class DivisionController extends Controller
     public function update(DivisionUpdateRequest $request, Division $division)
     {
         $this->divisionRepository->update($division, $request->except(['_token', '_method']));
+
         return back()->with('success', 'You have successfully updated a division.');
     }
 
     public function destroy(Division $division)
     {
         $this->divisionRepository->delete($division);
+
         return back()->with('success', 'You have successfully deleted a division.');
     }
 }

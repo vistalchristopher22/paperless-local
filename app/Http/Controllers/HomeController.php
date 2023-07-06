@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Schedule;
+use App\Enums\CommitteeStatus;
 use App\Models\Committee;
 use App\Models\LoginHistory;
-use App\Enums\CommitteeStatus;
+use App\Models\Schedule;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -21,7 +21,6 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
     }
-
 
     public function index()
     {
@@ -52,8 +51,6 @@ class HomeController extends Controller
                 ->groupBy(DB::raw('CONVERT(date, created_at)'))
                 ->get();
 
-
-
             $dates = [];
             for ($i = 0; $i < 7; $i++) {
                 $dates[] = Carbon::now()->subDays($i)->format('Y-m-d');
@@ -61,7 +58,6 @@ class HomeController extends Controller
 
             $labels = $committeesPastSevenDays->pluck('date')->map(fn ($row) => $row->format('Y-m-d'))->toArray();
             $values = $committeesPastSevenDays->pluck('total')->toArray();
-
 
             $merged = array_unique(array_merge($dates, $labels));
 

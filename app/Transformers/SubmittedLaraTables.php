@@ -2,8 +2,8 @@
 
 namespace App\Transformers;
 
-use Carbon\Carbon;
 use App\Enums\CommitteeStatus;
+use Carbon\Carbon;
 
 class SubmittedLaraTables
 {
@@ -16,7 +16,6 @@ class SubmittedLaraTables
     {
         return view('admin.committee.includes.lead_committee', compact('committee'))->render();
     }
-
 
     public static function laratablesCreatedAt($committee)
     {
@@ -33,14 +32,12 @@ class SubmittedLaraTables
         return view('admin.committee.includes.committee-dashboard-action', compact('committee'))->render();
     }
 
-
     public static function laratablesLeadCommitteeRelationQuery()
     {
         return function ($query) {
             $query->with('lead_committee_information');
         };
     }
-
 
     public static function laratablesExpandedCommitteeRelationQuery()
     {

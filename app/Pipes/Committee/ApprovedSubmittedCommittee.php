@@ -2,9 +2,9 @@
 
 namespace App\Pipes\Committee;
 
-use Closure;
-use App\Enums\CommitteeStatus;
 use App\Contracts\Pipes\IPipeHandler;
+use App\Enums\CommitteeStatus;
+use Closure;
 
 final class ApprovedSubmittedCommittee implements IPipeHandler
 {
@@ -16,6 +16,7 @@ final class ApprovedSubmittedCommittee implements IPipeHandler
     {
         $payload->status = CommitteeStatus::APPROVED->value;
         $payload->save();
+
         return $next($payload);
     }
 }

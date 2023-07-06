@@ -2,10 +2,10 @@
 
 namespace App\Pipes\Committee;
 
-use Closure;
-use App\Enums\CommitteeStatus;
 use App\Contracts\Pipes\IPipeHandler;
+use App\Enums\CommitteeStatus;
 use App\Repositories\CommitteeRepository;
+use Closure;
 
 final class UpdateCommittee implements IPipeHandler
 {
@@ -19,11 +19,11 @@ final class UpdateCommittee implements IPipeHandler
     public function handle(mixed $payload, Closure $next)
     {
         $this->committeeRepository->update($payload['committee'], [
-            'name'               => $payload['name'],
-            'lead_committee'     => $payload['lead_committee'],
+            'name' => $payload['name'],
+            'lead_committee' => $payload['lead_committee'],
             'expanded_committee' => $payload['expanded_committee'],
-            'file_path'          => $payload['file_path'] ?? $payload['committee']->file_path,
-            'status'             => CommitteeStatus::REVIEW->value,
+            'file_path' => $payload['file_path'] ?? $payload['committee']->file_path,
+            'status' => CommitteeStatus::REVIEW->value,
         ]);
 
         return $next($payload['committee']);

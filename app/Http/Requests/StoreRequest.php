@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Contracts\FormRules\DiscoverRules;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest 
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,10 +28,9 @@ class StoreRequest extends FormRequest
             'suffix' => ['nullable', 'min:2'],
             'username' => ['required', 'unique:users,username'],
             'password' => ['required', 'min:8'],
-            'account_type' => ['required' ],
+            'account_type' => ['required'],
             'status' => ['required'],
             'division' => ['required', 'exists:divisions,id'],
         ];
     }
-
 }

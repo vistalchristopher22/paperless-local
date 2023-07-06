@@ -84,8 +84,9 @@
                             <h6 class="text-dark fw-medium">Preview</h6>
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" target="_blank" href="{{ route('committee-meeting-schedule.print', $dates) }}">
-                           <h6 class="text-dark fw-medium">Print</h6>
+                        <a class="dropdown-item" target="_blank"
+                            href="{{ route('committee-meeting-schedule.print', $dates) }}">
+                            <h6 class="text-dark fw-medium">Print</h6>
                         </a>
                     </div>
                 </div>
@@ -96,9 +97,9 @@
                 class="header d-flex flex-row align-items-center justify-content-center border border-start-0 border-end-0 border-top-0 border-5 border-dark mb-3">
                 <img width="10%" src="{{ asset('session/logo.png') }}" alt="" class="me-auto">
                 <div class="d-flex flex-column align-items-center">
-                    <h5 class="text-dark">Republic of the Philippines</h5>
-                    <h5 class="fw-bold text-dark">PROVINCE OF SURIGAO DEL SUR</h5>
-                    <h5 class="text-dark">Tandag City</h5>
+                    <h4 class="text-dark">Republic of the Philippines</h4>
+                    <h4 class="fw-bold text-dark">PROVINCE OF SURIGAO DEL SUR</h4>
+                    <h4 class="text-dark">Tandag City</h4>
                     <h3 class="fw-bold text-dark">TANGGAPAN NG SANGGUNIANG PANLALAWIGAN</h3>
                     <h5 class="text-dark">(Office of the Provincial Council)</h5>
                 </div>
@@ -260,7 +261,7 @@
                             order: items,
                         },
                         success: function(response) {
-
+                            notyf.success('Committee moved successfully!');
                         }
                     });
                 }

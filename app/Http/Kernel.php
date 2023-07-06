@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\ConvertIdsToModelsMiddleware;
 use App\Http\Middleware\GlobalFileAttachmentMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
@@ -70,6 +69,4 @@ class Kernel extends HttpKernel
         'features' => EnsureFeaturesAreActive::class,
         'verify.user' => \App\Http\Middleware\VerifyUser::class,
     ];
-
-
 }

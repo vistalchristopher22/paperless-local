@@ -8,6 +8,7 @@ final class CommitteeMeetingRepository extends CommitteeRepository
 {
     /**
      * Add a committee meeting to the specified schedule.
+     *
      * @param  mixed  $scheduleId  The ID of the schedule to add the committee meeting to
      * @param  array  $data  An array of data for the committee meeting to add
      * @return void
@@ -23,6 +24,7 @@ final class CommitteeMeetingRepository extends CommitteeRepository
 
     /**
      * Reorder committee display indices based on the provided data.
+     *
      * @param  array  $newOrderedData  An array of committee IDs in their new order
      * @return void
      */

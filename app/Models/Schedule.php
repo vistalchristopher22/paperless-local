@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
+
     public $casts = [
         'date_and_time' => 'datetime',
     ];
