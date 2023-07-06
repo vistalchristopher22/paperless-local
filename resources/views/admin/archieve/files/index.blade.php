@@ -324,14 +324,13 @@
                     let directory = card.find('.file-name').attr('data-path');
                     let fileName = card.find(`.file-name`).text();
                     $.ajax({
-                        url: '/admin/archive/process/details',
+                        url: route('file.show'),
                         method: 'POST',
                         data: {
                             path: fileName,
                             directory: directory,
                         },
                         success: function(response) {
-                            // Parse the JSON data
                             let data = response;
 
                             let html = $('<div class="row mb-3">');
@@ -425,7 +424,7 @@
                     let directory = card.find('.file-name').attr('data-path');
                     let fileName = card.find(`.file-name`).text();
                     $.ajax({
-                        url: '/admin/archive/process/show-in-explorer',
+                        url: route('file.show-in-explorer'),
                         method: 'POST',
                         data: {
                             directory: directory,
@@ -454,7 +453,7 @@
                         return;
                     } else {
                         $.ajax({
-                            url: '/admin/archive/process/preview',
+                            url: route('file.preview'),
                             method: 'POST',
                             data: {
                                 fileName,
@@ -510,7 +509,7 @@
                             'This action will delete all the selected files. Are you sure you want to proceed?',
                             function() {
                                 $.ajax({
-                                    url: '/admin/archive/file/delete/bulk',
+                                    url: route('file.delete.bulk'),
                                     method: 'DELETE',
                                     data: selectedFiles,
                                     success: function(response) {
@@ -528,7 +527,7 @@
                         alertify.confirm('This action will delete the file. Are you sure you want to proceed?',
                             function() {
                                 $.ajax({
-                                    url: '/admin/archive/file/delete',
+                                    url: route('file.delete'),
                                     method: 'DELETE',
                                     data: {
                                         path: fileName,
@@ -692,7 +691,7 @@
 
             $('#btnRename').click(function() {
                 $.ajax({
-                    url: '/admin/archive/file/rename',
+                    url: route('file.update'),
                     method: 'POST',
                     data: {
                         newName: $('#newFileName').val(),
@@ -763,7 +762,7 @@
                     );
 
                     $.ajax({
-                        url: '/admin/archive/files/get-files',
+                        url: route('file.list'),
                         type: 'GET',
                         data: {
                             path: path
@@ -1031,7 +1030,7 @@
         <script>
             Dropzone.autoDiscover = false;
             let myDropzone = new Dropzone("#files", {
-                url: "/admin/archive/process/upload",
+                url: route('file.store'),
                 success: function(file, response) {
                     setTimeout(() => {
                         var progressBar = document.querySelector(".progress-bar");
