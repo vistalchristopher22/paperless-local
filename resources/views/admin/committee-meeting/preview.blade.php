@@ -165,38 +165,8 @@
                         @endforeach
                     </div>
                 @endforeach
-                {{-- <div class="row">
-                    <div class="col-lg-4 offset-7">
-                        <h5 class="text-uppercase">
-                            prepared by:
-                        </h5>
-                    </div>
-
-                    <div class="col-lg-4 offset-8">
-                        <h5 class="text-uppercase" style="letter-spacing : 1.09px">
-                            {{ $settings->where('name', 'prepared_by')->first()->value }}
-                            <p class="text-start mx-5 fw-bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLSE II</p>
-                        </h5>
-                    </div>
-                </div> --}}
-
-                {{-- <div class="row">
-                    <div class="col-lg-11 offset-1">
-                        <h5 class="text-uppercase">
-                            noted by:
-                        </h5>
-                    </div>
-
-                    <div class="col-lg-4 offset-2">
-                        <h5 class="text-uppercase" style="letter-spacing : 1.09px">
-                            {{ $settings->where('name', 'noted_by')->first()->value }}
-                            <p class="text-start mx-5 fw-bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLSO IV</p>
-                        </h5>
-                    </div>
-                </div> --}}
             </div>
         </div>
     </div>
 </body>
-
 </html>

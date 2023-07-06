@@ -40,7 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('re-order/agenda', [AgendaController::class, 'reOrder'])->name('agenda.re-order');
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
 
-        Route::get('schedule/committees/{dates}/preview', [CommitteeMeetingSchedulePreviewController::class])->name('committee-meeting-schedule.preview');
+        Route::get('schedule/committees/{dates}/preview',CommitteeMeetingSchedulePreviewController::class)->name('committee-meeting-schedule.preview');
         Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
         Route::get('schedule/committees/{dates}', [CommitteeMeetingScheduleController::class, 'show'])->name('committee-meeting-schedule.show');
         Route::post('schedule/committees', [CommitteeMeetingScheduleController::class, 'store'])->name('committee-meeting-schedule.store');
