@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\SanggunianMemberController;
 use App\Http\Controllers\Admin\SubmittedCommitteeController;
 use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
 use App\Http\Controllers\Admin\CommitteeMeetingScheduleController;
+use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
 
 Route::redirect('/', '/login');
@@ -39,7 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('re-order/agenda', [AgendaController::class, 'reOrder'])->name('agenda.re-order');
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
 
-        Route::get('schedule/committees/{dates}/preview', [CommitteeMeetingScheduleController::class, 'preview'])->name('committee-meeting-schedule.preview');
+        Route::get('schedule/committees/{dates}/preview', [CommitteeMeetingSchedulePreviewController::class])->name('committee-meeting-schedule.preview');
         Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
         Route::get('schedule/committees/{dates}', [CommitteeMeetingScheduleController::class, 'show'])->name('committee-meeting-schedule.show');
         Route::post('schedule/committees', [CommitteeMeetingScheduleController::class, 'store'])->name('committee-meeting-schedule.store');

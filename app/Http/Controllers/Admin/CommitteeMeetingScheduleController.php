@@ -30,13 +30,4 @@ final class CommitteeMeetingScheduleController extends Controller
             'dates' => implode('&', $dates),
         ]);
     }
-
-    public function preview(string $dates)
-    {
-        $dates = explode("&", $dates);
-        return view('admin.committee-meeting.preview', [
-            'schedules' => $this->scheduleRepository->groupedByDate($dates),
-            'dates' => implode('&', $dates),
-        ]);
-    }
 }
