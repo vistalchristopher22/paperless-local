@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Contracts\FormRules\DiscoverRules;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest implements DiscoverRules
+class StoreRequest extends FormRequest 
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,19 +15,6 @@ class StoreRequest extends FormRequest implements DiscoverRules
         return true;
     }
 
-    public function getBaseRule(): string
-    {
-        return request()->route()->getAction()['base_rule'] ?? "";
-    }
-
-    public function getRules(string $type): array
-    {
-        $model = (app()->make(request()->route()->getAction()['model']));
-        return $model::rules()[$this->getBaseRule()][$type] ?? $model::rules()[$type];
-    }
-
-
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -35,7 +22,17 @@ class StoreRequest extends FormRequest implements DiscoverRules
      */
     public function rules(): array
     {
-        return $this->getRules('POST');
+        return [
+            'first_name' => ['required'],
+            'middle_name' => ['nullable', 'min:2'],
+            'last_name' => ['required'],
+            'suffix' => ['nullable', 'min:2'],
+            'username' => ['required', 'unique:users,username'],
+            'password' => ['required', 'min:8'],
+            'account_type' => ['required' ],
+            'status' => ['required'],
+            'division' => ['required', 'exists:divisions,id'],
+        ];
     }
 
 }

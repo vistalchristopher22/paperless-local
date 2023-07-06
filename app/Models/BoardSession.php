@@ -12,7 +12,6 @@ class BoardSession extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    use BoardSessionFormRules;
 
     protected $guarded = [];
 

@@ -80,14 +80,15 @@
                     </button>
 
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="uploadGroupDropdown">
-                        <a class="dropdown-item d-flex flex-row align-items-center" target="_blank" href="{{ route('display.published.meeting', $dates) }}">
-                                <i class="mdi mdi-eye mdi-18px mx-2"></i>
-                                View
+                        <a class="dropdown-item d-flex flex-row align-items-center" target="_blank"
+                            href="{{ route('committee-meeting-schedule.preview', $dates) }}">
+                            <i class="mdi mdi-eye mdi-18px mx-2"></i>
+                            Preview
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" target="_blank" href="{{ route('schedule-meeting.merge.print', $dates) }}">
-                                <i class="mdi mdi-printer mdi-18px mx-2"></i>
-                                Print
+                        <a class="dropdown-item" target="_blank" href="{{ route('committee-meeting-schedule.print', $dates) }}">
+                            <i class="mdi mdi-printer mdi-18px mx-2"></i>
+                            Print
                         </a>
                     </div>
                 </div>
@@ -251,7 +252,7 @@
                     });
 
                     $.ajax({
-                        url: '/committee-add-schedule',
+                        url: route('committee-meeting-schedule.store'),
                         method: 'POST',
                         data: {
                             parent: columnId,

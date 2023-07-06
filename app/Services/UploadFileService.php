@@ -12,7 +12,7 @@ final class UploadFileService implements IUploadService
     {
         $filename = time() . '_' .  $file->getClientOriginalName();
         $directoryName = str_replace(" ", "_", $directoryName);
-       $directory = Storage::disk('source')->putFileAs($directoryName, $file, $filename);
-       return Storage::disk('source')->path($directory);
+        $directory = Storage::disk('source')->putFileAs($directoryName, $file, $filename);
+        return Storage::disk('source')->path($directory);
     }
 }

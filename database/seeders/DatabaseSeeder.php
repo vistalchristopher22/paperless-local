@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             AgendaMemberSeeder::class,
             SettingSeeder::class,
             UserSeeder::class,
-        //    CommitteeSeeder::class,
+           CommitteeSeeder::class,
         ]);
     }
 }

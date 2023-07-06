@@ -3,11 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Models\Committee;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Services\CommitteeFile;
-use Illuminate\Support\Facades\File;
 use App\Utilities\CommitteeFileUtility;
 
 // ...

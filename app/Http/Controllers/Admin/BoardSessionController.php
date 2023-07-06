@@ -49,7 +49,7 @@ final class BoardSessionController extends Controller
         return view('admin.board-sessions.create');
     }
 
-    public function store(StoreRequest $request)
+    public function store(Request $request)
     {
         return Pipeline::send($request->all())
             ->through([

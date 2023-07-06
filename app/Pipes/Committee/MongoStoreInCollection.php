@@ -5,7 +5,6 @@ namespace App\Pipes\Committee;
 use Closure;
 use Illuminate\Support\Facades\Http;
 use App\Contracts\Pipes\IPipeHandler;
-use App\Repositories\CommitteeRepository;
 
 final class MongoStoreInCollection implements IPipeHandler
 {

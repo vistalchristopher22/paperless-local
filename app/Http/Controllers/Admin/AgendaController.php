@@ -14,7 +14,6 @@ class AgendaController extends Controller
 {
     public function __construct(private AgendaRepository $agendaRepository, private SanggunianMemberRepository $sanggunianMemberRepository)
     {
-        $this->middleware('convert.id.to.models')->only(['store', 'update']);
     }
 
     public function index()
