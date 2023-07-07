@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Venue;
 use App\Models\Setting;
 use App\Models\Schedule;
 use App\Models\Committee;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VenueController;
 use App\Http\Controllers\Admin\AgendaController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\DivisionController;
@@ -39,6 +41,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['middleware' => 'features:administrator'], function () {
         Route::group(['model' => User::class], fn () => Route::resource('account', UserController::class));
+
+        Route::resource('venue', VenueController::class);
 
         Route::resource('account-access-control', UserAccessController::class);
 
@@ -118,7 +122,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('schedules', CommitteeMeetingController::class)->only('index');
         Route::resource('committee-file', CommitteeFileController::class)->only(['show', 'edit']);
-   
+
 
         Route::resource('committee', CommitteeController::class);
 
@@ -213,3 +217,38 @@ Route::get('display-schedule-merge-committee/{dates}', function (string $dates) 
         'dates' => implode('&', $dates),
     ]);
 })->name('display.published.meeting');
+
+
+// Route for SP-Member
+Route::get('sp-committee-sched-meeting/{dates}', function (string $dates) {
+    $dates = date('Y-m-d H:i:s');
+    $dates = explode("&", $dates);
+    // dd($dates);
+
+    $schedules = Schedule::with(['committees', 'committees.lead_committee_infromation', 'committees.expanded_committee_information'])
+        ->orderBy('with_invited_guest', 'DESC')
+        ->orderBy('date_and_time', 'ASC')
+        ->get()
+        ->groupBy(function ($record) {
+
+            return $record->date_and_time->format('Y-m-d');
+
+        });
+
+
+        return view('sp-committee-sched-meeting', [
+            'schedules' => $schedules,
+            'dates' => implode('&', $dates)
+        ]);
+
+})->name('sp-committee.shed');
+
+
+Route::post('store-venue', function(Request $request) {
+
+    Venue::create([
+        'name' => $request->name
+    ]);
+
+    return response()->json(['success' => true]);
+});

@@ -14,4 +14,8 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         '/committee-list'
     ];
+
+    // protected $except = [
+    //     '*'
+    // ];
 }

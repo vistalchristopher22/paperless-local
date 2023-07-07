@@ -4,6 +4,34 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.css' />
 @endprepend
 @section('content')
+    {{-- Venue Modal --}}
+    <div class="clearfix">
+        <button class="btn btn-lg btn-primary mb-4 float-end" data-bs-toggle="modal" data-bs-target="#modalVenue">Add Venue</button>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="modalVenue">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Create Venue</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formVenue">
+                <div class="modal-body">
+                    <div class="form-group mt-2">
+                        <label for="">Name</label>
+                        <input type="text" class="form-control form-control-lg" name="name" id="name" placeholder="Enter the name of the venue..">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-md" id="btnSaveVenue">Save</button>
+                </div>
+            </form>
+          </div>
+        </div>
+    </div>
+    {{-- End of the venue modal --}}
+
     <div class="card">
         <div class="card-header bg-dark">
             <div class="card-title text-white h6">
@@ -229,6 +257,33 @@
                     });
 
                 });
+
+
+                $('#btnSaveVenue').on('click', function() {
+
+                    if(document.querySelector('#name').value == "")
+                    {
+                        document.querySelector('#name').classList.add('is-invalid');
+                    }else {
+                        $.ajax({
+                        url: 'store-venue',
+                        type: 'POST',
+                        data: $('#formVenue').serialize(),
+                        success: function(response) {
+                            if (response.success) {
+                                notyf.success('Successfully added a venue!');
+                                $('#modalVenue').modal('toggle');
+                                document.querySelector('#name').value = '';
+                            }
+                        }
+                        });
+                    }
+
+
+
+
+                });
+
             });
         </script>
     @endpush
