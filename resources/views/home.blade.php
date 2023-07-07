@@ -152,20 +152,18 @@
             </h6>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover border" id="committees-table" width="100%">
-                    <thead>
-                    <tr class="bg-light">
-                        <th class="border text-dark">Name</th>
-                        <th class="border text-dark">Lead Committee</th>
-                        <th class="border text-dark">Expanded Committee</th>
-                        <th class="border text-dark text-center text-capitalize">submitted at</th>
-                        <th class="border text-dark text-center text-capitalize">submitted by</th>
-                        <th class="border text-center text-dark">Actions</th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
+            <table class="table table-hover border" id="committees-table" width="100%">
+                <thead>
+                <tr class="bg-light">
+                    <th class="border text-dark">Name</th>
+                    <th class="border text-dark">Lead Committee</th>
+                    <th class="border text-dark">Expanded Committee</th>
+                    <th class="border text-dark text-center text-capitalize">submitted at</th>
+                    <th class="border text-dark text-center text-capitalize">submitted by</th>
+                    <th class="border text-center text-dark">Actions</th>
+                </tr>
+                </thead>
+            </table>
         </div>
     </div>
 

@@ -86,12 +86,14 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 // Route for SP-Member
-Route::get('sp-committee-sched-meeting/{dates}', function (string $dates) {
+Route::get('sp-committee-sched-meeting', function () {
     $dates = date('Y-m-d H:i:s');
     $dates = explode("&", $dates);
     $schedules = Schedule::with(['committees', 'committees.lead_committee_infromation', 'committees.expanded_committee_information'])
         ->orderBy('with_invited_guest', 'DESC')
         ->orderBy('date_and_time', 'ASC')
+        ->whereDay('date_and_time', date('d'))
+        ->whereYear('date_and_time', date('Y'))
         ->get()
         ->groupBy(function ($record) {
             return $record->date_and_time->format('Y-m-d');
@@ -108,7 +110,7 @@ Route::get('sp-committee-sched-meeting/{dates}', function (string $dates) {
 Route::post('store-venue', function (Request $request) {
 
     Venue::create([
-        'name' => $request->name
+        'name' => $request->venueName,
     ]);
 
     return response()->json(['success' => true]);
