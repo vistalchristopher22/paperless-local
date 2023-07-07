@@ -72,22 +72,21 @@
     <div class="card">
         <div class="card-header">
             <div class="btn-group float-end" role="group">
-
                 <div class="btn-group">
-                    <button type="button" class="btn btn-light dropdown-toggle" id="uploadGroupDropdown"
+                    <button type="button" class="btn btn-dark dropdown-toggle" id="uploadGroupDropdown"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <i data-feather="align-justify"></i>
                     </button>
 
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="uploadGroupDropdown">
-                        <a class="dropdown-item d-flex flex-row align-items-center" target="_blank" href="{{ route('display.published.meeting', $dates) }}">
-                                <i class="mdi mdi-eye mdi-18px mx-2"></i>
-                                View
+                        <a class="dropdown-item d-flex flex-row align-items-center" target="_blank"
+                            href="{{ route('committee-meeting-schedule.preview', $dates) }}">
+                            <h6 class="text-dark fw-medium">Preview</h6>
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" target="_blank" href="{{ route('schedule-meeting.merge.print', $dates) }}">
-                                <i class="mdi mdi-printer mdi-18px mx-2"></i>
-                                Print
+                        <a class="dropdown-item" target="_blank"
+                            href="{{ route('committee-meeting-schedule.print', $dates) }}">
+                            <h6 class="text-dark fw-medium">Print</h6>
                         </a>
                     </div>
                 </div>
@@ -98,9 +97,9 @@
                 class="header d-flex flex-row align-items-center justify-content-center border border-start-0 border-end-0 border-top-0 border-5 border-dark mb-3">
                 <img width="10%" src="{{ asset('session/logo.png') }}" alt="" class="me-auto">
                 <div class="d-flex flex-column align-items-center">
-                    <h5 class="text-dark">Republic of the Philippines</h5>
-                    <h5 class="fw-bold text-dark">PROVINCE OF SURIGAO DEL SUR</h5>
-                    <h5 class="text-dark">Tandag City</h5>
+                    <h4 class="text-dark">Republic of the Philippines</h4>
+                    <h4 class="fw-bold text-dark">PROVINCE OF SURIGAO DEL SUR</h4>
+                    <h4 class="text-dark">Tandag City</h4>
                     <h3 class="fw-bold text-dark">TANGGAPAN NG SANGGUNIANG PANLALAWIGAN</h3>
                     <h5 class="text-dark">(Office of the Provincial Council)</h5>
                 </div>
@@ -109,6 +108,9 @@
             <div class="text-center">
                 <h4 class="fw-medium" style="letter-spacing : 1.8px;">
                     SCHEDULE OF COMMITTEE MEETINGS
+                    <h4 class="fw-bold text-uppercase text-decoration-underline">
+                        {{ $schedules?->first()?->first()?->venue }}
+                    </h4>
                 </h4>
             </div>
 
@@ -251,7 +253,7 @@
                     });
 
                     $.ajax({
-                        url: '/committee-add-schedule',
+                        url: route('committee-meeting-schedule.store'),
                         method: 'POST',
                         data: {
                             parent: columnId,
@@ -259,7 +261,7 @@
                             order: items,
                         },
                         success: function(response) {
-
+                            notyf.success('Committee moved successfully!');
                         }
                     });
                 }

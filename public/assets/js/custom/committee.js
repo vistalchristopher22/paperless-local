@@ -12,7 +12,7 @@ String.prototype.limit = function (limit) {
 let table = $('#committees-table').DataTable({
     serverSide: true,
     ajax: {
-        url: '/api/committee-list',
+        url: '/api/committee-list/*/*/*',
         // "error": function () {
         //     location.reload();
         // },
@@ -24,26 +24,27 @@ let table = $('#committees-table').DataTable({
     columns: [
         {
             name: 'name',
-            render : (data) => `<span class="mx-2">${data}</span>`,
+            render: (data) => `<span class="mx-2">${data}</span>`,
         },
         {
+            className: 'text-center',
             name: 'submitted.fullname',
             searchable: false,
-            orderable : false,
-            render : (data) => `<span class="mx-2">${data}</span>`,
+            orderable: false,
+            render: (data) => `<span class="mx-2">${data}</span>`,
         },
         {
             name: 'lead_committee',
             searchable: false,
             orderable: false,
-            render : (data) => `<span class="mx-2">${data}</span>`,
+            render: (data) => `<span class="mx-2">${data}</span>`,
         },
         {
 
             name: 'expanded_committee',
             searchable: false,
             orderable: false,
-            render : (data) => `<span class="mx-2">${data}</span>`,
+            render: (data) => `<span class="mx-2">${data}</span>`,
         },
         {
             name: 'status',
@@ -74,10 +75,9 @@ let table = $('#committees-table').DataTable({
 
 
 
-// Add debounce for searching
 let searchTimeout;
 const searchInput = $('#committees-table_filter input');
-const delay = 300; // Set delay time in milliseconds
+const delay = 300;
 
 searchInput.off().on('keyup', function () {
     clearTimeout(searchTimeout);
@@ -89,15 +89,13 @@ searchInput.off().on('keyup', function () {
 $('#filterLeadCommitee').change(function () {
     let lead = $('#filterLeadCommitee').val();
     let expanded = $('#filterExpandedCommittee').val();
-    let content = $('#filterByContent').val();
-    table.ajax.url(`/committee-list/${lead}/${expanded}/${content}`).load(null, false);
+    table.ajax.url(`/api/committee-list/${lead}/${expanded}/*`).load(null, false);
 });
 
 $('#filterExpandedCommittee').change(function () {
     let lead = $('#filterLeadCommitee').val();
     let expanded = $('#filterExpandedCommittee').val();
-    let content = $('#filterByContent').val();
-    table.ajax.url(`/committee-list/${lead}/${expanded}/${content}`).load(null, false);
+    table.ajax.url(`/api/committee-list/${lead}/${expanded}/*`).load(null, false);
 });
 
 $('#filterByContent').keyup(function (e) {
@@ -105,11 +103,30 @@ $('#filterByContent').keyup(function (e) {
         let lead = $('#filterLeadCommitee').val();
         let expanded = $('#filterExpandedCommittee').val();
         let content = $(this).val();
-        table.ajax.url(`/committee-list/${lead}/${expanded}/${content}`).load(null, false);
+        if (content == '') {
+            table.ajax.url(`/api/committee-list/${lead}/${expanded}/*`).load(null, false);
+        } else {
+            $.ajax({
+                url: 'http://localhost:3030/api/committee-content/search',
+                method: 'POST',
+                data: {
+                    key: content,
+                    page: 1,
+                },
+                success: function (response) {
+                    let ids = response.committees.map((committee) => committee.id);
+                    if (ids.length === 0) {
+                        table.ajax.url(`/api/committee-list/-1/-1/*`).load(null, false);
+                    } else {
+                        table.ajax.url(`/api/committee-list/${lead}/${expanded}/${ids.join(',') || '*'}`).load(null, false);
+                    }
+                }
+            });
+        }
+
     }
 
 });
-
 
 
 const loadCanvasContent = (response) => {

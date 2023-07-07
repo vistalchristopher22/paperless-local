@@ -2,8 +2,8 @@
 
 namespace App\Pipes\Notification;
 
-use Closure;
 use App\Contracts\Pipes\IPipeHandler;
+use Closure;
 use Symfony\Component\HttpClient\CurlHttpClient;
 
 final class NotifyCreatedCommittee implements IPipeHandler
@@ -14,7 +14,6 @@ final class NotifyCreatedCommittee implements IPipeHandler
     {
         $this->client = new CurlHttpClient();
     }
-
 
     public function handle(mixed $payload, Closure $next)
     {
@@ -28,10 +27,10 @@ final class NotifyCreatedCommittee implements IPipeHandler
 
         $clientID = $res['sid'];
 
-        $this->client->request('POST', 'http://localhost:3030/socket.io/?EIO=4&transport=polling&sid=' . $clientID, ['body' => '40']);
-        $this->client->request('GET', 'http://localhost:3030/socket.io/?EIO=4&transport=polling&sid=' . $clientID);
-        $this->client->request('POST', 'http://localhost:3030/socket.io/?EIO=4&transport=polling&sid=' . $clientID, [
-            'body' => '42["NOTIFY_CREATED_COMMITTEE", "submitted=' . $payload?->submitted?->id . '&name=' . $payload->name . '&committee=' . $payload->lead_committee . '"]'
+        $this->client->request('POST', 'http://localhost:3030/socket.io/?EIO=4&transport=polling&sid='.$clientID, ['body' => '40']);
+        $this->client->request('GET', 'http://localhost:3030/socket.io/?EIO=4&transport=polling&sid='.$clientID);
+        $this->client->request('POST', 'http://localhost:3030/socket.io/?EIO=4&transport=polling&sid='.$clientID, [
+            'body' => '42["NOTIFY_CREATED_COMMITTEE", "submitted='.$payload?->submitted?->id.'&name='.$payload->name.'&committee='.$payload->lead_committee.'"]',
         ]);
 
         return $next($payload);

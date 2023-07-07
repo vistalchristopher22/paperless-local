@@ -4,10 +4,10 @@ namespace App\Repositories;
 
 use App\Models\Agenda;
 use App\Models\SanggunianMember;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Model;
 
 final class AgendaRepository extends BaseRepository
 {
@@ -37,8 +37,8 @@ final class AgendaRepository extends BaseRepository
     /**
      * > It stores an agenda and its members in the database
      * {@inheritdoc}
-     * @param array data The data to be stored.
      *
+     * @param array data The data to be stored.
      * @return mixed The newly stored agenda with the members added to it.
      */
     public function store(array $data = []): mixed
@@ -47,6 +47,7 @@ final class AgendaRepository extends BaseRepository
             $data['index'] = (int) $this->model->max('index');
             $data['index'] = ++$data['index'];
             $newlyStoredAgenda = parent::store(Arr::except($data, 'members'));
+
             return $this->agendaMemberRepository->addMembersToThis(agendaID: $newlyStoredAgenda->id, members: $data['members']);
         });
     }
@@ -58,7 +59,6 @@ final class AgendaRepository extends BaseRepository
      *
      * @param Model agenda The agenda model instance
      * @param array data The data to be used to update the model.
-     *
      * @return mixed True
      */
     public function update(Model $agenda, array $data = []): mixed
@@ -68,6 +68,7 @@ final class AgendaRepository extends BaseRepository
             $this->agendaMemberRepository->removeExistingMembers($agenda);
             $this->agendaMemberRepository->addMembersToThis($agenda->id, $data['members']);
         });
+
         return true;
     }
 
@@ -75,7 +76,6 @@ final class AgendaRepository extends BaseRepository
      * It returns an array of the ids of the members of the given agenda
      *
      * @param Agenda agenda The agenda object
-     *
      * @return array An array of the members id's
      */
     public function getMembersId(Agenda $agenda): array
@@ -85,7 +85,8 @@ final class AgendaRepository extends BaseRepository
 
     /**
      * Retrieve agendas based on a given SanggunianMember.
-     * @param SanggunianMember $member The SanggunianMember object to retrieve agendas for.
+     *
+     * @param  SanggunianMember  $member The SanggunianMember object to retrieve agendas for.
      * @return array Returns an array containing the agendas, separated by chairman, vice_chairman, and member.
      */
     public function getAgendasByMember(SanggunianMember $member): array
@@ -95,9 +96,9 @@ final class AgendaRepository extends BaseRepository
         $memberInAgenda = $this->agendaMemberRepository->getAgendaOfMember($member);
 
         return [
-            'chairman'      => $chairmanInAgenda,
+            'chairman' => $chairmanInAgenda,
             'vice_chairman' => $viceChairmanInAgenda,
-            'member'        => $memberInAgenda,
+            'member' => $memberInAgenda,
         ];
     }
 
@@ -105,7 +106,6 @@ final class AgendaRepository extends BaseRepository
      * It updates the index of the record with the given id.
      *
      * @param array data The data to be updated.
-     *
      * @return bool A boolean value.
      */
     public function reOrderIndex(array $data = []): bool

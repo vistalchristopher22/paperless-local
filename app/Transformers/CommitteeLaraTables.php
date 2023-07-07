@@ -3,7 +3,6 @@
 namespace App\Transformers;
 
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 
 class CommitteeLaraTables
 {
@@ -16,7 +15,6 @@ class CommitteeLaraTables
     {
         return view('admin.committee.includes.lead_committee', compact('committee'))->render();
     }
-
 
     public static function laratablesCreatedAt($committee)
     {
@@ -33,11 +31,6 @@ class CommitteeLaraTables
         return view('admin.committee.includes.action', compact('committee'))->render();
     }
 
-    /**
-     * Eager load media items of the role for displaying in the datatables.
-     *
-     * @return callable
-     */
     public static function laratablesLeadCommitteeRelationQuery()
     {
         return function ($query) {
@@ -45,15 +38,27 @@ class CommitteeLaraTables
         };
     }
 
-    /**
-     * Eager load media items of the role for displaying in the datatables.
-     *
-     * @return callable
-     */
     public static function laratablesExpandedCommitteeRelationQuery()
     {
         return function ($query) {
             $query->with('expanded_committee_information');
         };
+    }
+
+    public static function laratablesQueryConditions($query)
+    {
+        if (request()->lead !== '*' && request()->expanded !== '*') {
+            $query = $query->where('lead_committee', request()->lead)->where('expanded_committee', request()->expanded);
+        } elseif (request()->lead === '*' && request()->expanded !== '*') {
+            $query = $query->where('expanded_committee', request()->expanded);
+        } elseif (request()->lead !== '*' && request()->expanded === '*') {
+            $query = $query->where('lead_committee', request()->lead);
+        }
+
+        if (request()->ids !== '*') {
+            return $query->whereIn('id', explode(',', request()->ids));
+        }
+
+        return $query;
     }
 }

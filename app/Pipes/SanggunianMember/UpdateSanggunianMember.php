@@ -2,10 +2,10 @@
 
 namespace App\Pipes\SanggunianMember;
 
-use Closure;
 use App\Contracts\Pipes\IPipeHandler;
-// use App\Models\SanggunianMember;
 use App\Repositories\SanggunianMemberRepository;
+// use App\Models\SanggunianMember;
+use Closure;
 
 final class UpdateSanggunianMember implements IPipeHandler
 {
@@ -18,14 +18,13 @@ final class UpdateSanggunianMember implements IPipeHandler
         // $this->sanggunianMember = app()->make(SanggunianMember::class);
     }
 
-
     public function handle(mixed $payload, Closure $next)
     {
         $this->sangguninanMemberRepository->update($payload['sanggunianMember'], [
             'fullname' => $payload['fullname'],
             'district' => $payload['district'],
             'sanggunian' => $payload['sanggunian'],
-            'profile_picture' => $payload['profile_picture'] ?? $payload['sanggunianMember']['profile_picture']
+            'profile_picture' => $payload['profile_picture'] ?? $payload['sanggunianMember']['profile_picture'],
         ]);
 
         // dd($data);

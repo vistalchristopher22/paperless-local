@@ -2,10 +2,10 @@
 
 namespace App\Pipes\Committee;
 
-use Closure;
 use App\Contracts\Pipes\IPipeHandler;
-use Illuminate\Support\Facades\Redis;
 use App\Repositories\CommitteeRepository;
+use Closure;
+use Illuminate\Support\Facades\Redis;
 
 final class CacheCommittee implements IPipeHandler
 {
@@ -16,10 +16,10 @@ final class CacheCommittee implements IPipeHandler
         $this->committeeRepository = app()->make(CommitteeRepository::class);
     }
 
-
     public function handle(mixed $payload, Closure $next)
     {
-        Redis::set("committees:" . $payload->id, $this->committeeRepository->findBy('id', $payload->id));
+        Redis::set('committees:'.$payload->id, $this->committeeRepository->findBy('id', $payload->id));
+
         return $next($payload);
     }
 }

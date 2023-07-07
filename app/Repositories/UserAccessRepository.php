@@ -18,7 +18,7 @@ final class UserAccessRepository extends BaseRepository
         return $user->load('access');
     }
 
-    public function grantAccess(array|null $agendas = [], User $user)
+    public function grantAccess(array|null $agendas, User $user)
     {
         return DB::transaction(function () use ($agendas, $user) {
             if (isset($agendas)) {

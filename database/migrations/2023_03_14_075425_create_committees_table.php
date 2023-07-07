@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\User;
-use App\Models\Schedule;
 use App\Enums\CommitteeStatus;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Schedule;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class () extends Migration {
     /**
@@ -28,7 +28,6 @@ return new class () extends Migration {
             $table->text('returned_message')->nullable();
             $table->foreignIdFor(User::class, 'submitted_by')->nullable();
             $table->foreignIdFor(Schedule::class)->nullable();
-
             $table->date('date')->default(now());
             $table->softDeletes();
             $table->timestamps();

@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Services\UserService;
-use App\Pipes\User\UpdateUser;
+use App\Http\Requests\UpdateAccountInformationRequest;
 use App\Pipes\User\ChangePassword;
 use App\Pipes\User\ProfilePicture;
-use Illuminate\Support\Facades\DB;
+use App\Pipes\User\UpdateUser;
 use App\Repositories\UserRepository;
+use App\Services\UserService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Pipeline;
-use App\Http\Requests\UpdateAccountInformationRequest;
 
 final class AccountController extends Controller
 {
@@ -33,15 +32,11 @@ final class AccountController extends Controller
         ]);
     }
 
-
-
-
     /**
      * > The `update` function takes an `UpdateAccountInformationRequest` object, sends it through a
      * pipeline of classes, and then returns a response
      *
      * @param UpdateAccountInformationRequest request The request object
-     *
      * @return The user is being returned.
      */
     public function update(UpdateAccountInformationRequest $request)

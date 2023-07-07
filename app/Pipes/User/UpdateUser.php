@@ -2,10 +2,10 @@
 
 namespace App\Pipes\User;
 
+use App\Contracts\Pipes\IPipeHandler;
+use App\Repositories\UserRepository;
 use Closure;
 use Illuminate\Support\Arr;
-use App\Repositories\UserRepository;
-use App\Contracts\Pipes\IPipeHandler;
 
 final class UpdateUser implements IPipeHandler
 {
@@ -16,10 +16,10 @@ final class UpdateUser implements IPipeHandler
         $this->userRepository = app()->make(UserRepository::class);
     }
 
-
     public function handle(mixed $payload, Closure $next)
     {
         $this->userRepository->update($payload['account'], Arr::except($payload, ['account', '_token', '_method', 'image']));
+
         return $next($payload);
     }
 }

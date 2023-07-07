@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\BoardSessionStatus;
-use App\FormRules\BoardSessionFormRules;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,7 +11,6 @@ class BoardSession extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    use BoardSessionFormRules;
 
     protected $guarded = [];
 

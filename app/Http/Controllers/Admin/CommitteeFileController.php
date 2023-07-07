@@ -2,33 +2,35 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Committee;
 use App\Http\Controllers\Controller;
+use App\Models\Committee;
+use App\Utilities\CommitteeFileUtility;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 
-class CommitteeFileController extends Controller
+final class CommitteeFileController extends Controller
 {
-    public function show(Committee $committee_file)
+    public function __construct()
     {
-        $file = basename($committee_file->file_path);
-        // build a path for this committee
-
-        $fullPath = public_path("storage/committees/{$file}");
-        $filePathForView = "storage" . DIRECTORY_SEPARATOR . "committees" . DIRECTORY_SEPARATOR . $file;
-
-        $filePath = str_replace("\\", "/", $fullPath);
-        Artisan::call("convert:path \"" . $filePath . "\"");
-        // Artisan::call("convert:path " . str_replace("\\", "/", $fullPath));
-
-        $extension = pathinfo($file, PATHINFO_EXTENSION);
-
-        $newFilename = str_replace($extension, 'pdf', $file);
-
-        $filePathForView = str_replace($file, $newFilename, $filePathForView);
-
-        return view('admin.committee.show', compact('filePathForView'));
+        Cache::flush();
     }
 
+    public function show(int $committee)
+    {
+        $committee = Committee::find($committee, ['id', 'file_path']);
+        $filePath = CommitteeFileUtility::correctDirectorySeparator($committee->file_path);
+        $fileName = basename($filePath);
+        $outputDirectory = CommitteeFileUtility::publicDirectoryForViewing();
+        Artisan::call('convert:path "'.$filePath.'" --output="'.$outputDirectory.'"');
+        $pathForView = CommitteeFileUtility::generatePathForViewing($outputDirectory, $fileName);
+        $basePath = base_path();
+        $escaped_path = escapeshellarg(CommitteeFileUtility::publicDirectoryForViewing().CommitteeFileUtility::changeExtension($fileName));
+        shell_exec("python.exe $basePath\\reader.py -f $escaped_path");
+
+        return view('admin.committee.show', [
+            'filePathForView' => $pathForView,
+        ]);
+    }
 
     public function edit(Committee $committee_file)
     {

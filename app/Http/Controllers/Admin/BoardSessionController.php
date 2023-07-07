@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreRequest;
 use App\Models\BoardSession;
 use App\Pipes\BoardSession\DatatablesWrapper;
 use App\Pipes\BoardSession\DeleteBoardSession;
@@ -49,7 +48,7 @@ final class BoardSessionController extends Controller
         return view('admin.board-sessions.create');
     }
 
-    public function store(StoreRequest $request)
+    public function store(Request $request)
     {
         return Pipeline::send($request->all())
             ->through([
@@ -62,7 +61,7 @@ final class BoardSessionController extends Controller
     {
         $boardSession = $this->boardSessionRepository->findBy('id', $id);
 
-        if(!$this->documentService->isPDF($boardSession->file_path)) {
+        if (! $this->documentService->isPDF($boardSession->file_path)) {
             Artisan::call('convert:path', ['path' => $boardSession->file_path]);
         }
 
@@ -72,6 +71,7 @@ final class BoardSessionController extends Controller
     public function edit(int $id)
     {
         $boardSession = $this->boardSessionRepository->findBy('id', $id);
+
         return view('admin.board-sessions.edit', compact('boardSession'));
     }
 
@@ -89,21 +89,24 @@ final class BoardSessionController extends Controller
         Pipeline::send($board_session)
             ->through([
                 DeleteBoardSession::class,
-                DeleteFileUpload::class
+                DeleteFileUpload::class,
             ])
             ->then(fn ($data) => $data);
+
         return response()->json(['success' => true, 'message' => 'Board session deleted successfully']);
     }
 
     public function locked(BoardSession $board_session)
     {
         $this->boardSessionRepository->locked($board_session);
+
         return response()->json(['success' => true, 'message' => 'Board session locked successfully']);
     }
 
     public function unlocked(BoardSession $board_session)
     {
         $this->boardSessionRepository->unlocked($board_session);
+
         return response()->json(['success' => true, 'message' => 'Board session unlocked successfully']);
     }
 }

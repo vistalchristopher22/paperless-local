@@ -138,30 +138,48 @@
                 </div>
                 <!-- End Col -->
 
+
                 <div class="col-sm-auto" aria-label="Button group">
                     <!-- Button Group -->
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#uploadFilesModal">
-                            <i class="bi-cloud-arrow-up-fill me-1"></i> Upload
-                        </button>
-
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary dropdown-toggle" id="uploadGroupDropdown"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i data-feather="plus"></i>
+                    <div class="button-items">
+                        <button type="button" id="buttonFilter" class="btn btn-secondary btn-square dropdown-toggle"
+                            data-bs-toggle="dropdown" aria-expanded="false"><span>File Type</span> <i
+                                class="mdi mdi-chevron-down"></i></button>
+                        <div class="dropdown-menu" style="">
+                            <a class="dropdown-item filter-file-type" data-type="*" href="#">
+                                All Files
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item filter-file-type" data-type="word_file" href="#">
+                                Documents
+                            </a>
+                            <button class="dropdown-item filter-file-type" data-type="excel_file" href="#">
+                                Spreadsheets
                             </button>
-
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="uploadGroupDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="bi-folder-plus dropdown-item-icon"></i> New folder
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
-                                    data-bs-target="#uploadFilesModal">
-                                    <i class="bi-upload dropdown-item-icon"></i> Upload folder
-                                </a>
-                            </div>
+                            <button class="dropdown-item filter-file-type" data-type="powerpoint_file">
+                                Presentations
+                            </button>
+                            <button class="dropdown-item filter-file-type" data-type="pictures_file">
+                                Photos & images
+                            </button>
+                            <button class="dropdown-item filter-file-type" data-type="pdf_file">
+                                PDFs
+                            </button>
+                            <button class="dropdown-item filter-file-type" data-type="video_file">
+                                Videos
+                            </button>
+                            <button class="dropdown-item filter-file-type" data-type="folder">
+                                Folders
+                            </button>
+                            <button class="dropdown-item filter-file-type" data-type="shortcut_file">
+                                Shortcuts
+                            </button>
+                            <button class="dropdown-item filter-file-type" data-type="audio_file">
+                                Audio
+                            </button>
+                            <button class="dropdown-item filter-file-type" data-type="archives_file">
+                                Archives
+                            </button>
                         </div>
                     </div>
                     <!-- End Button Group -->
@@ -172,7 +190,7 @@
         </div>
         <!-- End Page Header -->
 
-        <h2 class="h4 mb-3">Folders</h2>
+        <h2 class="h4 mb-3"></h2>
 
         <!-- Folders -->
         <div id="directories">
@@ -182,7 +200,7 @@
         <!-- End Folders -->
 
         <div class="progress rounded-0"
-            style="position:fixed; top :0%; z-index:9999999; right:0%; left:0%; background :white;">
+            style="position:fixed; bottom :0%; z-index:9999999; right:0%; left:0%; background :white;">
             <div class="progress-bar rounded-0" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
             </div>
         </div>
@@ -306,14 +324,13 @@
                     let directory = card.find('.file-name').attr('data-path');
                     let fileName = card.find(`.file-name`).text();
                     $.ajax({
-                        url: '/admin/archive/process/details',
+                        url: route('file.show'),
                         method: 'POST',
                         data: {
                             path: fileName,
                             directory: directory,
                         },
                         success: function(response) {
-                            // Parse the JSON data
                             let data = response;
 
                             let html = $('<div class="row mb-3">');
@@ -349,23 +366,45 @@
                             fileActivityRow.append($('<div class="col-12">'));
 
                             html.find('.col-12').append(fileActivityRow);
+
+                            let trackUrl = 'http://localhost:3030/api/backtrack-attachments/pdf';
+
+                            if (response.type === 'docx') {
+                                trackUrl = 'http://localhost:3030/api/backtrack-attachments/docx';
+                            }
+
                             $.ajax({
-                                url: 'http://localhost:3030/api/backtrack-attachments/pdf',
+                                url: trackUrl,
                                 method: 'POST',
                                 data: {
                                     file_path: `${data.directory}/${data.name}`,
                                 },
-                                success: function(response) {
-                                    let fileAttachments = response.attachments.split(
-                                        "||").filter((e) => !!e);
-                                    fileAttachments.forEach((file) => {
-                                        let [text, link] = file.split("|");
-                                        listGroup.append($(
-                                            '<li class="list-group-item">'
-                                        ).html(
-                                            '<strong>Attachments:</strong> ' +
-                                            text));
-                                    });
+                                success: function(data) {
+                                    if (response.type === 'docx') {
+                                        data.map((attachment) => {
+                                            let {
+                                                text,
+                                                url
+                                            } = attachment;
+                                            listGroup.append($(
+                                                '<li class="list-group-item">'
+                                            ).html(
+                                                `<strong>Attachments:</strong> <a class="text-decoration-underline" target="_blank" href="${url}">${text}</a>`
+                                            ));
+                                        });
+                                    } else {
+                                        let fileAttachments = data.attachments
+                                            .split(
+                                                "||").filter((e) => !!e);
+                                        fileAttachments.forEach((file) => {
+                                            let [text, link] = file.split("|");
+                                            listGroup.append($(
+                                                '<li class="list-group-item">'
+                                            ).html(
+                                                '<strong>Attachments:</strong> ' +
+                                                text));
+                                        });
+                                    }
                                     $('.offcanvas-body').html(html);
                                     $('#detailsOffcanvas').offcanvas('show');
                                 }
@@ -385,7 +424,7 @@
                     let directory = card.find('.file-name').attr('data-path');
                     let fileName = card.find(`.file-name`).text();
                     $.ajax({
-                        url: '/admin/archive/process/show-in-explorer',
+                        url: route('file.show-in-explorer'),
                         method: 'POST',
                         data: {
                             directory: directory,
@@ -414,7 +453,7 @@
                         return;
                     } else {
                         $.ajax({
-                            url: '/admin/archive/process/preview',
+                            url: route('file.preview'),
                             method: 'POST',
                             data: {
                                 fileName,
@@ -470,7 +509,7 @@
                             'This action will delete all the selected files. Are you sure you want to proceed?',
                             function() {
                                 $.ajax({
-                                    url: '/admin/archive/file/delete/bulk',
+                                    url: route('file.delete.bulk'),
                                     method: 'DELETE',
                                     data: selectedFiles,
                                     success: function(response) {
@@ -488,7 +527,7 @@
                         alertify.confirm('This action will delete the file. Are you sure you want to proceed?',
                             function() {
                                 $.ajax({
-                                    url: '/admin/archive/file/delete',
+                                    url: route('file.delete'),
                                     method: 'DELETE',
                                     data: {
                                         path: fileName,
@@ -652,7 +691,7 @@
 
             $('#btnRename').click(function() {
                 $.ajax({
-                    url: '/admin/archive/file/rename',
+                    url: route('file.update'),
                     method: 'POST',
                     data: {
                         newName: $('#newFileName').val(),
@@ -723,7 +762,7 @@
                     );
 
                     $.ajax({
-                        url: '/admin/archive/files/get-files',
+                        url: route('file.list'),
                         type: 'GET',
                         data: {
                             path: path
@@ -743,7 +782,6 @@
                                 directoriesTrack = [currentPath];
                             }
                             updateBreadcrumbNavigation();
-
 
                             var directories = data.directories;
                             var $directoryRow = $('<div>').addClass(
@@ -852,16 +890,147 @@
                         }
                     });
                 }
+
+                $(document).on('click', '.filter-file-type', function() {
+                    let fileType = $(this).attr('data-type');
+                    $('#buttonFilter').text($(this).text());
+
+                    let [currentDirectory] = directoriesTrack.slice(-1);
+
+                    if (fileType !== '*') {
+                        $.ajax({
+                            url: `/admin/files/filter/type`,
+                            method: 'POST',
+                            data: {
+                                type: fileType,
+                                directory: currentDirectory,
+                            },
+                            success: function(data) {
+                                updateBreadcrumbNavigation();
+                                let directories = data.directories;
+                                let directoryRow = $('<div>').addClass(
+                                    'row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5');
+                                for (let i = 0; i < directories.length; i++) {
+                                    let directory = directories[i];
+                                    let numFiles = directories[i].files.length;
+                                    let numFolders = directories[i].directories.length;
+                                    let fileStr = numFiles == 1 ? 'file' : 'files';
+                                    let folderStr = numFolders == 1 ? 'folder' : 'folders';
+                                    let column = $('<div>').addClass('col mb-3 mb-lg-5')
+                                        .attr('data-path', directory.path);
+                                    let card = $('<div>').addClass(
+                                        'card card-sm card-hover-shadow card-header-borderless h-100 text-center cursor-pointer'
+                                    );
+                                    let cardBody = $('<div>').addClass(
+                                        'card-body bg-light d-flex flex-column align-items-center justify-content-center'
+                                    );
+                                    let folderIcon = $('<img>').addClass('img-fluid w-25').attr(
+                                        'src',
+                                        '/assets-2/images/widgets/folder-icon.svg').attr('alt',
+                                        'Folder Icon');
+                                    let details = $('<div>').addClass('mt-3');
+                                    let title = $('<h6>').addClass('').text(directory.basename);
+                                    let date = $('<p>').addClass('small').text('Last Modified: ' +
+                                        new Date(directory.mTime * 1000).toLocaleString());
+                                    let count = $('<p>').addClass('small').text(numFiles + ' ' +
+                                        fileStr + ', ' + numFolders + ' ' + folderStr);
+                                    cardBody.append(folderIcon);
+                                    details.append(title).append(date).append(count);
+                                    card.append(cardBody).append(details);
+                                    column.append(card);
+                                    directoryRow.append(column);
+                                }
+
+                                $('#directories').empty().append(directoryRow);
+
+                                let files = data.files;
+                                let fileRow = $('<div>').addClass(
+                                    'row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5');
+                                fileRow.attr('id', 'file-list')
+                                for (let j = 0; j < files.length; j++) {
+                                    let file = files[j];
+                                    let column = $('<div>').addClass('col mb-3 mb-lg-5');
+
+                                    let card = $('<div>').addClass(
+                                        'card card-sm card-hover-shadow card-header-borderless h-100 text-center cursor-pointer'
+                                    );
+
+                                    card.attr('data-index', j);
+
+                                    let cardBody = $('<div>').addClass(
+                                        'card-body bg-light d-flex flex-column align-items-center justify-content-center'
+                                    );
+
+                                    let fileIcon = null;
+
+                                    if (file.basename.includes('.pdf')) {
+                                        fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
+                                            '/assets-2/images/widgets/pdf-icon.svg').attr('alt',
+                                            'File Icon');
+                                    } else if (file.basename.includes('.xlsx') || file.basename
+                                        .includes(
+                                            '.xls')) {
+                                        fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
+                                                '/assets-2/images/widgets/google-sheets-icon.svg')
+                                            .attr(
+                                                'alt',
+                                                'File Icon');
+                                    } else if (file.basename.includes('.png') || file.basename
+                                        .includes(
+                                            '.jpg') || file.basename.includes('.jpeg') || file
+                                        .basename
+                                        .includes(
+                                            '.webp')) {
+                                        fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
+                                                '/assets-2/images/widgets/image-placeholder.svg')
+                                            .attr(
+                                                'alt',
+                                                'File Icon');
+                                    } else if (file.basename.includes('.csv')) {
+                                        fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
+                                            '/assets-2/images/widgets/csv.svg').attr('alt',
+                                            'File Icon');
+                                    } else {
+                                        fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
+                                            '/assets-2/images/widgets/word-icon.svg').attr(
+                                            'alt',
+                                            'File Icon');
+                                    }
+
+                                    var details = $('<div>').addClass('mt-3');
+                                    var title = $(
+                                            `<h6 class="file-name" data-path="${file.directory}">`)
+                                        .addClass(
+                                            '').text(file.basename);
+                                    var date = $('<p>').addClass('small').text('Last Modified: ' +
+                                        new Date(
+                                            file.mTime * 1000).toLocaleString());
+                                    var size = $('<p>').addClass('small').text('Size: ' +
+                                        formatBytes(
+                                            file
+                                            .size));
+                                    cardBody.append(fileIcon);
+                                    details.append(title).append(date).append(size);
+                                    card.append(cardBody).append(details);
+                                    column.append(card);
+                                    fileRow.append(column);
+                                }
+                                $('#files').empty().append(fileRow);
+                            }
+                        });
+                    } else {
+                        // load all the files within the directory.
+                        loadFilesAndDirectories(currentDirectory);
+                    }
+                });
             });
         </script>
-
-
 
 
         <script>
             Dropzone.autoDiscover = false;
             let myDropzone = new Dropzone("#files", {
-                url: "/admin/archive/process/upload",
+                url: route('file.store'),
                 success: function(file, response) {
                     setTimeout(() => {
                         var progressBar = document.querySelector(".progress-bar");

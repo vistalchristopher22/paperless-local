@@ -15,7 +15,6 @@ final class StoreBoardSession implements IPipeHandler
         $this->boardSessionRepository = app()->make(BoardSessionRespository::class);
     }
 
-
     public function handle(mixed $payload, Closure $next)
     {
         $session = $this->boardSessionRepository->store([

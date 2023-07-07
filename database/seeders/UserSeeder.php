@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Enums\UserTypes;
 use App\Enums\UserStatus;
+use App\Enums\UserTypes;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -66,7 +66,6 @@ class UserSeeder extends Seeder
             'user' => $user->id,
             'agenda' => 5,
         ]);
-
 
     }
 }

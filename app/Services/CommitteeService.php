@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use App\Contracts\Services\IUploadService;
+use Illuminate\Http\Request;
 
 final class CommitteeService
 {
@@ -16,7 +16,7 @@ final class CommitteeService
     public function uploadFile(Request $request, IUploadService $uploadService): mixed
     {
         if ($request->has('file')) {
-            $path = $uploadService->handle($request->file('file'));
+            $path = $uploadService->handle($request->file('file'), 'DRAFT COMMITTEES');
             $request->merge(['file_path' => $path]);
         }
 

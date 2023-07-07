@@ -2,29 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
-use App\Enums\UserTypes;
 use App\Enums\UserStatus;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Pipes\User\StoreUser;
-use App\Services\UserService;
-use App\Pipes\User\UpdateUser;
-use App\Pipes\User\ChangePassword;
-use App\Pipes\User\ProfilePicture;
-use App\Http\Requests\StoreRequest;
+use App\Enums\UserTypes;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRequest;
 use App\Http\Requests\UpdateRequest;
-use App\Repositories\UserRepository;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\User;
+use App\Pipes\User\ChangePassword;
+use App\Pipes\User\ProfilePicture;
+use App\Pipes\User\StoreUser;
+use App\Pipes\User\UpdateUser;
 use App\Repositories\DivisionRepository;
+use App\Repositories\UserRepository;
+use App\Services\UserService;
 use Illuminate\Support\Facades\Pipeline;
+use Illuminate\Support\Str;
 
 final class UserController extends Controller
 {
     private $divisionRepository;
-
 
     public function __construct(private UserRepository $userRepository, private UserService $userService)
     {
@@ -42,7 +40,7 @@ final class UserController extends Controller
     {
         return view('admin.account.index', [
             'users' => $this->userRepository->getWithDivision(),
-            'divisions' => $this->divisionRepository->get()
+            'divisions' => $this->divisionRepository->get(),
         ]);
     }
 
@@ -56,18 +54,15 @@ final class UserController extends Controller
         return view('admin.account.create', [
             'types' => UserTypes::cases(),
             'status' => UserStatus::cases(),
-            'divisions' => $this->divisionRepository->get()
+            'divisions' => $this->divisionRepository->get(),
         ]);
     }
-
-
 
     /**
      * > The `store` function takes a `UserStoreRequest` object, sends it through a pipeline of
      * classes, and then returns the data
      *
      * @param UserStoreRequest request The request object
-     *
      * @return The user is being returned.
      */
     public function store(StoreRequest $request)
@@ -78,9 +73,8 @@ final class UserController extends Controller
                 StoreUser::class,
             ])->then(fn ($data) => $data);
 
-        return back()->with('success', "Success! " . Str::ucfirst($request->last_name) . ", " . Str::ucfirst($request->first_name) . " has been created.");
+        return back()->with('success', 'Success! '.Str::ucfirst($request->last_name).', '.Str::ucfirst($request->first_name).' has been created.');
     }
-
 
     /**
      * It returns a view with the account and the types and status.
@@ -93,11 +87,9 @@ final class UserController extends Controller
         return view('admin.account.edit', compact('account'))->with([
             'types' => UserTypes::cases(),
             'status' => UserStatus::cases(),
-            'divisions' => $this->divisionRepository->get()
+            'divisions' => $this->divisionRepository->get(),
         ]);
     }
-
-
 
     /**
      * > The `update` function takes a `UserUpdateRequest` and a `User` model, and then sends the
@@ -105,7 +97,6 @@ final class UserController extends Controller
      *
      * @param UserUpdateRequest request The request object
      * @param User account The account model
-     *
      * @return The user is being returned.
      */
     public function update(UpdateRequest $request, User $account)
@@ -120,17 +111,17 @@ final class UserController extends Controller
         return back()->with('success', 'Success! account details have been updated.');
     }
 
-
-
     /**
      * Delete a user account.
-     * @param \Illuminate\Http\Request $request The HTTP request object.
-     * @param \App\Models\User $account The user account to delete.
+     *
+     * @param  \Illuminate\Http\Request  $request The HTTP request object.
+     * @param  \App\Models\User  $account The user account to delete.
      * @return \Illuminate\Http\JsonResponse Returns a JSON response indicating whether the operation was successful or not.
      */
     public function destroy(User $account)
     {
         $this->userRepository->delete($account);
+
         return response()->json(['success' => true, 'message' => 'Account deleted successfully, this page will automatically refresh after 5 seconds to apply the changes.']);
     }
 }

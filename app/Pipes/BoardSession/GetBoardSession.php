@@ -2,9 +2,9 @@
 
 namespace App\Pipes\BoardSession;
 
-use Closure;
 use App\Contracts\Pipes\IPipeHandler;
 use App\Repositories\BoardSessionRespository;
+use Closure;
 
 final class GetBoardSession implements IPipeHandler
 {
@@ -15,11 +15,11 @@ final class GetBoardSession implements IPipeHandler
         $this->boardSessionRepository = app()->make(BoardSessionRespository::class);
     }
 
-
     public function handle(mixed $payload, Closure $next)
     {
         // Fetch the record
         $payload = $this->boardSessionRepository->get();
+
         return $next($payload);
     }
 }

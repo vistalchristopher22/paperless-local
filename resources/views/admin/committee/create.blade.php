@@ -2,23 +2,6 @@
 @section('tab-title', 'Add new Committee')
 @prepend('page-css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    {{-- tempus dominos --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
-
-
-    <!-- Font awesome is not required provided you change the icon options -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/solid.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/fontawesome.min.js"></script>
-    <!-- end FA -->
-
-    <script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.7/dist/js/tempus-dominus.js"></script>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.7/dist/css/tempus-dominus.css" />
 @endprepend
 @section('content')
     @if (Session::has('success'))
@@ -60,6 +43,7 @@
                 <div class="form-group">
                     <label class="form-label">Expanded Committee</label>
                     <select type="text" class="form-select" name="expanded_committee">
+                        <option value="">Select Exanpaded Committee</option>
                         @foreach ($agendas as $agenda)
                             <option value="{{ $agenda->id }}">{{ $agenda->title }}</option>
                         @endforeach
@@ -111,6 +95,7 @@
         </div>
     </div>
     @push('page-scripts')
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script>
             $('select[name="lead_committee"]').select2({
                 placeholder: 'Select Lead Committee',
@@ -118,19 +103,7 @@
 
             $('select[name="expanded_committee"]').select2({
                 placeholder: 'Select Expanded Committee',
-
             });
-        </script>
-
-        <script>
-            //using "window" is just for the stackblitz, you do not need to do this
-            let datetimepicker = new tempusDominus.TempusDominus(
-                document.getElementById('datetimepicker1'), {
-                    restrictions: {
-                        minDate: new Date()
-                    },
-                }
-            );
         </script>
     @endpush
 @endsection

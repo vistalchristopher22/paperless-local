@@ -2,15 +2,15 @@
 
 namespace App\Providers;
 
-use App\Models\User;
 use App\Enums\UserTypes;
-use Laravel\Pennant\Feature;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\View;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\ServiceProvider;
+use App\Models\User;
 use App\ViewComposers\CommitteeViewComposer;
 use App\ViewComposers\NotificationViewComposer;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
+use Laravel\Pennant\Feature;
 
 class AppServiceProvider extends ServiceProvider
 {

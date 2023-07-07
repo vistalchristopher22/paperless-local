@@ -38,12 +38,12 @@ return [
         'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"',
         'timeout' => false,
         'options' => [
-            'margin-top'    => 45,
-            'margin-right'  => 10,
+            'margin-top' => 45,
+            'margin-right' => 10,
             'margin-bottom' => 15,
-            'margin-left'   => 10,
+            'margin-left' => 10,
         ],
-        'env'     => [],
+        'env' => [],
     ],
 
     'image' => [
@@ -51,7 +51,7 @@ return [
         'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltoimage.exe"',
         'timeout' => false,
         'options' => [],
-        'env'     => [],
+        'env' => [],
     ],
 
 ];

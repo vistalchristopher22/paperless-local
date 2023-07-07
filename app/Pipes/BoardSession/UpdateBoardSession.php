@@ -2,15 +2,14 @@
 
 namespace App\Pipes\BoardSession;
 
-use Closure;
 use App\Contracts\Pipes\IPipeHandler;
+use Closure;
 
 final class UpdateBoardSession implements IPipeHandler
 {
     public function __construct()
     {
     }
-
 
     public function handle(mixed $payload, Closure $next)
     {
@@ -21,6 +20,7 @@ final class UpdateBoardSession implements IPipeHandler
         $boardSession->announcement_title = $payload['announcement_title'];
         $boardSession->announcement_content = $payload['announcement_content'];
         $boardSession->save();
+
         return $next($payload);
     }
 }

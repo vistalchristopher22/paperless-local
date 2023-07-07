@@ -1,45 +1,50 @@
 <?php
 
+<<<<<<< HEAD
 use App\Models\User;
 use App\Models\Venue;
 use App\Models\Setting;
 use App\Models\Schedule;
 use App\Models\Committee;
+=======
+>>>>>>> 602dbfe3205e62fcb0463ec5e76b03c7c9993d1d
 use Illuminate\Support\Str;
-use App\Models\BoardSession;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use App\Utilities\CommitteeFileUtility;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VenueController;
 use App\Http\Controllers\Admin\AgendaController;
+use App\Http\Controllers\Admin\Archive\FileBulkDeleteController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\DivisionController;
+use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\CommitteeController;
 use App\Http\Controllers\Admin\UserAccessController;
+use App\Http\Controllers\Admin\Archive\FileController;
+use App\Http\Controllers\Admin\Archive\FilePreviewController;
+use App\Http\Controllers\Admin\Archive\FileShowInExplorerController;
 use App\Http\Controllers\Admin\BoardSessionController;
-use App\Http\Controllers\Admin\Archieve\FileController;
 use App\Http\Controllers\Admin\CommitteeFileController;
 use App\Http\Controllers\SPMember\SPMCommitteeController;
-use App\Http\Controllers\Admin\CommitteeMeetingController;
 use App\Http\Controllers\Admin\SanggunianMemberController;
+use App\Http\Controllers\Admin\SubmittedCommitteeController;
 use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
+use App\Http\Controllers\Admin\CommitteeMeetingScheduleController;
+use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
+use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
 
 Route::redirect('/', '/login');
-
 Auth::routes();
-
+Route::get('submitted-committee/list', SubmittedCommitteeController::class);
 Route::get('home', [HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
-
     Route::group(['middleware' => 'features:administrator'], function () {
+<<<<<<< HEAD
         Route::group(['model' => User::class], fn () => Route::resource('account', UserController::class));
 
         Route::resource('venue', VenueController::class);
@@ -123,34 +128,54 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('schedules', CommitteeMeetingController::class)->only('index');
         Route::resource('committee-file', CommitteeFileController::class)->only(['show', 'edit']);
 
+=======
+        Route::post('re-order/agenda', [AgendaController::class, 'reOrder'])->name('agenda.re-order');
+        Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
+>>>>>>> 602dbfe3205e62fcb0463ec5e76b03c7c9993d1d
 
-        Route::resource('committee', CommitteeController::class);
+        Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePreviewController::class)->name('committee-meeting-schedule.preview');
+        Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
+        Route::get('schedule/committees/{dates}', [CommitteeMeetingScheduleController::class, 'show'])->name('committee-meeting-schedule.show');
+        Route::post('schedule/committees', [CommitteeMeetingScheduleController::class, 'store'])->name('committee-meeting-schedule.store');
 
         Route::get('board-sessions/list', [BoardSessionController::class, 'list'])->name('board-sessions.list');
         Route::post('board-sessions/locked/{board_session}', [BoardSessionController::class, 'locked'])->name('board-sessions.locked');
         Route::post('board-sessions/unlocked/{board_session}', [BoardSessionController::class, 'unlocked'])->name('board-sessions.unlocked');
 
-        Route::group(['base_rule' => 'order_business', 'model' => BoardSession::class], fn () => Route::resource('board-sessions', BoardSessionController::class));
-
-        Route::post('/admin/archive/process/show-in-explorer', [FileController::class, 'show']);
-        Route::post('/admin/archive/process/upload', [FileController::class, 'upload']);
-        Route::post('/admin/archive/process/details', [FileController::class, 'getFileInformation']);
-        Route::post('/admin/archive/process/preview', [FileController::class, 'preview']);
-        Route::get('/admin/archive/files/get-files', [FileController::class, 'getFiles']);
-        Route::post('/admin/archive/file/rename', [FileController::class, 'renameFile']);
-        Route::delete('/admin/archive/file/delete', [FileController::class, 'deleteFile']);
-        Route::delete('/admin/archive/file/delete/bulk', [FileController::class, 'deleteBulk']);
-        Route::resource('files', FileController::class);
-
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('settings/update', [SettingController::class, 'update'])->name('settings.update');
+
+        Route::get('edit-information', [AccountController::class, 'edit'])->name('information.edit');
+        Route::put('edit-information', [AccountController::class, 'update'])->name('information.update');
+
+        Route::prefix('file')->group(function () {
+            Route::post('archive/show-in-explorer', FileShowInExplorerController::class)->name('file.show-in-explorer');
+            Route::post('archive/preview', FilePreviewController::class)->name('file.preview');
+            Route::delete('archive/delete/bulk', FileBulkDeleteController::class)->name('file.delete.bulk');
+
+            Route::get('archive/list', [FileController::class, 'list'])->name('file.list');
+            Route::post('archive/details', [FileController::class, 'show'])->name('file.show');
+            Route::post('archive/rename', [FileController::class, 'update'])->name('file.update');
+            Route::post('archive/upload', [FileController::class, 'store'])->name('file.store');
+            Route::delete('archive/delete', [FileController::class, 'destroy'])->name('file.delete');
+        });
+
+        Route::post('/admin/files/filter/type', [FileController::class, 'getFileByTypes']);
+
+        Route::resources([
+            'account' => UserController::class,
+            'account-access-control' => UserAccessController::class,
+            'sanggunian-members' => SanggunianMemberController::class,
+            'agendas' => AgendaController::class,
+            'division' => DivisionController::class,
+            'committee' => CommitteeController::class,
+            'schedules' => ScheduleController::class,
+            'committee-file' => CommitteeFileController::class,
+            'board-sessions' => BoardSessionController::class,
+            'files' => FileController::class,
+        ]);
     });
-
-    Route::get('edit-information', [AccountController::class, 'edit'])->name('information.edit');
-    Route::put('edit-information', [AccountController::class, 'update'])->name('information.update');
 });
-
-
 
 // SB MEMBER
 Route::group(['prefix' => 'sb-member', 'middleware' => ['auth', 'features:sb-member']], function () {
@@ -159,44 +184,30 @@ Route::group(['prefix' => 'sb-member', 'middleware' => ['auth', 'features:sb-mem
     // Route::get('sbm-committees', [SPMCommitteeController::class, 'index'])->name('sbm.committee.index');
 });
 
-Route::get('show-attachment/{file}/{location}', function (string $file, string $location) {
-    $location = str_replace("..", DIRECTORY_SEPARATOR, $location);
-
+Route::get('show-attachment/{url}/{location}', function (string $file, string $location) {
+    $location = str_replace('-', '/', $location);
     $extension = pathinfo($file, PATHINFO_EXTENSION);
-
-    $originalExtension = Str::reverse($extension);
-
-    $fileName = str_replace($extension, $originalExtension, $file);
-
-    if (!Str::contains($location, "C:")) {
-        $location = "C:{$location}";
-    }
-
-    $completePath = str_replace($file, $fileName, $location);
-
-    $toConvertExtension = ['xls', 'xlsx', 'doc', 'docx', 'jpg', 'jpeg', 'png', 'gif'];
-
-    if (in_array($originalExtension, $toConvertExtension)) {
-        Log::info('convert => ' . $fileName . ' to PDF');
-
-        shell_exec('"C:\Program Files\LibreOffice\program\soffice" --headless --convert-to pdf "' . $completePath . '" --outdir ' . public_path("storage\\copy-files\\"));
-
-        $viewPath  = "storage" . DIRECTORY_SEPARATOR . "copy-files" . DIRECTORY_SEPARATOR . str_replace($originalExtension, "pdf", $fileName);
+    $path = $location . '/' . $file;
+    $path = CommitteeFileUtility::fixTemporaryForwardSlashSeparator($path);
+    $outputDirectory = CommitteeFileUtility::publicDirectoryForViewing();
+    if (in_array($extension, CommitteeFileUtility::CONVERTIBLE_FILE_EXTENSIONS)) {
+        Artisan::call('convert:path "' . $path . '" --output="' . $outputDirectory . '"');
     } else {
-        // Using this complete path we can now copy the file and paste to copy-files directory in public/storage for viewing purposes.
-        if (File::exists($completePath)) {
-            File::copy($completePath, public_path("storage/copy-files/" . $fileName));
-            $viewPath  = "storage" . DIRECTORY_SEPARATOR . "copy-files" . DIRECTORY_SEPARATOR . $fileName;
-        } else {
-            throw new Exception("File on {$completePath} not found!");
-        }
+        $path = Str::after($path, 'storage');
+        $path = CommitteeFileUtility::correctDirectorySeparator(base_path() . '/storage' . $path);
+        copy($path, $outputDirectory . $file);
     }
 
+    $pathForView = CommitteeFileUtility::generatePathForViewing($outputDirectory, $file);
+    $basePath = base_path();
+    $escaped_path = escapeshellarg(CommitteeFileUtility::publicDirectoryForViewing() . CommitteeFileUtility::changeExtension($file));
+    shell_exec("python.exe $basePath\\reader.py -f $escaped_path");
 
     return view('testing', [
-        'filePathForView' => $viewPath,
+        'filePathForView' => $pathForView,
     ]);
 })->name('show-attachment');
+<<<<<<< HEAD
 
 
 Route::get('display-schedule-merge-committee/{dates}', function (string $dates) {
@@ -252,3 +263,5 @@ Route::post('store-venue', function(Request $request) {
 
     return response()->json(['success' => true]);
 });
+=======
+>>>>>>> 602dbfe3205e62fcb0463ec5e76b03c7c9993d1d

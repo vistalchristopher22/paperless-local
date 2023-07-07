@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Pipes\BoardSession\GetBoardSession;
 use Illuminate\Support\Facades\Pipeline;
 use Yajra\DataTables\Facades\DataTables;
-use App\Pipes\BoardSession\GetBoardSession;
 
 final class SessionController extends Controller
 {
@@ -21,7 +21,6 @@ final class SessionController extends Controller
             ->rawColumns(['action', 'published'])
             ->make(true);
     }
-
 
     public function index()
     {

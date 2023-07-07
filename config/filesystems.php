@@ -51,6 +51,20 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+        'SOURCE_TRASHED' => [
+            'driver' => 'local',
+            'root' => storage_path('app/source/.trashed'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+        'DRAFT_COMMITTEES' => [
+            'driver' => 'local',
+            'root' => storage_path('app/source/DRAFT_COMMITTEES'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
 
         's3' => [
             'driver' => 's3',

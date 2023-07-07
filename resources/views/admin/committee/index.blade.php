@@ -14,59 +14,73 @@
             </div>
         </div>
     @endif
-    <div class="card mb-3 d-none">
-        <div class="card-header">
-            <h6>What are you looking for?</h6>
+    <div class="card mb-3">
+        <div class="card-header bg-dark d-flex justify-content-between align-items-center" id="filterHeader">
+            <h6 class="card-title h6 fw-medium text-white">What are you looking for?</h6>
+            <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse"
+                aria-expanded="false" aria-controls="filterCollapse">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-funnel-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z" />
+                </svg>
+                Advanced Filters
+            </button>
         </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="fw-medium">Lead Committee</label>
-                        <select id="filterLeadCommitee" class="form-select">
-                            <option value="*">All</option>
-                            @foreach ($agendas as $agenda)
-                                <option value="{{ $agenda->id }}">{{ $agenda->title }}</option>
-                            @endforeach
-                        </select>
+        <div class="collapse" id="filterCollapse">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="fw-medium form-label">Lead Committee</label>
+                            <select id="filterLeadCommitee" class="form-control" style="width : 100%;">
+                                <option value="*">All</option>
+                                @foreach ($agendas as $agenda)
+                                    <option value="{{ $agenda->id }}">{{ $agenda->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="fw-medium form-label">Expanded Committee</label>
+                            <select id="filterExpandedCommittee" class="form-select" style="width : 100%;">
+                                <option value="*">All</option>
+                                @foreach ($agendas as $agenda)
+                                    <option value="{{ $agenda->id }}">{{ $agenda->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="fw-medium">Expanded Committee</label>
-                        <select id="filterExpandedCommittee" class="form-select">
-                            <option value="*">All</option>
-                            @foreach ($agendas as $agenda)
-                                <option value="{{ $agenda->id }}">{{ $agenda->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="form-group">
-                        <label>Search by content</label>
-                        <input id="filterByContent" class="form-control">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="form-label">Search by content</label>
+                            <input id="filterByContent" class="form-control" placeholder="Enter phrase or word">
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
     <div class="card">
         <div class="card-header bg-dark justify-content-between align-items-center d-flex">
-            <h6 class="card-title text-white h6">Committees</h6>
-            <a href="{{ route('committee.create') }}" class="btn btn-light fw-bold">
-                Add New Committee
-            </a>
+            <h6 class="card-title text-white h6 fw-medium">Committees</h6>
+            <div>
+                <a href="{{ route('committee.create') }}" class="btn btn-light fw-medium">
+                    Add New Committee
+                </a>
+            </div>
         </div>
         <div class="card-body">
             <table class="table table-striped table-bordered" id="committees-table" width="100%">
                 <thead>
                     <tr class="bg-light">
-                        <th class="p-3 border text-dark">Name</th>
-                        <th class="p-3 border text-dark">Submitted By</th>
+                        <th class="p-3 border text-dark align-middle" style="width:130px;">Name</th>
+                        <th class="p-3 border text-dark text-center" style="width:180px;">Submitted By</th>
                         <th class="p-3 border text-dark">Lead Committee</th>
                         <th class="p-3 border text-dark">Expanded Committee</th>
                         <th class="p-3 border text-dark text-center">Status</th>
@@ -105,9 +119,7 @@
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="{{ asset('assets/js/custom/committee.js') }}"></script>
         <script>
-            $('select#filterLeadCommitee, select#filterExpandedCommittee').select2({
-                theme: "classic"
-            });
+            $('select#filterLeadCommitee, select#filterExpandedCommittee').select2({});
         </script>
     @endpush
 @endsection

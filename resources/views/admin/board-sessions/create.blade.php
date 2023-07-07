@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-2')
 @prepend('page-css')
 
     @endpush

@@ -10,7 +10,7 @@ final class DivisionController extends Controller
     public function __invoke(DivisionRepository $divisionRepository)
     {
         return view('user.division.index', [
-            'division' => $divisionRepository->get()
+            'division' => $divisionRepository->get(),
         ]);
     }
 }

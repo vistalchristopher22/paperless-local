@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\UserService;
 use Closure;
 use Illuminate\Http\Request;
-use App\Services\UserService;
 use Symfony\Component\HttpFoundation\Response;
 
 class VerifyUser
@@ -20,7 +20,7 @@ class VerifyUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($this->userService->verify(request()->password, auth()->user())) {
+        if ($this->userService->verify(request()->password, auth()->user())) {
             return $next($request);
         } else {
             return response()->json(['message' => 'Invalid Password', 'success' => false]);

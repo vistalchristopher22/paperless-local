@@ -2,15 +2,14 @@
 
 namespace App\Pipes\Committee\Filter;
 
-use Closure;
 use App\Contracts\Pipes\IPipeHandler;
+use Closure;
 
 final class LeadCommitteeFilter implements IPipeHandler
 {
     public function __construct()
     {
     }
-
 
     public function handle(mixed $payload, Closure $next)
     {

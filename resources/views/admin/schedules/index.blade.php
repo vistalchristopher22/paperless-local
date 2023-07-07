@@ -172,7 +172,7 @@
                         }
 
                         if (allDates.length !== 1) {
-                            window.location.href = `/schedule-merge-committee/${allDates.join('&')}`;
+                            window.location.href = `${route('committee-meeting-schedule.show', allDates.join('&'))}`
                             return false;
                         } else {
 
@@ -191,7 +191,6 @@
                     },
                     eventDrop: function(event) {
                         let date = $.fullCalendar.formatDate(event.start, "MM/DD/YYYY");
-                        console.log(event, date);
                         $.ajax({
                             url: `/api/schedule-move/${event.id}`,
                             method: 'PUT',

@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
-final class CommitteeMeetingController extends Controller
+final class ScheduleController extends Controller
 {
     public function index()
     {
-        return view('admin.committee-meeting.index');
+        return view('admin.schedules.index');
     }
 }
