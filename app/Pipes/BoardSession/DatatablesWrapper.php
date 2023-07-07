@@ -20,20 +20,20 @@ final class DatatablesWrapper implements IPipeHandler
                 return $boardSession->created_at->format('F d, Y h:i A');
             })
             ->addColumn('action', function ($boardSession) {
-                $editButton = '<a href="'.route('board-sessions.edit', $boardSession->id).'" class="dropdown-item text-primary text-center fw-medium cursor-pointer">Edit</a>';
-                $showButton = '<a href="'.route('board-sessions.show', $boardSession->id).'" class="dropdown-item text-primary text-center fw-medium cursor-pointer">View</a>';
-                $lockedButton = '<a data-id='.$boardSession->id.' class="dropdown-item text-primary btn-lock-session text-center fw-medium cursor-pointer">Lock</a>';
-                $unlockedButton = '<a data-id='.$boardSession->id.' class="dropdown-item text-primary btn-unlock-session text-center fw-medium cursor-pointer"> Unlock</a>';
-                $deleteButton = '<a data-id='.$boardSession->id.' class="dropdown-item text-danger btn-delete-session text-center fw-medium cursor-pointer"> Delete</a>';
+                $editButton = '<a href="' . route('board-sessions.edit', $boardSession->id) . '" class="dropdown-item text-primary text-center fw-medium cursor-pointer">Edit</a>';
+                $showButton = '<a href="' . route('board-sessions.show', $boardSession->id) . '" class="dropdown-item text-primary text-center fw-medium cursor-pointer">View</a>';
+                $lockedButton = '<a data-id=' . $boardSession->id . ' class="dropdown-item text-primary btn-lock-session text-center fw-medium cursor-pointer">Lock</a>';
+                $unlockedButton = '<a data-id=' . $boardSession->id . ' class="dropdown-item text-primary btn-unlock-session text-center fw-medium cursor-pointer"> Unlock</a>';
+                $deleteButton = '<a data-id=' . $boardSession->id . ' class="dropdown-item text-danger btn-delete-session text-center fw-medium cursor-pointer"> Delete</a>';
                 if ($boardSession->status == BoardSessionStatus::LOCKED->value) {
                     return '<div class="dropdown">
                             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownAction" data-bs-toggle="dropdown" aria-expanded="false">
                                 Actions
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownAction" style="">
-                                <li>'.$showButton.'</li>
+                                <li>' . $showButton . '</li>
                                 <li class="dropdown-divider"></li>
-                                <li>'.$unlockedButton.' </li>
+                                <li>' . $unlockedButton . ' </li>
                             </ul>
                         </div>';
                 } else {
@@ -42,22 +42,22 @@ final class DatatablesWrapper implements IPipeHandler
                                 Actions
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownAction" style="">
-                                <li>'.$editButton.'</li>
+                                <li>' . $editButton . '</li>
                                 <li class="dropdown-divider"></li>
-                                <li>'.$showButton.' </li>
+                                <li>' . $showButton . ' </li>
                                 <li class="dropdown-divider"></li>
-                                <li>'.$lockedButton.' </li>
+                                <li>' . $lockedButton . ' </li>
                                 <li class="dropdown-divider"></li>
-                                <li>'.$deleteButton.' </li>
+                                <li>' . $deleteButton . ' </li>
                             </ul>
                         </div>';
                 }
             })
             ->addColumn('status', function ($boardSession) {
                 if ($boardSession->status == BoardSessionStatus::LOCKED->value) {
-                    return '<span class="badge bg-danger">'.$boardSession->status.'</span>';
+                    return '<span class="badge bg-danger">' . $boardSession->status . '</span>';
                 } else {
-                    return '<span class="badge bg-primary">'.$boardSession->status.'</span>';
+                    return '<span class="badge bg-primary">' . $boardSession->status . '</span>';
                 }
             })
             ->addColumn('published', function ($boardSession) {

@@ -27,10 +27,10 @@ final class NotifyUpdatedCommittee implements IPipeHandler
 
         $clientID = $res['sid'];
 
-        $this->client->request('POST', 'http://localhost:3030/socket.io/?EIO=4&transport=polling&sid='.$clientID, ['body' => '40']);
-        $this->client->request('GET', 'http://localhost:3030/socket.io/?EIO=4&transport=polling&sid='.$clientID);
-        $this->client->request('POST', 'http://localhost:3030/socket.io/?EIO=4&transport=polling&sid='.$clientID, [
-            'body' => '42["NOTIFY_UPDATED_COMMITTEE", "submitted='.$payload?->submitted?->id.'&name='.$payload->name.'"]',
+        $this->client->request('POST', 'http://localhost:3030/socket.io/?EIO=4&transport=polling&sid=' . $clientID, ['body' => '40']);
+        $this->client->request('GET', 'http://localhost:3030/socket.io/?EIO=4&transport=polling&sid=' . $clientID);
+        $this->client->request('POST', 'http://localhost:3030/socket.io/?EIO=4&transport=polling&sid=' . $clientID, [
+            'body' => '42["NOTIFY_UPDATED_COMMITTEE", "submitted=' . $payload?->submitted?->id . '&name=' . $payload->name . '"]',
         ]);
 
         return $next($payload);

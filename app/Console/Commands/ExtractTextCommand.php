@@ -29,12 +29,12 @@ class ExtractTextCommand extends Command
     public function handle()
     {
         $record = Committee::find($this->argument('id'));
-        $escaped_path = escapeshellarg(CommitteeFileUtility::draftCommitteesDirectory() .  basename($record->file_path));
+        $escaped_path = escapeshellarg(CommitteeFileUtility::draftCommitteesDirectory() . basename($record->file_path));
         $data = shell_exec(' ' . escapeshellarg(env('LIBRE_DIRECTORY')) . ' --headless --cat ' . $escaped_path);
         $data = preg_replace('/[\n\t]/', '', $data);
         $content = Str::of($data)->remove("\n")
-                             ->remove("\t")
-                             ->ascii($data);
+            ->remove("\t")
+            ->ascii($data);
         $record->content = $content;
         $record->save();
         $this->info('Successfully extract and saved all the text inside the file.');

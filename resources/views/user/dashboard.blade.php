@@ -1,7 +1,7 @@
 @extends('layouts.app-2')
 @section('page-title', 'Dashboard')
 @prepend('page-css')
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.css' />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.css'/>
 @endprepend
 @section('content')
     <div class="card">
@@ -84,18 +84,18 @@
                 selectHelper: true,
                 eventSources: [{
                     url: `/api/schedules`,
-                    failure: function() {
+                    failure: function () {
                         alert(
                             'there was an error while fetching events try to reload the page.'
                         );
                     },
                 }],
-                eventClick: function(info) {
+                eventClick: function (info) {
                     selectedDate = $.fullCalendar.formatDate(info.start, "MM/DD/YYYY");
                     selectedEvent = info;
                     $.ajax({
                         url: `/api/schedule/${info.id}`,
-                        success: function(response) {
+                        success: function (response) {
                             type = 'PUT';
                             $('#addScheduleModalLabel').text('VIEW SCHEDULE');
                             $('#name').val(response.name);
@@ -114,7 +114,7 @@
                         }
                     });
                 },
-                select: function(start, end, allDay) {
+                select: function (start, end, allDay) {
                     var allDates = [];
                     var currentDate = start.clone();
                     while (currentDate < end) {

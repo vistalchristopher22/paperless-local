@@ -24,7 +24,7 @@ function formatSizeUnits($bytes)
         return '0 bytes';
     }
 
-    $i = (int) floor(log($bytes, 1024));
+    $i = (int)floor(log($bytes, 1024));
     $size = number_format($bytes / (1024 ** $i), 2);
     $unit = $units[$i];
 

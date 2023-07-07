@@ -28,7 +28,7 @@ class ServiceCommand extends Command
     {
         $name = $this->argument('name');
 
-        $stub = File::get(base_path().'/stubs/service.stub');
+        $stub = File::get(base_path() . '/stubs/service.stub');
 
         $stub = str_replace('{{class}}', $name, $stub);
 

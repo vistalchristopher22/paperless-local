@@ -31,7 +31,7 @@ final class CommitteeFileUtility
 
     public static function generatePathForViewing(string $outputDirectory, string $fileName): string
     {
-        $fullDirectory = $outputDirectory.self::changeExtension($fileName);
+        $fullDirectory = $outputDirectory . self::changeExtension($fileName);
 
         return Str::of($fullDirectory)
             ->remove(self::correctDirectorySeparator(public_path()), $fullDirectory)
@@ -40,7 +40,7 @@ final class CommitteeFileUtility
 
     public static function publicDirectoryForViewing(): string
     {
-        return self::correctDirectorySeparator(public_path().DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'committees'.DIRECTORY_SEPARATOR);
+        return self::correctDirectorySeparator(public_path() . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'committees' . DIRECTORY_SEPARATOR);
     }
 
     public static function reverseFileExtension(string $fileName): string
@@ -57,7 +57,7 @@ final class CommitteeFileUtility
 
     public static function isExists(string $file): bool
     {
-        return file_exists(CommitteeFileUtility::publicDirectoryForViewing().CommitteeFileUtility::changeExtension($file));
+        return file_exists(CommitteeFileUtility::publicDirectoryForViewing() . CommitteeFileUtility::changeExtension($file));
     }
 
     public static function temporaryReplaceForwardSlash(string $path): string
@@ -78,5 +78,10 @@ final class CommitteeFileUtility
     public static function draftCommitteesDirectory(): string
     {
         return self::correctDirectorySeparator(Storage::disk('DRAFT_COMMITTEES')->path('/'));
+    }
+
+    public static function copyFileToCommitteePublicDirectory(string $originalSource, string $destinationSource): void
+    {
+        copy($originalSource, $destinationSource);
     }
 }

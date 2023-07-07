@@ -2,7 +2,7 @@
 @section('page-title', 'File Manager')
 @prepend('page-css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/dropzone.min.css"
-        crossorigin="anonymous" />
+          crossorigin="anonymous"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js" crossorigin="anonymous">
     </script>
     <style>
@@ -143,7 +143,7 @@
                     <!-- Button Group -->
                     <div class="button-items">
                         <button type="button" id="buttonFilter" class="btn btn-secondary btn-square dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-expanded="false"><span>File Type</span> <i
+                                data-bs-toggle="dropdown" aria-expanded="false"><span>File Type</span> <i
                                 class="mdi mdi-chevron-down"></i></button>
                         <div class="dropdown-menu" style="">
                             <a class="dropdown-item filter-file-type" data-type="*" href="#">
@@ -200,8 +200,9 @@
         <!-- End Folders -->
 
         <div class="progress rounded-0"
-            style="position:fixed; bottom :0%; z-index:9999999; right:0%; left:0%; background :white;">
-            <div class="progress-bar rounded-0" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+             style="position:fixed; bottom :0%; z-index:9999999; right:0%; left:0%; background :white;">
+            <div class="progress-bar rounded-0" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                 aria-valuemax="100">
             </div>
         </div>
 
@@ -221,7 +222,8 @@
         <div class="offcanvas offcanvas-end" style="width : 450px;" tabindex="-1" id="detailsOffcanvas">
             <div class="offcanvas-header">
                 <h6 class="offcanvas-title text-white card-title">Details</h6>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
             </div>
             <div class="offcanvas-body"></div>
         </div>
@@ -235,7 +237,7 @@
                     </div>
                     <div class="modal-body p-0 m-0">
                         <iframe src="" frameborder="0" width="100%" height="110%"
-                            style="position:absolute; top :-6%;"></iframe>
+                                style="position:absolute; top :-6%;"></iframe>
                     </div>
                 </div>
             </div>
@@ -252,7 +254,7 @@
                         <div class="form-group">
                             <label for="currentDirectory">Directory</label>
                             <input type="text" class="form-control" id="currentDirectory" name="currentDirectory"
-                                value="" required readonly>
+                                   value="" required readonly>
                             <div class="invalid-feedback">
                                 Please enter a valid file name.
                             </div>
@@ -261,7 +263,7 @@
                         <div class="form-group">
                             <label for="currentFileName">Current File Name</label>
                             <input type="text" class="form-control" id="currentFileName" name="currentFileName"
-                                value="" required readonly>
+                                   value="" required readonly>
                             <div class="invalid-feedback">
                                 Please enter a valid file name.
                             </div>
@@ -269,7 +271,7 @@
                         <div class="form-group">
                             <label for="newFileName">New File Name</label>
                             <input type="text" class="form-control" id="newFileName" name="newFileName"
-                                value="" required>
+                                   value="" required>
                             <div class="invalid-feedback">
                                 Please enter a valid file name.
                             </div>
@@ -296,8 +298,7 @@
             let selectedFiles = {};
 
 
-
-            $('#files').on('contextmenu', '.card', function(event) {
+            $('#files').on('contextmenu', '.card', function (event) {
                 // Prevent the default context menu from appearing
                 event.preventDefault();
 
@@ -317,10 +318,10 @@
 
                 // Add some options to the context menu
                 const detailsOption = $(`<div>
-                    <i class="mdi mdi-file-document-outline "></i> Details    
+                    <i class="mdi mdi-file-document-outline "></i> Details
                 </div>`);
 
-                detailsOption.on('click', function() {
+                detailsOption.on('click', function () {
                     let directory = card.find('.file-name').attr('data-path');
                     let fileName = card.find(`.file-name`).text();
                     $.ajax({
@@ -330,7 +331,7 @@
                             path: fileName,
                             directory: directory,
                         },
-                        success: function(response) {
+                        success: function (response) {
                             let data = response;
 
                             let html = $('<div class="row mb-3">');
@@ -379,7 +380,7 @@
                                 data: {
                                     file_path: `${data.directory}/${data.name}`,
                                 },
-                                success: function(data) {
+                                success: function (data) {
                                     if (response.type === 'docx') {
                                         data.map((attachment) => {
                                             let {
@@ -417,10 +418,10 @@
 
                 // Add some options to the context menu
                 const showInExplorerOption = $(`<div>
-                    <i class="mdi mdi-folder-outline "></i> Show in explorer    
+                    <i class="mdi mdi-folder-outline "></i> Show in explorer
                 </div>`);
 
-                showInExplorerOption.on('click', function() {
+                showInExplorerOption.on('click', function () {
                     let directory = card.find('.file-name').attr('data-path');
                     let fileName = card.find(`.file-name`).text();
                     $.ajax({
@@ -430,7 +431,7 @@
                             directory: directory,
                             name: fileName,
                         },
-                        success: function(response) {
+                        success: function (response) {
 
                         },
                     });
@@ -439,10 +440,10 @@
                 contextMenu.append(showInExplorerOption);
 
                 const previewOption = $(`<div>
-                    <i class="mdi mdi-eye-circle-outline"></i> Preview    
+                    <i class="mdi mdi-eye-circle-outline"></i> Preview
                 </div>`);
 
-                previewOption.on('click', function() {
+                previewOption.on('click', function () {
                     let fileName = card.find('.file-name').text();
                     let path = card.find('.file-name').attr('data-path');
 
@@ -450,7 +451,7 @@
                         socket.emit('PREVIEW_DOC_FILE', {
                             file_path: `${path}\\${fileName}`,
                         });
-                        return;
+
                     } else {
                         $.ajax({
                             url: route('file.preview'),
@@ -459,7 +460,7 @@
                                 fileName,
                                 path,
                             },
-                            success: function(response) {
+                            success: function (response) {
                                 $('#previewModal iframe').attr('src', response.destination);
                                 $('#previewModal').modal('show');
                             }
@@ -474,7 +475,7 @@
                     <i class="mdi mdi-download-outline"></i> Download
                 </div>`);
 
-                downloadOption.on('click', function() {
+                downloadOption.on('click', function () {
                     let fileName = card.find(`.file-name`).text();
                     let directory = card.find('.file-name').attr('data-path');
                     alert(fileName, directory);
@@ -486,7 +487,7 @@
                     <i class="mdi mdi-pencil-outline"></i> Rename
                 </div>`);
 
-                renameOption.on('click', function() {
+                renameOption.on('click', function () {
                     $('#currentDirectory').val(card.find('.file-name').attr('data-path'));
                     $('#currentFileName').val(card.find(`.file-name`).text());
                     selectedCard = card;
@@ -501,21 +502,21 @@
                     <i class="mdi mdi-trash-can-outline"></i> Remove
                 </div>`);
 
-                deleteOption.on('click', function() {
+                deleteOption.on('click', function () {
                     let directory = card.find('.file-name').attr('data-path');
                     let fileName = card.find(`.file-name`).text();
                     if (_.isObject(selectedFiles) && _.size(selectedFiles) !== 0) {
                         alertify.confirm(
                             'This action will delete all the selected files. Are you sure you want to proceed?',
-                            function() {
+                            function () {
                                 $.ajax({
                                     url: route('file.delete.bulk'),
                                     method: 'DELETE',
                                     data: selectedFiles,
-                                    success: function(response) {
+                                    success: function (response) {
                                         notyf.success(response.message);
                                         _.every(selectedFiles, (file) => $(
-                                                `[data-index=${file.index}]`).parent()
+                                            `[data-index=${file.index}]`).parent()
                                             .remove());
                                         selectedFiles = {};
                                     }
@@ -525,7 +526,7 @@
                         });
                     } else {
                         alertify.confirm('This action will delete the file. Are you sure you want to proceed?',
-                            function() {
+                            function () {
                                 $.ajax({
                                     url: route('file.delete'),
                                     method: 'DELETE',
@@ -533,7 +534,7 @@
                                         path: fileName,
                                         directory: directory,
                                     },
-                                    success: function(response) {
+                                    success: function (response) {
                                         notyf.success(response.message);
                                         card.parent().remove();
                                     }
@@ -560,18 +561,18 @@
                 currentContextMenu = contextMenu;
 
                 // Add a click event listener to the document to close the context menu
-                $(document).on('click', function() {
+                $(document).on('click', function () {
                     contextMenu.remove();
                     currentContextMenu = null;
                 });
             });
 
-            $(document).on('keydown keyup', function(event) {
+            $(document).on('keydown keyup', function (event) {
                 isCtrlPressed = event.ctrlKey;
                 isShiftPressed = event.shiftKey;
             });
 
-            $('#files').on('click', '.card', function(event) {
+            $('#files').on('click', '.card', function (event) {
                 let card = $(this);
                 let isChecked = Boolean(card.attr('is-checked'));
                 let fileName = card.find('.file-name').text();
@@ -629,7 +630,7 @@
                 }
             });
 
-            $(document).on('click', '.new-upload-file', function() {
+            $(document).on('click', '.new-upload-file', function () {
                 let card = $(this);
                 let isChecked = Boolean(card.attr('is-checked'));
                 let fileName = card.find('.file-name').text();
@@ -688,8 +689,7 @@
             });
 
 
-
-            $('#btnRename').click(function() {
+            $('#btnRename').click(function () {
                 $.ajax({
                     url: route('file.update'),
                     method: 'POST',
@@ -698,12 +698,12 @@
                         oldName: $('#currentFileName').val(),
                         directory: $('#currentDirectory').val(),
                     },
-                    success: function(response) {
+                    success: function (response) {
                         selectedCard.find('.file-name').text($('#newFileName').val());
                         $('#renameModal').modal('toggle');
                         notyf.success(response.message);
                     },
-                    error: function(response) {
+                    error: function (response) {
                         notyf.error(response.responseJSON.message);
                     }
                 })
@@ -720,20 +720,20 @@
             }
         </script>
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 let breadCrumbTrack = ['Home'];
                 let currentPath = "C:\\laragon\\www\\paperless\\storage\\app\\source";
                 let directoriesTrack = [currentPath];
 
                 loadFilesAndDirectories(currentPath);
 
-                $('#breadcrumb').on('click', 'a', function(e) {
+                $('#breadcrumb').on('click', 'a', function (e) {
                     e.preventDefault();
                     let path = $(this).data('path');
                     loadFilesAndDirectories(path);
                 });
 
-                $('#directories').on('dblclick', '.col[data-path]', function(e) {
+                $('#directories').on('dblclick', '.col[data-path]', function (e) {
                     e.preventDefault();
                     let path = $(this).data('path');
                     loadFilesAndDirectories(path);
@@ -767,7 +767,7 @@
                         data: {
                             path: path
                         },
-                        success: function(data) {
+                        success: function (data) {
                             if (path !== currentPath) {
                                 var currentPathIndex = directoriesTrack.indexOf(path);
                                 if (currentPathIndex === -1) {
@@ -844,12 +844,12 @@
                                         '/assets-2/images/widgets/pdf-icon.svg').attr('alt',
                                         'File Icon');
                                 } else if (file.basename.includes('.xlsx') || file.basename.includes(
-                                        '.xls')) {
+                                    '.xls')) {
                                     var $img = $('<img>').addClass('img-fluid w-25').attr('src',
                                         '/assets-2/images/widgets/google-sheets-icon.svg').attr('alt',
                                         'File Icon');
                                 } else if (file.basename.includes('.png') || file.basename.includes(
-                                        '.jpg') || file.basename.includes('.jpeg') || file.basename
+                                    '.jpg') || file.basename.includes('.jpeg') || file.basename
                                     .includes(
                                         '.webp')) {
                                     var $img = $('<img>').addClass('img-fluid w-25').attr('src',
@@ -880,7 +880,7 @@
                             }
                             $('#files').empty().append($fileRow);
                         },
-                        error: function() {
+                        error: function () {
                             $('#directories').html(
                                 '<p class="text-center text-danger">There was an error loading the directories. Please try again.</p>'
                             );
@@ -891,7 +891,7 @@
                     });
                 }
 
-                $(document).on('click', '.filter-file-type', function() {
+                $(document).on('click', '.filter-file-type', function () {
                     let fileType = $(this).attr('data-type');
                     $('#buttonFilter').text($(this).text());
 
@@ -899,13 +899,13 @@
 
                     if (fileType !== '*') {
                         $.ajax({
-                            url: `/admin/files/filter/type`,
+                            url: route('file.filter'),
                             method: 'POST',
                             data: {
                                 type: fileType,
                                 directory: currentDirectory,
                             },
-                            success: function(data) {
+                            success: function (data) {
                                 updateBreadcrumbNavigation();
                                 let directories = data.directories;
                                 let directoryRow = $('<div>').addClass(
@@ -971,7 +971,7 @@
                                         .includes(
                                             '.xls')) {
                                         fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
-                                                '/assets-2/images/widgets/google-sheets-icon.svg')
+                                            '/assets-2/images/widgets/google-sheets-icon.svg')
                                             .attr(
                                                 'alt',
                                                 'File Icon');
@@ -982,7 +982,7 @@
                                         .includes(
                                             '.webp')) {
                                         fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
-                                                '/assets-2/images/widgets/image-placeholder.svg')
+                                            '/assets-2/images/widgets/image-placeholder.svg')
                                             .attr(
                                                 'alt',
                                                 'File Icon');
@@ -999,7 +999,7 @@
 
                                     var details = $('<div>').addClass('mt-3');
                                     var title = $(
-                                            `<h6 class="file-name" data-path="${file.directory}">`)
+                                        `<h6 class="file-name" data-path="${file.directory}">`)
                                         .addClass(
                                             '').text(file.basename);
                                     var date = $('<p>').addClass('small').text('Last Modified: ' +
@@ -1008,7 +1008,7 @@
                                     var size = $('<p>').addClass('small').text('Size: ' +
                                         formatBytes(
                                             file
-                                            .size));
+                                                .size));
                                     cardBody.append(fileIcon);
                                     details.append(title).append(date).append(size);
                                     card.append(cardBody).append(details);
@@ -1031,7 +1031,7 @@
             Dropzone.autoDiscover = false;
             let myDropzone = new Dropzone("#files", {
                 url: route('file.store'),
-                success: function(file, response) {
+                success: function (file, response) {
                     setTimeout(() => {
                         var progressBar = document.querySelector(".progress-bar");
                         progressBar.style.width = 0 + "%";
@@ -1043,7 +1043,7 @@
                         'card card-sm card-hover-shadow card-header-borderless h-100 text-center new-upload-file'
                     );
 
-                    // assign data-index by getting the number of cards with .file-name class 
+                    // assign data-index by getting the number of cards with .file-name class
                     $card.attr('data-index', $('.file-name').length + 1);
 
                     var $cardBody = $('<div>').addClass(
@@ -1055,7 +1055,7 @@
                             '/assets-2/images/widgets/pdf-icon.svg').attr('alt',
                             'File Icon');
                     } else if (response.fileName.includes('.xlsx') || response.fileName.includes(
-                            '.xls')) {
+                        '.xls')) {
                         var $img = $('<img>').addClass('img-fluid w-25').attr('src',
                             '/assets-2/images/widgets/google-sheets-icon.svg').attr('alt',
                             'File Icon');
@@ -1088,20 +1088,20 @@
 
                     $('#file-list').append($col);
                 },
-                error: function(file, message) {
+                error: function (file, message) {
                     // This function is executed when an error occurs during the file upload
                     console.log("Error uploading file:", message);
                 }
             });
 
-            myDropzone.on("sending", function(file, xhr, formData) {
+            myDropzone.on("sending", function (file, xhr, formData) {
                 // Update the progress bar when the file upload starts
                 var progressBar = document.querySelector(".progress-bar");
                 progressBar.style.width = "0%";
                 progressBar.setAttribute("aria-valuenow", 0);
             });
 
-            myDropzone.on("uploadprogress", function(file, progress, bytesSent) {
+            myDropzone.on("uploadprogress", function (file, progress, bytesSent) {
                 // Update the progress bar while the file is uploading
                 var progressBar = document.querySelector(".progress-bar");
                 progressBar.style.width = progress + "%";

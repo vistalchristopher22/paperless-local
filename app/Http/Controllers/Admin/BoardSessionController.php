@@ -61,7 +61,7 @@ final class BoardSessionController extends Controller
     {
         $boardSession = $this->boardSessionRepository->findBy('id', $id);
 
-        if (! $this->documentService->isPDF($boardSession->file_path)) {
+        if (!$this->documentService->isPDF($boardSession->file_path)) {
             Artisan::call('convert:path', ['path' => $boardSession->file_path]);
         }
 

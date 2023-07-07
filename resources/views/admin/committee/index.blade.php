@@ -1,10 +1,13 @@
 @extends('layouts.app-2')
 @section('tab-title', 'Sangguniang Panlalawigan Members')
 @prepend('page-css')
-    <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('/assets-2/plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{{ asset('/assets-2/plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet"
+          type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 @endprepend
 @section('content')
     @if (Session::has('success'))
@@ -18,11 +21,11 @@
         <div class="card-header bg-dark d-flex justify-content-between align-items-center" id="filterHeader">
             <h6 class="card-title h6 fw-medium text-white">What are you looking for?</h6>
             <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse"
-                aria-expanded="false" aria-controls="filterCollapse">
+                    aria-expanded="false" aria-controls="filterCollapse">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-funnel-fill" viewBox="0 0 16 16">
+                     class="bi bi-funnel-fill" viewBox="0 0 16 16">
                     <path
-                        d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z" />
+                        d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
                 </svg>
                 Advanced Filters
             </button>
@@ -76,8 +79,9 @@
             </div>
         </div>
         <div class="card-body">
-            <table class="table table-striped table-bordered" id="committees-table" width="100%">
-                <thead>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" id="committees-table" width="100%">
+                    <thead>
                     <tr class="bg-light">
                         <th class="p-3 border text-dark align-middle" style="width:130px;">Name</th>
                         <th class="p-3 border text-dark text-center" style="width:180px;">Submitted By</th>
@@ -87,14 +91,14 @@
                         <th class="p-3 border text-dark text-center">Submitted At</th>
                         <th class="p-3 border text-center text-dark">Actions</th>
                     </tr>
-                </thead>
-
-            </table>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
 
     <div class="offcanvas offcanvas-end border-0" style="width:450px;" tabindex="-1" id="offCanvasCommittee"
-        aria-labelledby="offCanvasCommitteeTitle">
+         aria-labelledby="offCanvasCommitteeTitle">
         <div class="offcanvas-header position-relative">
             <div class="d-flex flex-column w-100">
                 <h5 class="offcanvas-title mb-3" id="offCanvasCommitteeTitle"></h5>

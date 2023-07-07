@@ -31,7 +31,7 @@ class PipeCommand extends Command
     {
         $name = $this->argument('name');
 
-        $stub = File::get(base_path().'/stubs/pipe.stub');
+        $stub = File::get(base_path() . '/stubs/pipe.stub');
 
         $stub = str_replace('{{name}}', basename($name), $stub);
 
@@ -40,7 +40,7 @@ class PipeCommand extends Command
 
         $stub = str_replace('{{namespace}}', rtrim($namespace, '\\'), $stub);
 
-        if (! is_dir(dirname($directory))) {
+        if (!is_dir(dirname($directory))) {
             File::makeDirectory(dirname($directory), $mode = 0777, $recursive = true);
         }
         if (File::exists($directory)) {

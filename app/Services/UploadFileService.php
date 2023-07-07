@@ -10,7 +10,7 @@ final class UploadFileService implements IUploadService
 {
     public function handle(UploadedFile $file, string $directoryName = null)
     {
-        $filename = time().'_'.$file->getClientOriginalName();
+        $filename = time() . '_' . $file->getClientOriginalName();
         $directoryName = str_replace(' ', '_', $directoryName);
         $directory = Storage::disk('source')->putFileAs($directoryName, $file, $filename);
 

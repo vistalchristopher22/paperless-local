@@ -117,7 +117,7 @@ let table = $('#committees-table').DataTable({
 
 table.on('draw', function () {
     if ($('#filterByContent').val()) {
-        var rows = table.rows({ search: 'applied' }).nodes();
+        var rows = table.rows({search: 'applied'}).nodes();
 
         $.each(rows, function (index) {
             var tr = $(this).closest('tr');

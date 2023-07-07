@@ -15,7 +15,7 @@ final class DeleteFileUpload implements IPipeHandler
     {
 
         $payload['file_name'] = basename($payload['file_path']);
-        unlink(storage_path('app/public/board-sessions/'.$payload['file_name']));
+        unlink(storage_path('app/public/board-sessions/' . $payload['file_name']));
 
         return $next($payload);
     }

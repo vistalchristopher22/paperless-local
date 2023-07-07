@@ -15,7 +15,7 @@ final class CommitteeViewComposer
     /**
      * Create a new category composer.
      *
-     * @param  Category  $committees
+     * @param Category $committees
      * @return void
      */
     public function __construct(Committee $committee)

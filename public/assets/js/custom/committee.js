@@ -74,7 +74,6 @@ let table = $('#committees-table').DataTable({
 });
 
 
-
 let searchTimeout;
 const searchInput = $('#committees-table_filter input');
 const delay = 300;

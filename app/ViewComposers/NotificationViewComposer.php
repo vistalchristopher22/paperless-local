@@ -18,7 +18,7 @@ final class NotificationViewComposer
     /**
      * Create a new category composer.
      *
-     * @param  Category  $committees
+     * @param Category $committees
      * @return void
      */
     public function __construct(UserNotification $notifications)

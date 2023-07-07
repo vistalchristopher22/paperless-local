@@ -14,7 +14,7 @@ final class MongoStoreInCollection implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        $response = Http::post(config('app.node_url').'/committees', $payload);
+        $response = Http::post(config('app.node_url') . '/committees', $payload);
 
         if ($response->ok()) {
             $committee = $response->json();
