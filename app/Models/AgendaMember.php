@@ -18,6 +18,6 @@ class AgendaMember extends Model
 
     public function agenda()
     {
-        return $this->belongsTo(Agenda::class);
+        return $this->belongsTo(Agenda::class, 'agenda_id', 'id');
     }
 }

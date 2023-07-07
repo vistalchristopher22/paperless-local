@@ -24,4 +24,35 @@ class SanggunianMember extends Model
             set: fn (string $value) => bcrypt($value),
         );
     }
+
+    public function agenda_chairman()
+    {
+        return $this->hasMany(Agenda::class, 'chairman', 'id');
+    }
+
+    public function agenda_vice_chairman()
+    {
+        return $this->hasMany(Agenda::class, 'vice_chairman', 'id');
+    }
+
+    public function agenda_member()
+    {
+        return $this->hasMany(AgendaMember::class, 'member', 'id');
+    }
+
+
+    public function expanded_agenda_chairman()
+    {
+        return $this->hasMany(Agenda::class, 'chairman', 'id');
+    }
+
+    public function expanded_agenda_vice_chairman()
+    {
+        return $this->hasMany(Agenda::class, 'vice_chairman', 'id');
+    }
+
+    public function expanded_agenda_member()
+    {
+        return $this->hasMany(AgendaMember::class, 'member', 'id');
+    }
 }

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+          rel="stylesheet">
     <title>401 Unauthorized</title>
     <style>
         * {
@@ -43,11 +43,12 @@
         }
 
         .button_wrapper {
-            display:flex;
+            display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: center;
         }
+
         .custom-btn {
             width: auto;
             height: auto;
@@ -59,10 +60,10 @@
             position: relative;
             display: inline-block;
             box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
-                7px 7px 20px 0px rgba(0, 0, 0, .1),
-                4px 4px 5px 0px rgba(0, 0, 0, .1);
+            7px 7px 20px 0px rgba(0, 0, 0, .1),
+            4px 4px 5px 0px rgba(0, 0, 0, .1);
             outline: none;
-            padding : 15px;
+            padding: 15px;
         }
 
         /* 1 */
@@ -75,13 +76,13 @@
 </head>
 
 <body>
-    <div>
-        <h1 class="code_error">401</h1>
-        <p class="code_text">Unauthorized Access</p>
-        <div class="button_wrapper">
-            <button class="custom-btn btn-1">Go Back</button>
-        </div>
+<div>
+    <h1 class="code_error">401</h1>
+    <p class="code_text">Unauthorized Access</p>
+    <div class="button_wrapper">
+        <button class="custom-btn btn-1">Go Back</button>
     </div>
+</div>
 </body>
 
 </html>

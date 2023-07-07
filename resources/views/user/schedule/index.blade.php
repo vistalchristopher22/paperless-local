@@ -53,28 +53,6 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <div class="btn-group float-end" role="group">
-
-                <div class="btn-group">
-                    <button type="button" class="btn btn-light dropdown-toggle" id="uploadGroupDropdown"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i data-feather="align-justify"></i>
-                    </button>
-
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="uploadGroupDropdown">
-                        <a class="dropdown-item d-flex flex-row align-items-center" target="_blank"
-                            href="{{ route('display.published.meeting', $dates) }}">
-                            <i class="mdi mdi-eye mdi-18px mx-2"></i>
-                            View
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" target="_blank" href="{{ route('user.schedules.print', $dates) }}">
-                            <i class="mdi mdi-printer mdi-18px mx-2"></i>
-                            Print
-                        </a>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="card-body">
             <div

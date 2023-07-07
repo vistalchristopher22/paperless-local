@@ -21,7 +21,6 @@ final class FileUpload implements IPipeHandler
             $session = $payload['boardSession'] ?? $payload['session'];
             $session->file_path = $this->service->handle($payload['file_path'], 'board-sessions');
             $session->save();
-
             return $next($payload);
         }
 
