@@ -38,7 +38,6 @@
                         <th class="fw-medium text-center border text-dark">Unassigned Content</th>
                         <th class="fw-medium text-center border text-dark">Announcement Title</th>
                         <th class="fw-medium text-center border text-dark">Announcement Content</th>
-                        <th class="fw-medium text-center border text-dark">Published</th>
                         <th class="fw-medium text-center border text-dark">Status</th>
                         <th class="fw-medium text-center border text-dark">Created At</th>
                         <th class="fw-medium text-center border text-dark">Action</th>
@@ -87,11 +86,6 @@
                             className: 'border',
                             data: 'announcement_content',
                             name: 'announcement_content'
-                        },
-                        {
-                            className: 'border text-center',
-                            data: 'published',
-                            name: 'published'
                         },
                         {
                             className: 'border text-center',

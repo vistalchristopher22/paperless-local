@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>SP-Committee Sched Meeting</title>
+    <title>Today's Scheduled Committee Meeting</title>
 
     <!-- Vendor CSS -->
     <link rel="stylesheet" href="/assets/css/libs.bundle.css"/>
@@ -109,36 +109,17 @@
             margin: 0px;
         }
 
+        .highlighted-text {
+            background-color: yellow;
+        }
     </style>
 </head>
 <body>
-{{--<nav class="navbar navbar-expand-lg bg-dark">--}}
-{{--    <div class="container-fluid">--}}
-{{--        <div class="collapse navbar-collapse" id="navbarSupportedContent">--}}
-{{--            <ul class="navbar-nav me-auto mb-2 mb-lg-0">--}}
-{{--                <li class="nav-item">--}}
-{{--                    <a class="nav-link active text-light" aria-current="page" href="#">Home</a>--}}
-{{--                </li>--}}
-{{--                <li class="nav-item dropdown">--}}
-{{--                    <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown"--}}
-{{--                       aria-expanded="false">--}}
-{{--                        Sessions--}}
-{{--                    </a>--}}
-{{--                    <ul class="dropdown-menu">--}}
-{{--                        <li><a class="dropdown-item text-dark" href="#">Action</a></li>--}}
-{{--                        <li><a class="dropdown-item text-dark" href="#">Another action</a></li>--}}
-{{--                    </ul>--}}
-{{--                </li>--}}
-{{--            </ul>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</nav>--}}
-
 
 <div class="row">
     <div class="col-lg-2 pe-0 d-sm-none d-none d-lg-block d-md-block">
         <div data-simplebar style="height:100vh;" data-simplebar-auto-hide="false">
-            <div class="list-group list-group-flush border-bottom scrollarea">
+            <div class="list-group list-group-flush scrollarea">
                 <div class="input-group my-2 rounded-0">
                     <span class="input-group-text" id="basic-addon1">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -157,7 +138,8 @@
                 </div>
 
                 @foreach($members as $member)
-                    <a href="#" class="list-group-item list-group-item-action list-group-members-item py-3 lh-tight"
+                    <a href="#"
+                       class="sanggunian-member-item list-group-item list-group-item-action list-group-members-item py-3 lh-tight"
                        aria-current="true"
                        data-search-content="{{ Str::of($member->fullname)->snake() }}">
                         <div class="d-flex align-items-center justify-content-start">
@@ -168,25 +150,54 @@
                         </div>
                         <div class="ms-2">
                             @foreach($member->agenda_chairman as $chairman)
-                                <div class="col-10 mb-1 mt-1 small">Chairman of {{ $chairman->title }}</div>
+                                <div class="card-title border-bottom  mb-1 mt-1 small">
+                                    Chairman <span
+                                        class="text-lowercase">of</span> <strong
+                                        class="sanggunian-member-committee">{{ $chairman->title }}</strong></div>
                             @endforeach
                             @foreach($member->agenda_vice_chairman as $vice_chairman)
-                                <div class="col-10 mb-1 mt-1 small">Vice Chairman of {{ $vice_chairman->title }}</div>
+                                <div
+                                    class="card-title border-bottom col-10 mb-1 mt-1 small">
+                                    Vice Chairman <span
+                                        class="text-lowercase">of</span> <strong
+                                        class="sanggunian-member-committee">{{ $vice_chairman->title }}</strong>
+                                </div>
                             @endforeach
                             @foreach($member->agenda_member as $agendaMember)
-                                <div class="col-10 mb-1 mt-1 small">Member of {{ $agendaMember->agenda->title }}</div>
+                                <div
+                                    class="col-10 mb-1 border-bottom mt-1 small card-title">
+                                    Member
+                                    <span class="text-lowercase">of</span>
+                                    <strong
+                                        class="sanggunian-member-committee">{{ $agendaMember->agenda->title }}</strong>
+                                </div>
                             @endforeach
                             @foreach($member->expanded_agenda_chairman as $expandedAgendaChairman)
-                                <div class="col-10 mb-1 mt-1 small">Chairman of Expanded
-                                    Committee {{ $expandedAgendaChairman->title }}</div>
+                                <div
+                                    class="card-title col-10 mb-1 mt-1 small border-bottom">
+                                    Chairman <span
+                                        class="text-lowercase">of</span> Expanded
+                                    Committee <strong
+                                        class="sanggunian-member-committee">{{ $expandedAgendaChairman->title }}</strong>
+                                </div>
                             @endforeach
                             @foreach($member->expanded_agenda_vice_chairman as $expandedAgendaViceChairman)
-                                <div class="col-10 mb-1 mt-1 small">Vice Chairman of Expanded
-                                    Committee {{ $expandedAgendaViceChairman->title }}</div>
+                                <div
+                                    class="col-10 mb-1 mt-1 small card-title border-bottom">
+                                    Vice Chairman <span
+                                        class="text-lowercase">of</span> Expanded
+                                    Committee <strong
+                                        class="sanggunian-member-committee">{{ $expandedAgendaViceChairman->title }}</strong>
+                                </div>
                             @endforeach
                             @foreach($member->expanded_agenda_member as $expandedMember)
-                                <div class="col-10 mb-1 mt-1 small">Member of Expanded
-                                    Committee {{ $expandedMember->agenda->title }}</div>
+                                <div
+                                    class="col-10 mb-1 mt-1 small card-title border-bottom">
+                                    Member <span
+                                        class="text-lowercase">of</span> Expanded
+                                    Committee <strong
+                                        class="sanggunian-member-committee">{{ $expandedMember->agenda->title }}</strong>
+                                </div>
                             @endforeach
                         </div>
                     </a>
@@ -246,7 +257,8 @@
                                         @foreach ($schedule->committees as $committee)
                                             <li class="kanban-card" data-id="{{ $committee->id }}">
                                                 <a target="_blank"
-                                                   href="{{ route('committee-file.show', $committee) }}">
+                                                   href="{{ route('committee-file.show', $committee) }}"
+                                                   class="kanban-content">
                                                     <span class="text-dark">
                                                         <span class="count-index">{{ $countIndex }}. </span>
                                                         {{ $committee->lead_committee_information->title }} /
@@ -267,7 +279,8 @@
                                         @foreach ($schedule->committees as $committee)
                                             <li class="kanban-card" data-id="{{ $committee->id }}">
                                                 <a target="_blank"
-                                                   href="{{ route('committee-file.show', $committee) }}">
+                                                   href="{{ route('committee-file.show', $committee) }}"
+                                                   class="kanban-content">
                                                     <span class="text-dark">
                                                         <span class="count-index">{{ $countIndex }}. </span>
                                                         {{ $committee->lead_committee_information->title }} /
@@ -314,6 +327,30 @@
             noResults.style.display = 'block';
         }
     });
+
+    document.querySelectorAll('.sanggunian-member-item').forEach((item) => {
+        item.addEventListener('click', function (e) {
+            let committees = [];
+            item.querySelectorAll('.sanggunian-member-committee').forEach((committee) => {
+                committees.push(committee.innerText);
+            });
+            const cards = document.querySelectorAll('li.kanban-card');
+            cards.forEach((card) => {
+                const contentElement = card.querySelector('.kanban-content');
+                // Remove any existing highlighting
+                contentElement.querySelectorAll('.highlighted-text').forEach((highlighted) => {
+                    highlighted.outerHTML = highlighted.innerHTML;
+                });
+                committees.forEach((committee) => {
+                    if (contentElement.innerText.toLowerCase().includes(committee.toLowerCase())) {
+                        const highlightedText = contentElement.innerHTML.replace(new RegExp(committee, 'gi'), '<span class="highlighted-text">$&</span>');
+                        contentElement.innerHTML = highlightedText;
+                    }
+                });
+            });
+        });
+    });
+
 </script>
 </body>
 </html>

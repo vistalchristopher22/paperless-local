@@ -4,12 +4,9 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.css'/>
 @endprepend
 @section('content')
-    {{-- Venue Modal --}}
-    <div class="clearfix">
-        <button class="btn btn-lg btn-primary mb-4 float-end" data-bs-toggle="modal" data-bs-target="#modalVenue">Add
-            Venue
-        </button>
-    </div>
+
+    <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#modalVenue">Add Venue</button>
+    <div class="clearfix"></div>
 
     <div class="modal fade" tabindex="-1" id="modalVenue">
         <div class="modal-dialog">
@@ -20,14 +17,15 @@
                 </div>
                 <form id="formVenue">
                     <div class="modal-body">
-                        <div class="form-group mt-2">
+                        <div class="form-group">
                             <label for="">Name</label>
-                            <input type="text" class="form-control form-control-lg" name="name" id="venueName"
+                            <input type="text" class="form-control" name="name" id="venueName"
                                    placeholder="Enter the name of the venue..">
+                            <span class="text-danger error-field"></span>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success btn-md" id="btnSaveVenue">Save</button>
+                        <button type="button" class="btn btn-dark btn-md" id="btnSaveVenue">Save</button>
                     </div>
                 </form>
             </div>
@@ -51,8 +49,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-dark">
                     <h5 class="modal-title text-white h6 text-uppercase" id="addScheduleModalLabel">Add Schedule</h5>
-                    <a class="text-white cursor-pointer" data-bs-dismiss="modal">
-                        <i class="fas fa-times fa-2x"></i>
+                    <a class="cursor-pointer btn-close" data-bs-dismiss="modal">
                     </a>
                 </div>
                 <div class="modal-body">
@@ -74,8 +71,9 @@
                     <div class="form-group">
                         <label class="form-label text-capitalize">Venue</label>
                         <select name="venue" id="venue" class="form-control">
-                            <option value="Session Hall">Session Hall</option>
-                            <option value="Second District">Second District</option>
+                            @foreach($venues as $venue)
+                                <option value="{{ $venue->name }}">{{ $venue->name }}</option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -163,7 +161,7 @@
                                 $('#venue').val(response.venue);
                                 $('#id').val(response.id);
                                 $('#withGuests').val(response.with_invited_guest === 1 ? "on" : "off");
-                                if(response.with_invited_guest == 1) {
+                                if (response.with_invited_guest == 1) {
                                     $('#withGuests').attr('checked', true);
                                 }
                                 $('#scheduleModal').modal('toggle');
@@ -269,26 +267,33 @@
 
                 $('#btnSaveVenue').on('click', function () {
 
-                    if (document.querySelector('#name').value == "") {
-                        document.querySelector('#name').classList.add('is-invalid');
-                    } else {
-                        $.ajax({
-                            url: 'store-venue',
-                            type: 'POST',
-                            data: $('#formVenue').serialize(),
-                            success: function (response) {
-                                if (response.success) {
-                                    notyf.success('Successfully added a venue!');
-                                    $('#modalVenue').modal('toggle');
-                                    document.querySelector('#name').value = '';
-                                }
-                            }
-                        });
+                    if (($("#venueName").val() === '')) {
+                        $('#venueName').addClass('is-invalid');
+                        return;
                     }
 
-
+                    $.ajax({
+                        url: route('venue.store'),
+                        type: 'POST',
+                        data: $('#formVenue').serialize(),
+                        success: function (response) {
+                            if (response.success) {
+                                $('#modalVenue').modal('toggle');
+                                notyf.success('Successfully added a venue!');
+                                $('#venue').append(`<option value="${$("#venueName").val()}">${$('#venueName').val()}</option>`)
+                                $("#venueName").val('');
+                            }
+                        },
+                        error: function (response) {
+                            const {errors} = response.responseJSON;
+                            Object.keys(errors).forEach(field => {
+                                const [$field] = $(`[name^='${field}']`).addClass('is-invalid').next('span.error-field');
+                                const [message] = errors[field];
+                                $($field).text(message);
+                            });
+                        }
+                    });
                 });
-
             });
         </script>
     @endpush

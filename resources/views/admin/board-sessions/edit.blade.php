@@ -109,15 +109,6 @@
                             @enderror
                         </div>
 
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="publishedCheckbox"
-                                   name="published" {{ $boardSession->is_published == 1 ? "checked" : "" }}>
-                            <label class="form-check-label" for="publishedCheckbox">Published</label>
-                            @error('published')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
                     </div>
 
 

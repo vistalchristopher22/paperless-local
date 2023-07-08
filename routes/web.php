@@ -21,23 +21,23 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SubmittedCommitteeController;
 use App\Http\Controllers\Admin\UserAccessController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VenueController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LandingPageController;
 use App\Models\SanggunianMember;
 use App\Models\Schedule;
-use App\Models\Venue;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/login');
-
 Auth::routes();
 
+Route::get('/', LandingPageController::class);
 Route::get('home', [HomeController::class, 'index'])->name('home');
+
+Route::resource('committee-file', CommitteeFileController::class);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'features:administrator'], function () {
-
         Route::get('submitted-committee/list', SubmittedCommitteeController::class);
         Route::post('re-order/agenda', [AgendaController::class, 'reOrder'])->name('agenda.re-order');
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
@@ -80,8 +80,8 @@ Route::group(['middleware' => 'auth'], function () {
             'division' => DivisionController::class,
             'committee' => CommitteeController::class,
             'schedules' => ScheduleController::class,
-            'committee-file' => CommitteeFileController::class,
             'board-sessions' => BoardSessionController::class,
+            'venue' => VenueController::class,
             'files' => FileController::class,
         ]);
     });
@@ -89,7 +89,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 // Route for SP-Member
-Route::get('sp-committee-sched-meeting', function () {
+Route::get('/scheduled/committee-meeting', function () {
     $dates = date('Y-m-d H:i:s');
     $dates = explode("&", $dates);
 
@@ -136,20 +136,24 @@ Route::get('sp-committee-sched-meeting', function () {
         'expanded_agenda_member.agenda',
     ])->get();
 
+    $sanggunianMembers = $sanggunianMembers->filter(function ($record) {
+        return
+            !$record->agenda_chairman->isEmpty() or
+            !$record->agenda_vice_chairman->isEmpty() or
+            !$record->agenda_member->isEmpty() or
+            !$record->expanded_agenda_chairman->isEmpty() or
+            !$record->expanded_agenda_vice_chairman->isEmpty() or !$record->expanded_agenda_member->isEmpty();
+    });
 
-    return view('sp-committee-sched-meeting', [
-        'members' => $sanggunianMembers,
-        'schedules' => $schedules,
-        'dates' => implode('&', $dates)
-    ]);
-})->name('sp-committee.shed');
+    if ($allSchedules->count() === 0) {
+        return view('no-schedule');
+    } else {
+        return view('sp-committee-sched-meeting', [
+            'members' => $sanggunianMembers,
+            'schedules' => $schedules,
+            'dates' => implode('&', $dates)
+        ]);
+    }
 
 
-Route::post('store-venue', function (Request $request) {
-
-    Venue::create([
-        'name' => $request->venueNmae
-    ]);
-
-    return response()->json(['success' => true]);
-});
+})->name('scheduled.committee-meeting.today');

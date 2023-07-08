@@ -12,6 +12,7 @@ final class CommitteeFileController extends Controller
 {
     public function __construct()
     {
+        $this->middleware(['auth', 'features:administrator'])->only('edit');
     }
 
     public function show(int $committee)
