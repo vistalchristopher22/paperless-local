@@ -27,7 +27,7 @@
         </div>
 
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="">
                 <table class="table table-bordered" id="order-business-table">
                     <thead>
                     <tr class="bg-light">
@@ -38,6 +38,7 @@
                         <th class="fw-medium text-center border text-dark">Unassigned Content</th>
                         <th class="fw-medium text-center border text-dark">Announcement Title</th>
                         <th class="fw-medium text-center border text-dark">Announcement Content</th>
+                        <th class="fw-medium text-center border text-dark">Publish Status</th>
                         <th class="fw-medium text-center border text-dark">Status</th>
                         <th class="fw-medium text-center border text-dark">Created At</th>
                         <th class="fw-medium text-center border text-dark">Action</th>
@@ -86,6 +87,18 @@
                             className: 'border',
                             data: 'announcement_content',
                             name: 'announcement_content'
+                        },
+                        {
+                            className: 'border text-center',
+                            data: 'is_published',
+                            name: 'is_published',
+                            render: function (data) {
+                                if (data == 1) {
+                                    return `<span class="badge badge-soft-primary">Published</span>`;
+                                }
+
+                                return ``;
+                            }
                         },
                         {
                             className: 'border text-center',
@@ -139,6 +152,13 @@
                     let id = $(this).data('id');
                     let url = route('board-sessions.locked', id);
                     showConfirmation(url, "POST", "Enter Password to Lock Session");
+                });
+
+
+                $(document).on('click', '.btn-published', function (e) {
+                    let id = $(this).data('id');
+                    let url = route('board-sessions.published', id);
+                    showConfirmation(url, "POST", "Enter Password to Published");
                 });
 
                 $(document).on('click', '.btn-unlock-session', function () {

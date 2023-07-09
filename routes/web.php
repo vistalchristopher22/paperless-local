@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Archive\FileController;
 use App\Http\Controllers\Admin\Archive\FilePreviewController;
 use App\Http\Controllers\Admin\Archive\FileShowInExplorerController;
 use App\Http\Controllers\Admin\BoardSessionController;
+use App\Http\Controllers\Admin\BoardSessionPublishPreviewController;
 use App\Http\Controllers\Admin\CommitteeController;
 use App\Http\Controllers\Admin\CommitteeFileAttachmentController;
 use App\Http\Controllers\Admin\CommitteeFileController;
@@ -50,6 +51,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('board-sessions/list', [BoardSessionController::class, 'list'])->name('board-sessions.list');
         Route::post('board-sessions/locked/{board_session}', [BoardSessionController::class, 'locked'])->name('board-sessions.locked');
         Route::post('board-sessions/unlocked/{board_session}', [BoardSessionController::class, 'unlocked'])->name('board-sessions.unlocked');
+        Route::post('board-sessions/published/{board_session}', [BoardSessionController::class, 'published'])->name('board-sessions.published');
+        Route::get('board-session/{dates}/published/preview', BoardSessionPublishPreviewController::class)->name('board-sessions-published.preview');
 
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('settings/update', [SettingController::class, 'update'])->name('settings.update');

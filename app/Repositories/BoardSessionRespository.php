@@ -45,4 +45,9 @@ final class BoardSessionRespository extends BaseRepository
 
         return $boardSession;
     }
+
+    public function published()
+    {
+        return $this->model->where('is_published', 1)->latest()->first();
+    }
 }

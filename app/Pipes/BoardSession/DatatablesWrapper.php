@@ -20,13 +20,14 @@ final class DatatablesWrapper implements IPipeHandler
             ->editColumn('created_at', function ($boardSession) {
                 return $boardSession->created_at->format('F d, Y h:i A');
             })
-            ->editColumn('unassigned_business', fn ($record) => Str::limit($record->unassigned_business, 50, '...'))
-            ->editColumn('announcement_content', fn ($record) => Str::limit($record->announcement_content, 50, '...'))
+            ->editColumn('unassigned_business', fn($record) => Str::limit($record->unassigned_business, 50, '...'))
+            ->editColumn('announcement_content', fn($record) => Str::limit($record->announcement_content, 50, '...'))
             ->addColumn('action', function ($boardSession) {
                 $editButton = '<a href="' . route('board-sessions.edit', $boardSession->id) . '" class="dropdown-item">Edit</a>';
                 $showButton = '<a href="' . route('board-sessions.show', $boardSession->id) . '" class="dropdown-item">View</a>';
                 $lockedButton = '<a data-id=' . $boardSession->id . ' class="dropdown-item btn-lock-session ">Lock</a>';
                 $unlockedButton = '<a data-id=' . $boardSession->id . ' class="dropdown-item btn-unlock-session "> Unlock</a>';
+                $btnPublished = '<a data-id=' . $boardSession->id . ' class="dropdown-item btn-published cursor-pointer"> Publish</a>';
                 $deleteButton = '<a data-id=' . $boardSession->id . ' class="dropdown-item text-danger btn-delete-session cursor-pointer"> Delete</a>';
                 if ($boardSession->status == BoardSessionStatus::LOCKED->value) {
                     return '<div class="dropdown">
@@ -47,11 +48,12 @@ final class DatatablesWrapper implements IPipeHandler
                                 Actions
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownAction" style="">
-                                 <li    >' . $editButton . '</li>
-                                <li class="dropdown-divider"></li>
-                                <li>' . $showButton . ' </li>
-                                <li class="dropdown-divider"></li>
-                                <li>' . $deleteButton . ' </li>
+                                    <li>' . $editButton . '</li>
+                                    <li>' . $showButton . ' </li>
+                                    <li class="dropdown-divider"></li>
+                                    <li>' . $btnPublished . '</li>
+                                    <li class="dropdown-divider"></li>
+                                    <li>' . $deleteButton . ' </li>
                             </ul>
                         </div>';
                 }

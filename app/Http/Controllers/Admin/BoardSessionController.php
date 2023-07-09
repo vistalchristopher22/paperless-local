@@ -97,6 +97,13 @@ final class BoardSessionController extends Controller
             ])->then(fn ($data) => redirect()->back()->with('success', 'Board session updated successfully'));
     }
 
+    public function published(BoardSession $boardSession)
+    {
+        $boardSession->is_published = 1;
+        $boardSession->save();
+        return response()->json(['success' => true, 'message' => 'Session published successfully!']);
+    }
+
     public function destroy(BoardSession $board_session)
     {
         DB::transaction(function () use ($board_session) {
