@@ -74,7 +74,6 @@ final class UserController extends Controller
                 ProfilePicture::class,
                 StoreUser::class,
             ])->then(fn ($data) => $data);
-
         return back()->with('success', 'Success! ' . Str::ucfirst($request->last_name) . ', ' . Str::ucfirst($request->first_name) . ' has been created.');
     }
 

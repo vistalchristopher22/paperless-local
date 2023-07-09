@@ -122,7 +122,7 @@
 
 
 <div class="row">
-    <div class="col-lg-2 pe-0 d-sm-none d-none d-lg-block d-md-block">
+    <div class="col-lg-2 pe-0 d-sm-none d-none d-lg-block d-md-block" id="sidebar">
         <div data-simplebar class="px-2" data-simplebar-auto-hide="true" id="spMemberWidget">
             <div class="list-group list-group-flush scrollarea">
                 <div class="input-group mb-2 mt-2 rounded-0">
@@ -212,7 +212,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-10 p-0 col-sm-12">
+    <div class="col-lg-10 p-0 col-sm-12" id="content">
         <div class="row">
             <div class="col-lg-12">
                 <nav class="navbar navbar-expand-lg navbar-dark bg-dark z-index-50">
@@ -226,17 +226,19 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent2">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                    <a class="nav-link h5" aria-current="page" href="{{ route('committee-meeting-schedule.preview', $dates) }}">Committees</a>
+                                    <a class="nav-link" aria-current="page"
+                                       href="{{ route('committee-meeting-schedule.preview', $dates) }}">Committees</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link h5" href="{{ route('board-sessions-published.preview', $dates) }}">Sessions</a>
+                                    <a class="nav-link"
+                                       href="{{ route('board-sessions-published.preview', $dates) }}">Sessions</a>
                                 </li>
                             </ul>
-                            {{--                            <form class="d-flex">--}}
-                            {{--                                <a class="nav-link text-white h5" href="{{ route('login') }}">Sign In</a>--}}
-                            {{--                            </form>--}}
+                            <form class="d-flex">
+                                <a class="nav-link text-white" href="{{ route('login') }}">Sign In</a>
+                            </form>
                         </div>
-                    </div><!--end container-->
+                    </div>
                 </nav>
             </div>
             <div class="col-lg-12">
@@ -351,6 +353,7 @@
         let widget = document.querySelector('#spMemberWidget');
         widget.style.height = committeeDocuments.offsetHeight + 70 + 'px';
     }());
+
 
     searchField.addEventListener('input', () => {
         const searchTerm = searchField.value.trim().toLowerCase();

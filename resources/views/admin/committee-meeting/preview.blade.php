@@ -371,10 +371,7 @@
         }
     });
 
-
     document.querySelectorAll('.sanggunian-member-item').forEach((item) => {
-
-
         item.addEventListener('click', function (e) {
             let currentElement = e.currentTarget;
 

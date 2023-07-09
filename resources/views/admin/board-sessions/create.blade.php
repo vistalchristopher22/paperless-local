@@ -1,6 +1,7 @@
 @extends('layouts.app-2')
 @prepend('page-css')
-
+    <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet"
+          type="text/css"/>
     @endpush
     @section('page-title', 'New Ordered Business')
     @section('content')
@@ -126,8 +127,19 @@
 
 
 
+
+
+
+
         @push('page-scripts')
+            <script type="text/javascript"
+                    src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script>
+                new FroalaEditor('textarea', {
+                    tabSpaces: 10
+                });
+            </script>
             <script>
                 $(document).ready(function () {
                     const ALLOWED_FILE_EXTENSIONS = ['pdf', 'docx', 'doc'];
@@ -158,6 +170,7 @@
                         }
                     });
                 });
+
             </script>
         @endpush
     @endsection
