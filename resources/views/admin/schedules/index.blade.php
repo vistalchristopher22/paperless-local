@@ -1,3 +1,4 @@
+@php use App\Enums\ScheduleType; @endphp
 @extends('layouts.app-2')
 @section('tab-title', 'Schedules')
 @prepend('page-css')
@@ -73,6 +74,15 @@
                         <select name="venue" id="venue" class="form-control">
                             @foreach($venues as $venue)
                                 <option value="{{ $venue->name }}">{{ $venue->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label text-capitalize">Type</label>
+                        <select name="type" id="type" class="form-control text-capitalize">
+                            @foreach(ScheduleType::values() as $schedule)
+                                <option value="{{ $schedule }}">{{ $schedule }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -159,8 +169,9 @@
                                 $('#time').val(response.time);
                                 $('#shortDescription').val(response.description);
                                 $('#venue').val(response.venue);
+                                $('#type').val(response.type);
                                 $('#id').val(response.id);
-                                $('#withGuests').val(response.with_invited_guest === 1 ? "on" : "off");
+                                $("#withGuests").val(response.with_invited_guest === 1 ? "on" : "off");
                                 if (response.with_invited_guest == 1) {
                                     $('#withGuests').attr('checked', true);
                                 }
@@ -220,6 +231,7 @@
                         time: $('#time').val(),
                         description: $('#shortDescription').val(),
                         venue: $('#venue').val(),
+                        type: $('#type').val(),
                         guests: $('#withGuests').is(':checked') ? "on" : "off",
                         selected_date: selectedDate,
                     };

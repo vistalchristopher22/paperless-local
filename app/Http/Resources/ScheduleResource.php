@@ -22,6 +22,7 @@ class ScheduleResource extends JsonResource
             'start' => $this->date_and_time->format('Y-m-d H:i:s'),
             'end' => $this->date_and_time->format('Y-m-d H:i:s'),
             'with_invited_guest' => $this->with_invited_guest,
+            'type' => $this->type,
         ];
         // return parent::toArray($request);
     }

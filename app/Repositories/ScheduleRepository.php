@@ -27,8 +27,8 @@ final class ScheduleRepository extends BaseRepository
             'date_and_time' => $carbonDate,
             'description' => $data['description'],
             'venue' => $data['venue'],
+            'type' => $data['type'],
             'with_invited_guest' => $data['guests'] == 'on' ? 1 : 0,
-            'type' => 'committee',
         ]);
     }
 
@@ -39,7 +39,8 @@ final class ScheduleRepository extends BaseRepository
         $schedule->date_and_time = Carbon::parse($data['selected_date'] . ' ' . $data['time']);
         $schedule->description = $data['description'];
         $schedule->venue = $data['venue'];
-        $schedule->with_invited_guest = $data['guests'] == 'on' ? 1 : 0 ;
+        $schedule->with_invited_guest = $data['guests'] == 'on' ? 1 : 0;
+        $schedule->type = $data['type'];
         $schedule->save();
         return $schedule;
     }
@@ -68,6 +69,6 @@ final class ScheduleRepository extends BaseRepository
             ->orderBy('with_invited_guest', 'DESC')
             ->orderBy('date_and_time', 'ASC')
             ->get()
-            ->groupBy(fn ($record) => $record->date_and_time->format('Y-m-d'));
+            ->groupBy(fn($record) => $record->date_and_time->format('Y-m-d'));
     }
 }
