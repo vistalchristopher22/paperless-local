@@ -257,14 +257,13 @@
                         <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="order-business"
                              id="order-business">
                             <div class="d-flex align-items-center justify-content-center">
-                                <iframe src="{{ $boardSessionPathForView }}#view=fitW"
-                                        style="min-height : 100vh; min-width : 85vw;"></iframe>
+                                <embed src="{{ $boardSessionPathForView }}#zoom=196&toolbar=0&pagemode=thumbs" style="min-height : 100vh; min-width : 85vw;"></embed>
                             </div>
                         </div>
 
                         <div class="tab-pane fade" role="tabpanel" aria-labelledby="unassigned-business-tab"
                              id="unassigned-business">
-                            <div class="d-flex align-items-center justify-content-center">
+                            <div class="d-flex flex-column align-items-center justify-content-center">
                                 {{ $boardSession->unassigned_title }}
                                 {!! $boardSession->unassigned_business !!}
                             </div>
@@ -272,7 +271,7 @@
 
                         <div class="tab-pane fade" role="tabpanel" aria-labelledby="unassigned-business-tab"
                              id="announcements">
-                            <div class="d-flex align-items-center justify-content-center">
+                            <div class="d-flex flex-column align-items-center justify-content-center">
                                 {{ $boardSession->announcement_title }}
                                 {!! $boardSession->announcement_content !!}
                             </div>

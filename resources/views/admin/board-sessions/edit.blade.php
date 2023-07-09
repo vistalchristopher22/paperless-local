@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-2')
 @prepend('page-css')
     <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet"
           type="text/css"/>

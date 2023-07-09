@@ -36,6 +36,10 @@ Route::get('/', LandingPageController::class);
 Route::get('home', [HomeController::class, 'index'])->name('home');
 
 Route::resource('committee-file', CommitteeFileController::class);
+Route::get('board-session/{dates}/published/preview', BoardSessionPublishPreviewController::class)->name('board-sessions-published.preview');
+Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePreviewController::class)->name('committee-meeting-schedule.preview');
+Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
+
 
 Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'features:administrator'], function () {
@@ -43,8 +47,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('re-order/agenda', [AgendaController::class, 'reOrder'])->name('agenda.re-order');
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
 
-        Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePreviewController::class)->name('committee-meeting-schedule.preview');
-        Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
         Route::get('schedule/committees/{dates}', [CommitteeMeetingScheduleController::class, 'show'])->name('committee-meeting-schedule.show');
         Route::post('schedule/committees', [CommitteeMeetingScheduleController::class, 'store'])->name('committee-meeting-schedule.store');
 
@@ -52,7 +54,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('board-sessions/locked/{board_session}', [BoardSessionController::class, 'locked'])->name('board-sessions.locked');
         Route::post('board-sessions/unlocked/{board_session}', [BoardSessionController::class, 'unlocked'])->name('board-sessions.unlocked');
         Route::post('board-sessions/published/{board_session}', [BoardSessionController::class, 'published'])->name('board-sessions.published');
-        Route::get('board-session/{dates}/published/preview', BoardSessionPublishPreviewController::class)->name('board-sessions-published.preview');
 
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('settings/update', [SettingController::class, 'update'])->name('settings.update');
