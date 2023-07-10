@@ -17,6 +17,8 @@ use App\Pipes\User\UpdateUser;
 use App\Repositories\DivisionRepository;
 use App\Repositories\UserRepository;
 use App\Services\UserService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Pipeline;
 use Illuminate\Support\Str;
 
@@ -72,8 +74,7 @@ final class UserController extends Controller
                 ProfilePicture::class,
                 StoreUser::class,
             ])->then(fn ($data) => $data);
-
-        return back()->with('success', 'Success! '.Str::ucfirst($request->last_name).', '.Str::ucfirst($request->first_name).' has been created.');
+        return back()->with('success', 'Success! ' . Str::ucfirst($request->last_name) . ', ' . Str::ucfirst($request->first_name) . ' has been created.');
     }
 
     /**
@@ -114,9 +115,9 @@ final class UserController extends Controller
     /**
      * Delete a user account.
      *
-     * @param  \Illuminate\Http\Request  $request The HTTP request object.
-     * @param  \App\Models\User  $account The user account to delete.
-     * @return \Illuminate\Http\JsonResponse Returns a JSON response indicating whether the operation was successful or not.
+     * @param Request $request The HTTP request object.
+     * @param User $account The user account to delete.
+     * @return JsonResponse Returns a JSON response indicating whether the operation was successful or not.
      */
     public function destroy(User $account)
     {

@@ -1,4 +1,4 @@
-@extends('layouts.app-2')
+{{--@extends('layouts.app-2')--}}
 @section('tab-title', 'Ordered Business')
 @prepend('page-css')
     <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />

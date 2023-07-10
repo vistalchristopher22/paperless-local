@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Archive;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
@@ -15,7 +16,7 @@ final class FileController extends Controller
     {
     }
 
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         return response()->json($this->archiveFileService->getFileInDirectory($request->query('path')));
     }
@@ -34,7 +35,7 @@ final class FileController extends Controller
         return response()->json($fileInformation);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         try {
             $file = $request->file('file');
@@ -59,7 +60,7 @@ final class FileController extends Controller
         return response()->json($response, $code);
     }
 
-    public function update(Request $request)
+    public function update(Request $request): JsonResponse
     {
         try {
             $this->archiveFileService->rename($request->directory, $request->oldName, $request->newName);
@@ -73,7 +74,7 @@ final class FileController extends Controller
         return response()->json($response, $code);
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $path = $request->directory . DIRECTORY_SEPARATOR . $request->path;
         try {
@@ -87,7 +88,7 @@ final class FileController extends Controller
         return response()->json($response, $code);
     }
 
-    public function getFileByTypes(Request $request)
+    public function filter(Request $request): JsonResponse
     {
         $fileInformation = $this->archiveFileService->getFilesByType($request->type, $request->directory);
         return response()->json($fileInformation);

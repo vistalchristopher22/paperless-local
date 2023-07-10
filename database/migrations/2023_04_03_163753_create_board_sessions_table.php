@@ -21,7 +21,7 @@ return new class () extends Migration {
             $table->text('announcement_content')->nullable();
             $table->enum('status', BoardSessionStatus::values())->default(BoardSessionStatus::UNLOCKED->value);
             $table->unsignedBigInteger('locked_by')->nullable();
-            $table->unsignedBigInteger('is_published')->default(0);
+            $table->unsignedBigInteger('is_published')->nullable()->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -44,7 +44,7 @@ final class AgendaRepository extends BaseRepository
     public function store(array $data = []): mixed
     {
         return DB::transaction(function () use ($data) {
-            $data['index'] = (int) $this->model->max('index');
+            $data['index'] = (int)$this->model->max('index');
             $data['index'] = ++$data['index'];
             $newlyStoredAgenda = parent::store(Arr::except($data, 'members'));
 
@@ -86,7 +86,7 @@ final class AgendaRepository extends BaseRepository
     /**
      * Retrieve agendas based on a given SanggunianMember.
      *
-     * @param  SanggunianMember  $member The SanggunianMember object to retrieve agendas for.
+     * @param SanggunianMember $member The SanggunianMember object to retrieve agendas for.
      * @return array Returns an array containing the agendas, separated by chairman, vice_chairman, and member.
      */
     public function getAgendasByMember(SanggunianMember $member): array

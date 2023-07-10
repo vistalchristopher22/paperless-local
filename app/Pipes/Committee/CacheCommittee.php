@@ -18,7 +18,7 @@ final class CacheCommittee implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        Redis::set('committees:'.$payload->id, $this->committeeRepository->findBy('id', $payload->id));
+        Redis::set('committees:' . $payload->id, $this->committeeRepository->findBy('id', $payload->id));
 
         return $next($payload);
     }

@@ -25,7 +25,6 @@ class SanggunianMemberSeeder extends Seeder
             ['fullname' => 'Hon. Melanie Joy M. Guno', 'district' => '-', 'sanggunian' => '19th Sangguniang Panlalawigan Member'],
             ['fullname' => 'Hon. Charles P. Arreza', 'district' => '-', 'sanggunian' => '19th Sangguniang Panlalawigan Member'],
             ['fullname' => 'Hon. Jimmy I. Guinsod', 'district' => '-', 'sanggunian' => '19th Sangguniang Panlalawigan Member'],
-            ['fullname' => 'Hon. Ruel D. Momo', 'district' => '-', 'sanggunian' => '19th Sangguniang Panlalawigan Member'],
             ['fullname' => 'Hon. Margarita G. Garay', 'district' => '-', 'sanggunian' => '19th Sangguniang Panlalawigan Member'],
             ['fullname' => 'Hon. Manuel O. Alameda, Sr.', 'district' => '-', 'sanggunian' => '19th Sangguniang Panlalawigan Member'],
             ['fullname' => 'Hon. Anthony Joseph P. Cañedo', 'district' => '-', 'sanggunian' => '19th Sangguniang Panlalawigan Member'],

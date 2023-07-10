@@ -64,7 +64,7 @@ class HomeController extends Controller
             $data = array_fill_keys($merged, 0);
             foreach ($committeesPastSevenDays as $item) {
                 $date = $item->date->format('Y-m-d');
-                $data[$date] = (int) $item->total ?? 0;
+                $data[$date] = (int)$item->total ?? 0;
             }
 
             ksort($data);

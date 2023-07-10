@@ -39,7 +39,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
@@ -47,25 +47,32 @@ return [
         'source' => [
             'driver' => 'local',
             'root' => storage_path('app/source'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
         'SOURCE_TRASHED' => [
             'driver' => 'local',
             'root' => storage_path('app/source/.trashed'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
         'DRAFT_COMMITTEES' => [
             'driver' => 'local',
             'root' => storage_path('app/source/DRAFT_COMMITTEES'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
 
+        'BOARD_SESSIONS' => [
+            'driver' => 'local',
+            'root' => storage_path('app/source/SESSIONS'),
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

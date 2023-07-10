@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Archive;
 
 use App\Http\Controllers\Controller;
 use App\Services\ArchiveFileService;
+use Exception;
 use Illuminate\Http\Request;
 
 final class FilePreviewController extends Controller
@@ -22,7 +23,7 @@ final class FilePreviewController extends Controller
             $this->archiveFileService->copy($currentDirectory, $destination);
             $response = ['message' => 'File copied successfully', 'destination' => url('/') . "/storage/previews/{$request->fileName}"];
             $code = 200;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $response = ['message' => $e->getMessage()];
             $code = 422;
         }

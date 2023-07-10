@@ -15,7 +15,7 @@ final class ExtractFileText implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        Artisan::call('extract:file '.$payload->id);
+        Artisan::call('extract:file ' . $payload->id);
         $committee = Committee::find($payload->id);
         return $next($committee);
     }

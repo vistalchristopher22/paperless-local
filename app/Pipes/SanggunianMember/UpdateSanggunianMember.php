@@ -4,12 +4,14 @@ namespace App\Pipes\SanggunianMember;
 
 use App\Contracts\Pipes\IPipeHandler;
 use App\Repositories\SanggunianMemberRepository;
+
 // use App\Models\SanggunianMember;
 use Closure;
 
 final class UpdateSanggunianMember implements IPipeHandler
 {
     private SanggunianMemberRepository $sangguninanMemberRepository;
+
     // private SanggunianMember $sanggunianMember;
 
     public function __construct()

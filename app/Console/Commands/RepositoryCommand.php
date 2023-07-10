@@ -28,7 +28,7 @@ class RepositoryCommand extends Command
     {
         $name = $this->argument('name');
 
-        $stub = File::get(base_path().'/stubs/repository.stub');
+        $stub = File::get(base_path() . '/stubs/repository.stub');
 
         $stub = str_replace('{{class}}', $name, $stub);
 
