@@ -1,13 +1,10 @@
 <?php
 
-<<<<<<< HEAD
 use App\Models\User;
 use App\Models\Venue;
 use App\Models\Setting;
 use App\Models\Schedule;
 use App\Models\Committee;
-=======
->>>>>>> 602dbfe3205e62fcb0463ec5e76b03c7c9993d1d
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -44,7 +41,6 @@ Route::get('home', [HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'features:administrator'], function () {
-<<<<<<< HEAD
         Route::group(['model' => User::class], fn () => Route::resource('account', UserController::class));
 
         Route::resource('venue', VenueController::class);
@@ -128,10 +124,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('schedules', CommitteeMeetingController::class)->only('index');
         Route::resource('committee-file', CommitteeFileController::class)->only(['show', 'edit']);
 
-=======
-        Route::post('re-order/agenda', [AgendaController::class, 'reOrder'])->name('agenda.re-order');
-        Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
->>>>>>> 602dbfe3205e62fcb0463ec5e76b03c7c9993d1d
 
         Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePreviewController::class)->name('committee-meeting-schedule.preview');
         Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
@@ -207,7 +199,6 @@ Route::get('show-attachment/{url}/{location}', function (string $file, string $l
         'filePathForView' => $pathForView,
     ]);
 })->name('show-attachment');
-<<<<<<< HEAD
 
 
 Route::get('display-schedule-merge-committee/{dates}', function (string $dates) {
@@ -247,15 +238,15 @@ Route::get('sp-committee-sched-meeting/{dates}', function (string $dates) {
         });
 
 
-        return view('sp-committee-sched-meeting', [
-            'schedules' => $schedules,
-            'dates' => implode('&', $dates)
-        ]);
+    return view('sp-committee-sched-meeting', [
+        'schedules' => $schedules,
+        'dates' => implode('&', $dates)
+    ]);
 
 })->name('sp-committee.shed');
 
 
-Route::post('store-venue', function(Request $request) {
+Route::post('store-venue', function (Request $request) {
 
     Venue::create([
         'name' => $request->name
@@ -263,5 +254,3 @@ Route::post('store-venue', function(Request $request) {
 
     return response()->json(['success' => true]);
 });
-=======
->>>>>>> 602dbfe3205e62fcb0463ec5e76b03c7c9993d1d

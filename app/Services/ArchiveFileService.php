@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 final class ArchiveFileService
 {
-    const FILE_TYPES = [
+    public const FILE_TYPES = [
         'word_file' => [
             '*.doc',
             '*.docx',

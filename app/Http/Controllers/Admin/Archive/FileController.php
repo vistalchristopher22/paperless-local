@@ -7,12 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Services\ArchiveFileService;
-use Symfony\Component\Finder\Finder;
 use Illuminate\Support\Facades\Storage;
 
 final class FileController extends Controller
 {
-    
     public function __construct(private ArchiveFileService $archiveFileService)
     {
     }
