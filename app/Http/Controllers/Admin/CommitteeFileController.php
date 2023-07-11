@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Committee;
 use App\Resolvers\PDFLinkResolver;
-use App\Utilities\CommitteeFileUtility;
+use App\Utilities\FileUtility;
 use Illuminate\Support\Facades\Artisan;
 
 final class CommitteeFileController extends Controller
@@ -19,17 +19,17 @@ final class CommitteeFileController extends Controller
     {
         $committee = Committee::find($committee, ['id', 'file_path']);
 
-        $filePath = CommitteeFileUtility::correctDirectorySeparator($committee->file_path);
+        $filePath = FileUtility::correctDirectorySeparator($committee->file_path);
 
         $fileName = basename($filePath);
 
-        $outputDirectory = CommitteeFileUtility::publicDirectoryForViewing();
+        $outputDirectory = FileUtility::publicDirectoryForViewing();
 
         Artisan::call('convert:path "' . $filePath . '" --output="' . $outputDirectory . '"');
 
-        $pathForView = CommitteeFileUtility::generatePathForViewing($outputDirectory, $fileName);
+        $pathForView = FileUtility::generatePathForViewing($outputDirectory, $fileName);
 
-        new PDFLinkResolver(CommitteeFileUtility::publicDirectoryForViewing() . CommitteeFileUtility::changeExtension($fileName));
+        new PDFLinkResolver(FileUtility::publicDirectoryForViewing() . FileUtility::changeExtension($fileName));
 
         return view('admin.committee.file-displays.show', [
             'filePathForView' => $pathForView,

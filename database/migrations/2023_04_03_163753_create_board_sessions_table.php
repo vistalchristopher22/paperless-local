@@ -16,7 +16,7 @@ return new class () extends Migration {
             $table->string('title')->nullable();
             $table->string('file_path')->nullable();
             $table->string('unassigned_title')->nullable();
-            $table->text('unassigned_business')->nullable();
+            $table->text('unassigned_business_file_path')->nullable();
             $table->string('announcement_title')->nullable();
             $table->text('announcement_content')->nullable();
             $table->enum('status', BoardSessionStatus::values())->default(BoardSessionStatus::UNLOCKED->value);

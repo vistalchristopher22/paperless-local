@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Committee;
-use App\Utilities\CommitteeFileUtility;
+use App\Utilities\FileUtility;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 
@@ -29,7 +29,7 @@ class ExtractTextCommand extends Command
     public function handle()
     {
         $record = Committee::find($this->argument('id'));
-        $escaped_path = escapeshellarg(CommitteeFileUtility::draftCommitteesDirectory() . basename($record->file_path));
+        $escaped_path = escapeshellarg(FileUtility::draftCommitteesDirectory() . basename($record->file_path));
         $data = shell_exec(' ' . escapeshellarg(env('LIBRE_DIRECTORY')) . ' --headless --cat ' . $escaped_path);
         $data = preg_replace('/[\n\t]/', '', $data);
         $content = Str::of($data)->remove("\n")

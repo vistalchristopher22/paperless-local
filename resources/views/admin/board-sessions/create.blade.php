@@ -3,7 +3,7 @@
     <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet"
           type="text/css"/>
     @endpush
-    @section('page-title', 'New Ordered Business')
+    @section('tab-title', 'New Ordered Business')
     @section('content')
         @if ($errors->any())
             <div class="card mb-2 bg-danger shadow-sm text-white">
@@ -29,17 +29,17 @@
               enctype="multipart/form-data">
 
             <div class="card shadow-none mb-5">
-                <div class="card-header d-flex flex-row justify-content-between align-items-center">
-                    <span class="fw-bold">Ordered Business</span>
+                <div class="card-header bg-light p-3 d-flex flex-row justify-content-between align-items-center">
+                    <div class="card-title fw-medium">Ordered Business</div>
                 </div>
 
                 <div class="card-body p-0 mb-0">
-                    <div class="p-4">
+                    <div class="p-3">
                         <div class="mb-3">
                             <label for="title" class="form-label">Order Business Title</label>
                             <input type="text" class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}"
                                    value="{{ old('title') }}" id="title" title="title" name="title"
-                                   placeholder="Enter title">
+                                   placeholder="">
                             @error('title')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -65,17 +65,16 @@
                             <input type="text"
                                    class="form-control {{ $errors->has('unassigned_title') ? 'is-invalid' : '' }}"
                                    value="{{ old('unassigned_title') }}" id="unassigned_title" name="unassigned_title"
-                                   placeholder="Enter title">
+                                   placeholder="">
                             @error('unassigned_title')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-3">
-                            <label for="unassigned_business" class="form-label">Content</label>
-                            <textarea class="form-control {{ $errors->has('unassigned_business') ? 'is-invalid' : '' }}"
-                                      id="unassigned_business"
-                                      name="unassigned_business" rows="3">{{ old('unassigned_business') }}</textarea>
+                            <label for="file_path" class="form-label">Unassigned Business Content</label>
+                            <input type="file" class="form-control" id="unassigned_business"
+                                   name="unassigned_business">
                             @error('unassigned_business')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -92,7 +91,7 @@
                             <label for="announcement_title" class="form-label">Announcement Title</label>
                             <input type="text" class="form-control @error('announcement_title') is-invalid @enderror"
                                    value="{{ old('announcement_title') }}" id="announcement_title"
-                                   name="announcement_title" placeholder="Enter title">
+                                   name="announcement_title" placeholder="">
                             @error('announcement_title')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -117,9 +116,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <a href="{{ route('board-sessions.index') }}"
                            class="btn btn-default text-primary text-decoration-underline fw-bold">Back</a>
-                        <button type="submit" id="btnSubmit"
-                                class="btn btn-primary float-end">Submit
-                        </button>
+                        <button type="submit" id="btnSubmit" class="btn btn-primary fw-medium float-end">Submit</button>
                     </div>
                 </div>
             </div>
@@ -132,45 +129,47 @@
 
 
         @push('page-scripts')
-            <script type="text/javascript"
-                    src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
             <script>
                 new FroalaEditor('textarea', {
                     tabSpaces: 10
                 });
             </script>
             <script>
-                $(document).ready(function () {
-                    const ALLOWED_FILE_EXTENSIONS = ['pdf', 'docx', 'doc'];
+                const ALLOWED_FILE_EXTENSIONS = ['pdf', 'docx', 'doc'];
 
-
-                    $('#btnSubmit').click(function (e) {
-                        e.preventDefault();
-                        alertify.confirm("Are you sure you want to perform this action?",
-                            function () {
-                                $('#orderBusinessForm').submit();
-                            },
-                            function () {
-                            }).set({
-                            labels: {
-                                ok: 'Yes',
-                                cancel: 'No',
-                            }
-                        }).setHeader('Confirm Dialog');
-                    });
-                    $('#file_path').change(function () {
-                        if ($.inArray($(this).val().split('.').pop().toLowerCase(), ALLOWED_FILE_EXTENSIONS) === -1) {
-                            $(this).val('');
-                            $(this).addClass('is-invalid');
-                            $(this).after(
-                                `<div class="invalid-feedback">Only formats are allowed : ${ALLOWED_FILE_EXTENSIONS.join(', ')}
-                            </div>`
-                            );
+                $('#btnSubmit').click(e => {
+                    e.preventDefault();
+                    alertify.confirm('Are you sure you want to perform this action?', () => {
+                        $('#orderBusinessForm').submit();
+                    }, () => {
+                    }).set({
+                        labels: {
+                            ok: 'Yes',
+                            cancel: 'No'
                         }
-                    });
+                    }).setHeader('Confirmation');
                 });
 
+                const orderBusinessContent = document.querySelector('#file_path');
+                orderBusinessContent.addEventListener('change', () => {
+                    const ext = orderBusinessContent.value.split('.').pop().toLowerCase();
+                    if (!ALLOWED_FILE_EXTENSIONS.includes(ext)) {
+                        orderBusinessContent.value = '';
+                        orderBusinessContent.classList.add('is-invalid');
+                        orderBusinessContent.insertAdjacentHTML('afterend', `<div class="invalid-feedback">Only formats are allowed: ${ALLOWED_FILE_EXTENSIONS.join(', ')}</div>`);
+                    }
+                });
+
+                const unassignedBusinessFilePath = document.querySelector('#unassigned_business');
+                unassignedBusinessFilePath.addEventListener('change', () => {
+                    const ext = unassignedBusinessFilePath.value.split('.').pop().toLowerCase();
+                    if (!ALLOWED_FILE_EXTENSIONS.includes(ext)) {
+                        unassignedBusinessFilePath.value = '';
+                        unassignedBusinessFilePath.classList.add('is-invalid');
+                        unassignedBusinessFilePath.insertAdjacentHTML('afterend', `<div class="invalid-feedback">Only formats are allowed: ${ALLOWED_FILE_EXTENSIONS.join(', ')}</div>`);
+                    }
+                });
             </script>
         @endpush
     @endsection

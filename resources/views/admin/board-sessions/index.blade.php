@@ -35,7 +35,6 @@
                             Order Business Title
                         </th>
                         <th class="fw-medium text-center border text-dark">Unassigned Title</th>
-                        <th class="fw-medium text-center border text-dark">Unassigned Content</th>
                         <th class="fw-medium text-center border text-dark">Announcement Title</th>
                         <th class="fw-medium text-center border text-dark">Announcement Content</th>
                         <th class="fw-medium text-center border text-dark">Publish Status</th>
@@ -72,11 +71,6 @@
                             className: 'border',
                             data: 'unassigned_title',
                             name: 'unassigned_title'
-                        },
-                        {
-                            className: 'border',
-                            data: 'unassigned_business',
-                            name: 'unassigned_business'
                         },
                         {
                             className: 'border',

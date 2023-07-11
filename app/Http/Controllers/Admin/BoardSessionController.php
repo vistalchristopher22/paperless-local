@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreBoardSessionRequest;
+use App\Http\Requests\UpdateBoardSessionRequest;
 use App\Models\BoardSession;
 use App\Pipes\BoardSession\DatatablesWrapper;
 use App\Pipes\BoardSession\DeleteBoardSession;
@@ -15,8 +17,7 @@ use App\Repositories\BoardSessionRespository;
 use App\Resolvers\PDFLinkResolver;
 use App\Services\DocumentService;
 use App\Services\UserService;
-use App\Utilities\CommitteeFileUtility;
-use Illuminate\Http\Request;
+use App\Utilities\FileUtility;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Pipeline;
@@ -51,7 +52,7 @@ final class BoardSessionController extends Controller
         return view('admin.board-sessions.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreBoardSessionRequest $request)
     {
         return DB::transaction(function () use ($request) {
             return Pipeline::send($request->all())
@@ -65,17 +66,17 @@ final class BoardSessionController extends Controller
     public function show(int $id)
     {
         $boardSession = $this->boardSessionRepository->findBy('id', $id);
-        $filePath = CommitteeFileUtility::correctDirectorySeparator($boardSession->file_path);
+        $filePath = FileUtility::correctDirectorySeparator($boardSession->file_path);
 
         $fileName = basename($filePath);
 
-        $outputDirectory = CommitteeFileUtility::publicDirectoryForViewing();
+        $outputDirectory = FileUtility::publicDirectoryForViewing();
 
         Artisan::call('convert:path "' . $filePath . '" --output="' . $outputDirectory . '"');
 
-        $pathForView = CommitteeFileUtility::generatePathForViewing($outputDirectory, $fileName);
+        $pathForView = FileUtility::generatePathForViewing($outputDirectory, $fileName);
 
-        new PDFLinkResolver(CommitteeFileUtility::publicDirectoryForViewing() . CommitteeFileUtility::changeExtension($fileName));
+        new PDFLinkResolver(FileUtility::publicDirectoryForViewing() . FileUtility::changeExtension($fileName));
 
         return view('admin.board-sessions.show', [
             'filePathForView' => $pathForView
@@ -88,7 +89,7 @@ final class BoardSessionController extends Controller
         return view('admin.board-sessions.edit', compact('boardSession'));
     }
 
-    public function update(Request $request, BoardSession $board_session)
+    public function update(UpdateBoardSessionRequest $request, BoardSession $board_session)
     {
         return Pipeline::send($request->merge(['boardSession' => $board_session])->all())
             ->through([

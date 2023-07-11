@@ -53,7 +53,8 @@
                     </li>
 
                     <li class="nav-item waves-effect waves-light" role="presentation">
-                        <button class="nav-link h5" id="announcement-tab" data-bs-toggle="tab" data-bs-target="#announcements"
+                        <button class="nav-link h5" id="announcement-tab" data-bs-toggle="tab"
+                                data-bs-target="#announcements"
                                 type="button" role="tab" aria-controls="session" aria-selected="false">Announcements
                         </button>
                     </li>
@@ -62,8 +63,9 @@
                     <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="order-business"
                          id="order-business">
                         <div class="d-flex align-items-center justify-content-center">
-                            <embed src="{{ $boardSessionPathForView }}#zoom=210&toolbar=0" allowfullscreen="true" allowtransparency="true"
-                                    style="height : 100vh; min-width : 100vw;"></embed>
+                            <embed src="{{ $boardSessionPathForView }}#zoom=210&toolbar=0" allowfullscreen="true"
+                                   allowtransparency="true"
+                                   style="height : 100vh; min-width : 100vw;"></embed>
                         </div>
                     </div>
 
