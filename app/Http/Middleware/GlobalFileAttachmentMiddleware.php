@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Utilities\CommitteeFileUtility;
+use App\Utilities\FileUtility;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -21,7 +21,7 @@ class GlobalFileAttachmentMiddleware
                 $fileName = basename($url);
                 $location = dirname($url);
 
-                return redirect()->route('show-attachment', [$fileName, CommitteeFileUtility::temporaryReplaceForwardSlash($location)]);
+                return redirect()->route('show-attachment', [$fileName, FileUtility::temporaryReplaceForwardSlash($location)]);
             }
         }
 

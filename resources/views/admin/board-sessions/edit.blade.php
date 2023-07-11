@@ -3,7 +3,7 @@
     <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet"
           type="text/css"/>
     @endpush
-    @section('page-title', 'New Ordered Business')
+    @section('tab-title', 'New Ordered Business')
     @section('content')
         @if ($errors->any())
             <div class="card mb-2 bg-danger shadow-sm text-white">
@@ -25,22 +25,23 @@
                 </div>
             </div>
         @endif
+
         <form action="{{ route('board-sessions.update', $boardSession) }}" id="orderBusinessForm" method="POST"
               enctype="multipart/form-data">
             @method('PUT')
             <div class="card shadow-none mb-5">
-                <div class="card-header d-flex flex-row justify-content-between align-items-center">
-                    <span class="fw-bold">Ordered Business</span>
+                <div class="card-header bg-light p-3 d-flex flex-row justify-content-between align-items-center">
+                    <span class="card-title h6 fw-medium">Ordered Business</span>
                 </div>
 
                 <div class="card-body p-0 mb-0">
-                    <div class="p-4">
+                    <div class="p-3">
                         <div class="mb-3">
-                            <label for="title" class="form-label">Order Business title</label>
+                            <label for="title" class="form-label">Order Business Title</label>
                             <input type="text" class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}"
                                    value="{{ old('title', $boardSession->title) }}" id="title" title="title"
                                    name="title"
-                                   placeholder="Enter title">
+                                   placeholder="">
                             @error('title')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -61,27 +62,26 @@
                     </div>
                     <div class="p-3">
                         <div class="mb-3">
-                            <label for="unassigned_title" class="form-label">Unassigned Business title</label>
+                            <label for="unassigned_title" class="form-label">Unassigned Business Title</label>
                             <input type="text"
                                    class="form-control {{ $errors->has('unassigned_title') ? 'is-invalid' : '' }}"
                                    value="{{ old('unassigned_title', $boardSession->unassigned_title) }}"
                                    id="unassigned_title" name="unassigned_title"
-                                   placeholder="Enter title">
+                                   placeholder="">
                             @error('unassigned_title')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-3">
-                            <label for="unassigned_business" class="form-label">Content</label>
-                            <textarea class="form-control {{ $errors->has('unassigned_business') ? 'is-invalid' : '' }}"
-                                      id="unassigned_business"
-                                      name="unassigned_business"
-                                      rows="3">{{ old('unassigned_business', $boardSession->unassigned_business) }}</textarea>
+                            <label for="file_path" class="form-label">Unassigned Business Content</label>
+                            <input type="file" class="form-control" id="unassigned_business"
+                                   name="unassigned_business">
                             @error('unassigned_business')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
 
                     </div>
 
@@ -91,11 +91,11 @@
 
                     <div class="p-3">
                         <div class="mb-3">
-                            <label for="announcement_title" class="form-label">Announcement title</label>
+                            <label for="announcement_title" class="form-label">Announcement Title</label>
                             <input type="text" class="form-control @error('announcement_title') is-invalid @enderror"
                                    value="{{ old('announcement_title', $boardSession->announcement_title) }}"
                                    id="announcement_title"
-                                   name="announcement_title" placeholder="Enter title">
+                                   name="announcement_title" placeholder="">
                             @error('announcement_title')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -121,8 +121,7 @@
                         <a href="{{ route('board-sessions.index') }}"
                            class="btn btn-default text-primary text-decoration-underline fw-bold">Back</a>
 
-                        <button type="submit" id="btnSubmit"
-                                class="btn btn-success text-white float-end">Update
+                        <button type="button" id="btnSubmit" class="btn btn-success text-white float-end">Update
                         </button>
                     </div>
                 </div>
@@ -134,35 +133,45 @@
         @push('page-scripts')
             <script type="text/javascript"
                     src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             <script>
                 new FroalaEditor('textarea', {
                     tabSpaces: 10
                 });
             </script>
             <script>
-                (function () {
-                    if (localStorage.getItem('tab')) {
-                        // If it does, set the active tab to the tab in localStorage
-                        $(`#${localStorage.getItem('tab')}`).trigger('click');
+                document.addEventListener('DOMContentLoaded', () => {
+                    const unassignedBusinessFilePath = document.querySelector('#unassigned_business');
+                    const fileInput = document.querySelector('#file_path');
+                    const fileExtensions = ['pdf', 'docx', 'doc'];
 
-                        // Remove the tab from localStorage
-                        localStorage.removeItem('tab');
-                    }
-                })();
+                    $('#btnSubmit').click(e => {
+                        e.preventDefault();
+                        alertify.confirm('Are you sure you want to perform this action?', () => {
+                            $('#orderBusinessForm').submit();
+                        }, () => {
+                        }).set({
+                            labels: {
+                                ok: 'Yes',
+                                cancel: 'No'
+                            }
+                        }).setHeader('Confirmation');
+                    });
 
-                $(document).ready(function () {
-                    $('#file_path').change(function () {
-                        // Check file extension
-                        var fileExtension = ['pdf', 'docx', 'doc'];
-                        if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
-                            $(this).val('');
-                            // display an error message at the bottom if there's an error and also add a is-invalid in the input
-                            $(this).addClass('is-invalid');
-                            $(this).after(
-                                `<div class="invalid-feedback">Only formats are allowed : ${fileExtension.join(', ')}
-                            </div>`
-                            );
+                    fileInput.addEventListener('change', () => {
+                        const ext = fileInput.value.split('.').pop().toLowerCase();
+                        if (!fileExtensions.includes(ext)) {
+                            fileInput.value = '';
+                            fileInput.classList.add('is-invalid');
+                            fileInput.insertAdjacentHTML('afterend', `<div class="invalid-feedback">Only formats are allowed: ${fileExtensions.join(', ')}</div>`);
+                        }
+                    });
+
+                    unassignedBusinessFilePath.addEventListener('change', () => {
+                        const ext = unassignedBusinessFilePath.value.split('.').pop().toLowerCase();
+                        if (!fileExtensions.includes(ext)) {
+                            unassignedBusinessFilePath.value = '';
+                            unassignedBusinessFilePath.classList.add('is-invalid');
+                            unassignedBusinessFilePath.insertAdjacentHTML('afterend', `<div class="invalid-feedback">Only formats are allowed: ${fileExtensions.join(', ')}</div>`);
                         }
                     });
                 });

@@ -20,8 +20,7 @@ final class DatatablesWrapper implements IPipeHandler
             ->editColumn('created_at', function ($boardSession) {
                 return $boardSession->created_at->format('F d, Y h:i A');
             })
-            ->editColumn('unassigned_business', fn($record) => Str::limit($record->unassigned_business, 50, '...'))
-            ->editColumn('announcement_content', fn($record) => Str::limit($record->announcement_content, 50, '...'))
+            ->editColumn('announcement_content', fn ($record) => Str::limit($record->announcement_content, 50, '...'))
             ->addColumn('action', function ($boardSession) {
                 $editButton = '<a href="' . route('board-sessions.edit', $boardSession->id) . '" class="dropdown-item">Edit</a>';
                 $showButton = '<a href="' . route('board-sessions.show', $boardSession->id) . '" class="dropdown-item">View</a>';

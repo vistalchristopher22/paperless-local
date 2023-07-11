@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Repositories\BoardSessionRespository;
 use App\Resolvers\PDFLinkResolver;
-use App\Utilities\CommitteeFileUtility;
-use Illuminate\Http\Request;
+use App\Utilities\FileUtility;
 use Illuminate\Support\Facades\Artisan;
 
 final class BoardSessionPublishPreviewController extends Controller
@@ -16,17 +15,17 @@ final class BoardSessionPublishPreviewController extends Controller
         $dates = explode("&", $dates);
         $latestPublishedBoardSession = $boardSessionRepository->published();
 
-        $filePath = CommitteeFileUtility::correctDirectorySeparator($latestPublishedBoardSession->file_path);
+        $filePath = FileUtility::correctDirectorySeparator($latestPublishedBoardSession->file_path);
 
         $fileName = basename($filePath);
 
-        $outputDirectory = CommitteeFileUtility::publicDirectoryForViewing();
+        $outputDirectory = FileUtility::publicDirectoryForViewing();
 
         Artisan::call('convert:path "' . $filePath . '" --output="' . $outputDirectory . '"');
 
-        $boardSessionPathForView = CommitteeFileUtility::generatePathForViewing($outputDirectory, $fileName);
+        $boardSessionPathForView = FileUtility::generatePathForViewing($outputDirectory, $fileName);
 
-        new PDFLinkResolver(CommitteeFileUtility::publicDirectoryForViewing() . CommitteeFileUtility::changeExtension($fileName));
+        new PDFLinkResolver(FileUtility::publicDirectoryForViewing() . FileUtility::changeExtension($fileName));
 
         return view('admin.board-sessions.preview', [
             'boardSessionPathForView' => $boardSessionPathForView,

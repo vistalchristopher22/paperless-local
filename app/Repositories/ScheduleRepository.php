@@ -69,6 +69,6 @@ final class ScheduleRepository extends BaseRepository
             ->orderBy('with_invited_guest', 'DESC')
             ->orderBy('date_and_time', 'ASC')
             ->get()
-            ->groupBy(fn($record) => $record->date_and_time->format('Y-m-d'));
+            ->groupBy(fn ($record) => $record->date_and_time->format('Y-m-d'));
     }
 }

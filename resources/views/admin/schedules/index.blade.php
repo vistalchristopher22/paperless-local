@@ -48,8 +48,8 @@
     <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-dark">
-                    <h5 class="modal-title text-white h6 text-uppercase" id="addScheduleModalLabel">Add Schedule</h5>
+                <div class="modal-header bg-dark ">
+                    <h5 class="modal-title text-white text-uppercase" id="addScheduleModalLabel">Add Schedule</h5>
                     <a class="cursor-pointer btn-close" data-bs-dismiss="modal">
                     </a>
                 </div>

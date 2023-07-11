@@ -5,7 +5,7 @@ namespace App\Utilities;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
-final class CommitteeFileUtility
+final class FileUtility
 {
     public const CONVERTIBLE_FILE_EXTENSIONS = [
         'doc', 'docx', 'webp', 'txt',
@@ -57,7 +57,7 @@ final class CommitteeFileUtility
 
     public static function isExists(string $file): bool
     {
-        return file_exists(CommitteeFileUtility::publicDirectoryForViewing() . CommitteeFileUtility::changeExtension($file));
+        return file_exists(FileUtility . phpFileUtility::publicDirectoryForViewing() . FileUtility::changeExtension($file));
     }
 
     public static function temporaryReplaceForwardSlash(string $path): string
