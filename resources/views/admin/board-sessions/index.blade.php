@@ -21,26 +21,27 @@
     @endif
 
     <div class="card mb-4">
-        <div class="card-header bg-dark d-flex justify-content-between align-items-center">
-            <h6 class="fw-medium text-white h6 card-title">Ordered Business</h6>
-            <a href="{{ route('board-sessions.create') }}" class="btn btn-light fw-bold shadow">New Ordered Business</a>
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h6 class="fw-medium h6 card-title">Ordered Business</h6>
+            <a href="{{ route('board-sessions.create') }}" class="btn btn-dark fw-medium shadow-dark">New Ordered
+                Business</a>
         </div>
 
         <div class="card-body">
-            <div class="">
+            <div class="p-3">
                 <table class="table table-bordered" id="order-business-table">
                     <thead>
                     <tr class="bg-light">
-                        <th class="fw-medium text-center border text-dark">
+                        <th class="p-2 text-center">
                             Order Business Title
                         </th>
-                        <th class="fw-medium text-center border text-dark">Unassigned Title</th>
-                        <th class="fw-medium text-center border text-dark">Announcement Title</th>
-                        <th class="fw-medium text-center border text-dark">Announcement Content</th>
-                        <th class="fw-medium text-center border text-dark">Publish Status</th>
-                        <th class="fw-medium text-center border text-dark">Status</th>
-                        <th class="fw-medium text-center border text-dark">Created At</th>
-                        <th class="fw-medium text-center border text-dark">Action</th>
+                        <th class="p-2 text-center">Unassigned Title</th>
+                        <th class="p-2 text-center">Announcement Title</th>
+                        <th class="p-2 text-center">Announcement Content</th>
+                        <th class="p-2 text-center">Publish Status</th>
+                        <th class="p-2 text-center">Status</th>
+                        <th class="p-2 text-center">Created At</th>
+                        <th class="p-2 text-center">Action</th>
                     </tr>
                     </thead>
                     <tbody></tbody>
@@ -68,12 +69,15 @@
                         }
                     },
                         {
-                            className: 'border',
+                            className: 'border text-center',
                             data: 'unassigned_title',
-                            name: 'unassigned_title'
+                            name: 'unassigned_title',
+                            render: function (data, _, row) {
+                                return `<span class="text-decoration-underline fw-medium text-capitalize text-primary cursor-pointer btn-view-file" data-path="${row.unassigned_business_file_path}" data-id="${row.id}">${data}</span>`;
+                            }
                         },
                         {
-                            className: 'border',
+                            className: 'border mx-3',
                             data: 'announcement_title',
                             name: 'announcement_title'
                         },

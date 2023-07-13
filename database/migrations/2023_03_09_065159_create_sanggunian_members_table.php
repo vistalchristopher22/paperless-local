@@ -13,6 +13,7 @@ return new class () extends Migration {
         Schema::create('sanggunian_members', function (Blueprint $table) {
             $table->id();
             $table->string('fullname');
+            $table->string('lastname');
             $table->string('district');
             $table->string('sanggunian');
             $table->string('profile_picture')->default('no_image.png');

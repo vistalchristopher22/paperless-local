@@ -21,8 +21,8 @@ final class ScheduleController extends Controller
 
     public function store(Request $request)
     {
-        $this->scheduleRepository->createSchedule($request->all());
-        return response()->json(['success' => true]);
+        $data = $this->scheduleRepository->createSchedule($request->all());
+        return response()->json(['success' => true, 'type' => $request->type, 'id' => $data->id]);
     }
 
     public function show(int $id)

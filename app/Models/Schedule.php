@@ -19,4 +19,9 @@ class Schedule extends Model
     {
         return $this->hasMany(Committee::class, 'schedule_id', 'id')->orderBy('display_index', 'ASC');
     }
+
+    public function board_sessions()
+    {
+        return $this->hasMany(BoardSession::class, 'schedule_id', 'id');
+    }
 }
