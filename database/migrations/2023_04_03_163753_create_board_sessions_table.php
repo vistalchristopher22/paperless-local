@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\BoardSessionStatus;
+use App\Models\Schedule;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,6 +23,7 @@ return new class () extends Migration {
             $table->enum('status', BoardSessionStatus::values())->default(BoardSessionStatus::UNLOCKED->value);
             $table->unsignedBigInteger('locked_by')->nullable();
             $table->unsignedBigInteger('is_published')->nullable()->default(0);
+            $table->foreignIdFor(Schedule::class)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

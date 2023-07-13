@@ -116,7 +116,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <a href="{{ route('board-sessions.index') }}"
                            class="btn btn-default text-primary text-decoration-underline fw-bold">Back</a>
-                        <button type="submit" id="btnSubmit" class="btn btn-primary fw-medium float-end">Submit</button>
+                        <button type="submit" id="btnSubmit" class="btn btn-dark fw-medium float-end">Submit</button>
                     </div>
                 </div>
             </div>

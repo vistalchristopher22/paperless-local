@@ -209,32 +209,52 @@
                 <ul class="nav-second-level" aria-expanded="false">
                     <li>
                         <a href="{{ route('schedules.index') }}">
-                            <i class="mdi mdi-calendar"></i>
+                            {{--                            <i class="mdi mdi-calendar"></i>--}}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor"
+                                 class="bi bi-record me-2" viewBox="0 0 16 16">
+                                <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z"/>
+                            </svg>
                             Schedules
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('committee.index') }}">
-                            <i class="mdi mdi-file-table-outline"></i>
+                            {{--                            <i class="mdi mdi-file-table-outline"></i>--}}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor"
+                                 class="bi bi-record me-2" viewBox="0 0 16 16">
+                                <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z"/>
+                            </svg>
                             Committees
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('board-sessions.index') }}">
-                            <i class="mdi mdi-hospital-building"></i>
+                            {{--                            <i class="mdi mdi-hospital-building"></i>--}}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor"
+                                 class="bi bi-record me-2" viewBox="0 0 16 16">
+                                <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z"/>
+                            </svg>
                             Sessions
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('agendas.index') }}">
-                            <i class=" mdi mdi-table "></i>
+                            {{--                            <i class=" mdi mdi-table "></i>--}}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor"
+                                 class="bi bi-record me-2" viewBox="0 0 16 16">
+                                <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z"/>
+                            </svg>
                             Agendas
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('division.index') }}">
-                            <i class="mdi mdi-office-building "></i>
-                            Divisions
+                            {{--                            <i class="mdi mdi-office-building "></i>--}}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor"
+                                 class="bi bi-record me-2" viewBox="0 0 16 16">
+                                <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z"/>
+                            </svg>
+                             Divisions
                         </a>
                     </li>
                     @endfeature

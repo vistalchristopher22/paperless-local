@@ -6,14 +6,13 @@
 @endprepend
 @section('content')
 
-    <button class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#modalVenue">Add Venue</button>
     <div class="clearfix"></div>
 
     <div class="modal fade" tabindex="-1" id="modalVenue">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Create Venue</h5>
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title text-dark">Create Venue</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="formVenue">
@@ -21,12 +20,19 @@
                         <div class="form-group">
                             <label for="">Name</label>
                             <input type="text" class="form-control" name="name" id="venueName"
-                                   placeholder="Enter the name of the venue..">
+                                   placeholder="Enter the name of the venue">
                             <span class="text-danger error-field"></span>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-dark btn-md" id="btnSaveVenue">Save</button>
+                        <button type="button" class="btn btn-dark btn-md" id="btnSaveVenue">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-send me-1" viewBox="0 0 16 16">
+                                <path
+                                    d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                            </svg>
+                            Submit Venue
+                        </button>
                     </div>
                 </form>
             </div>
@@ -34,22 +40,89 @@
     </div>
     {{-- End of the venue modal --}}
 
-    <div class="card">
-        <div class="card-header bg-dark">
-            <div class="card-title text-white h6">
-                Schedules
+
+    <div class="row">
+        <div class="col-lg-2">
+
+            <div class="card calendar-cta">
+                <div class="card-header bg-light p-3">
+                    <div class="card-title fw-medium">Sessions</div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="text-center">
+                                <img src="/assets-2/images/widgets/calendar.svg" alt="" class="" height="150">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <h5 class="font-20 text-center">No Schedule Sessions</h5>
+                            <hr>
+                            <div id="calendar-events">
+                                @forelse($upcomingSessions as $session)
+                                    <div class='fc-event' data-id="{{ $session->id }}">{{ $session->title }}</div>
+                                @empty
+                                    <div class="d-grid">
+                                        <a class="btn btn-dark fw-medium " href="{{ route('board-sessions.create') }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                 fill="currentColor"
+                                                 class="bi bi-plus-circle me-1" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                <path
+                                                    d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                            </svg>
+                                            Add New Session
+                                        </a>
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-10">
+            <div class="card">
+                <div class="card-header bg-light d-flex flex-row justify-content-between align-items-center">
+                    <div class="card-title fw-medium">Schedules</div>
+                    <div>
+                        <button class="btn btn-dark fw-medium shadow-dark" data-bs-toggle="modal"
+                                data-bs-target="#modalVenue">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-plus-circle me-1" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path
+                                    d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                            Add New Venue
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="p-2">
+                        <div id="calendar"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="card-body">
-            <div id="calendar"></div>
-        </div>
+
     </div>
+
+
+
+
 
     <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-dark ">
-                    <h5 class="modal-title text-white text-uppercase" id="addScheduleModalLabel">Add Schedule</h5>
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title text-dark fw-medium text-uppercase" id="addScheduleModalLabel">Add
+                        Schedule</h5>
                     <a class="cursor-pointer btn-close" data-bs-dismiss="modal">
                     </a>
                 </div>
@@ -98,7 +171,7 @@
 
                 </div>
                 <div class="modal-footer border">
-                    <button type="button" class="btn btn-danger text-white shadow" id="btnDeleteSchedule">
+                    <button type="button" class="btn btn-danger btn-md text-white shadow" id="btnDeleteSchedule">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              class="bi bi-trash" viewBox="0 0 16 16">
                             <path
@@ -111,7 +184,7 @@
                             Delete
                         </span>
                     </button>
-                    <button type="button" class="btn btn-dark align-middle shadow" id="btnSaveSchedule">
+                    <button type="button" class="btn btn-dark btn-md align-middle shadow" id="btnSaveSchedule">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              class="bi bi-save2-fill" viewBox="0 0 16 16">
                             <path
@@ -128,26 +201,62 @@
 
     @push('page-scripts')
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+        {{--        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>--}}
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.5/dist/fullcalendar.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
         <script>
             $(document).ready(function () {
+                const SESSION_TYPE = "{{ ScheduleType::SESSION->value }}";
+                const COMMITTEE_TYPE = "{{ ScheduleType::MEETING->value }}";
+
                 let selectedDate = null;
                 let selectedEvent = null;
+                let droppedEventId = 0;
                 let type = null;
 
                 let selectedDates = [];
 
+                $('#calendar-events .fc-event').each(function () {
+                    // store data so the calendar knows to render an event upon drop
+                    $(this).data('event', {
+                        id: $(this).attr('data-id'),
+                        title: $.trim($(this).text()), // use the element's text as the event title
+                        stick: true // maintain when user navigates (see docs on the renderEvent method)
+                    });
+
+                    // make the event draggable using jQuery UI
+                    $(this).draggable({
+                        zIndex: 999,
+                        revert: true,      // will cause the event to go back to its
+                        revertDuration: 0  //  original position after the drag
+                    });
+
+                });
+
                 let calendar = $('#calendar').fullCalendar({
                     editable: true,
-                    height: 'auto',
+                    height: window.innerHeight - 250,
                     header: {
                         left: 'prev,next today',
                         center: 'title',
-                        right: 'month,agendaWeek,agendaDay'
                     },
                     defaultView: 'month',
                     selectable: true,
+                    droppable: true,
                     selectHelper: true,
+                    eventAfterAllRender: function (view) {
+                        let legend = `<div class="fc-legend">
+                              <div class="fc-event">
+                                    <div class="fc-bg" style="background:green"></div>
+                               </div>
+                              <span class="legend-label">Sessions</span>
+                               <div class="fc-event">
+                                    <div class="fc-bg" style="background:blue"></div>
+                                </div>
+                              <span class="legend-label">Committee</span>
+                          </div>`;
+                        $('.fc-header-toolbar').html(legend);
+                    },
                     eventSources: [{
                         url: `/api/schedules`,
                         failure: function () {
@@ -156,6 +265,15 @@
                             );
                         },
                     }],
+                    drop: function (date, a, b, c) {
+                        droppedEventId = $(this).attr('data-id');
+                        $(this).remove();
+                        selectedDate = $.fullCalendar.formatDate(date, "MM/DD/YYYY");
+                        $('#type').val(SESSION_TYPE);
+                        type = 'POST';
+                        $('#addScheduleModalLabel').text('SESSION SCHEDULE');
+                        $('#scheduleModal').modal('toggle');
+                    },
                     eventClick: function (info) {
                         selectedDate = $.fullCalendar.formatDate(info.start, "MM/DD/YYYY");
                         selectedEvent = info;
@@ -169,7 +287,7 @@
                                 $('#time').val(response.time);
                                 $('#shortDescription').val(response.description);
                                 $('#venue').val(response.venue);
-                                $('#type').val(response.type);
+                                $('#type').val(COMMITTEE_TYPE);
                                 $('#id').val(response.id);
                                 $("#withGuests").val(response.with_invited_guest === 1 ? "on" : "off");
                                 if (response.with_invited_guest == 1) {
@@ -191,7 +309,6 @@
                             window.location.href = `${route('committee-meeting-schedule.show', allDates.join('&'))}`
                             return false;
                         } else {
-
                             let date = $.fullCalendar.formatDate(start, "MM/DD/YYYY");
                             type = 'POST';
                             selectedDate = date;
@@ -242,9 +359,26 @@
                         data: schedule,
                         success: function (response) {
                             if (response.success) {
-                                notyf.success('Successfully set new committee meeting');
-                                $('#calendar').fullCalendar('refetchEvents');
-                                $('#scheduleModal').modal('toggle');
+                                if (response.type === SESSION_TYPE) {
+                                    $.ajax({
+                                        url: '/api/board-session/add-schedule',
+                                        method: 'PUT',
+                                        data: {
+                                            schedule_id: response.id,
+                                            board_session_id: droppedEventId,
+                                        },
+                                        success: function (response) {
+                                            notyf.success('Successfully set new committee meeting');
+                                            $('#calendar').fullCalendar('removeEvents', droppedEventId);
+                                            $('#calendar').fullCalendar('refetchEvents');
+                                            $('#scheduleModal').modal('toggle');
+                                        },
+                                    });
+                                } else {
+                                    notyf.success('Successfully set new committee meeting');
+                                    $('#calendar').fullCalendar('refetchEvents');
+                                    $('#scheduleModal').modal('toggle');
+                                }
                             }
                         }
                     });

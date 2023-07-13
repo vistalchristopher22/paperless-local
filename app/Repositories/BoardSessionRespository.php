@@ -12,6 +12,16 @@ final class BoardSessionRespository extends BaseRepository
         parent::__construct($model);
     }
 
+
+    public function getNoScheduleEvents()
+    {
+        return $this->model::orderBy('created_at', 'ASC')
+                            ->whereNull('schedule_id')
+                            ->whereDay('created_at', '>=', date('d'))
+                            ->whereYear('created_at', '>=', date('Y'))
+                            ->get(['id', 'title', 'unassigned_title', 'announcement_title']);
+    }
+
     public function createUnassignedBusiness(array $data = []): BoardSession
     {
         return $this->model->create([

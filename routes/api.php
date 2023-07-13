@@ -3,13 +3,27 @@
 use App\Http\Controllers\Admin\Api\AgendaMemberController;
 use App\Http\Controllers\Admin\Api\ScheduleController;
 use App\Http\Controllers\Admin\CommitteeController as AdminCommitteeController;
+use App\Models\BoardSession;
 use App\Models\Committee;
+use App\Models\Schedule;
 use App\Models\User;
 use App\Models\UserNotification;
 use Illuminate\Support\Facades\Route;
 
 Route::get('committee-list/{lead?}/{expanded?}/{ids?}', [AdminCommitteeController::class, 'list'])->name('committee.list');
 Route::get('agenda-members/{agenda}', [AgendaMemberController::class, 'members']);
+
+Route::put('board-session/add-schedule', function () {
+    try {
+        $boardSession = BoardSession::find(request()->board_session_id);
+        $boardSession->schedule_id = request()->schedule_id;
+        $boardSession->save();
+    } catch (\Exception $e) {
+        // find the schedule then delete
+        $schedule = Schedule::find(request()->schedule_id);
+        $schedule->delete();
+    }
+});
 
 Route::get('schedules', [ScheduleController::class, 'index'])->name('schedules.index');
 Route::post('schedule', [ScheduleController::class, 'store'])->name('schedule.store');
@@ -26,7 +40,6 @@ Route::put('committee-approved', function () {
 
     return response()->json(['success' => true, 'sender' => $committee->submitted_by, 'committee' => $committee->id]);
 });
-
 Route::put('committee-returned', function () {
     $committee = Committee::find(request()->id);
     $committee->status = 'returned';
@@ -35,7 +48,6 @@ Route::put('committee-returned', function () {
 
     return response()->json(['success' => true]);
 });
-
 Route::group(['prefix' => 'notifications'], function () {
 
     Route::post('user/push-notification', function () {
@@ -82,7 +94,7 @@ Route::group(['prefix' => 'notifications'], function () {
 
             $description = $descriptions[request()->event];
 
-            $description = str_replace(':user', $sender->last_name.' '.$sender->first_name, $description);
+            $description = str_replace(':user', $sender->last_name . ' ' . $sender->first_name, $description);
             $description = str_replace(':committee_name', $committee?->lead_committee_information?->title, $description);
 
             UserNotification::updateOrCreate([

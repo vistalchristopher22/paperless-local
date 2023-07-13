@@ -73,7 +73,6 @@
                          id="unassigned-business">
                         <div class="d-flex flex-column align-items-center justify-content-center">
                             {{ $boardSession->unassigned_title }}
-                            {!! $boardSession->unassigned_business !!}
                         </div>
                     </div>
 
