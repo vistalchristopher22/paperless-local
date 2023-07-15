@@ -1,34 +1,35 @@
 <?php
 
-use App\Http\Controllers\AccountController;
-use App\Http\Controllers\Admin\AgendaController;
-use App\Http\Controllers\Admin\Archive\FileBulkDeleteController;
-use App\Http\Controllers\Admin\Archive\FileController;
-use App\Http\Controllers\Admin\Archive\FilePreviewController;
-use App\Http\Controllers\Admin\Archive\FileShowInExplorerController;
-use App\Http\Controllers\Admin\BoardSessionController;
-use App\Http\Controllers\Admin\BoardSessionPublishPreviewController;
-use App\Http\Controllers\Admin\CommitteeController;
-use App\Http\Controllers\Admin\CommitteeFileAttachmentController;
-use App\Http\Controllers\Admin\CommitteeFileController;
-use App\Http\Controllers\Admin\CommitteeMeetingScheduleController;
-use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
-use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
-use App\Http\Controllers\Admin\DivisionController;
-use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
-use App\Http\Controllers\Admin\SanggunianMemberController;
-use App\Http\Controllers\Admin\ScheduleController;
-use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\SubmittedCommitteeController;
-use App\Http\Controllers\Admin\UserAccessController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\VenueController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LandingPageController;
-use App\Models\SanggunianMember;
 use App\Models\Schedule;
+use App\Models\SanggunianMember;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VenueController;
+use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\Admin\AgendaController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\DivisionController;
+use App\Http\Controllers\Admin\ScheduleController;
+use App\Http\Controllers\Admin\CommitteeController;
+use App\Http\Controllers\Admin\UserAccessController;
+use App\Http\Controllers\Admin\LegislationController;
+use App\Http\Controllers\Admin\Archive\FileController;
+use App\Http\Controllers\Admin\BoardSessionController;
+use App\Http\Controllers\Admin\CommitteeFileController;
+use App\Http\Controllers\Admin\SanggunianMemberController;
+use App\Http\Controllers\Admin\SubmittedCommitteeController;
+use App\Http\Controllers\Admin\Archive\FilePreviewController;
+use App\Http\Controllers\Admin\Archive\FileBulkDeleteController;
+use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
+use App\Http\Controllers\Admin\CommitteeFileAttachmentController;
+use App\Http\Controllers\Admin\CommitteeMeetingScheduleController;
+use App\Http\Controllers\Admin\Archive\FileShowInExplorerController;
+use App\Http\Controllers\Admin\BoardSessionPublishPreviewController;
+use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
+use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
 
 Auth::routes();
 
@@ -46,6 +47,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('submitted-committee/list', SubmittedCommitteeController::class);
         Route::post('re-order/agenda', [AgendaController::class, 'reOrder'])->name('agenda.re-order');
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
+
+
+        Route::resources(['legislation' => LegislationController::class]);
+
 
         Route::get('schedule/committees/{dates}', [CommitteeMeetingScheduleController::class, 'show'])->name('committee-meeting-schedule.show');
         Route::post('schedule/committees', [CommitteeMeetingScheduleController::class, 'store'])->name('committee-meeting-schedule.store');
@@ -159,5 +164,5 @@ Route::get('/scheduled/committee-meeting', function () {
         ]);
     }
 
-
 })->name('scheduled.committee-meeting.today');
+

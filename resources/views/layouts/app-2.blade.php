@@ -158,8 +158,16 @@
 
             @feature('administrator')
             <li>
-                <a href="{{ route('sanggunian-members.index') }}"><i data-feather="users"
-                                                                     class="align-self-center menu-icon"></i><span>Sanggunian Members</span></a>
+                <a href="{{ route('sanggunian-members.index') }}">
+                    <i data-feather="users" class="align-self-center menu-icon"></i>
+                    <span>Sanggunian Members</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('legislation.index') }}">
+                    <i data-feather="file" class="align-self-center menu-icon"></i>
+                    <span>Legislations</span>
+                </a>
             </li>
             @endfeature
 

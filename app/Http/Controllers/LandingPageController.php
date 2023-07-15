@@ -15,10 +15,10 @@ final class LandingPageController extends Controller
             ->whereYear('date_and_time', date('Y'))
             ->get();
 
-//        if ($allSchedules->count()) {
-            return to_route("scheduled.committee-meeting.today");
-//        }
+        //        if ($allSchedules->count()) {
+        return to_route("scheduled.committee-meeting.today");
+        //        }
 
-//        return to_route("login");
+        //        return to_route("login");
     }
 }

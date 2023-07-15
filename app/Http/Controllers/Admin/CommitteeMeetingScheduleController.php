@@ -38,26 +38,23 @@ final class CommitteeMeetingScheduleController extends Controller
         $recordTypes = $records->pluck('*.type')->flatten()->flip();
 
         if ($recordTypes->has('session') && !$recordTypes->has('committee')) {
-            dd($records);
-            $filePath = FileUtility::correctDirectorySeparator($latestPublishedBoardSession->file_path);
 
-            $fileName = basename($filePath);
+            // $fileName = basename($filePath);
 
-            $outputDirectory = FileUtility::publicDirectoryForViewing();
+            // $outputDirectory = FileUtility::publicDirectoryForViewing();
 
-            Artisan::call('convert:path "' . $filePath . '" --output="' . $outputDirectory . '"');
+            // Artisan::call('convert:path "' . $filePath . '" --output="' . $outputDirectory . '"');
 
-            $boardSessionPathForView = FileUtility::generatePathForViewing($outputDirectory, $fileName);
+            // $boardSessionPathForView = FileUtility::generatePathForViewing($outputDirectory, $fileName);
 
-            new PDFLinkResolver(FileUtility::publicDirectoryForViewing() . FileUtility::changeExtension($fileName));
-            return view('admin.committee-meeting.session-display', [
-                'schedules' => $this->scheduleRepository->groupedByDate($dates),
-                'boardSessionPathForView' => $boardSessionPathForView,
-                'boardSession' => $latestPublishedBoardSession,
-                'settings' => $this->settingRepository->getByNames('name', ['prepared_by', 'noted_by']),
-                'dates' => implode('&', $dates),
-            ]);
-        } else if ($recordTypes->has('session') && $recordTypes->has('committee')) {
+            // new PDFLinkResolver(FileUtility::publicDirectoryForViewing() . FileUtility::changeExtension($fileName));
+            // return view('admin.committee-meeting.session-display', [
+            //     'schedules' => $this->scheduleRepository->groupedByDate($dates),
+            //     'boardSessionPathForView' => $boardSessionPathForView,
+            //     'settings' => $this->settingRepository->getByNames('name', ['prepared_by', 'noted_by']),
+            //     'dates' => implode('&', $dates),
+            // ]);
+        } elseif ($recordTypes->has('session') && $recordTypes->has('committee')) {
             $latestPublishedBoardSession = $this->boardSessionRespository->published();
             $filePath = FileUtility::correctDirectorySeparator($latestPublishedBoardSession->file_path);
 

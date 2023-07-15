@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
+// use Illuminate\Database\Seeder;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -20,6 +22,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             VenueSeeder::class,
             //    CommitteeSeeder::class,
+            LegislationSeeder::class,
         ]);
     }
 }
