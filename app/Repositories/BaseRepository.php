@@ -18,6 +18,11 @@ class BaseRepository implements IBaseRepository
         return $this->model->whereNull('deleted_at')->oldest()->get();
     }
 
+    public function findById(int $id)
+    {
+        return $this->findBy(column : 'id', value : $id);
+    }
+
     public function findBy(string $column, mixed $value)
     {
         return $this->model->where($column, $value)->first();

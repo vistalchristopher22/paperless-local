@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\Legislation;
 use Illuminate\Support\Collection;
 
-
 final class LegislationRepository extends BaseRepository
 {
     // Change the model

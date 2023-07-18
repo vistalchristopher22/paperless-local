@@ -1,407 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Today's Scheduled Committee Meeting</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
-    <!-- Vendor CSS -->
-    <link rel="stylesheet" href="/assets/css/libs.bundle.css"/>
-
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="/assets/css/theme.bundle.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css"
-    />
-    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+    <title>{{ config('app.name') }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('styles.mine280.css?v=0eb413625a') }}">
 
     <style>
 
-
-        body {
-            box-sizing: border-box;
-            padding: 0px;
-            margin: 0px;
-            /*overflow: hidden;*/
+        :root {
+            --ghost-accent-color: #04142c;
         }
 
-        .kanban-board {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
+        * {
+            font-family: 'Inter', sans-serif;
         }
 
-        .kanban-column {
-            /* background-color: #f2f3f6; */
-            padding: 10px;
-            padding-right: 32px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            flex-basis: calc(33.33% - 20px);
-            /* max-width: calc(33.33% - 20px); */
-        }
 
-        .kanban-column h2 {
-            margin-top: 0;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 10px;
-        }
-
-        .kanban-card {
-            /* background-color: #ffffff; */
-            border-radius: 5px;
-            padding: 10px;
-            margin-top: 30px;
-            margin-bottom: 25px;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        .kanban-card h3 {
-            margin-top: 0;
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .kanban-card p {
-            margin-bottom: 0;
+        .text-action {
+            color: rgb(3, 79, 250) !important;
+            font-weight: 500;
             font-size: 0.9rem;
-            color: white;
         }
+
+        .sidebar-nav > ul > li > a {
+            font-weight: normal;
+            letter-spacing: 1.5px;
+        }
+
+
+        .card-body {
+            padding: 1.25rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+
+        .fw-bold {
+            font-weight: bold;
+        }
+
+        .text-uppercase {
+            text-transform: uppercase;
+        }
+
+        .text-decoration-underline {
+            text-decoration: underline;
+        }
+
+        .schedule-container {
+            margin-top: 1.25rem;
+        }
+
+        .mt-5 {
+            margin-top: 1.25rem !important;
+        }
+
+        .mt-3 {
+            margin-top: 0.75rem !important;
+        }
+
 
         ol {
             list-style: none;
         }
 
-        .simplebar-content-wrapper {
-            /*background: #07073d;*/
+        .text-dark {
+            color: #212529 !important;
         }
 
-        .simplebar-track {
-            border-radius: 0px;
-            background: #07073d;
+
+        .container {
+            max-width: 1500px;
+            padding: 50px;
+            padding-bottom: 0px;
+            background: white;
         }
 
-        .simplebar-thumb {
-            border-radius: 0px;
+        .header-logo {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #f2f3f6;
+            border-left: 0;
+            border-right: 0;
+            border-top: 0;
+            border-width: 3.5px;
         }
 
-        .simplebar-scrollbar {
-            border-radius: 0px;
+        .fs-2 {
+            font-size: 1.1rem !important;
         }
 
-        .simplebar-scrollbar:before,
-        .simplebar-scrollbar:after {
-            border-radius: 0px;
-            background-color: #07073d;
-            padding: 0px;
-            margin: 0px;
+        .fw-medium {
+            font-weight: 500;
         }
 
-        .highlighted-text {
-            background-color: yellow;
+        .shadow {
+            box-shadow: 2px 0px 20px #f2f6fb;
         }
 
+        .committee-details {
+            display: flex;
+            flex-direction: column;
+            text-indent: 30px;
+            line-height: 23px;
+            transition: all 0.3s ease; /* add a transition */
+        }
+
+
+        .committee-details {
+            display: flex;
+            flex-direction: column;
+            text-indent: 30px;
+            line-height: 23px;
+        }
+
+        .highlight {
+            background: #fff0a6;
+            transition: background-color 0.3s ease-in;
+            border-radius: 5px;
+        }
+
+        .member-clicked {
+            border-left: 5px solid #f2f3f6;
+            transition: all 0.2s ease;
+            padding-left: 5px;
+            font-weight: 500;
+        }
+
+        .agenda {
+            transition: all 0.2s ease-in;
+            border-radius: 5px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
     </style>
 </head>
-<body>
+<body class="home-template">
+<main>
+
+    <aside class="sidebar no-image shadow">
+
+        <div style="display:flex; align-items:center;">
+            <div>
+                <a href="index.html" class="site-logo">
+                    <img src="{{ asset('paperless-logo.png') }}" width="50" alt="{{ config('app.name') }}"/>
+                </a>
+            </div>
+            <div>
+                <h2 style="color:white; margin : 0px 0px 0px 15px; letter-spacing: 1.5px;">
+                    PAPERLESS
+                </h2>
+            </div>
+        </div>
 
 
-<div class="row">
-    <div class="col-lg-2 pe-0 d-sm-none d-none d-lg-block d-md-block">
-        <div data-simplebar class="px-2" data-simplebar-auto-hide="true" id="spMemberWidget">
-            <div class="list-group list-group-flush scrollarea">
-                <div class="input-group mb-2 mt-2 rounded-0">
-                    <input type="text" class="form-control  border border-dark rounded-0" placeholder="Search..." id="searchField">
-                </div>
+        <span class="sidebar-nav-toggle">
+      </span>
 
-                <div class="list-group-item list-group-item-action py-3 lh-tight" id="noResults" style="display:none;">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <span class="text-muted text-center">Sorry, we couldn't find any matches for your search.</span>
-                    </div>
-                </div>
-
-                @foreach($members as $member)
-                    <a href="#"
-                       id="{{ $member->id }}"
-                       class="sanggunian-member-item list-group-item list-group-item-action list-group-members-item py-3 lh-tight"
-                       aria-current="true"
-                       data-search-content="{{ Str::of($member->fullname)->snake() }}">
-                        <div class="d-flex align-items-center justify-content-start">
-                            <img class="img-fluid rounded-circle"
+        <div class="sidebar-inner" style="overflow-y: hidden;">
+            <nav class="sidebar-nav ">
+                <ul>
+                    @foreach($members as $member)
+                        <li style="display:flex;" data-search-content="{{ Str::of($member->fullname)->snake() }}"
+                            data-agenda-chairman="{{ $member->agenda_chairman }}"
+                            data-agenda-vice-chairman="{{ $member->agenda_vice_chairman }}"
+                            data-agenda-member="{{ $member->agenda_member }}"
+                            data-expanded-agenda-chairman="{{ $member->expanded_agenda_chairman }}"
+                            data-expanded-agenda-vice-chairman="{{ $member->expanded_agenda_vice_chairman }}"
+                            data-expanded-agenda-member="{{ $member->expanded_agenda_member }}"
+                            class="sanggunian-member-item list-group-members-item">
+                            <img class="img-fluid rounded-circle" style="margin-right : 5px;"
                                  src="{{ asset('storage/user-images/' . $member->profile_picture) }}"
                                  width="50px">
-                            <strong class="mb-1 mx-2">{{ $member->fullname }}</strong>
-                        </div>
-                        <div class="ms-2">
-                            @foreach($member->agenda_chairman as $chairman)
-                                <div class="card-title border-bottom  mb-1 mt-1 small">
-                                    Chairman <span
-                                        class="text-lowercase">of</span> <strong
-                                        class="sanggunian-member-committee">{{ $chairman->title }}</strong></div>
-                            @endforeach
-                            @foreach($member->agenda_vice_chairman as $vice_chairman)
-                                <div
-                                    class="card-title border-bottom col-10 mb-1 mt-1 small">
-                                    Vice Chairman <span
-                                        class="text-lowercase">of</span> <strong
-                                        class="sanggunian-member-committee">{{ $vice_chairman->title }}</strong>
-                                </div>
-                            @endforeach
-                            @foreach($member->agenda_member as $agendaMember)
-                                <div
-                                    class="col-10 mb-1 border-bottom mt-1 small card-title">
-                                    Member
-                                    <span class="text-lowercase">of</span>
-                                    <strong
-                                        class="sanggunian-member-committee">{{ $agendaMember->agenda->title }}</strong>
-                                </div>
-                            @endforeach
-                            @foreach($member->expanded_agenda_chairman as $expandedAgendaChairman)
-                                <div
-                                    class="card-title col-10 mb-1 mt-1 small border-bottom">
-                                    Chairman <span
-                                        class="text-lowercase">of</span> Expanded
-                                    Committee <strong
-                                        class="sanggunian-member-committee">{{ $expandedAgendaChairman->title }}</strong>
-                                </div>
-                            @endforeach
-                            @foreach($member->expanded_agenda_vice_chairman as $expandedAgendaViceChairman)
-                                <div
-                                    class="col-10 mb-1 mt-1 small card-title border-bottom">
-                                    Vice Chairman <span
-                                        class="text-lowercase">of</span> Expanded
-                                    Committee <strong
-                                        class="sanggunian-member-committee">{{ $expandedAgendaViceChairman->title }}</strong>
-                                </div>
-                            @endforeach
-                            @foreach($member->expanded_agenda_member as $expandedMember)
-                                <div
-                                    class="col-10 mb-1 mt-1 small card-title border-bottom">
-                                    Member <span
-                                        class="text-lowercase">of</span> Expanded
-                                    Committee <strong
-                                        class="sanggunian-member-committee">{{ $expandedMember->agenda->title }}</strong>
-                                </div>
-                            @endforeach
-                        </div>
-                    </a>
-                @endforeach
-            </div>
+                            <a href="#" class="member-name">
+                                hon. {{ $member->lastname }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </nav>
         </div>
-    </div>
-    <div class="col-lg-10 p-0 col-sm-12">
-        <div class="row">
-            <div class="col-lg-12">
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark z-index-50">
-                    <div class="container-fluid">
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#navbarSupportedContent2"
-                                aria-controls="navbarSupportedContent" aria-expanded="false"
-                                aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent2">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item">
-                                    <a class="nav-link h5" aria-current="page" href="{{ route('committee-meeting-schedule.preview', $dates) }}">Committees</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link h5" href="{{ route('board-sessions-published.preview', $dates) }}">Sessions</a>
-                                </li>
-                            </ul>
-{{--                            <form class="d-flex">--}}
-{{--                                <a class="nav-link text-white h5" href="{{ route('login') }}">Sign In</a>--}}
-{{--                            </form>--}}
-                        </div>
-                    </div><!--end container-->
-                </nav>
-            </div>
-            <div class="col-lg-12">
-                <div class="card rounded-0 border-0 p-0" style="min-height:94.5vh;" id="committeeDocuments">
-                    <div class="card-body">
-                        <div
-                            class="header d-flex flex-row align-items-center justify-content-center border border-start-0 border-end-0 border-top-0 border-5 border-dark mb-3">
-                            <img width="13%" src="{{ asset('session/logo.png') }}" alt="" class="me-auto">
-                            <div class="d-flex flex-column align-items-center">
-                                <h5 class="text-dark">Republic of the Philippines</h5>
-                                <h5 class="fw-bold text-dark">PROVINCE OF SURIGAO DEL SUR</h5>
-                                <h5 class="text-dark">Tandag City</h5>
-                                <h3 class="fw-bold text-dark">TANGGAPAN NG SANGGUNIANG PANLALAWIGAN</h3>
-                                <h5 class="text-dark">(Office of the Provincial Council)</h5>
-                            </div>
-                            <img width="14.5%" src="{{ asset('assets/tsp.png') }}" alt="" class="ms-auto">
-                        </div>
-                        <div class="text-center">
-                            <h4 class="fw-medium" style="letter-spacing : 1.8px;">
-                                SCHEDULE OF COMMITTEE MEETINGS
-                                <h4 class="fw-bold text-uppercase text-decoration-underline">
-                                    {{ $schedules?->first()?->first()?->venue }}
-                                </h4>
-                            </h4>
-                        </div>
+    </aside>
 
-                        @foreach ($schedules as $index => $grouppedSchedules)
-                            <div id="{{ $index }}" class="schedule-container">
-                                @foreach ($grouppedSchedules as $key => $schedule)
-                                    @if (
-                                        $key === 0 ||
-                                            $schedule->date_and_time->format('Y-m-d') !== $grouppedSchedules[$key - 1]->date_and_time->format('Y-m-d'))
-                                        <h5 class="fw-medium text-center mt-5">
-                                    <span class="text-uppercase">
-                                        @if ($schedule->date_and_time->hour === 0)
-                                            {{ $schedule->date_and_time->format('F d, Y') }}
-                                        @else
-                                            {{ $schedule->date_and_time->format('F d, Y @ h:i A') }}
-                                        @endif
-                                    </span>
-                                            <p class="">{{ $schedule->description }}</p>
-                                        </h5>
-                                        @php $countIndex = 1; @endphp
-                                    @endif
+    <section class="content shadow" style="background: #f2f3f6;">
+        <nav class="site-nav" style="background: white;">
+            <ul class="nav" role="menu">
+                <li class="nav-home nav-current" role="menuitem"><a
+                        href="{{ route('scheduled.committee-meeting.today', $dates) }}">Committee Meetings</a></li>
+                <li class="nav-style-guide" role="menuitem"><a
+                        href="{{ route('board-sessions-published.preview', $dates) }}">Ordered Business</a></li>
+            </ul>
+        </nav>
 
-                                    @if ($schedule->with_invited_guest == 1)
-                                        <h5 class="fw-medium text-uppercase text-center mt-3"
-                                            style="letter-spacing : 1.8px;">
-                                            COMMITTEE WITH INVITED GUESTS
-                                        </h5>
-                                        <div class="kanban-column w-100">
-                                            <ol class="kanban-cards" id="{{ $schedule->id }}">
-                                                @foreach ($schedule->committees as $committee)
-                                                    <li class="kanban-card" data-id="{{ $committee->id }}">
-                                                        <a target="_blank"
-                                                           href="{{ route('committee-file.show', $committee) }}"
-                                                           class="kanban-content">
-                                                    <span class="text-dark">
-                                                        <span class="count-index">{{ $countIndex }}. </span>
-                                                        {{ $committee->lead_committee_information->title }} /
-                                                        {{ $committee->expanded_committee_information->title }}
-                                                    </span>
-                                                        </a>
-                                                        @php $countIndex++; @endphp
-                                                    </li>
-                                                @endforeach
-                                            </ol>
-                                        </div>
-                                    @else
-                                        <h5 class="fw-medium text-uppercase text-center mt-3"
-                                            style="letter-spacing : 1.8px;">
-                                            COMMITTEE WITHOUT INVITED GUESTS
-                                        </h5>
-                                        <div class="kanban-column w-100">
-                                            <ol class="kanban-cards" id="{{ $schedule->id }}">
-                                                @foreach ($schedule->committees as $committee)
-                                                    <li class="kanban-card" data-id="{{ $committee->id }}">
-                                                        <a target="_blank"
-                                                           href="{{ route('committee-file.show', $committee) }}"
-                                                           class="kanban-content">
-                                                    <span class="text-dark">
-                                                        <span class="count-index">{{ $countIndex }}. </span>
-                                                        {{ $committee->lead_committee_information->title }} /
-                                                        {{ $committee->expanded_committee_information->title }}
-                                                    </span>
-                                                        </a>
-                                                        @php $countIndex++; @endphp
-                                                    </li>
-                                                @endforeach
-                                            </ol>
-                                        </div>
-                                    @endif
-                                @endforeach
-                            </div>
-                        @endforeach
+
+        <section class="site-title no-image">
+            <div class="container" style="margin-top: 15px;">
+                <div class="hero-content">
+                    <div class="header-logo">
+                        <img src="{{ asset('session/logo.png') }}" alt="" width="12%" style="margin-right: auto;">
+                        <div style="display: flex; flex-direction: column; align-items: center; line-height: 29px;">
+                            <span style="color: #212529; font-size: 1.1rem;">Republic of the Philippines</span>
+                            <span style="color: #212529; font-size: 1.1rem;">PROVINCE OF SURIGAO DEL SUR</span>
+                            <span
+                                style="color: #212529; font-size: 1.1rem;">Tandag City</span>
+                            <span
+                                style="color: #212529; font-size: 1.1rem;">TANGGAPAN NG SANGGUNIANG PANLALAWIGAN</span>
+                            <span style="color: #212529; font-size: 1.1rem;">(Office of the Provincial Council)</span>
+                        </div>
+                        <img src="{{ asset('assets/tsp.png') }}" alt="" width="13%" style="margin-left: auto;">
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        </section>
 
+        <main id="site-main" class="container">
+            <div class="card" id="committeeDocuments">
+                <div class="card-body">
+                    <div class="text-center">
+                        <span class="fs-2" style="letter-spacing : 1.8px;">
+                            SCHEDULE OF COMMITTEE MEETINGS
+                            <br>
+                            <span class="text-uppercase fw-bold">
+                                {{ $schedules?->first()?->first()?->venue }}
+                            </span>
+                        </span>
+                    </div>
 
+                    <br>
+                    <br>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
+                    @foreach ($schedules as $index => $grouppedSchedules)
+                        <div id="{{ $index }}" class="schedule-container">
+                            @foreach ($grouppedSchedules as $key => $schedule)
+                                @if (
+                                    $key === 0 ||
+                                        $schedule->date_and_time->format('Y-m-d') !== $grouppedSchedules[$key - 1]->date_and_time->format('Y-m-d'))
+                                    <div class="text-center">
+                                        <span class="fw-bold text-center fs-2">
+                                            <span class="text-uppercase">
+                                                @if ($schedule->date_and_time->hour === 0)
+                                                    {{ $schedule->date_and_time->format('F d, Y') }}
+                                                @else
+                                                    {{ $schedule->date_and_time->format('F d, Y @ h:i A') }}
+                                                @endif
+                                            </span>
+                                        </span>
+                                        <p>{{ $schedule->description }}</p>
+                                    </div>
+                                    @php $countIndex = 1; @endphp
+                                @endif
+
+                                @if ($schedule->with_invited_guest == 1)
+                                    <p class="text-uppercase text-center mt-3 fs-2"
+                                       style="letter-spacing : 2px;">
+                                        COMMITTEE WITH INVITED GUESTS
+                                    </p>
+                                    <div class="">
+                                        <ol class="committee-container" id="{{ $schedule->id }}">
+                                            @foreach ($schedule->committees as $committee)
+                                                <li style="font-size:1.2rem; margin-top : 25px;"
+                                                    class="committee-agenda-item"
+                                                    data-id="{{ $committee->lead_committee }}">
+                                                    <a target="_blank"
+                                                       href="{{ route('committee-file.show', $committee) }}"
+                                                       class="">
+                                                        <span class="text-dark">
+                                                        <span class="count-index">{{ $countIndex }}. </span>
+                                                        <span
+                                                            class="agenda"
+                                                            data-lead-committee="{{ $committee->lead_committee }}">{{ $committee->lead_committee_information->title }}</span>
+                                                        <span>/</span>
+                                                        <span
+                                                            class="agenda"
+                                                            data-expanded-committee="{{ $committee->expanded_committee }}">{{ Str::remove('Committee on', $committee->expanded_committee_information->title) }}</span>
+                                                    </span>
+                                                    </a>
+                                                    @php $countIndex++; @endphp
+                                                </li>
+                                                <div class="committee-details">
+                                                    <div>
+                                                        Chairman & Vice Chairman: <span
+                                                            class="text-action">{{ $committee->lead_committee_information->chairman_information->fullname }}</span>
+                                                        / <span
+                                                            class="text-action">{{ $committee->lead_committee_information->vice_chairman_information->fullname }}</span>
+                                                    </div>
+                                                    <span>
+                                                            Members :
+                                                        @foreach($committee->lead_committee_information->members as $member)
+                                                            <span
+                                                                class="text-action">{{ Str::of($member->sanggunian_member->pluck('lastname')[0])->prepend('Hon. ')  }}</span>
+                                                            @if(!$loop->last)
+                                                                /
+                                                            @endif
+                                                        @endforeach
+                                                    </span>
+                                                </div>
+                                            @endforeach
+                                        </ol>
+                                    </div>
+                                @else
+                                    <p class="text-uppercase text-center fs-2"
+                                       style="letter-spacing : 2px;">
+                                        COMMITTEE WITHOUT INVITED GUESTS
+                                    </p>
+                                    <div class="">
+                                        <ol class="committee-container" id="{{ $schedule->id }}">
+                                            @foreach ($schedule->committees as $committee)
+                                                <li style="font-size:1.2rem; margin-top : 25px;"
+                                                    data-id="{{ $committee->lead_committee }}"
+                                                    class="committee-agenda-item">
+                                                    <a target="_blank"
+                                                       href="{{ route('committee-file.show', $committee) }}"
+                                                       class="">
+                                                        <span class="text-dark">
+                                                            <span class="count-index">{{ $countIndex }}. </span>
+                                                            <span
+                                                                class="agenda"
+                                                                data-lead-committee="{{ $committee->lead_committee }}">{{ $committee->lead_committee_information->title }}</span>
+                                                            <span>/</span>
+                                                            <span
+                                                                class="agenda"
+                                                                data-expanded-committee="{{ $committee->expanded_committee }}">{{ Str::remove('Committee on', $committee->expanded_committee_information->title) }}</span>
+                                                        </span>
+                                                    </a>
+                                                    @php $countIndex++; @endphp
+                                                </li>
+                                                <div class="committee-details">
+                                                    <div>
+                                                        Chairman & Vice Chairman: <span
+                                                            class="text-action">{{ $committee->lead_committee_information->chairman_information->fullname }}</span>
+                                                        / <span
+                                                            class="text-action">{{ $committee->lead_committee_information->vice_chairman_information->fullname }}</span>
+                                                    </div>
+                                                    <span>Members :
+                                                          @foreach($committee->lead_committee_information->members as $member)
+                                                            <span
+                                                                class="text-action">{{ Str::of($member->sanggunian_member->pluck('lastname')[0])->prepend('Hon. ')  }}</span>
+                                                            @if(!$loop->last)
+                                                                /
+                                                            @endif
+                                                        @endforeach
+                                                    </span>
+                                                </div>
+                                            @endforeach
+                                        </ol>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+
+                    @endforeach
+                </div>
+            </div>
+        </main>
+        <br>
+    </section>
+</main>
+
+<script type="text/javascript" src="{{ asset('scripts.mine280.js?v=0eb413625a') }}"></script>
 <script>
-    const searchField = document.querySelector('#searchField');
-    const listItems = document.querySelectorAll('.list-group-members-item');
-    const noResults = document.querySelector('#noResults');
+    let memberItems = document.querySelectorAll('.sanggunian-member-item');
 
-    (function () {
-        let committeeDocuments = document.querySelector('#committeeDocuments');
-        let widget = document.querySelector('#spMemberWidget');
-        widget.style.height = committeeDocuments.offsetHeight + 70 + 'px';
-    }());
+    function highlightMatchingAgendaItems(e) {
+        const {
+            agendaChairman,
+            agendaViceChairman,
+            agendaMember,
+            expandedAgendaChairman,
+            expandedAgendaViceChairman,
+            expandedAgendaMember
+        } = e.currentTarget.dataset;
 
-    searchField.addEventListener('input', () => {
-        const searchTerm = searchField.value.trim().toLowerCase();
-        let foundMatch = false;
-        listItems.forEach((item) => {
-            const searchContent = item.getAttribute('data-search-content');
-            if (searchContent.indexOf(searchTerm) !== -1) {
-                item.style.display = 'block';
-                foundMatch = true;
-            } else {
-                item.style.display = 'none';
+        const chairmanInAgendas = JSON.parse(agendaChairman).map(agenda => parseInt(agenda.id));
+        const viceChairmanInAgendas = JSON.parse(agendaViceChairman).map(agenda => parseInt(agenda.id));
+        const agendaMemberInAgendas = JSON.parse(agendaMember).map(agenda => parseInt(agenda.agenda_id));
+
+        const committeeAgendaItems = Array.from(document.querySelectorAll('.committee-agenda-item'));
+        document.querySelectorAll('span.highlight').forEach(item => item.classList.remove('highlight'));
+
+        const matchingAgendaItems = committeeAgendaItems.filter(item => {
+            const leadCommitteeId = parseInt(item.querySelector('*[data-lead-committee]').dataset.leadCommittee);
+            const expandedCommitteeId = parseInt(item.querySelector('*[data-expanded-committee]').dataset.expandedCommittee);
+            return chairmanInAgendas.includes(leadCommitteeId) || viceChairmanInAgendas.includes(leadCommitteeId) || agendaMemberInAgendas.includes(leadCommitteeId) || expandedAgendaChairman.includes(expandedCommitteeId) || expandedAgendaViceChairman.includes(expandedCommitteeId) || expandedAgendaMember.includes(expandedCommitteeId);
+        });
+
+        matchingAgendaItems.forEach(item => {
+            const leadCommitteeId = parseInt(item.querySelector('*[data-lead-committee]').dataset.leadCommittee);
+            const expandedCommitteeId = parseInt(item.querySelector('*[data-expanded-committee]').dataset.expandedCommittee);
+
+            if (chairmanInAgendas.includes(leadCommitteeId) || viceChairmanInAgendas.includes(leadCommitteeId) || agendaMemberInAgendas.includes(leadCommitteeId)) {
+                item.querySelector(`span[data-lead-committee="${leadCommitteeId}"]`).classList.add('highlight');
+            }
+
+            if (expandedAgendaChairman.includes(expandedCommitteeId) || expandedAgendaViceChairman.includes(expandedCommitteeId) || expandedAgendaMember.includes(expandedCommitteeId)) {
+                item.querySelector(`span[data-expanded-committee="${expandedCommitteeId}"]`).classList.add('highlight');
             }
         });
-        if (foundMatch) {
-            noResults.style.display = 'none';
-        } else {
-            noResults.style.display = 'block';
-        }
-    });
+    }
 
-    document.querySelectorAll('.sanggunian-member-item').forEach((item) => {
-        item.addEventListener('click', function (e) {
-            let currentElement = e.currentTarget;
+    memberItems.forEach((item) => {
+        item.addEventListener('mouseenter', (e) => {
+            highlightMatchingAgendaItems(e);
+        });
 
-            document.querySelectorAll('.sanggunian-member-item').forEach((element) => {
-                if (element.getAttribute('id') != currentElement.getAttribute('id')) {
-                    element.classList.remove('bg-dark');
-                    element.classList.remove('text-white');
-                }
-            });
-
-            currentElement.classList.toggle('bg-dark');
-            currentElement.classList.toggle('text-white');
-
-            let committees = [];
-            item.querySelectorAll('.sanggunian-member-committee').forEach((committee) => {
-                committees.push(committee.innerText);
-            });
-            const cards = document.querySelectorAll('li.kanban-card');
-            cards.forEach((card) => {
-                const contentElement = card.querySelector('.kanban-content');
-                // Remove any existing highlighting
-                contentElement.querySelectorAll('.highlighted-text').forEach((highlighted) => {
-                    highlighted.outerHTML = highlighted.innerHTML;
-                });
-                committees.forEach((committee) => {
-                    if (contentElement.innerText.toLowerCase().includes(committee.toLowerCase())) {
-                        if (currentElement.classList.contains('bg-dark')) {
-                            const highlightedText = contentElement.innerHTML.replace(new RegExp(committee, 'gi'), '<span class="highlighted-text">$&</span>');
-                            contentElement.innerHTML = highlightedText;
-                        }
-                    }
-                });
-            });
+        item.addEventListener('mouseleave', () => {
+            document.querySelectorAll('span.highlight').forEach(item => item.classList.remove('highlight'));
         });
     });
-
 </script>
 </body>
 </html>

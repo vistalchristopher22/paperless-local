@@ -1,331 +1,186 @@
 @extends('layouts.app-2')
 @section('tab-title', 'Modify Schedule')
 @prepend('page-css')
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <style>
-        .kanban-board {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        .kanban-column {
-            /* background-color: #f2f3f6; */
-            padding: 10px;
-            padding-right: 32px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            flex-basis: calc(33.33% - 20px);
-            /* max-width: calc(33.33% - 20px); */
-        }
-
-        .kanban-column h2 {
-            margin-top: 0;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 10px;
-        }
-
-        .kanban-card {
-            /* background-color: #ffffff; */
-            background-color: #07073d;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 25px;
-            cursor: move;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .kanban-card h3 {
-            margin-top: 0;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-
-        .kanban-card p {
-            margin-bottom: 0;
-            font-size: 0.9rem;
-            color: white;
-        }
-
-        .kanban-card-placeholder {
-            border: 1px dashed #07073d;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            height: 100px;
-            margin-bottom: 10px;
-            letter-spacing: 1.1px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #999;
-        }
-
-        ol {
-            list-style-type: none;
-            margin-left: 20px;
-        }
-    </style>
 @endprepend
 @section('content')
-    <div class="card">
-        <div class="card-header m-0 py-0 px-1">
-            <ul class="nav nav-tabs d-flex align-items-center m-0 border-0" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active h5" id="committee-tab" data-bs-toggle="tab"
-                            data-bs-target="#committee"
-                            type="button" role="tab" aria-controls="committee" aria-selected="true">Commmittee
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link h5" id="session-tab" data-bs-toggle="tab" data-bs-target="#session"
-                            type="button" role="tab" aria-controls="session" aria-selected="false">Session
-                    </button>
-                </li>
 
-                <li class="nav-item dropdown" role="presentation">
-                    <a class="nav-link dropdown-toggle h5" data-bs-toggle="dropdown" href="#" role="button"
-                       aria-expanded="false">
-                        Actions
-                        <i class="mdi mdi-chevron-down"></i>
-                    </a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" target="_blank" href="{{ route('committee-meeting-schedule.preview', $dates) }}">Preview</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" target="_blank"
-                           href="{{ route('committee-meeting-schedule.print', $dates) }}">Print</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-
-        <div class="tab-content" id="tab-panes">
-            <div class="tab-pane fade show active" id="committee" role="tabpanel" aria-labelledby="committee-tab">
-                <div class="card-body">
-                    <div
-                        class="header d-flex flex-row align-items-center justify-content-center border border-start-0 border-end-0 border-top-0 border-5 border-dark mb-3">
-                        <img width="10%" src="{{ asset('session/logo.png') }}" alt="" class="me-auto">
-                        <div class="d-flex flex-column align-items-center">
-                            <h4 class="text-dark">Republic of the Philippines</h4>
-                            <h4 class="fw-bold text-dark">PROVINCE OF SURIGAO DEL SUR</h4>
-                            <h4 class="text-dark">Tandag City</h4>
-                            <h3 class="fw-bold text-dark">TANGGAPAN NG SANGGUNIANG PANLALAWIGAN</h3>
-                            <h5 class="text-dark">(Office of the Provincial Council)</h5>
-                        </div>
-                        <img width="11.5%" src="{{ asset('assets/tsp.png') }}" alt="" class="ms-auto">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="fw-medium" style="letter-spacing : 1.8px;">
-                            SCHEDULE OF COMMITTEE MEETINGS
-                            <h4 class="fw-bold text-uppercase text-decoration-underline">
-                                {{ $schedules?->first()?->first()?->venue }}
-                            </h4>
-                        </h4>
-                    </div>
-
-
-                    @foreach ($schedules as $index => $grouppedSchedules)
-                        <div id="{{ $index }}" class="schedule-container">
-                            @foreach ($grouppedSchedules as $key => $schedule)
-                                @if (
-                                    $key === 0 ||
-                                        $schedule->date_and_time->format('Y-m-d') !== $grouppedSchedules[$key - 1]->date_and_time->format('Y-m-d'))
-                                    <h5 class="fw-medium text-center mt-5">
-                                <span class="text-uppercase">
-                                    @if ($schedule->date_and_time->hour === 0)
-                                        {{ $schedule->date_and_time->format('F d, Y') }}
-                                    @else
-                                        {{ $schedule->date_and_time->format('F d, Y @ h:i A') }}
-                                    @endif
-                                </span>
-                                        <p class="">{{ $schedule->description }}</p>
-                                    </h5>
-                                    @php $countIndex = 1; @endphp
-                                @endif
-
-                                @if ($schedule->with_invited_guest == 1)
-                                    <h5 class="fw-medium text-uppercase text-center mt-3"
-                                        style="letter-spacing : 1.8px;">
-                                        COMMITTEE WITH INVITED GUESTS
-                                    </h5>
-                                    <div class="kanban-column w-100">
-                                        <ol class="kanban-cards" id="{{ $schedule->id }}">
-                                            @foreach ($schedule->committees as $committee)
-                                                <li class="kanban-card shadow-lg" data-id="{{ $committee->id }}">
-                                            <span class="text-white">
-                                                <span class="count-index">{{ $countIndex }}. </span>
-                                                {{ $committee->lead_committee_information->title }} /
-                                                {{ $committee->expanded_committee_information->title }}
-                                            </span>
-                                                    @php $countIndex++; @endphp
-                                                </li>
-                                            @endforeach
-                                            <div style="pointer-events: none;"
-                                                 class="shadow-lg kanban-card-placeholder text-uppercase d-flex flex-column justify-content-center align-items-center">
-                                        <span class="text-muted fw-medium">
-                                            Drop committees here
-                                        </span>
-                                            </div>
-                                        </ol>
-                                    </div>
-                                @else
-                                    <h5 class="fw-medium text-uppercase text-center mt-3"
-                                        style="letter-spacing : 1.8px;">
-                                        COMMITTEE WITHOUT INVITED GUESTS
-                                    </h5>
-                                    <div class="kanban-column w-100">
-                                        <ol class="kanban-cards" id="{{ $schedule->id }}">
-                                            @foreach ($schedule->committees as $committee)
-                                                <li class="kanban-card shadow-lg" data-id="{{ $committee->id }}">
-                                            <span class="text-white">
-                                                <span class="count-index">{{ $countIndex }}. </span>
-                                                {{ $committee->lead_committee_information->title }} /
-                                                {{ $committee->expanded_committee_information->title }}
-                                            </span>
-                                                    @php $countIndex++; @endphp
-                                                </li>
-                                            @endforeach
-                                            <div style="pointer-events: none;"
-                                                 class="shadow-lg kanban-card-placeholder d-flex flex-column justify-content-center align-items-center text-uppercase fw-medium">
-                                                <div class="text-muted fw-medium">
-                                                    Drop committees here
-                                                </div>
-                                            </div>
-                                        </ol>
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
-                    @endforeach
-                    <div class="row">
-                        <div class="col-lg-4 offset-7">
-                            <h5 class="text-uppercase">
-                                prepared by:
-                            </h5>
-                        </div>
-
-                        <div class="col-lg-4 offset-8">
-                            <h5 class="text-uppercase" style="letter-spacing : 1.09px">
-                                {{ $settings->where('name', 'prepared_by')->first()->value }}
-                                <p class="text-start mx-5 fw-bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLSE II</p>
-                            </h5>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-11 offset-1">
-                            <h5 class="text-uppercase">
-                                noted by:
-                            </h5>
-                        </div>
-
-                        <div class="col-lg-4 offset-2">
-                            <h5 class="text-uppercase" style="letter-spacing : 1.09px">
-                                {{ $settings->where('name', 'noted_by')->first()->value }}
-                                <p class="text-start mx-5 fw-bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLSO IV</p>
-                            </h5>
-                        </div>
-                    </div>
+    <div class="modal fade" tabindex="-1" id="previewModal">
+        <div class="modal-dialog modal-xl modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title card-title h6">Preview Document</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
-            <div class="tab-pane fade" role="tabpanel" aria-labelledby="session-tab" id="session">
-                <div class="card-body">
-                    <ul class="nav nav-pills nav-justified d-flex align-items-center" role="tablist">
-                        <li class="nav-item waves-effect waves-light" role="presentation">
-                            <button class="nav-link active h5" id="order-business-tab" data-bs-toggle="tab"
-                                    data-bs-target="#order-business"
-                                    type="button" role="tab" aria-controls="committee" aria-selected="true">Order
-                                Business
-                            </button>
-                        </li>
-                        <li class="nav-item waves-effect waves-light" role="presentation">
-                            <button class="nav-link h5" id="unassigned-business-tab" data-bs-toggle="tab"
-                                    data-bs-target="#unassigned-business"
-                                    type="button" role="tab" aria-controls="session" aria-selected="false">Unassigned
-                                Bussiness
-                            </button>
-                        </li>
-
-                        <li class="nav-item waves-effect waves-light" role="presentation">
-                            <button class="nav-link h5" id="announcement-tab" data-bs-toggle="tab" data-bs-target="#announcements"
-                                    type="button" role="tab" aria-controls="session" aria-selected="false">Announcements
-                            </button>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="session-tab-panes">
-                        <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="order-business"
-                             id="order-business">
-                            <div class="d-flex align-items-center justify-content-center">
-                                <embed src="{{ $boardSessionPathForView }}#zoom=196&toolbar=0&pagemode=thumbs" style="min-height : 100vh; min-width : 85vw;"></embed>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade" role="tabpanel" aria-labelledby="unassigned-business-tab"
-                             id="unassigned-business">
-                            <div class="d-flex flex-column align-items-center justify-content-center">
-                                {{ $boardSession->unassigned_title }}
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade" role="tabpanel" aria-labelledby="unassigned-business-tab"
-                             id="announcements">
-                            <div class="d-flex flex-column align-items-center justify-content-center">
-                                {{ $boardSession->announcement_title }}
-                                {!! $boardSession->announcement_content !!}
-                            </div>
-                        </div>
-                    </div>
+                <div class="modal-body p-0 m-0" style="overflow-y: hidden">
+                    <iframe src="" width="100%" height="110%"
+                            style="position:absolute; top :0%;"></iframe>
                 </div>
             </div>
         </div>
     </div>
+    @foreach($records as $date => $record)
+        <div class="accordion" style="max-width: 2000px;">
+            <div class="accordion-item border-top-0">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button bg-soft-primary" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panel-{{ $date }}" aria-expanded="true"
+                            aria-controls="panel-{{ $date }}">
+                        <div class="card-title">
+                            <span class="text-capitalize me-1 text-dark fw-bolder">Session </span> (<span
+                                class="">{{ date('F d, Y', strtotime($date)) }}</span>)
+                        </div>
+                    </button>
+                </h2>
+                <div id="panel-{{ $date }}" class="accordion-collapse collapse"
+                     aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body">
+                        @foreach($record as $key => $session)
+                            <div class="card">
+                                <div class="card-header bg-light p-3">
+                                    <div class="card-title">
+                                        {{ $session->name }}
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="accordion" id="session-{{ $session->id }}">
+                                        <div class="accordion-item border-top-0">
+                                            <h2 class="accordion-header mt-0 d-flex flex-row rounded-0"
+                                                id="orderBusiness">
+                                                <button class="accordion-button bg-light collapsed" type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#session-{{ $session->id }}-order-business"
+                                                        aria-expanded="true"
+                                                        aria-controls="session-{{ $session->id }}-order-business">
+                                                    <span class="card-title">
+                                                        Order Business
+                                                    </span>
+                                                </button>
+                                                <button
+                                                    class="btn-sm btn btn-dark fw-medium btn-preview-document rounded-0 px-3 fw-medium d-flex align-items-center"
+                                                    data-url="{{ $session->board_sessions[0]->file_path_view }}"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         width="16"
+                                                         height="16" fill="currentColor"
+                                                         class="bi bi-file-text me-2"
+                                                         viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/>
+                                                        <path
+                                                            d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
+                                                    </svg>
+                                                    Document
+                                                </button>
+                                            </h2>
+
+                                            <div id="session-{{ $session->id }}-order-business"
+                                                 class="accordion-collapse collapse"
+                                                 aria-labelledby="orderBusiness"
+                                                 data-bs-parent="#session-{{ $session->id }}">
+                                                <div class="accordion-body">
+                                                    @isset($session->board_sessions[0]->order_business_note)
+                                                        {!! $session->board_sessions[0]->order_business_note !!}
+                                                    @else
+                                                        Note Not Available
+                                                    @endisset
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="accordion-item border-top-0">
+                                            <h2 class="accordion-header mt-0 d-flex flex-row rounded-0"
+                                                id="orderBusiness">
+                                                <button class="accordion-button bg-light collapsed" type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#session-{{ $session->id }}-un-assigned-business"
+                                                        aria-expanded="true"
+                                                        aria-controls="session-{{ $session->id }}-un-assigned-business">
+                                                    <span class="card-title">
+                                                        Unassigned Business
+                                                    </span>
+                                                </button>
+                                                <button
+                                                    class="btn-sm btn btn-dark fw-medium btn-preview-document rounded-0 px-3 fw-medium d-flex align-items-center"
+                                                    data-url="{{ $session->board_sessions[0]->unassigned_business_file_path_view }}"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         width="16"
+                                                         height="16" fill="currentColor"
+                                                         class="bi bi-file-text me-2"
+                                                         viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/>
+                                                        <path
+                                                            d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
+                                                    </svg>
+                                                    Document
+                                                </button>
+                                            </h2>
+
+                                            <div id="session-{{ $session->id }}-un-assigned-business"
+                                                 class="accordion-collapse collapse"
+                                                 aria-labelledby="orderBusiness"
+                                                 data-bs-parent="#session-{{ $session->id }}">
+                                                <div class="accordion-body">
+                                                    @isset($session->board_sessions[0]->unassigned_business_note)
+                                                        {!! $session->board_sessions[0]->unassigned_business_note !!}
+                                                    @else
+                                                        Note Not Available
+                                                    @endisset
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header mt-0 d-flex flex-row rounded-0">
+                                                <button class="accordion-button collapsed bg-light"
+                                                        type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#announcement-{{ $session->id }}"
+                                                        aria-expanded="false"
+                                                        aria-controls="announcement-{{ $session->id }}">
+                                                    <span class="card-title">
+                                                        Announcements
+                                                    </span>
+                                                </button>
+                                            </h2>
+                                            <div id="announcement-{{ $session->id }}"
+                                                 class="accordion-collapse collapse"
+                                                 data-bs-parent="#session-{{ $session->id }}"
+                                                 style="">
+                                                <div class="accordion-body">
+                                                    @isset($session->board_sessions[0]->announcement_content)
+                                                        {!! $session->board_sessions[0]->announcement_content !!}
+                                                    @else
+                                                        Note Not Available
+                                                    @endisset
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
     @push('page-scripts')
-        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
         <script>
-            $(".kanban-cards").sortable({
-                connectWith: ".kanban-cards",
-                placeholder: "kanban-card-placeholder",
-                forcePlaceholderSize: true,
-                start: function (event, ui) {
-                    ui.item.addClass("dragging");
-                    let labelIndex = ui.item.data('index');
-                    $(`#parent-index-${labelIndex}`).hide();
-                },
-                stop: function (event, ui) {
-                    ui.item.removeClass("dragging");
-                    let cardId = ui.item.data("id");
-                    let columnId = ui.item.parent().attr("id");
-                    let items = {};
-                    let labelIndex = ui.item.data('index');
-                    $(`#parent-index-${labelIndex}`).hide();
-
-                    $('.kanban-card').each(function (index, element) {
-                        let currentElementParentId = $(element).parent().attr('id');
-                        if (!items[currentElementParentId]) {
-                            items[currentElementParentId] = [];
-                        }
-                        items[currentElementParentId].push($(element).attr('data-id'));
-                    });
-
-                    $(ui.item.closest('.schedule-container')).find('li.kanban-card').each(function (index, element) {
-                        $(element).find('.count-index').text(`${index + 1}. `);
-                    });
-
-                    $.ajax({
-                        url: route('committee-meeting-schedule.store'),
-                        method: 'POST',
-                        data: {
-                            parent: columnId,
-                            id: cardId,
-                            order: items,
-                        },
-                        success: function (response) {
-                            notyf.success('Committee moved successfully!');
-                        }
-                    });
-                }
-            }).disableSelection();
+            $(document).ready(function () {
+                $(document).on('click', '.btn-preview-document', function () {
+                    let url = $(this).attr('data-url');
+                    $('#previewModal').find('iframe').attr('src', `${url}#zoom=190&toolbar=0`);
+                    $('#previewModal').modal('show');
+                })
+            });
         </script>
     @endpush
 @endsection
+s

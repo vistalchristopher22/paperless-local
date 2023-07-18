@@ -79,7 +79,7 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="">
                 <table class="table table-striped table-bordered" id="committees-table" width="100%">
                     <thead>
                     <tr class="bg-light">
@@ -87,6 +87,7 @@
                         <th class="p-3 border text-dark text-center" style="width:180px;">Submitted By</th>
                         <th class="p-3 border text-dark">Lead Committee</th>
                         <th class="p-3 border text-dark">Expanded Committee</th>
+                        <th class="p-3 border text-dark">Schedule</th>
                         <th class="p-3 border text-dark text-center">Status</th>
                         <th class="p-3 border text-dark text-center">Submitted At</th>
                         <th class="p-3 border text-center text-dark">Actions</th>
@@ -114,6 +115,21 @@
                 <div class="overflow-hidden" id="leadCommitteeContent">
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-bottom border-0" tabindex="-1" id="offCanvasSchedule"
+         aria-labelledby="offCanvasScheduleTitle">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title mt-0" id="offcanvasExampleLabel">Schedule Information</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
+            <div class="overflow-auto py-2">
+                <div class="overflow-hidden" id="scheduleInformationContent">
+                </div>
+            </div>
+
         </div>
     </div>
 

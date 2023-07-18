@@ -2,6 +2,8 @@
 
 namespace App\Resolvers;
 
+use Illuminate\Support\Facades\Log;
+
 final class PDFLinkResolver implements IResolver
 {
     public function __construct(string $path, string $directory = null)
@@ -11,6 +13,11 @@ final class PDFLinkResolver implements IResolver
 
     public function resolve(string $path, string $directory): void
     {
-        shell_exec("python.exe {$directory}\\reader.py -f {$path}");
+        try {
+            shell_exec("python.exe {$directory}\\reader.py -f {$path}");
+            Log::info('PDF Link: ' . $path);
+        } catch(\Exception $e) {
+            dd($e->getMessage());
+        }
     }
 }

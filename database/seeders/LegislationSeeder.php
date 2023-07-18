@@ -7,7 +7,6 @@ use App\Models\Ordinance;
 use App\Models\Resolution;
 use App\Models\Legislation;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class LegislationSeeder extends Seeder
 {

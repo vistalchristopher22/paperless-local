@@ -18,6 +18,8 @@ final class UpdateBoardSession implements IPipeHandler
         $boardSession->unassigned_title = $payload['unassigned_title'];
         $boardSession->announcement_title = $payload['announcement_title'];
         $boardSession->announcement_content = $payload['announcement_content'];
+        $boardSession->order_business_note = $payload['orderBusinessNote'];
+        $boardSession->unassigned_business_note = $payload['unAssignedBusinessNote'];
         $boardSession->save();
 
         return $next($payload);

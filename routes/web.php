@@ -53,6 +53,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         Route::get('schedule/committees/{dates}', [CommitteeMeetingScheduleController::class, 'show'])->name('committee-meeting-schedule.show');
+        Route::get('schedule/committees-and-session/{dates}', [CommitteeMeetingScheduleController::class, 'committeesAndSession'])->name('committee-meeting.schedule.show.committees-and-session');
+        Route::Get('schedule/session-only/{dates}', [CommitteeMeetingScheduleController::class, 'sessions'])->name('committee-meeting.schedule.show.session-only');
         Route::post('schedule/committees', [CommitteeMeetingScheduleController::class, 'store'])->name('committee-meeting-schedule.store');
 
         Route::get('board-sessions/list', [BoardSessionController::class, 'list'])->name('board-sessions.list');
@@ -107,6 +109,7 @@ Route::get('/scheduled/committee-meeting', function () {
         ->orderBy('date_and_time', 'ASC')
         ->whereDay('date_and_time', date('d'))
         ->whereYear('date_and_time', date('Y'))
+        ->where('type', 'committee')
         ->get();
 
     $schedules = $allSchedules->groupBy(function ($record) {
@@ -165,4 +168,3 @@ Route::get('/scheduled/committee-meeting', function () {
     }
 
 })->name('scheduled.committee-meeting.today');
-

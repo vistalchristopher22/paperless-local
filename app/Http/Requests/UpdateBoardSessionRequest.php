@@ -28,6 +28,8 @@ class UpdateBoardSessionRequest extends FormRequest
             'announcement_content' => ['nullable', 'min:2'],
             'file_path' => ['nullable', 'file', 'mimes:pdf,doc,docx,xlsx,xls', 'max:10240'],
             'unassigned_business' => ['nullable', 'file', 'mimes:pdf,doc,docx,xlsx,xls', 'max:10240'],
+            'orderBusinessNote' => ['nullable', 'min:2'],
+            'unAssignedBusinessNote' => ['nullable', 'min:2'],
         ];
     }
 }

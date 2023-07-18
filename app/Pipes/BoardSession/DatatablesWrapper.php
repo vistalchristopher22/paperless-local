@@ -71,7 +71,7 @@ final class DatatablesWrapper implements IPipeHandler
                     return '<span class="badge bg-primary text-uppercase">No</span>';
                 }
             })
-            ->rawColumns(['action', 'status', 'published'])
+            ->rawColumns(['action', 'status', 'published', 'announcement_content'])
             ->make(true);
 
         return $next($payload);

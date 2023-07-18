@@ -43,7 +43,6 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
-
         'source' => [
             'driver' => 'local',
             'root' => storage_path('app/source'),
@@ -65,7 +64,6 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
-
         'BOARD_SESSIONS' => [
             'driver' => 'local',
             'root' => storage_path('app/source/SESSIONS'),

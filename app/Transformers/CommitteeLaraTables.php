@@ -8,7 +8,7 @@ class CommitteeLaraTables
 {
     public static function laratablesAdditionalColumns()
     {
-        return ['lead_committee', 'expanded_committee', 'file_path'];
+        return ['lead_committee', 'expanded_committee', 'file_path', 'schedule_id'];
     }
 
     public static function laratablesCustomLeadCommittee($committee)
@@ -26,9 +26,21 @@ class CommitteeLaraTables
         return view('admin.committee.includes.expanded_committee', compact('committee'))->render();
     }
 
+    public static function laratablesCustomSchedule($committee)
+    {
+        return view('admin.committee.includes.schedule', compact('committee'))->render();
+    }
+
     public static function laratablesCustomAction($committee)
     {
         return view('admin.committee.includes.action', compact('committee'))->render();
+    }
+
+    public static function laratablesScheduleRelationQuery()
+    {
+        return function ($query) {
+            $query->with('schedule_information');
+        };
     }
 
     public static function laratablesLeadCommitteeRelationQuery()

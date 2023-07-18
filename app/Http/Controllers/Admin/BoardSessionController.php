@@ -15,8 +15,6 @@ use App\Pipes\BoardSession\StoreBoardSession;
 use App\Pipes\BoardSession\UpdateBoardSession;
 use App\Repositories\BoardSessionRespository;
 use App\Resolvers\PDFLinkResolver;
-use App\Services\DocumentService;
-use App\Services\UserService;
 use App\Utilities\FileUtility;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -24,13 +22,9 @@ use Illuminate\Support\Facades\Pipeline;
 
 final class BoardSessionController extends Controller
 {
-    private DocumentService $documentService;
-
-    public function __construct(private BoardSessionRespository $boardSessionRepository, private readonly UserService $userService)
+    public function __construct(private BoardSessionRespository $boardSessionRepository)
     {
-        $this->documentService = app()->make(DocumentService::class);
         $this->middleware('verify.user')->only(['locked', 'unlocked', 'destroy']);
-
     }
 
     public function list()

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Api\AgendaMemberController;
 use App\Http\Controllers\Admin\Api\ScheduleController;
 use App\Http\Controllers\Admin\CommitteeController as AdminCommitteeController;
+use App\Http\Controllers\Api\CommitteeScheduleController;
 use App\Models\BoardSession;
 use App\Models\Committee;
 use App\Models\Schedule;
@@ -31,6 +32,9 @@ Route::get('schedule/{id}', [ScheduleController::class, 'show'])->name('schedule
 Route::delete('schedule/{id}', [ScheduleController::class, 'destroy'])->name('schedule.destroy');
 Route::put('schedule-move/{schedule}', [ScheduleController::class, 'move'])->name('schedule.move');
 Route::put('schedule', [ScheduleController::class, 'update'])->name('schedule.update');
+
+
+Route::get('committee-schedule-information/{schedule}', [CommitteeScheduleController::class, 'show'])->name('committee-schedule-information.show');
 
 
 Route::put('committee-approved', function () {

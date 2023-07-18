@@ -37,7 +37,6 @@
                         </th>
                         <th class="p-2 text-center">Unassigned Title</th>
                         <th class="p-2 text-center">Announcement Title</th>
-                        <th class="p-2 text-center">Announcement Content</th>
                         <th class="p-2 text-center">Publish Status</th>
                         <th class="p-2 text-center">Status</th>
                         <th class="p-2 text-center">Created At</th>
@@ -77,21 +76,16 @@
                             }
                         },
                         {
-                            className: 'border mx-3',
+                            className: 'border mx-5',
                             data: 'announcement_title',
                             name: 'announcement_title'
-                        },
-                        {
-                            className: 'border',
-                            data: 'announcement_content',
-                            name: 'announcement_content'
                         },
                         {
                             className: 'border text-center',
                             data: 'is_published',
                             name: 'is_published',
                             render: function (data) {
-                                if (data == 1) {
+                                if (data === 1) {
                                     return `<span class="badge badge-soft-primary">Published</span>`;
                                 }
 

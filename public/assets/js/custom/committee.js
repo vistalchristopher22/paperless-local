@@ -13,9 +13,6 @@ let table = $('#committees-table').DataTable({
     serverSide: true,
     ajax: {
         url: '/api/committee-list/*/*/*',
-        // "error": function () {
-        //     location.reload();
-        // },
     },
     processing: true,
     language: {
@@ -47,6 +44,12 @@ let table = $('#committees-table').DataTable({
             render: (data) => `<span class="mx-2">${data}</span>`,
         },
         {
+            className : 'text-center',
+            name: 'schedule',
+            searchable: false,
+            orderable: false,
+        },
+        {
             name: 'status',
             className: 'text-center',
             render: function (raw) {
@@ -73,7 +76,6 @@ let table = $('#committees-table').DataTable({
     ],
 });
 
-
 let searchTimeout;
 const searchInput = $('#committees-table_filter input');
 const delay = 300;
@@ -84,19 +86,16 @@ searchInput.off().on('keyup', function () {
         table.search($(this).val()).draw();
     }, delay);
 });
-
 $('#filterLeadCommitee').change(function () {
     let lead = $('#filterLeadCommitee').val();
     let expanded = $('#filterExpandedCommittee').val();
     table.ajax.url(`/api/committee-list/${lead}/${expanded}/*`).load(null, false);
 });
-
 $('#filterExpandedCommittee').change(function () {
     let lead = $('#filterLeadCommitee').val();
     let expanded = $('#filterExpandedCommittee').val();
     table.ajax.url(`/api/committee-list/${lead}/${expanded}/*`).load(null, false);
 });
-
 $('#filterByContent').keyup(function (e) {
     if (e.keyCode == 13) {
         let lead = $('#filterLeadCommitee').val();
@@ -126,8 +125,6 @@ $('#filterByContent').keyup(function (e) {
     }
 
 });
-
-
 const loadCanvasContent = (response) => {
     let chairmanAndViceChairmanCount = 2;
     let {
@@ -217,8 +214,6 @@ const loadCanvasContent = (response) => {
         });
     }
 };
-
-
 document.addEventListener('click', event => {
     if (event.target.matches('.btn-edit')) {
         const id = event.target.getAttribute('data-id');
@@ -241,6 +236,42 @@ document.addEventListener('click', event => {
         fetch(`/api/agenda-members/${agenda}`)
             .then(response => response.json())
             .then(data => loadCanvasContent(data))
+            .catch(error => console.error(error));
+    }
+
+    if(event.target.matches('.view-schedule-information')) {
+        const schedule = event.target.getAttribute('data-id');
+        let endpoint = route('committee-schedule-information.show', schedule);
+        fetch(endpoint)
+            .then(response => response.json())
+            .then(data => {
+                let { schedule } = data;
+                $('#scheduleInformationContent').html(``);
+                console.log(schedule);
+                $('#scheduleInformationContent').append(`
+                    <div class="list-group">
+                        <div class="list-group-item align-middle">
+                            <strong>Name</strong> : ${schedule.name}
+                        </div>
+
+                        <div class="list-group-item align-middle">
+                            <strong>Description</strong> : ${schedule.description}
+                        </div>
+
+                        <div class="list-group-item align-middle">
+                            <strong>Date & Time</strong> : ${moment(schedule.date_and_time).format('MMMM Do YYYY')}
+                        </div>
+
+                        <div class="list-group-item align-middle">
+                            <strong>Venue</strong> : ${schedule.venue}
+                        </div>
+
+                        <div class="list-group-item align-middle">
+                            <strong>With Guest</strong> : ${schedule.with_guests == 1 ? "Yes" : "No"}
+                        </div>
+                    </div>
+                `);
+            })
             .catch(error => console.error(error));
     }
 });

@@ -17,10 +17,17 @@ class BoardSession extends Model
     public static function boot()
     {
         parent::boot();
-        parent::updating(function ($boardSession) {
+        parent::updating(callback: function ($boardSession) {
             if ($boardSession->status == BoardSessionStatus::LOCKED->value) {
                 return false;
             }
         });
     }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class, 'schedule_id', 'id');
+    }
+
+
 }
