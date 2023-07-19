@@ -14,17 +14,7 @@ class BoardSession extends Model
 
     protected $guarded = [];
 
-    public static function boot()
-    {
-        parent::boot();
-        parent::updating(callback: function ($boardSession) {
-            if ($boardSession->status == BoardSessionStatus::LOCKED->value) {
-                return false;
-            }
-        });
-    }
-
-    public function schedule()
+    public function schedule_information()
     {
         return $this->belongsTo(Schedule::class, 'schedule_id', 'id');
     }

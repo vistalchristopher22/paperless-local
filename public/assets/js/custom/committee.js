@@ -247,7 +247,6 @@ document.addEventListener('click', event => {
             .then(data => {
                 let { schedule } = data;
                 $('#scheduleInformationContent').html(``);
-                console.log(schedule);
                 $('#scheduleInformationContent').append(`
                     <div class="list-group">
                         <div class="list-group-item align-middle">
@@ -267,7 +266,7 @@ document.addEventListener('click', event => {
                         </div>
 
                         <div class="list-group-item align-middle">
-                            <strong>With Guest</strong> : ${schedule.with_guests == 1 ? "Yes" : "No"}
+                            <strong>With Guest</strong> : ${schedule.with_invited_guest == 1 ? "Yes" : "No"}
                         </div>
                     </div>
                 `);

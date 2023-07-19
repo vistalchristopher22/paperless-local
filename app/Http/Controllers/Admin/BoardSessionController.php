@@ -6,16 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBoardSessionRequest;
 use App\Http\Requests\UpdateBoardSessionRequest;
 use App\Models\BoardSession;
-use App\Pipes\BoardSession\DatatablesWrapper;
 use App\Pipes\BoardSession\DeleteBoardSession;
 use App\Pipes\BoardSession\DeleteFileUpload;
 use App\Pipes\BoardSession\FileUpload;
-use App\Pipes\BoardSession\GetBoardSession;
 use App\Pipes\BoardSession\StoreBoardSession;
 use App\Pipes\BoardSession\UpdateBoardSession;
 use App\Repositories\BoardSessionRespository;
 use App\Resolvers\PDFLinkResolver;
+use App\Transformers\BoardSessionLaraTables;
 use App\Utilities\FileUtility;
+use Freshbitsweb\Laratables\Laratables;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Pipeline;
@@ -29,11 +29,7 @@ final class BoardSessionController extends Controller
 
     public function list()
     {
-        return Pipeline::send([])
-            ->through([
-                GetBoardSession::class,
-                DatatablesWrapper::class,
-            ])->then(fn ($data) => $data);
+        return Laratables::recordsOf(BoardSession::class, BoardSessionLaraTables::class);
     }
 
     public function index()
@@ -53,7 +49,7 @@ final class BoardSessionController extends Controller
                 ->through([
                     StoreBoardSession::class,
                     FileUpload::class,
-                ])->then(fn ($data) => redirect()->back()->with('success', 'Board session created successfully'));
+                ])->then(fn($data) => redirect()->back()->with('success', 'Board session created successfully'));
         });
     }
 
@@ -89,7 +85,7 @@ final class BoardSessionController extends Controller
             ->through([
                 UpdateBoardSession::class,
                 FileUpload::class,
-            ])->then(fn ($data) => redirect()->back()->with('success', 'Board session updated successfully'));
+            ])->then(fn($data) => redirect()->back()->with('success', 'Board session updated successfully'));
     }
 
     public function published(BoardSession $boardSession)
@@ -107,7 +103,7 @@ final class BoardSessionController extends Controller
                     DeleteBoardSession::class,
                     DeleteFileUpload::class,
                 ])
-                ->then(fn ($data) => $data);
+                ->then(fn($data) => $data);
         });
 
         return response()->json(['success' => true, 'message' => 'Board session deleted successfully']);
