@@ -42,6 +42,11 @@ class Committee extends Model
         return $this->hasOne(Agenda::class, 'id', 'lead_committee');
     }
 
+    public function schedule_information()
+    {
+        return $this->belongsTo(Schedule::class, 'schedule_id', 'id');
+    }
+
     public function submitted()
     {
         return $this->belongsTo(User::class, 'submitted_by', 'id');

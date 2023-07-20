@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\FileSearchController;
 use App\Models\Schedule;
 use App\Models\SanggunianMember;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,7 @@ Route::resource('committee-file', CommitteeFileController::class);
 Route::get('board-session/{dates}/published/preview', BoardSessionPublishPreviewController::class)->name('board-sessions-published.preview');
 Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePreviewController::class)->name('committee-meeting-schedule.preview');
 Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
+Route::get('archive/list', [FileController::class, 'list'])->name('file.list');
 
 
 Route::group(['middleware' => 'auth'], function () {
@@ -56,6 +58,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         Route::get('schedule/committees/{dates}', [CommitteeMeetingScheduleController::class, 'show'])->name('committee-meeting-schedule.show');
+        Route::get('schedule/committees-and-session/{dates}', [CommitteeMeetingScheduleController::class, 'committeesAndSession'])->name('committee-meeting.schedule.show.committees-and-session');
+        Route::Get('schedule/session-only/{dates}', [CommitteeMeetingScheduleController::class, 'sessions'])->name('committee-meeting.schedule.show.session-only');
         Route::post('schedule/committees', [CommitteeMeetingScheduleController::class, 'store'])->name('committee-meeting-schedule.store');
 
         Route::get('board-sessions/list', [BoardSessionController::class, 'list'])->name('board-sessions.list');
@@ -73,8 +77,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('archive/show-in-explorer', FileShowInExplorerController::class)->name('file.show-in-explorer');
             Route::post('archive/preview', FilePreviewController::class)->name('file.preview');
             Route::delete('archive/delete/bulk', FileBulkDeleteController::class)->name('file.delete.bulk');
+            Route::post('archive/file-search', FileSearchController::class)->name('file.search');
 
-            Route::get('archive/list', [FileController::class, 'list'])->name('file.list');
             Route::post('files/filter/type', [FileController::class, 'filter'])->name('file.filter');
             Route::post('archive/details', [FileController::class, 'show'])->name('file.show');
             Route::post('archive/rename', [FileController::class, 'update'])->name('file.update');
@@ -110,6 +114,7 @@ Route::get('/scheduled/committee-meeting', function () {
         ->orderBy('date_and_time', 'ASC')
         ->whereDay('date_and_time', date('d'))
         ->whereYear('date_and_time', date('Y'))
+        ->where('type', 'committee')
         ->get();
 
     $schedules = $allSchedules->groupBy(function ($record) {

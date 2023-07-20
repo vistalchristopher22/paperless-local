@@ -33,7 +33,7 @@ final class CommitteeController extends Controller
      * @param mixed lead * = all
      * @param mixed expanded * = all
      * @param mixed content The content to filter by.
-     * @return A datatable of the filtered data.
+     * @return array datatable of the filtered data.
      */
     public function list()
     {

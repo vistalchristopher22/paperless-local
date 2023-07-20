@@ -22,6 +22,8 @@ final class StoreBoardSession implements IPipeHandler
             'unassigned_title' => $payload['unassigned_title'],
             'announcement_title' => $payload['announcement_title'],
             'announcement_content' => $payload['announcement_content'],
+            'unassigned_business_note' => $payload['unAssignedBusinessNote'],
+            'order_business_note' => $payload['orderBusinessNote'],
         ]);
 
         $payload = array_merge($payload, ['session' => $session]);

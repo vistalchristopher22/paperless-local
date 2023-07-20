@@ -53,6 +53,14 @@
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <div class="mb-3">
+                            <label for="orderBusinessNote" class="form-label">Order Business Note</label>
+                            <textarea class="form-control" id="orderBusinessNote" name="orderBusinessNote"></textarea>
+                            @error('orderBusinessNote')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     <div class="p-3 border border-start-0 border-end-0 bg-light">
@@ -76,6 +84,15 @@
                             <input type="file" class="form-control" id="unassigned_business"
                                    name="unassigned_business">
                             @error('unassigned_business')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="unAssignedBusinessNote" class="form-label">Unassigned Business Note</label>
+                            <textarea class="form-control" id="unAssignedBusinessNote"
+                                      name="unAssignedBusinessNote"></textarea>
+                            @error('unAssignedBusinessNote')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
@@ -106,7 +123,6 @@
                             @enderror
                         </div>
 
-
                     </div>
 
 
@@ -129,7 +145,8 @@
 
 
         @push('page-scripts')
-            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
+            <script type="text/javascript"
+                    src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
             <script>
                 new FroalaEditor('textarea', {
                     tabSpaces: 10

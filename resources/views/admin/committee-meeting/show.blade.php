@@ -70,34 +70,21 @@
 @endprepend
 @section('content')
     <div class="card">
-        <div class="card-header m-0 py-0 px-1">
-            <ul class="nav nav-tabs d-flex align-items-center m-0 border-0" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active h5" id="committee-tab" data-bs-toggle="tab"
-                            data-bs-target="#committee"
-                            type="button" role="tab" aria-controls="committee" aria-selected="true">Commmittee
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link h5" id="session-tab" data-bs-toggle="tab" data-bs-target="#session"
-                            type="button" role="tab" aria-controls="session" aria-selected="false">Session
-                    </button>
-                </li>
-
-                <li class="nav-item dropdown" role="presentation">
-                    <a class="nav-link dropdown-toggle h5" data-bs-toggle="dropdown" href="#" role="button"
-                       aria-expanded="false">
-                        Actions
-                        <i class="mdi mdi-chevron-down"></i>
-                    </a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" target="_blank" href="{{ route('committee-meeting-schedule.preview', $dates) }}">Preview</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" target="_blank"
-                           href="{{ route('committee-meeting-schedule.print', $dates) }}">Print</a>
-                    </div>
-                </li>
-            </ul>
+        <div class="card-header m-0 py-0 px-0">
+            <button class="nav-item dropdown btn btn-dark rounded-0 float-end" role="presentation">
+                <a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" href="#" role="button"
+                   aria-expanded="false">
+                    Actions
+                    <i class="mdi mdi-chevron-down"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" target="_blank"
+                       href="{{ route('committee-meeting-schedule.preview', $dates) }}">Preview</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" target="_blank"
+                       href="{{ route('committee-meeting-schedule.print', $dates) }}">Print</a>
+                </div>
+            </button>
         </div>
 
         <div class="tab-content" id="tab-panes">
@@ -225,55 +212,6 @@
                                 {{ $settings->where('name', 'noted_by')->first()->value }}
                                 <p class="text-start mx-5 fw-bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLSO IV</p>
                             </h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" role="tabpanel" aria-labelledby="session-tab" id="session">
-                <div class="card-body">
-                    <ul class="nav nav-pills nav-justified d-flex align-items-center" role="tablist">
-                        <li class="nav-item waves-effect waves-light" role="presentation">
-                            <button class="nav-link active h5" id="order-business-tab" data-bs-toggle="tab"
-                                    data-bs-target="#order-business"
-                                    type="button" role="tab" aria-controls="committee" aria-selected="true">Order
-                                Business
-                            </button>
-                        </li>
-                        <li class="nav-item waves-effect waves-light" role="presentation">
-                            <button class="nav-link h5" id="unassigned-business-tab" data-bs-toggle="tab"
-                                    data-bs-target="#unassigned-business"
-                                    type="button" role="tab" aria-controls="session" aria-selected="false">Unassigned
-                                Bussiness
-                            </button>
-                        </li>
-
-                        <li class="nav-item waves-effect waves-light" role="presentation">
-                            <button class="nav-link h5" id="announcement-tab" data-bs-toggle="tab" data-bs-target="#announcements"
-                                    type="button" role="tab" aria-controls="session" aria-selected="false">Announcements
-                            </button>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="session-tab-panes">
-                        <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="order-business"
-                             id="order-business">
-                            <div class="d-flex align-items-center justify-content-center">
-                                <embed src="{{ $boardSessionPathForView }}#zoom=196&toolbar=0&pagemode=thumbs" style="min-height : 100vh; min-width : 85vw;"></embed>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade" role="tabpanel" aria-labelledby="unassigned-business-tab"
-                             id="unassigned-business">
-                            <div class="d-flex flex-column align-items-center justify-content-center">
-                                {{ $boardSession->unassigned_title }}
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade" role="tabpanel" aria-labelledby="unassigned-business-tab"
-                             id="announcements">
-                            <div class="d-flex flex-column align-items-center justify-content-center">
-                                {{ $boardSession->announcement_title }}
-                                {!! $boardSession->announcement_content !!}
-                            </div>
                         </div>
                     </div>
                 </div>

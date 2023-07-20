@@ -23,8 +23,15 @@
     <div class="card mb-4">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
             <h6 class="fw-medium h6 card-title">Ordered Business</h6>
-            <a href="{{ route('board-sessions.create') }}" class="btn btn-dark fw-medium shadow-dark">New Ordered
-                Business</a>
+            <a href="{{ route('board-sessions.create') }}" class="btn btn-dark fw-medium shadow-dark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-plus-circle me-1" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path
+                        d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+                New Ordered Business
+            </a>
         </div>
 
         <div class="card-body">
@@ -37,9 +44,7 @@
                         </th>
                         <th class="p-2 text-center">Unassigned Title</th>
                         <th class="p-2 text-center">Announcement Title</th>
-                        <th class="p-2 text-center">Announcement Content</th>
-                        <th class="p-2 text-center">Publish Status</th>
-                        <th class="p-2 text-center">Status</th>
+                        <th class="p-2 text-center">Schedule</th>
                         <th class="p-2 text-center">Created At</th>
                         <th class="p-2 text-center">Action</th>
                     </tr>
@@ -47,6 +52,21 @@
                     <tbody></tbody>
                 </table>
             </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-bottom border-0" tabindex="-1" id="offCanvasSchedule"
+         aria-labelledby="offCanvasScheduleTitle">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title mt-0" id="offcanvasExampleLabel">Schedule Information</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
+            <div class="overflow-auto py-2">
+                <div class="overflow-hidden" id="scheduleInformationContent">
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -60,59 +80,41 @@
                 $('#order-business-table').DataTable({
                     serverSide: true,
                     ajax: tableUrl,
-                    columns: [{
-                        className: 'border text-center',
-                        data: 'title',
-                        name: 'title',
-                        render: function (data, _, row) {
-                            return `<span class="text-decoration-underline fw-medium text-capitalize text-primary cursor-pointer btn-view-file" data-path="${row.file_path}" data-id="${row.id}">${data}</span>`;
-                        }
-                    },
+                    columns: [
                         {
                             className: 'border text-center',
-                            data: 'unassigned_title',
+                            name: 'title',
+                            render: function (data, type, row) {
+                                let filePath = $(row[5]).attr('data-file-path');
+                                let id = $(row[5]).attr('data-id');
+                                return `<span class="text-decoration-underline fw-medium text-capitalize text-primary cursor-pointer btn-view-file" data-path="${filePath}" data-id="${id}">${data}</span>`;
+                            }
+                        },
+                        {
+                            className: 'border text-center',
                             name: 'unassigned_title',
-                            render: function (data, _, row) {
-                                return `<span class="text-decoration-underline fw-medium text-capitalize text-primary cursor-pointer btn-view-file" data-path="${row.unassigned_business_file_path}" data-id="${row.id}">${data}</span>`;
+                            render: function (data, type, row) {
+                                let filePath = $(row[5]).attr('data-unassigned-file-path');
+                                let id = $(row[5]).attr('data-id');
+                                return `<span class="text-decoration-underline fw-medium text-capitalize text-primary cursor-pointer btn-view-file" data-path="${filePath}" data-id="${id}">${data}</span>`;
                             }
                         },
                         {
-                            className: 'border mx-3',
-                            data: 'announcement_title',
-                            name: 'announcement_title'
-                        },
-                        {
-                            className: 'border',
-                            data: 'announcement_content',
-                            name: 'announcement_content'
+                            className: 'border mx-5',
+                            name: 'announcement_title',
                         },
                         {
                             className: 'border text-center',
-                            data: 'is_published',
-                            name: 'is_published',
-                            render: function (data) {
-                                if (data == 1) {
-                                    return `<span class="badge badge-soft-primary">Published</span>`;
-                                }
-
-                                return ``;
-                            }
+                            name: 'schedule',
                         },
                         {
                             className: 'border text-center',
-                            data: 'status',
-                            name: 'status'
+                            name: 'created_at',
                         },
                         {
-                            className: 'border text-center',
-                            data: 'created_at',
-                            name: 'created_at'
-                        },
-                        {
-                            className: 'border text-center',
-                            data: 'action',
+                            className: 'd-flex flex-row align-items-center justify-content-center',
                             name: 'action',
-                            orderable: false
+                            orderable: false,
                         },
                     ]
                 });
@@ -176,6 +178,42 @@
                     socket.emit('EDIT_FILE', {
                         file_path: path
                     });
+                });
+
+                $(document).on('click', '.view-schedule-information', function () {
+                    const schedule = $(this).attr('data-id');
+                    let endpoint = route('committee-schedule-information.show', schedule);
+                    fetch(endpoint)
+                        .then(response => response.json())
+                        .then(data => {
+                            let {schedule} = data;
+                            console.log(schedule);
+                            $('#scheduleInformationContent').html(``);
+                            $('#scheduleInformationContent').append(`
+                                <div class="list-group">
+                                    <div class="list-group-item align-middle">
+                                        <strong>Name</strong> : ${schedule.name}
+                                    </div>
+
+                                    <div class="list-group-item align-middle">
+                                        <strong>Description</strong> : ${schedule.description}
+                                    </div>
+
+                                    <div class="list-group-item align-middle">
+                                        <strong>Date & Time</strong> : ${moment(schedule.date_and_time).format('MMMM Do YYYY')}
+                                    </div>
+
+                                    <div class="list-group-item align-middle">
+                                        <strong>Venue</strong> : ${schedule.venue}
+                                    </div>
+
+                                    <div class="list-group-item align-middle">
+                                        <strong>With Guest</strong> : ${schedule.with_invited_guest == 1 ? "Yes" : "No"}
+                                    </div>
+                                </div>
+                            `);
+                        })
+                        .catch(error => console.error(error));
                 });
             });
         </script>

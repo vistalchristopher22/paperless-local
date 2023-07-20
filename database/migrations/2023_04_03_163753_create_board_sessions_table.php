@@ -16,8 +16,12 @@ return new class () extends Migration {
             $table->id();
             $table->string('title')->nullable();
             $table->string('file_path')->nullable();
+            $table->string('file_path_view')->nullable();
+            $table->text('order_business_note')->nullable();
             $table->string('unassigned_title')->nullable();
             $table->text('unassigned_business_file_path')->nullable();
+            $table->string('unassigned_business_file_path_view')->nullable();
+            $table->text('unassigned_business_note')->nullable();
             $table->string('announcement_title')->nullable();
             $table->text('announcement_content')->nullable();
             $table->enum('status', BoardSessionStatus::values())->default(BoardSessionStatus::UNLOCKED->value);

@@ -55,6 +55,16 @@
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <div class="mb-3">
+                            <label for="orderBusinessNote" class="form-label">Order Business Note</label>
+                            <textarea class="form-control" id="orderBusinessNote" name="orderBusinessNote">{{ old('orderBusinessNote', $boardSession->order_business_note) }}</textarea>
+                            @error('orderBusinessNote')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+
                     </div>
 
                     <div class="p-3 border border-start-0 border-end-0 bg-light">
@@ -78,6 +88,15 @@
                             <input type="file" class="form-control" id="unassigned_business"
                                    name="unassigned_business">
                             @error('unassigned_business')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="unAssignedBusinessNote" class="form-label">Unassigned Business Note</label>
+                            <textarea class="form-control" id="unAssignedBusinessNote"
+                                      name="unAssignedBusinessNote">{{ old('unAssignedBusinessNote', $boardSession->unassigned_business_note) }}</textarea>
+                            @error('unAssignedBusinessNote')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>

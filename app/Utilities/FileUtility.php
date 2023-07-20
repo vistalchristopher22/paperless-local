@@ -84,4 +84,14 @@ final class FileUtility
     {
         copy($originalSource, $destinationSource);
     }
+
+    public static function isInputDirectoryEscaped(string $path): string
+    {
+        $escaped_string = escapeshellarg($path);
+
+        if ($path === stripslashes($escaped_string)) {
+            return escapeshellarg($path);
+        }
+        return $path;
+    }
 }

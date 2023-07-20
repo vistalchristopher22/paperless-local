@@ -128,22 +128,22 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="form-label text-capitalize">Name</label>
+                        <label for="name" class="form-label text-capitalize">Name</label>
                         <input type="text" class="form-control" id="name">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label text-capitalize">Time</label>
+                        <label for="time" class="form-label text-capitalize">Time</label>
                         <input type="time" class="form-control" id="time">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label text-capitalize">Short Description</label>
+                        <label for="shortDescription" class="form-label text-capitalize">Short Description</label>
                         <textarea class="form-control" name="" id="shortDescription" rows="2"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label text-capitalize">Venue</label>
+                        <label for="venue" class="form-label text-capitalize">Venue</label>
                         <select name="venue" id="venue" class="form-control">
                             @foreach($venues as $venue)
                                 <option value="{{ $venue->name }}">{{ $venue->name }}</option>
@@ -152,8 +152,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label text-capitalize">Type</label>
-                        <select name="type" id="type" class="form-control text-capitalize">
+                        <label for="type" class="form-label text-capitalize">Type</label>
+                        <select name="type" id="type" class="form-control text-capitalize" disabled>
                             @foreach(ScheduleType::values() as $schedule)
                                 <option value="{{ $schedule }}">{{ $schedule }}</option>
                             @endforeach
@@ -265,7 +265,7 @@
                             );
                         },
                     }],
-                    drop: function (date, a, b, c) {
+                    drop: function (date) {
                         droppedEventId = $(this).attr('data-id');
                         $(this).remove();
                         selectedDate = $.fullCalendar.formatDate(date, "MM/DD/YYYY");
@@ -287,7 +287,7 @@
                                 $('#time').val(response.time);
                                 $('#shortDescription').val(response.description);
                                 $('#venue').val(response.venue);
-                                $('#type').val(COMMITTEE_TYPE);
+                                $('#type').val(response.type);
                                 $('#id').val(response.id);
                                 $("#withGuests").val(response.with_invited_guest === 1 ? "on" : "off");
                                 if (response.with_invited_guest == 1) {
@@ -317,6 +317,7 @@
                             $('#shortDescription').val('');
                             $('#venue').val('');
                             $('#withGuests').val('');
+                            $('#type').val(COMMITTEE_TYPE);
                             $('#addScheduleModalLabel').text('ADD SCHEDULE');
                             $('#scheduleModal').modal('toggle');
                         }

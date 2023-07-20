@@ -27,6 +27,6 @@ for page in pdf.pages:
         new_url = pdfrw.objects.pdfstring.PdfString("(" + new_url + ")")
         annot.A.URI = new_url
 
-    new_pdf.addpage(page)    
+    new_pdf.addpage(page)
 
 new_pdf.write(directory + "/" + filename)
