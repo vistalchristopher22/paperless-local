@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
 use App\Models\Ordinance;
 use App\Models\Resolution;
 use App\Models\Legislation;
@@ -52,6 +51,7 @@ final class LegislationController extends Controller
 
                 return $btnEdit . "&nbsp" . $btnDelete;
             })->make(true);
+
     }
 
 
@@ -63,44 +63,44 @@ final class LegislationController extends Controller
      */
     public function index()
     {
-        $legislations = Legislation::select('title', 'description', 'type')
-            ->where('type', 'resolution')
-            ->whereIn('title', ["Distinctio rerum quia consectetur consequuntur earum.", "Aut eveniet eos tempora aut."])
-            ->get();
+        $data = Legislation::get();
 
         return view('admin.legislations.index', compact('data'));
     }
 
 
+    /**
+     * Displays the create form for adding a new legislation in the admin panel.
+     * Retrieves a list of sanggunian members and the possible types of legislation,
+     * then passes this data to the view.
+     *
+     * @return \Illuminate\View\View
+     */
     public function create()
     {
-        return view('admin.legislations.create');
+        $sp_members = DB::table('sanggunian_members')->select('id', 'fullname')->get();
+
+        $types = LegislateType::values();
+
+        return view('admin.legislations.create', compact('sp_members', 'types'));
     }
 
 
+    /**
+     * Stores (creates) a new legislation based on the data from the user's request.
+     * Handles creating either an "Ordinance" or a "Resolution" record, along with associated "Legislation" records.
+     * Manages file uploads for each legislation type (Ordinance or Resolution).
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
 
-        $img = $request->file('attachment');
-        $imgName = time() . '.' . $img->getClientOriginalName();
-        $img->move(public_path('storage/approved-legislations/'), $imgName);
-        $filePath = 'storage/approved-legislations/' . $imgName;
-
-
-        //   for ($i = 1; $i <= 5; $i++) {
-        //     $date = Carbon::now()->addDays($i);
-        $ordinance = new Ordinance([
-            'file' => $filePath . '.pdf',
-            'author' => $request->author,
-            'session_date' => $request->sessionDate
-        ]);
-        $ordinance->save();
-
-        $legislation = new Legislation([
-            'no' => 'ORD-' . str_pad(2, 5, '0', STR_PAD_LEFT),
-            'title' => $request->title,
-            'description' => $request->description,
-            'type' => $request->type
+        $this->validate($request, [
+            'title' => ['required'],
+            'description' => ['required'],
+            'attachment' => ['required'],
         ]);
 
         DB::transaction(function () use ($request) {
@@ -162,10 +162,12 @@ final class LegislationController extends Controller
     }
 
 
+
     public function show(string $id)
     {
         //
     }
+
 
 
     public function edit(string $id)
@@ -174,14 +176,17 @@ final class LegislationController extends Controller
     }
 
 
+
     public function update(Request $request, string $id)
     {
         //
     }
 
 
+
     public function destroy(string $id)
     {
         //
     }
+
 }
