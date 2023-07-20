@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Models\Ordinance;
+use App\Models\Resolution;
 use App\Models\Legislation;
+use App\Enums\LegislateType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -66,8 +68,7 @@ final class LegislationController extends Controller
             ->whereIn('title', ["Distinctio rerum quia consectetur consequuntur earum.", "Aut eveniet eos tempora aut."])
             ->get();
 
-
-        return view('admin.legislations.index', compact('legislations'));
+        return view('admin.legislations.index', compact('data'));
     }
 
 
@@ -102,17 +103,62 @@ final class LegislationController extends Controller
             'type' => $request->type
         ]);
 
-        $legislation->legislable()->associate($ordinance);
-        $legislation->save();
-        // }
+        DB::transaction(function () use ($request) {
+
+            if(LegislateType::ORDINANCE->value == $request->type) {
+
+                $img = $request->file('attachment');
+                $imgName = time().'.'.$img->getClientOriginalName();
+                $img->move(public_path('storage/source/Approved-Legislation/Ordinance'), $imgName);
+
+                $ordinance = new Ordinance([
+                    'file' => $img.'.pdf',
+                    'author' => $request->author,
+                    'session_date' => $request->sessionDate
+                ]);
+                $ordinance->save();
+
+                $data = DB::table('legislations')->where('type', LegislateType::ORDINANCE->value)->count();
+
+                $legislation = new Legislation([
+                    'no' => 'ORD-' . str_pad($data, 4, '0', STR_PAD_LEFT),
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'type' => $request->type
+                ]);
+
+                $legislation->legislable()->associate($ordinance);
+                $legislation->save();
+
+            } else {
+
+                $img = $request->file('attachment');
+                $imgName = time().'.'.$img->getClientOriginalName();
+                $img->move(public_path('storage/source/Approved-Legislation/Resolution'), $imgName);
 
 
-        return $legislation;
-        // Return a response to the Ajax request
-        // return response()->json([
-        //     'success' => true,
-        //     'message' => 'Legislation created successfully!',
-        // ]);
+                $resolution = new Resolution([
+                    'file' => $img . '.pdf',
+                    'author' => $request->author,
+                    'session_date' => $request->sessionDate
+                ]);
+                $resolution->save();
+
+                $data = DB::table('legislations')->where('type', LegislateType::RESOLUTION->value)->count();
+
+                $legislation = new Legislation([
+                    'no' => 'RES-' . str_pad($data, 4, '0', STR_PAD_LEFT),
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'type' => $request->type
+                ]);
+                $legislation->legislable()->associate($resolution);
+                $legislation->save();
+            }
+        });
+
+
+        return back()->with('success', 'Successfully updated.');
     }
 
 
