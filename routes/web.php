@@ -30,7 +30,6 @@ use App\Http\Controllers\Admin\Archive\FileShowInExplorerController;
 use App\Http\Controllers\Admin\BoardSessionPublishPreviewController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
-use App\Models\Legislation;
 
 Auth::routes();
 
@@ -169,4 +168,3 @@ Route::get('/scheduled/committee-meeting', function () {
     }
 
 })->name('scheduled.committee-meeting.today');
-

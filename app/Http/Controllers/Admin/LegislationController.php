@@ -2,23 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
 use App\Models\Ordinance;
 use App\Models\Resolution;
 use App\Models\Legislation;
 use App\Enums\LegislateType;
 use Illuminate\Http\Request;
-use App\Models\SanggunianMember;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 use App\Repositories\LegislationRepository;
-use App\Http\Requests\LegislationStoreRequest;
 
 final class LegislationController extends Controller
 {
-
-    public function __construct(private LegislationRepository $legislationRepository){
+    public function __construct(private LegislationRepository $legislationRepository)
+    {
     }
 
 
@@ -53,7 +50,7 @@ final class LegislationController extends Controller
                 $btnDelete = '<a href="#" class="btn btn-sm btn-danger"><i class="bi bi-trash h5"></i> Delete</a>';
 
                 return $btnEdit . "&nbsp" . $btnDelete;
-        })->make(true);
+            })->make(true);
 
     }
 
@@ -106,10 +103,9 @@ final class LegislationController extends Controller
             'attachment' => ['required'],
         ]);
 
-        DB::transaction(function () use($request) {
+        DB::transaction(function () use ($request) {
 
-            if(LegislateType::ORDINANCE->value == $request->type)
-            {
+            if(LegislateType::ORDINANCE->value == $request->type) {
 
                 $img = $request->file('attachment');
                 $imgName = time().'.'.$img->getClientOriginalName();
@@ -134,7 +130,7 @@ final class LegislationController extends Controller
                 $legislation->legislable()->associate($ordinance);
                 $legislation->save();
 
-            }else {
+            } else {
 
                 $img = $request->file('attachment');
                 $imgName = time().'.'.$img->getClientOriginalName();
