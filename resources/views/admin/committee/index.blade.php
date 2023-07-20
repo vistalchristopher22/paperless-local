@@ -72,7 +72,7 @@
     </div>
     <div class="card">
         <div class="card-header bg-light justify-content-between align-items-center d-flex">
-            <h6 class="fw-bolder h6 card-title">Committees</h6>
+            <h6 class="h6 card-title">Committees</h6>
             <div>
                 <a href="{{ route('committee.create') }}" class="btn btn-dark fw-medium shadow-dark">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

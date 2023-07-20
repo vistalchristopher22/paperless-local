@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\FileSearchController;
 use App\Models\Schedule;
 use App\Models\SanggunianMember;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,7 @@ Route::resource('committee-file', CommitteeFileController::class);
 Route::get('board-session/{dates}/published/preview', BoardSessionPublishPreviewController::class)->name('board-sessions-published.preview');
 Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePreviewController::class)->name('committee-meeting-schedule.preview');
 Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
+Route::get('archive/list', [FileController::class, 'list'])->name('file.list');
 
 
 Route::group(['middleware' => 'auth'], function () {
@@ -72,8 +74,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('archive/show-in-explorer', FileShowInExplorerController::class)->name('file.show-in-explorer');
             Route::post('archive/preview', FilePreviewController::class)->name('file.preview');
             Route::delete('archive/delete/bulk', FileBulkDeleteController::class)->name('file.delete.bulk');
+            Route::post('archive/file-search', FileSearchController::class)->name('file.search');
 
-            Route::get('archive/list', [FileController::class, 'list'])->name('file.list');
             Route::post('files/filter/type', [FileController::class, 'filter'])->name('file.filter');
             Route::post('archive/details', [FileController::class, 'show'])->name('file.show');
             Route::post('archive/rename', [FileController::class, 'update'])->name('file.update');

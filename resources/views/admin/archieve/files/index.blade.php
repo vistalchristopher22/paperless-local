@@ -142,9 +142,26 @@
                 <div class="col-sm-auto" aria-label="Button group">
                     <!-- Button Group -->
                     <div class="button-items">
-                        <button type="button" id="buttonFilter" class="btn btn-secondary btn-square dropdown-toggle"
-                                data-bs-toggle="dropdown" aria-expanded="false"><span>File Type</span> <i
-                                class="mdi mdi-chevron-down"></i></button>
+                        <button class="btn btn-dark" id="btnSearch">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-search" viewBox="0 0 16 16">
+                                <path
+                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                            Search
+                        </button>
+                        <button type="button" id="buttonFilter" class="btn btn-dark dropdown-toggle"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-funnel" viewBox="0 0 16 16">
+                                      <path
+                                          d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/>
+                                    </svg>
+                                File Type
+                            </span>
+                            <i class="mdi mdi-chevron-down"></i>
+                        </button>
                         <div class="dropdown-menu" style="">
                             <a class="dropdown-item filter-file-type" data-type="*" href="#">
                                 All Files
@@ -191,7 +208,10 @@
         <!-- End Page Header -->
 
         <h2 class="h4 mb-3"></h2>
-
+        <div id="searchContainer" class="d-none">
+            <label for="searchField" class="form-label text-dark fw-bolder">Search</label>
+            <input id="searchField" type="text" class="form-control form-control-lg mb-3 border-dark">
+        </div>
         <!-- Folders -->
         <div id="directories">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5">
@@ -288,6 +308,17 @@
     </div>
     @push('page-scripts')
         <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+        <script>
+
+            $('#btnSearch').click(function () {
+                if ($("#searchContainer").hasClass('remove') || $('#searchContainer').hasClass('d-none')) {
+                    $("#searchContainer").fadeIn(300).removeClass('remove').removeClass('d-none').trigger('click');
+                } else {
+                    $("#searchContainer").fadeOut(300).addClass('remove');
+                    $('#searchField').val('');
+                }
+            });
+        </script>
         <script>
             let currentContextMenu = null;
             let currentOffcanvas = null;
@@ -1021,6 +1052,138 @@
                     } else {
                         // load all the files within the directory.
                         loadFilesAndDirectories(currentDirectory);
+                    }
+                });
+
+                $('#searchField').keyup(function (e) {
+                    if (e.keyCode === 13) {
+                        let currentDirectory = directoriesTrack.slice(-1)[0];
+                        let value = $(this).val();
+                        console.log(value);
+                        $.ajax({
+                            url: route('file.search'),
+                            method: 'POST',
+                            data: {
+                                directory: currentDirectory,
+                                term: value
+                            },
+                            success: function (data) {
+                                if (value !== '') {
+                                    updateBreadcrumbNavigation();
+                                    let directories = data.directories;
+                                    let directoryRow = $('<div>').addClass(
+                                        'row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5');
+                                    for (let i = 0; i < directories.length; i++) {
+                                        let directory = directories[i];
+                                        let numFiles = directories[i].files.length;
+                                        let numFolders = directories[i].directories.length;
+                                        let fileStr = numFiles == 1 ? 'file' : 'files';
+                                        let folderStr = numFolders == 1 ? 'folder' : 'folders';
+                                        let column = $('<div>').addClass('col mb-3 mb-lg-5')
+                                            .attr('data-path', directory.path);
+                                        let card = $('<div>').addClass(
+                                            'card card-sm card-hover-shadow card-header-borderless h-100 text-center cursor-pointer'
+                                        );
+                                        let cardBody = $('<div>').addClass(
+                                            'card-body bg-light d-flex flex-column align-items-center justify-content-center'
+                                        );
+                                        let folderIcon = $('<img>').addClass('img-fluid w-25').attr(
+                                            'src',
+                                            '/assets-2/images/widgets/folder-icon.svg').attr('alt',
+                                            'Folder Icon');
+                                        let details = $('<div>').addClass('mt-3');
+                                        let title = $('<h6>').addClass('').text(directory.basename);
+                                        let date = $('<p>').addClass('small').text('Last Modified: ' +
+                                            new Date(directory.mTime * 1000).toLocaleString());
+                                        let count = $('<p>').addClass('small').text(numFiles + ' ' +
+                                            fileStr + ', ' + numFolders + ' ' + folderStr);
+                                        cardBody.append(folderIcon);
+                                        details.append(title).append(date).append(count);
+                                        card.append(cardBody).append(details);
+                                        column.append(card);
+                                        directoryRow.append(column);
+                                    }
+
+                                    $('#directories').empty().append(directoryRow);
+
+                                    let files = data.files;
+                                    let fileRow = $('<div>').addClass(
+                                        'row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5');
+                                    fileRow.attr('id', 'file-list')
+                                    for (let j = 0; j < files.length; j++) {
+                                        let file = files[j];
+                                        let column = $('<div>').addClass('col mb-3 mb-lg-5');
+
+                                        let card = $('<div>').addClass(
+                                            'card card-sm card-hover-shadow card-header-borderless h-100 text-center cursor-pointer'
+                                        );
+
+                                        card.attr('data-index', j);
+
+                                        let cardBody = $('<div>').addClass(
+                                            'card-body bg-light d-flex flex-column align-items-center justify-content-center'
+                                        );
+
+                                        let fileIcon = null;
+
+                                        if (file.basename.includes('.pdf')) {
+                                            fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
+                                                '/assets-2/images/widgets/pdf-icon.svg').attr('alt',
+                                                'File Icon');
+                                        } else if (file.basename.includes('.xlsx') || file.basename
+                                            .includes(
+                                                '.xls')) {
+                                            fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
+                                                '/assets-2/images/widgets/google-sheets-icon.svg')
+                                                .attr(
+                                                    'alt',
+                                                    'File Icon');
+                                        } else if (file.basename.includes('.png') || file.basename
+                                            .includes(
+                                                '.jpg') || file.basename.includes('.jpeg') || file
+                                            .basename
+                                            .includes(
+                                                '.webp')) {
+                                            fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
+                                                '/assets-2/images/widgets/image-placeholder.svg')
+                                                .attr(
+                                                    'alt',
+                                                    'File Icon');
+                                        } else if (file.basename.includes('.csv')) {
+                                            fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
+                                                '/assets-2/images/widgets/csv.svg').attr('alt',
+                                                'File Icon');
+                                        } else {
+                                            fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
+                                                '/assets-2/images/widgets/word-icon.svg').attr(
+                                                'alt',
+                                                'File Icon');
+                                        }
+
+                                        var details = $('<div>').addClass('mt-3');
+                                        var title = $(
+                                            `<h6 class="file-name" data-path="${file.path}">`)
+                                            .addClass(
+                                                '').text(file.basename);
+                                        var date = $('<p>').addClass('small').text('Last Modified: ' +
+                                            new Date(
+                                                file.mTime * 1000).toLocaleString());
+                                        var size = $('<p>').addClass('small').text('Size: ' +
+                                            formatBytes(
+                                                file
+                                                    .size));
+                                        cardBody.append(fileIcon);
+                                        details.append(title).append(date).append(size);
+                                        card.append(cardBody).append(details);
+                                        column.append(card);
+                                        fileRow.append(column);
+                                    }
+                                    $('#files').empty().append(fileRow);
+                                } else {
+                                    loadFilesAndDirectories(currentDirectory);
+                                }
+                            }
+                        });
                     }
                 });
             });

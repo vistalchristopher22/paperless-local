@@ -158,7 +158,7 @@ final class ArchiveFileService
     {
         // Create a new Finder instance and set it to search the given directory path
         $finder = new Finder();
-        $finder->depth('== 0')->in($directoryPath)->sortByModifiedTime();
+        $finder->depth(0)->in($directoryPath)->sortByModifiedTime();
 
         // Initialize empty arrays to hold the directories and files found in the directory
         $directories = [];
