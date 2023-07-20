@@ -44,14 +44,13 @@ final class LegislationController extends Controller
         return DataTables::of($legislations)
             ->addColumn('session_date', function ($row) {
                 return $row->resolution_session_date ?? $row->ordinance_session_date;
-
             })
             ->addColumn('action', function () {
                 $btnEdit = '<a href="#" class="btn btn-sm btn-info" data-key="editBtn"><i class="bi bi-pen h5"></i> Edit</a>';
                 $btnDelete = '<a href="#" class="btn btn-sm btn-danger"><i class="bi bi-trash h5"></i> Delete</a>';
 
                 return $btnEdit . "&nbsp" . $btnDelete;
-            })->make(true);               s
+            })->make(true);
 
     }
 
@@ -65,7 +64,6 @@ final class LegislationController extends Controller
     public function index()
     {
         $data = Legislation::get();
-
 
         return view('admin.legislations.index', compact('data'));
     }
@@ -123,7 +121,7 @@ final class LegislationController extends Controller
                 $data = DB::table('legislations')->where('type', LegislateType::ORDINANCE->value)->count();
 
                 $legislation = new Legislation([
-                    'no' => 'ORD-' . str_pad($data + 1, 4, '0', STR_PAD_LEFT),
+                    'no' => 'ORD-' . str_pad($data, 4, '0', STR_PAD_LEFT),
                     'title' => $request->title,
                     'description' => $request->description,
                     'type' => $request->type
@@ -149,7 +147,7 @@ final class LegislationController extends Controller
                 $data = DB::table('legislations')->where('type', LegislateType::RESOLUTION->value)->count();
 
                 $legislation = new Legislation([
-                    'no' => 'RES-' . str_pad($data + 1, 4, '0', STR_PAD_LEFT),
+                    'no' => 'RES-' . str_pad($data, 4, '0', STR_PAD_LEFT),
                     'title' => $request->title,
                     'description' => $request->description,
                     'type' => $request->type
