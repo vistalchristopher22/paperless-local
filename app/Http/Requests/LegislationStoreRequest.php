@@ -24,7 +24,7 @@ class LegislationStoreRequest extends FormRequest
         return [
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'attachment' => ['nullable', 'file', 'mimes:pdf,doc,docx,xlsx,xls', 'max:10240'],
+            'type'  => ['required', 'string'],
         ];
     }
 }

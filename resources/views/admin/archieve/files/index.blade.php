@@ -1156,7 +1156,7 @@
                                         } else {
                                             fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
                                                 '/assets-2/images/widgets/word-icon.svg').attr(
-                                                'alt',
+
                                                 'File Icon');
                                         }
 
