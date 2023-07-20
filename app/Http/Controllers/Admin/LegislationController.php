@@ -44,13 +44,14 @@ final class LegislationController extends Controller
         return DataTables::of($legislations)
             ->addColumn('session_date', function ($row) {
                 return $row->resolution_session_date ?? $row->ordinance_session_date;
+
             })
             ->addColumn('action', function () {
                 $btnEdit = '<a href="#" class="btn btn-sm btn-info" data-key="editBtn"><i class="bi bi-pen h5"></i> Edit</a>';
                 $btnDelete = '<a href="#" class="btn btn-sm btn-danger"><i class="bi bi-trash h5"></i> Delete</a>';
 
                 return $btnEdit . "&nbsp" . $btnDelete;
-            })->make(true);
+            })->make(true);               s
 
     }
 
@@ -64,6 +65,7 @@ final class LegislationController extends Controller
     public function index()
     {
         $data = Legislation::get();
+
 
         return view('admin.legislations.index', compact('data'));
     }
