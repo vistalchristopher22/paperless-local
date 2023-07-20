@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\Archive\FileShowInExplorerController;
 use App\Http\Controllers\Admin\BoardSessionPublishPreviewController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
+use App\Models\Legislation;
 
 Auth::routes();
 
@@ -49,7 +50,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
 
 
-        Route::resources(['legislation' => LegislationController::class]);
+        Route::get('legislation', [LegislationController::class, 'index'])->name('legislation.index');
+        Route::get('legislation/create', [LegislationController::class, 'create'])->name('legislation.create');
+        Route::post('legislation', [LegislationController::class, 'store'])->name('legislation.store');
+        Route::get('legislation/list', [LegislationController::class, 'list']);
 
 
         Route::get('schedule/committees/{dates}', [CommitteeMeetingScheduleController::class, 'show'])->name('committee-meeting-schedule.show');

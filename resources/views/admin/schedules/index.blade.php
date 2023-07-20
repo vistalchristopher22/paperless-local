@@ -444,3 +444,5 @@
         </script>
     @endpush
 @endsection
+
+delete
