@@ -199,9 +199,9 @@
         <nav class="site-nav" style="background: white;">
             <ul class="nav" role="menu">
                 <li class="nav-home nav-current" role="menuitem"><a
-                        href="{{ route('scheduled.committee-meeting.today', $dates) }}">Committee Meetings</a></li>
+                        href="{{ route('scheduled.committee-meeting.today', $dates) }}">Committee Meeting</a></li>
                 <li class="nav-style-guide" role="menuitem"><a
-                        href="{{ route('board-sessions-published.preview', $dates) }}">Ordered Business</a></li>
+                        href="{{ route('board-sessions-published.preview', $dates) }}">Session</a></li>
             </ul>
         </nav>
 

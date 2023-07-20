@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Enums\BoardSessionStatus;
 use App\Models\BoardSession;
+use Carbon\Carbon;
 
 final class BoardSessionRespository extends BaseRepository
 {
@@ -20,6 +21,15 @@ final class BoardSessionRespository extends BaseRepository
                             ->whereDay('created_at', '>=', date('d'))
                             ->whereYear('created_at', '>=', date('Y'))
                             ->get(['id', 'title', 'unassigned_title', 'announcement_title']);
+    }
+
+    public function fetchByDate($date)
+    {
+        $date = Carbon::parse($date);
+        $session = $this->model->with(['schedule_information' => function ($query) use($date) {
+            $query->whereDay('created_at', $date->day)->whereYear('created_at', $date->year)->whereMonth('created_at', $date->month);
+        }])->first();
+        return $session;
     }
 
     public function createUnassignedBusiness(array $data = []): BoardSession
