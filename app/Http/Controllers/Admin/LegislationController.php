@@ -67,7 +67,7 @@ final class LegislationController extends Controller
             ->get();
 
 
-        return view('admin.legislations.index', compact('data'));
+        return view('admin.legislations.index', compact('legislations'));
     }
 
 
