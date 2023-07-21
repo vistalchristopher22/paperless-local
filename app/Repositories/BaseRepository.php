@@ -10,7 +10,6 @@ class BaseRepository implements IBaseRepository
 {
     public function __construct(protected Model $model)
     {
-        $this->model = $model;
     }
 
     public function get(): Collection

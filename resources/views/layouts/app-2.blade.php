@@ -262,7 +262,7 @@
                                  class="bi bi-record me-2" viewBox="0 0 16 16">
                                 <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z"/>
                             </svg>
-                             Divisions
+                            Divisions
                         </a>
                     </li>
                     @endfeature
@@ -293,6 +293,11 @@
             <li>
                 <a href="{{ route('files.index') }}"><i data-feather="layers"
                                                         class="align-self-center menu-icon"></i><span>File Manager</span></a>
+            </li>
+            <hr class="hr-dashed hr-menu">
+            <li>
+                <a href="{{ route('settings.index') }}"><i data-feather="settings"
+                                                           class="align-self-center menu-icon"></i><span>Settings</span></a>
             </li>
             @endfeature
 
