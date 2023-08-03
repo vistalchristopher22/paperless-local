@@ -26,7 +26,7 @@ final class BoardSessionRespository extends BaseRepository
     public function fetchByDate($date)
     {
         $date = Carbon::parse($date);
-        $session = $this->model->with(['schedule_information' => function ($query) use($date) {
+        $session = $this->model->with(['schedule_information' => function ($query) use ($date) {
             $query->whereDay('created_at', $date->day)->whereYear('created_at', $date->year)->whereMonth('created_at', $date->month);
         }])->first();
         return $session;

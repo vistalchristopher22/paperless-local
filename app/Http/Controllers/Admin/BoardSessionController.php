@@ -49,7 +49,7 @@ final class BoardSessionController extends Controller
                 ->through([
                     StoreBoardSession::class,
                     FileUpload::class,
-                ])->then(fn($data) => redirect()->back()->with('success', 'Board session created successfully'));
+                ])->then(fn ($data) => redirect()->back()->with('success', 'Board session created successfully'));
         });
     }
 
@@ -85,7 +85,7 @@ final class BoardSessionController extends Controller
             ->through([
                 UpdateBoardSession::class,
                 FileUpload::class,
-            ])->then(fn($data) => redirect()->back()->with('success', 'Board session updated successfully'));
+            ])->then(fn ($data) => redirect()->back()->with('success', 'Board session updated successfully'));
     }
 
     public function published(BoardSession $boardSession)
@@ -103,7 +103,7 @@ final class BoardSessionController extends Controller
                     DeleteBoardSession::class,
                     DeleteFileUpload::class,
                 ])
-                ->then(fn($data) => $data);
+                ->then(fn ($data) => $data);
         });
 
         return response()->json(['success' => true, 'message' => 'Board session deleted successfully']);

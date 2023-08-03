@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\FileSearchController;
 use App\Models\Schedule;
 use App\Models\SanggunianMember;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VenueController;
@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\CommitteeController;
+use App\Http\Controllers\Admin\FileSearchController;
 use App\Http\Controllers\Admin\UserAccessController;
 use App\Http\Controllers\Admin\LegislationController;
 use App\Http\Controllers\Admin\Archive\FileController;
@@ -51,11 +52,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
 
 
+        Route::get('legislation/list/{dates}', [LegislationController::class, 'list']);
         Route::get('legislation', [LegislationController::class, 'index'])->name('legislation.index');
         Route::get('legislation/create', [LegislationController::class, 'create'])->name('legislation.create');
         Route::post('legislation', [LegislationController::class, 'store'])->name('legislation.store');
-        Route::get('legislation/list', [LegislationController::class, 'list']);
+        Route::get('legislation/edit/{id}', [LegislationController::class, 'edit'])->name('legislation.edit');
+        Route::put('legislation/{id}', [LegislationController::class, 'update'])->name('legislation.update');
 
+        Route::get('types/list', [TypeController::class, 'list']);
+        Route::get('types', [TypeController::class, 'index'])->name('types.index');
+        Route::post('type-store', [TypeController::class, 'store'])->name('types.store');
 
         Route::get('schedule/committees/{dates}', [CommitteeMeetingScheduleController::class, 'show'])->name('committee-meeting-schedule.show');
         Route::get('schedule/committees-and-session/{dates}', [CommitteeMeetingScheduleController::class, 'committeesAndSession'])->name('committee-meeting.schedule.show.committees-and-session');

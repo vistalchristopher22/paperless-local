@@ -2,12 +2,10 @@
 
 namespace App\Transformers;
 
-
 use App\Models\BoardSession;
 
 class BoardSessionLaraTables
 {
-
     public static function laratablesAdditionalColumns()
     {
         return ['file_path', 'unassigned_business_file_path', 'schedule_id'];
