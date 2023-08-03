@@ -3,36 +3,28 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Setting;
+use App\Repositories\SettingRepository;
 use Illuminate\Http\Request;
 
 final class SettingController extends Controller
 {
+
+    public function __construct(private readonly SettingRepository $settingRepository)
+    {
+    }
+
     public function index()
     {
-        $settings = Setting::get();
-
         return view('admin.settings.index', [
-            'settings' => $settings,
+            'settings' => $this->settingRepository->get(),
+            'settingRepository' => $this->settingRepository,
         ]);
     }
 
     public function update(Request $request)
     {
         $data = $request->except(['_token', '_method']);
-
-        foreach ($data as $setting => $value) {
-            Setting::updateOrCreate(
-                [
-                    'name' => $setting,
-                ],
-                [
-                    'name' => $setting,
-                    'value' => $value,
-                ]
-            );
-        }
-
+        $this->settingRepository->updateNewSettings($data);
         return to_route('settings.index')->with('success', 'Settings updated successfully!');
     }
 }
