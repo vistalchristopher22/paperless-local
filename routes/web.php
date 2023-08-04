@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VenueController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Admin\AgendaController;
+use App\Http\Controllers\Admin\ScreenController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\ScheduleController;
@@ -44,6 +45,7 @@ Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePrevie
 Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
 Route::get('archive/list', [FileController::class, 'list'])->name('file.list');
 
+Route::get('session_screen', [ScreenController::class, 'session_screen']);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'features:administrator'], function () {
