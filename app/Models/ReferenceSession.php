@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ScheduleType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ReferenceSession extends Model
 {
@@ -16,12 +17,12 @@ class ReferenceSession extends Model
         return $this->hasMany(Schedule::class);
     }
 
-    public function scheduleCommittees(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function scheduleCommittees(): HasMany
     {
         return $this->hasMany(Schedule::class)->where('type', ScheduleType::MEETING->value);
     }
 
-    public function scheduleSessions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function scheduleSessions(): HasMany
     {
         return $this->hasMany(Schedule::class)->where('type', ScheduleType::SESSION->value);
     }

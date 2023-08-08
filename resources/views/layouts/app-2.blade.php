@@ -158,12 +158,6 @@
 
             @feature('administrator')
             <li>
-                <a href="#">
-                    <i data-feather="calendar" class="align-self-center menu-icon"></i>
-                    <span>Regular Sessions</span>
-                </a>
-            </li>
-            <li>
                 <a href="{{ route('legislation.index') }}">
                     <i data-feather="file" class="align-self-center menu-icon"></i>
                     <span>Legislations</span>
@@ -304,7 +298,13 @@
             </li>
 
             <hr class="hr-dashed hr-menu">
-            <li class="menu-label my-2">Archieves</li>
+            <li class="menu-label my-2">Archives</li>
+            <li>
+                <a href="{{ route('regular-session.index') }}">
+                    <i data-feather="calendar" class="align-self-center menu-icon"></i>
+                    <span>Regular Sessions</span>
+                </a>
+            </li>
 
             <li>
                 <a href="{{ route('files.index') }}"><i data-feather="layers"

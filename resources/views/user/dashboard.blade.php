@@ -20,7 +20,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-dark">
                     <h5 class="modal-title text-white h6 text-uppercase" id="addScheduleModalLabel">View Schedule</h5>
-                    <a class="text-white cursor-pointer" data-bs-dismiss="modal">
+                    <a class="text-white cursor-pointer" dataf-bs-dismiss="modal">
                         <i class="fas fa-times fa-2x"></i>
                     </a>
                 </div>

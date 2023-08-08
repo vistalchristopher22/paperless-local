@@ -26,9 +26,9 @@
 
     <div class="card mb-4">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
-            <div class="card-title">
-                <h6 class="fw-bold h6">Complete Listing <span class="text-lowercase">of</span> Divisions</h6>
-            </div>
+            <h6 class="card-title fw-bold h6">
+                Complete Listing <span class="text-lowercase">of</span> Divisions
+            </h6>
             <div>
                 <a href="{{ route('division.create') }}" class="btn btn-dark shadow-dark-lg fw-medium">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\FileSearchController;
 use App\Http\Controllers\Admin\LegislationController;
+use App\Http\Controllers\Admin\RegularSessionController;
 use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
 use App\Http\Controllers\Admin\SanggunianMemberController;
 use App\Http\Controllers\Admin\ScheduleController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VenueController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\TypeController;
 use App\Models\SanggunianMember;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\Auth;
@@ -107,6 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
             'board-sessions' => BoardSessionController::class,
             'venue' => VenueController::class,
             'files' => FileController::class,
+            'regular-session' => RegularSessionController::class
         ]);
     });
 });
