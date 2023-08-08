@@ -20,10 +20,9 @@ final class StoreBoardSession implements IPipeHandler
         $session = $this->boardSessionRepository->store([
             'title' => $payload['title'],
             'unassigned_title' => $payload['unassigned_title'],
+            'unassigned_content' => $payload['unassigned_business_content'],
             'announcement_title' => $payload['announcement_title'],
             'announcement_content' => $payload['announcement_content'],
-            'unassigned_business_note' => $payload['unAssignedBusinessNote'],
-            'order_business_note' => $payload['orderBusinessNote'],
         ]);
 
         $payload = array_merge($payload, ['session' => $session]);

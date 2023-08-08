@@ -7,13 +7,7 @@ use Illuminate\Http\Request;
 
 final class CommitteeService
 {
-    /**
-     * If the request has a file, then upload the file and merge the file path into the request
-     *
-     * @param Request request The request object
-     * @param IUploadService uploadService This is the service that will handle the upload.
-     */
-    public function uploadFile(Request $request, IUploadService $uploadService): mixed
+    public function uploadFile(Request $request, IUploadService $uploadService): array
     {
         if ($request->has('file')) {
             $path = $uploadService->handle($request->file('file'), 'DRAFT COMMITTEES');

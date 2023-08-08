@@ -21,6 +21,8 @@ return new class () extends Migration {
             $table->foreign('lead_committee')->references('id')->on('agendas');
             $table->unsignedBigInteger('expanded_committee')->nullable();
             $table->foreign('expanded_committee')->references('id')->on('agendas');
+            $table->foreignId('expanded_committee_2')->nullable()->references('id')->on('agendas');
+            $table->foreignId('expanded_committee_3')->nullable()->references('id')->on('agendas');
             $table->string('file_path')->nullable();
             $table->longText('content')->charset('utf8mb4')->nullable();
             $table->boolean('invited_guests')->default(0);
@@ -29,6 +31,7 @@ return new class () extends Migration {
             $table->foreignIdFor(User::class, 'submitted_by')->nullable();
             $table->foreignIdFor(Schedule::class)->nullable();
             $table->date('date')->default(now());
+            $table->json('file_map')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

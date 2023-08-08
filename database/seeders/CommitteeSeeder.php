@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\CommitteeStatus;
 use App\Models\Agenda;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -29,7 +30,7 @@ class CommitteeSeeder extends Seeder
                 'date' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
-                'status' => 'review',
+                'status' => CommitteeStatus::APPROVED->value,
                 'submitted_by' => $user,
             ]);
         }

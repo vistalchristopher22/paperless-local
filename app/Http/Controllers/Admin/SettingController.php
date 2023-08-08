@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 final class SettingController extends Controller
 {
-
     public function __construct(private readonly SettingRepository $settingRepository)
     {
     }

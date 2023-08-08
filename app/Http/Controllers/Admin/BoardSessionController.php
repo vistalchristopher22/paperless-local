@@ -6,35 +6,47 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBoardSessionRequest;
 use App\Http\Requests\UpdateBoardSessionRequest;
 use App\Models\BoardSession;
+use App\Models\ReferenceSession;
+use App\Pipes\BoardSession\CreateWordDocumentContent;
 use App\Pipes\BoardSession\DeleteBoardSession;
 use App\Pipes\BoardSession\DeleteFileUpload;
 use App\Pipes\BoardSession\FileUpload;
 use App\Pipes\BoardSession\StoreBoardSession;
 use App\Pipes\BoardSession\UpdateBoardSession;
+use App\Pipes\BoardSession\UpdateWordDocumentContent;
 use App\Repositories\BoardSessionRespository;
+use App\Repositories\SettingRepository;
 use App\Resolvers\PDFLinkResolver;
 use App\Transformers\BoardSessionLaraTables;
 use App\Utilities\FileUtility;
+use Exception;
 use Freshbitsweb\Laratables\Laratables;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Pipeline;
 
 final class BoardSessionController extends Controller
 {
-    public function __construct(private BoardSessionRespository $boardSessionRepository)
+    public function __construct(private readonly BoardSessionRespository $boardSessionRepository)
     {
         $this->middleware('verify.user')->only(['locked', 'unlocked', 'destroy']);
     }
 
-    public function list()
+    public function list(): array
     {
         return Laratables::recordsOf(BoardSession::class, BoardSessionLaraTables::class);
     }
 
-    public function index()
+    /**
+     * @throws Exception
+     */
+    public function index(): View
     {
-        return view('admin.board-sessions.index');
+        return view('admin.board-sessions.index', [
+            'availableRegularSessions' => ReferenceSession::has('scheduleSessions')->get()->unique('number'),
+            'settingsMissingStatus' => SettingRepository::getSettingsForBoardSession(),
+        ]);
     }
 
     public function create()
@@ -49,7 +61,8 @@ final class BoardSessionController extends Controller
                 ->through([
                     StoreBoardSession::class,
                     FileUpload::class,
-                ])->then(fn($data) => redirect()->back()->with('success', 'Board session created successfully'));
+                    CreateWordDocumentContent::class,
+                ])->then(fn ($data) => redirect()->back()->with('success', 'Board session created successfully'));
         });
     }
 
@@ -76,16 +89,21 @@ final class BoardSessionController extends Controller
     public function edit(int $id)
     {
         $boardSession = $this->boardSessionRepository->findBy('id', $id);
-        return view('admin.board-sessions.edit', compact('boardSession'));
+        return view('admin.board-sessions.edit', [
+            'boardSession' => $boardSession,
+        ]);
     }
 
     public function update(UpdateBoardSessionRequest $request, BoardSession $board_session)
     {
-        return Pipeline::send($request->merge(['boardSession' => $board_session])->all())
-            ->through([
-                UpdateBoardSession::class,
-                FileUpload::class,
-            ])->then(fn($data) => redirect()->back()->with('success', 'Board session updated successfully'));
+        return DB::transaction(function () use ($request, $board_session) {
+            return Pipeline::send($request->merge(['boardSession' => $board_session])->all())
+                ->through([
+                    UpdateWordDocumentContent::class,
+                    UpdateBoardSession::class,
+                    FileUpload::class,
+                ])->then(fn ($data) => redirect()->back()->with('success', 'Board session updated successfully'));
+        });
     }
 
     public function published(BoardSession $boardSession)
@@ -103,7 +121,7 @@ final class BoardSessionController extends Controller
                     DeleteBoardSession::class,
                     DeleteFileUpload::class,
                 ])
-                ->then(fn($data) => $data);
+                ->then(fn ($data) => $data);
         });
 
         return response()->json(['success' => true, 'message' => 'Board session deleted successfully']);
@@ -119,7 +137,6 @@ final class BoardSessionController extends Controller
     public function unlocked(BoardSession $board_session)
     {
         $this->boardSessionRepository->unlocked($board_session);
-
         return response()->json(['success' => true, 'message' => 'Board session unlocked successfully']);
     }
 }

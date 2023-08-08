@@ -12,11 +12,11 @@ String.prototype.limit = function (limit) {
 let table = $('#committees-table').DataTable({
     serverSide: true,
     ajax: {
-        url: '/api/committee-list/*/*/*',
+        url: '/api/committee-list/*/*/*/*',
     },
     processing: true,
     language: {
-        processing: '<div class="spinner-border text-primary" role="status"></div>'
+        processing: '<div class="spinner-border text-info" role="status"></div>'
     },
     columns: [
         {
@@ -39,6 +39,13 @@ let table = $('#committees-table').DataTable({
         {
 
             name: 'expanded_committee',
+            searchable: false,
+            orderable: false,
+            render: (data) => `<span class="mx-2">${data}</span>`,
+        },
+        {
+
+            name: 'other_expanded_committee',
             searchable: false,
             orderable: false,
             render: (data) => `<span class="mx-2">${data}</span>`,
@@ -89,20 +96,29 @@ searchInput.off().on('keyup', function () {
 $('#filterLeadCommitee').change(function () {
     let lead = $('#filterLeadCommitee').val();
     let expanded = $('#filterExpandedCommittee').val();
-    table.ajax.url(`/api/committee-list/${lead}/${expanded}/*`).load(null, false);
+    let session = $('#availableSession').val();
+    table.ajax.url(`/api/committee-list/${lead}/${expanded}/*/${session}`).load(null, false);
 });
 $('#filterExpandedCommittee').change(function () {
     let lead = $('#filterLeadCommitee').val();
     let expanded = $('#filterExpandedCommittee').val();
-    table.ajax.url(`/api/committee-list/${lead}/${expanded}/*`).load(null, false);
+    let session = $('#availableSession').val();
+    table.ajax.url(`/api/committee-list/${lead}/${expanded}/*/${session}`).load(null, false);
 });
+
+$('#availableSession').change(function () {
+    let lead = $('#filterLeadCommitee').val();
+    let expanded = $('#filterExpandedCommittee').val();
+    table.ajax.url(`/api/committee-list/${lead}/${expanded}/*/${this.value}`).load(null, false);
+});
+
 $('#filterByContent').keyup(function (e) {
     if (e.keyCode == 13) {
         let lead = $('#filterLeadCommitee').val();
         let expanded = $('#filterExpandedCommittee').val();
         let content = $(this).val();
         if (content == '') {
-            table.ajax.url(`/api/committee-list/${lead}/${expanded}/*`).load(null, false);
+            table.ajax.url(`/api/committee-list/${lead}/${expanded}/*/*`).load(null, false);
         } else {
             $.ajax({
                 url: 'http://localhost:3030/api/committee-content/search',
@@ -114,9 +130,9 @@ $('#filterByContent').keyup(function (e) {
                 success: function (response) {
                     let ids = response.committees.map((committee) => committee.id);
                     if (ids.length === 0) {
-                        table.ajax.url(`/api/committee-list/-1/-1/*`).load(null, false);
+                        table.ajax.url(`/api/committee-list/-1/-1/*/*`).load(null, false);
                     } else {
-                        table.ajax.url(`/api/committee-list/${lead}/${expanded}/${ids.join(',') || '*'}`).load(null, false);
+                        table.ajax.url(`/api/committee-list/${lead}/${expanded}/${ids.join(',') || '*'}/*`).load(null, false);
                     }
                 }
             });

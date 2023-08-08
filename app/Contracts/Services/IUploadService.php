@@ -6,5 +6,5 @@ use Illuminate\Http\UploadedFile;
 
 interface IUploadService
 {
-    public function handle(UploadedFile $file, string $directoryName = null);
+    public function handle(UploadedFile $file, string $directoryName = null): string;
 }

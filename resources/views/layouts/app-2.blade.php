@@ -158,15 +158,21 @@
 
             @feature('administrator')
             <li>
-                <a href="{{ route('sanggunian-members.index') }}">
-                    <i data-feather="users" class="align-self-center menu-icon"></i>
-                    <span>Sanggunian Members</span>
+                <a href="#">
+                    <i data-feather="calendar" class="align-self-center menu-icon"></i>
+                    <span>Regular Sessions</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('legislation.index') }}">
                     <i data-feather="file" class="align-self-center menu-icon"></i>
                     <span>Legislations</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('sanggunian-members.index') }}">
+                    <i data-feather="users" class="align-self-center menu-icon"></i>
+                    <span>Sanggunian Members</span>
                 </a>
             </li>
             @endfeature
@@ -536,8 +542,7 @@
 
         <footer class="footer text-center text-sm-start">
             {{ date('Y', strtotime('-1 year', time())) }} - {{ date('Y') }} &copy;
-            {{ config('app.name') }} <span class="text-muted d-none d-sm-inline-block float-end">Powered by <i
-                    class="mdi mdi-heart text-danger"></i> PADMO-ITU</span>
+            {{ config('app.name') }} <span class="text-muted d-none d-sm-inline-block float-end">Powered by 4rrPADMO-ITU</span>
         </footer>
         <!--end footer-->
     </div>

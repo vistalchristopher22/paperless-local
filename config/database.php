@@ -81,7 +81,7 @@ return [
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '.'),
+            'host' => 'DESKTOP-VFHNFGB',
             'port' => env('DB_PORT', '1433'),
             'database' => env('DB_DATABASE', 'Paperless'),
             'username' => env('DB_USERNAME', 'sa'),

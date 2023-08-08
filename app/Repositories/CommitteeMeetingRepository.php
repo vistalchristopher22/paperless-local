@@ -13,7 +13,7 @@ final class CommitteeMeetingRepository extends CommitteeRepository
      * @param array $data An array of data for the committee meeting to add
      * @return void
      */
-    public function addCommitteeMeetingToSchedule(mixed $scheduleId, array $data = [])
+    public function addCommitteeMeetingToSchedule(mixed $scheduleId, array $data = []): void
     {
         $committee = $this->model->find($data['id']);
         $committee->schedule_id = $scheduleId;
@@ -28,7 +28,7 @@ final class CommitteeMeetingRepository extends CommitteeRepository
      * @param array $newOrderedData An array of committee IDs in their new order
      * @return void
      */
-    private function reorderCommitteeDisplayIndices(array $newOrderedData = [])
+    private function reorderCommitteeDisplayIndices(array $newOrderedData = []): void
     {
         collect($newOrderedData)->each(function ($committeeIds) {
             collect($committeeIds)->each(fn ($committeeId, $index) => $this->model->find($committeeId)->update(['display_index' => $index + 1]));

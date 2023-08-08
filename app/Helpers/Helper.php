@@ -1,6 +1,7 @@
 <?php
 
-function addNumberSuffix($num)
+
+function addNumberSuffix($num): string
 {
     if ($num % 100 >= 11 && $num % 100 <= 13) {
         return $num . 'th';
@@ -16,7 +17,7 @@ function addNumberSuffix($num)
     }
 }
 
-function formatSizeUnits($bytes)
+function formatSizeUnits($bytes): string
 {
     $units = ['bytes', 'KB', 'MB', 'GB', 'TB'];
 
@@ -29,4 +30,9 @@ function formatSizeUnits($bytes)
     $unit = $units[$i];
 
     return $size . ' ' . $unit;
+}
+
+function startsWithDigit($data): bool
+{
+    return preg_match('/^\d{1,2}\.\s/', $data);
 }

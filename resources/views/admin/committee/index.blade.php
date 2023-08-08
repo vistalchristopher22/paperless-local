@@ -19,7 +19,8 @@
     @endif
     <div class="card mb-3">
         <div class="card-header bg-light d-flex justify-content-between align-items-center" id="filterHeader">
-            <h6 class="card-title h6 fw-medium text-dark fw-bolder">What <span class="text-lowercase">are you looking for</span>?</h6>
+            <h6 class="card-title h6 fw-medium text-dark fw-medium">What <span class="text-lowercase">are you looking
+                    for</span>?</h6>
             <button class="btn btn-dark shadow-dark" type="button" data-bs-toggle="collapse"
                     data-bs-target="#filterCollapse"
                     aria-expanded="false" aria-controls="filterCollapse">
@@ -28,13 +29,12 @@
                     <path
                         d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
                 </svg>
-                Filter Data
             </button>
         </div>
         <div class="collapse" id="filterCollapse">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label class="fw-bolder text-dark form-label">Lead Committee</label>
                             <select id="filterLeadCommitee" class="form-control" style="width : 100%;">
@@ -45,13 +45,24 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="form-group">
-                            <label class="fw-bolder text-dark  form-label">Expanded Committee</label>
+                            <label class="fw-bolder text-dark form-label">Expanded Committee</label>
                             <select id="filterExpandedCommittee" class="form-select" style="width : 100%;">
                                 <option value="*">All</option>
                                 @foreach ($agendas as $agenda)
                                     <option value="{{ $agenda->id }}">{{ $agenda->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="fw-bolder text-dark form-label">Available Sessions</label>
+                            <select id="availableSession" class="form-select" style="width : 100%;">
+                                <option value="*">All</option>
+                                @foreach ($availableRegularSessions as $availableSession)
+                                    <option value="{{ $availableSession->id }}">{{ $availableSession->number }} Regular Session - {{ $availableSession->year }} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -90,14 +101,15 @@
                 <table class="table table-striped table-bordered" id="committees-table" width="100%">
                     <thead>
                     <tr class="bg-light">
-                        <th class="p-2 border text-dark align-middle" style="width:130px;">Name</th>
-                        <th class="p-2 border text-dark text-center" style="width:180px;">Submitted By</th>
-                        <th class="p-2 border text-dark">Lead Committee</th>
-                        <th class="p-2 border text-dark">Expanded Committee</th>
-                        <th class="p-2 border text-dark">Schedule</th>
-                        <th class="p-2 border text-dark text-center">Status</th>
-                        <th class="p-2 border text-dark text-center">Submitted At</th>
-                        <th class="p-2 border text-center text-dark">Actions</th>
+                        <th class="p-3 border text-dark align-middle" style="width:130px;">Name</th>
+                        <th class="p-3 border text-dark text-center" style="width:180px;">Submitted By</th>
+                        <th class="p-3 border text-dark">Lead Committee</th>
+                        <th class="p-3 border text-dark">Expanded Committee</th>
+                        <th class="p-3 border text-dark">Other Expanded Committee</th>
+                        <th class="p-3 border text-dark">Regular Session</th>
+                        <th class="p-3 border text-dark text-center">Status</th>
+                        <th class="p-3 border text-dark text-center">Submitted At</th>
+                        <th class="p-3 border text-center text-dark">Actions</th>
                     </tr>
                     </thead>
                 </table>
@@ -146,7 +158,7 @@
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="{{ asset('assets/js/custom/committee.js') }}"></script>
         <script>
-            $('select#filterLeadCommitee, select#filterExpandedCommittee').select2({});
+            $('select#filterLeadCommitee, select#filterExpandedCommittee, select#availableSession').select2({});
         </script>
     @endpush
 @endsection

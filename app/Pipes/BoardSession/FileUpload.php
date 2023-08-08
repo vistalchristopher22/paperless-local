@@ -22,54 +22,36 @@ final class FileUpload implements IPipeHandler
     {
 
         if (request()->has('file_path')) {
+            try {
+                $session = $payload['boardSession'] ?? $payload['session'];
 
-            $session = $payload['boardSession'] ?? $payload['session'];
+                $location = FileUtility::correctDirectorySeparator($this->service->handle($payload['file_path'], 'BOARD_SESSIONS'));
+                $templateFileName = FileUtility::hideFile($location);
 
-            $location = FileUtility::correctDirectorySeparator($this->service->handle($payload['file_path'], 'BOARD_SESSIONS'));
+                copy($location, $templateFileName);
 
-            $session->file_path = $location;
+                $session->file_path = $location;
+                $session->file_template = $templateFileName;
 
-            $fileName = basename($location);
+                $fileName = basename($location);
 
-            $outputDirectory = FileUtility::publicDirectoryForViewing();
+                $outputDirectory = FileUtility::publicDirectoryForViewing();
 
-            Artisan::call('convert:path "' . FileUtility::isInputDirectoryEscaped($location) . '" --output="' . $outputDirectory . '"');
+                Artisan::call('convert:path "' . FileUtility::isInputDirectoryEscaped($location) . '" --output="' . $outputDirectory . '"');
 
-            $boardSessionPathForView = FileUtility::generatePathForViewing($outputDirectory, $fileName);
+                $boardSessionPathForView = FileUtility::generatePathForViewing($outputDirectory, $fileName);
 
+                $session->file_path_view = $boardSessionPathForView;
+                // $session->file_template =
 
-            $session->file_path_view = $boardSessionPathForView;
+                $session->save();
 
-            $session->save();
-
-            new PDFLinkResolver($outputDirectory . FileUtility::changeExtension($fileName));
+                new PDFLinkResolver($outputDirectory . FileUtility::changeExtension($fileName));
+            } catch(\Exception $e) {
+                dd($e->getMessage());
+            }
         }
 
-
-        if (request()->has('unassigned_business')) {
-
-            $session = $payload['boardSession'] ?? $payload['session'];
-
-            $location = FileUtility::correctDirectorySeparator($this->service->handle($payload['unassigned_business'], 'UNASSIGNED_BUSINESS'));
-
-            $session->unassigned_business_file_path = $location;
-
-            $fileName = basename($location);
-
-            $outputDirectory = FileUtility::publicDirectoryForViewing();
-
-            Artisan::call('convert:path "' . FileUtility::isInputDirectoryEscaped($location) . '" --output="' . $outputDirectory . '"');
-
-            $unAssignedBusinessFilePath = FileUtility::generatePathForViewing($outputDirectory, $fileName);
-
-
-            $session->unassigned_business_file_path_view = $unAssignedBusinessFilePath;
-
-            $session->save();
-
-            new PDFLinkResolver($outputDirectory . FileUtility::changeExtension($fileName));
-
-        }
 
         return $next($payload);
     }

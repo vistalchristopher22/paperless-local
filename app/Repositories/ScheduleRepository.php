@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Http\Resources\ScheduleResource;
 use App\Models\Schedule;
+use App\Utilities\FileUtility;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -16,10 +17,10 @@ final class ScheduleRepository extends BaseRepository
 
     public function getAllSchedules()
     {
-        return ScheduleResource::collection($this->model->get());
+        return ScheduleResource::collection($this->model->get()->load('regular_session'));
     }
 
-    public function createSchedule(array $data = [])
+    public function createSchedule(array $data = [], int $reference)
     {
         $carbonDate = request()->time ? Carbon::parse($data['selected_date'] . ' ' . $data['time']) : Carbon::parse($data['selected_date']);
         return $this->model->create([
@@ -28,11 +29,13 @@ final class ScheduleRepository extends BaseRepository
             'description' => $data['description'],
             'venue' => $data['venue'],
             'type' => $data['type'],
+            'reference_session_id' => $reference,
             'with_invited_guest' => $data['guests'] == 'on' ? 1 : 0,
+            'root_directory' => FileUtility::isInputDirectoryEscaped($data['root_directory']),
         ]);
     }
 
-    public function updateSchedule(array $data = []): mixed
+    public function updateSchedule(array $data = [], int $reference): mixed
     {
         $schedule = $this->model->find($data['id']);
         $schedule->name = $data['name'];
@@ -41,6 +44,7 @@ final class ScheduleRepository extends BaseRepository
         $schedule->venue = $data['venue'];
         $schedule->with_invited_guest = $data['guests'] == 'on' ? 1 : 0;
         $schedule->type = $data['type'];
+        $schedule->reference_session_id = $reference;
         $schedule->save();
         return $schedule;
     }
@@ -64,7 +68,7 @@ final class ScheduleRepository extends BaseRepository
 
     public function groupedByDate(array $dates = [])
     {
-        return $this->model->with(['committees:id,lead_committee,expanded_committee,schedule_id', 'committees.lead_committee_information', 'committees.expanded_committee_information', 'board_sessions'])
+        return $this->model->with(['committees:id,lead_committee,expanded_committee,schedule_id', 'committees.lead_committee_information', 'committees.expanded_committee_information', 'board_sessions', 'regular_session'])
             ->whereIn(DB::raw('CONVERT(date, date_and_time)'), $dates)
             ->orderBy('with_invited_guest', 'DESC')
             ->orderBy('date_and_time', 'ASC')

@@ -1,4 +1,4 @@
-@php use App\Enums\ScheduleType; @endphp
+@php use App\Enums\ScheduleType;use App\Repositories\SettingRepository; @endphp
 @extends('layouts.app-2')
 @section('tab-title', 'Schedules')
 @prepend('page-css')
@@ -121,7 +121,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-light">
-                    <h5 class="modal-title text-dark fw-medium text-uppercase" id="addScheduleModalLabel">Add
+                    <h5 class="modal-title text-dark  fw-medium text-uppercase" id="addScheduleModalLabel">Add
                         Schedule</h5>
                     <a class="cursor-pointer btn-close" data-bs-dismiss="modal">
                     </a>
@@ -156,6 +156,15 @@
                         <select name="type" id="type" class="form-control text-capitalize" disabled>
                             @foreach(ScheduleType::values() as $schedule)
                                 <option value="{{ $schedule }}">{{ $schedule }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reference_session" class="form-label text-capitalize">Regular Session</label>
+                        <select name="reference_session" id="reference_session" class="form-control text-capitalize">
+                            @foreach($regularSessions as $regularSession)
+                                <option value="{{addNumberSuffix($regularSession) }}">{{ addNumberSuffix($regularSession) }} Regular Session</option>
                             @endforeach
                         </select>
                     </div>
@@ -289,6 +298,7 @@
                                 $('#venue').val(response.venue);
                                 $('#type').val(response.type);
                                 $('#id').val(response.id);
+                                $('#reference_session').val(response?.regular_session?.number);
                                 $("#withGuests").val(response.with_invited_guest === 1 ? "on" : "off");
                                 if (response.with_invited_guest == 1) {
                                     $('#withGuests').attr('checked', true);
@@ -350,6 +360,7 @@
                         description: $('#shortDescription').val(),
                         venue: $('#venue').val(),
                         type: $('#type').val(),
+                        reference_session : $('#reference_session').val(),
                         guests: $('#withGuests').is(':checked') ? "on" : "off",
                         selected_date: selectedDate,
                     };
@@ -445,5 +456,3 @@
         </script>
     @endpush
 @endsection
-
-delete

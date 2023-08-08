@@ -92,17 +92,17 @@ final class FileSearchController extends Controller
             'currentDirectory' => basename($request->directory),
         ];
 
-//        foreach ($files as $item) {
-//            if ($item->isFile()) {
-//                if (Str::contains(Str::lower($item->getFilename()), Str::lower($request->term))) {
-//                    $filtersFiles[] = $item;
-//                }
-//            } else {
-//                if (Str::contains(Str::lower($item->getBasename()), Str::lower($request->term))) {
-//
-//                    echo $item->getBasename();
-//                }
-//            }
-//        }
+        //        foreach ($files as $item) {
+        //            if ($item->isFile()) {
+        //                if (Str::contains(Str::lower($item->getFilename()), Str::lower($request->term))) {
+        //                    $filtersFiles[] = $item;
+        //                }
+        //            } else {
+        //                if (Str::contains(Str::lower($item->getBasename()), Str::lower($request->term))) {
+        //
+        //                    echo $item->getBasename();
+        //                }
+        //            }
+        //        }
     }
 }

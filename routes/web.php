@@ -1,36 +1,37 @@
 <?php
 
-use App\Http\Controllers\Admin\FileSearchController;
-use App\Models\Schedule;
-use App\Models\SanggunianMember;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\AgendaController;
+use App\Http\Controllers\Admin\Archive\FileBulkDeleteController;
+use App\Http\Controllers\Admin\Archive\FileController;
+use App\Http\Controllers\Admin\Archive\FilePreviewController;
+use App\Http\Controllers\Admin\Archive\FileShowInExplorerController;
+use App\Http\Controllers\Admin\BoardSessionController;
+use App\Http\Controllers\Admin\BoardSessionMoveReadingController;
+use App\Http\Controllers\Admin\BoardSessionPublishPreviewController;
+use App\Http\Controllers\Admin\CommitteeController;
+use App\Http\Controllers\Admin\CommitteeFileAttachmentController;
+use App\Http\Controllers\Admin\CommitteeFileController;
+use App\Http\Controllers\Admin\CommitteeMeetingScheduleController;
+use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
+use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
+use App\Http\Controllers\Admin\DivisionController;
+use App\Http\Controllers\Admin\FileSearchController;
+use App\Http\Controllers\Admin\LegislationController;
+use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
+use App\Http\Controllers\Admin\SanggunianMemberController;
+use App\Http\Controllers\Admin\ScheduleController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\SubmittedCommitteeController;
+use App\Http\Controllers\Admin\UserAccessController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VenueController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LandingPageController;
-use App\Http\Controllers\Admin\AgendaController;
-use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\DivisionController;
-use App\Http\Controllers\Admin\ScheduleController;
-use App\Http\Controllers\Admin\CommitteeController;
-use App\Http\Controllers\Admin\UserAccessController;
-use App\Http\Controllers\Admin\LegislationController;
-use App\Http\Controllers\Admin\Archive\FileController;
-use App\Http\Controllers\Admin\BoardSessionController;
-use App\Http\Controllers\Admin\CommitteeFileController;
-use App\Http\Controllers\Admin\SanggunianMemberController;
-use App\Http\Controllers\Admin\SubmittedCommitteeController;
-use App\Http\Controllers\Admin\Archive\FilePreviewController;
-use App\Http\Controllers\Admin\Archive\FileBulkDeleteController;
-use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
-use App\Http\Controllers\Admin\CommitteeFileAttachmentController;
-use App\Http\Controllers\Admin\CommitteeMeetingScheduleController;
-use App\Http\Controllers\Admin\Archive\FileShowInExplorerController;
-use App\Http\Controllers\Admin\BoardSessionPublishPreviewController;
-use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
-use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
+use App\Models\SanggunianMember;
+use App\Models\Schedule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
@@ -59,10 +60,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('schedule/committees/{dates}', [CommitteeMeetingScheduleController::class, 'show'])->name('committee-meeting-schedule.show');
         Route::get('schedule/committees-and-session/{dates}', [CommitteeMeetingScheduleController::class, 'committeesAndSession'])->name('committee-meeting.schedule.show.committees-and-session');
-        Route::Get('schedule/session-only/{dates}', [CommitteeMeetingScheduleController::class, 'sessions'])->name('committee-meeting.schedule.show.session-only');
+        Route::get('schedule/session-only/{dates}', [CommitteeMeetingScheduleController::class, 'sessions'])->name('committee-meeting.schedule.show.session-only');
         Route::post('schedule/committees', [CommitteeMeetingScheduleController::class, 'store'])->name('committee-meeting-schedule.store');
 
-        Route::get('board-sessions/list', [BoardSessionController::class, 'list'])->name('board-sessions.list');
+        Route::get('board-sessions/list/{regularSession?}', [BoardSessionController::class, 'list'])->name('board-sessions.list');
+        Route::post('board-session/move-reading', BoardSessionMoveReadingController::class)->name('board-session.move-reading');
         Route::post('board-sessions/locked/{board_session}', [BoardSessionController::class, 'locked'])->name('board-sessions.locked');
         Route::post('board-sessions/unlocked/{board_session}', [BoardSessionController::class, 'unlocked'])->name('board-sessions.unlocked');
         Route::post('board-sessions/published/{board_session}', [BoardSessionController::class, 'published'])->name('board-sessions.published');

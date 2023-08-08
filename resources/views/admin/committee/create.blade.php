@@ -1,7 +1,7 @@
 @extends('layouts.app-2')
 @section('tab-title', 'Add new Committee')
 @prepend('page-css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 @endprepend
 @section('content')
     @if (Session::has('success'))
@@ -12,84 +12,65 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
-            <h6 class="card-title h6 text-white m-0">New Committee Form</h6>
+        <div class="card-header bg-light p-3 justify-content-between align-items-center d-flex">
+            <h6 class="card-title h6 text-dark m-0">New Committee Form</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('committee.store') }}" enctype="multipart/form-data">
                 @csrf
-
                 <div class="form-group">
-                    <label class="form-label">Name</label>
-                    <input type="text" class="form-control" name="name" value="{{ old('name') }}">
+                    <label for="name" class="form-label">Name</label>
+                    <input id="name" type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                           name="name" value="{{ old('name') }}">
                     @error('name')
-                        <span class="text-danger">{{ $message }}</span>
+                    <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Lead Committee</label>
-                    <select type="text" class="form-select select2" name="lead_committee">
-                        <option value="">No Lead Committee</option>
-                        @foreach ($agendas as $agenda)
-                            <option value="{{ $agenda->id }}">{{ $agenda->title }}</option>
-                        @endforeach
-                    </select>
+                    <label for="lead_committee" class="form-label">Lead Committee</label>
+                    <div class="{{ $errors->has('lead_committee') ? 'border border-danger rounded' : '' }}">
+                        <select id="lead_committee" data-type="text" class="form-select select2" name="lead_committee">
+                            <option value="">No Lead Committee</option>
+                            @foreach ($agendas as $agenda)
+                                <option value="{{ $agenda->id }}">{{ $agenda->title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     @error('lead_committee')
-                        <span class="text-danger">{{ $message }}</span>
+                    <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Expanded Committee</label>
-                    <select type="text" class="form-select" name="expanded_committee">
-                        <option value="">Select Exanpaded Committee</option>
-                        @foreach ($agendas as $agenda)
-                            <option value="{{ $agenda->id }}">{{ $agenda->title }}</option>
-                        @endforeach
-                    </select>
+                    <label for="expanded_committee" class="form-label">Expanded Committee</label>
+                    <div class="{{ $errors->has('expanded_committee') ? 'border border-danger rounded' : '' }}">
+                        <select id="expanded_committee" class="form-select" multiple name="expanded_committee[]">
+                            <option value="">Select Exanpaded Committee</option>
+                            @foreach ($agendas as $agenda)
+                                <option value="{{ $agenda->id }}">{{ $agenda->title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     @error('expanded_committee')
-                        <span class="text-danger">{{ $message }}</span>
+                    <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
-
-
-                <div class="form-group">
-                    {{-- <label class="form-label d-flex flex-row">
-                        Schedule
-                        <div class="form-check form-switch mx-3">
-                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="with_guests">
-                            <label class="form-check-label" for="flexSwitchCheckChecked">With Invited Guests</label>
-                        </div>
-                    </label> --}}
-                    {{-- <div class="form-group mb-3">
-                        <div class="input-group" id="datetimepicker1" data-td-target-input="nearest"
-                            data-td-target-toggle="nearest">
-                            <input id="schedule" readonly name="schedule" type="text" class="form-control"
-                                data-td-target="#datetimepicker1" />
-                            <span class="input-group-text" data-td-target="#datetimepicker1"
-                                data-td-toggle="datetimepicker">
-                                <span class="fa-solid fa-calendar"></span>
-                            </span>
-                        </div>
-                    </div> --}}
-                </div>
-
-
 
 
                 <div class="form-group">
                     <label for="file">File</label>
-                    <input type="file" name="file" id="file" class="form-control">
+                    <div class="{{ $errors->has('file') ? 'border border-danger rounded' : '' }}">
+                        <input type="file" name="file" id="file" class="form-control">
+                    </div>
+
                     @error('file')
-                        <span class="text-danger"> {{ $message }}</span>
+                    <span class="text-danger"> {{ $message }}</span>
                     @enderror
                 </div>
-
-
-                <!-- Submit Button -->
                 <div>
-                    <button type="submit" class="btn btn-primary float-end mt-3">Submit</button>
+                    <button type="submit" class="btn btn-dark btn-md shadow-dark float-end mt-3">Submit</button>
                 </div>
             </form>
         </div>
@@ -101,8 +82,9 @@
                 placeholder: 'Select Lead Committee',
             });
 
-            $('select[name="expanded_committee"]').select2({
+            $('select[name="expanded_committee[]"]').select2({
                 placeholder: 'Select Expanded Committee',
+                maximumSelectionLength: 2,
             });
         </script>
     @endpush

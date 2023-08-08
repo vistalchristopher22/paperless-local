@@ -1,7 +1,7 @@
 @extends('layouts.app-2')
 @section('tab-title', 'Commitee')
 @prepend('page-css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 @endprepend
 @section('content')
     @if (Session::has('success'))
@@ -12,8 +12,8 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0 h6 text-white">Edit Commitee</h6>
+        <div class="card-header bg-light justify-content-between align-items-center d-flex">
+            <h6 class="card-title m-0 h6">Edit Commitee</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('committee.update', $committee) }}" enctype="multipart/form-data">
@@ -22,59 +22,65 @@
 
                 <div class="form-group">
                     <label>Name</label>
-                    <input type="text" class="form-control" name="name" value="{{ old('name', $committee->name) }}">
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
+                           value="{{ old('name', $committee->name) }}">
                     @error('name')
-                        <span class="text-danger">{{ $message }}</span>
+                    <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
                     <label>Lead Committee</label>
-                    <select type="text" class="form-select select2" name="lead_committee">
-                        @foreach ($agendas as $agenda)
-                            <option {{ old('lead_committee', $committee->lead_committee) == $agenda->id ? 'selected' : '' }}
-                                value="{{ $agenda->id }}">{{ $agenda->title }}</option>
-                        @endforeach
-                    </select>
+                    <div class="@error('lead_committee') border border-danger rounded @enderror">
+                        <select type="text" class="form-select select2" name="lead_committee">
+                            @foreach ($agendas as $agenda)
+                                <option
+                                    {{ old('lead_committee', $committee->lead_committee) == $agenda->id ? 'selected' : '' }}
+                                    value="{{ $agenda->id }}">{{ $agenda->title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     @error('lead_committee')
-                        <span class="text-danger">{{ $message }}</span>
+                    <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
                     <label>Expanded Committee</label>
-                    <select type="text" class="form-select" name="expanded_committee">
-                        @foreach ($agendas as $agenda)
-                            <option
-                                {{ old('expanded_committee', $committee->expanded_committee) == $agenda->id ? 'selected' : '' }}
-                                value="{{ $agenda->id }}">{{ $agenda->title }}</option>
-                        @endforeach
-                    </select>
+                    <div class="@error('expanded_committee') border border-danger rounded @enderror">
+                        <select type="text" class="form-select" name="expanded_committee[]" multiple>
+                            @foreach ($agendas as $agenda)
+                                @if(old('expanded_committee') !== null)
+                                    <option
+                                        {{ in_array($agenda->id, old('expanded_committee')) ? 'selected' : '' }}
+                                        value="{{ $agenda->id }}">{{ $agenda->title }}</option>
+                                @else
+                                    <option
+                                        {{ old('expanded_committee', $committee->expanded_committee) == $agenda->id ? 'selected' : '' }}
+                                        {{ $committee->expanded_committee_2 == $agenda->id ? 'selected' : '' }}
+                                        value="{{ $agenda->id }}">{{ $agenda->title }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
                     @error('expanded_committee')
-                        <span class="text-danger">{{ $message }}</span>
+                    <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
-
-
-                {{-- <div class="form-group">
-                    <label>Schedule</label>
-                    <input type="text" class="form-control" name="schedule"
-                        value="{{ old('schedule', $committee->session_schedule) }}">
-                    @error('schedule')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div> --}}
-
 
                 <div class="form-group">
-                    <label>File <a href="#" class="fw-bold text-decoration-underline text-primary btn-edit"
-                            data-id="{{ $committee->id }}">({{ basename($committee->file_path) }})</a></label>
-                    <input type="file" name="file" id="file" class="form-control mt-1">
+                    <label>File
+                        <a href="#" class="fw-bold text-decoration-underline text-primary btn-edit"
+                           data-id="{{ $committee->id }}">({{ basename($committee->file_path) }})</a>
+                    </label>
+
+                    <input type="file" name="file" id="file"
+                           class="form-control mt-1 @error('file') is-invalid @enderror">
+
                     @error('file')
-                        <span class="text-danger"> {{ $message }}</span>
+                    <span class="text-danger"> {{ $message }}</span>
                     @enderror
                 </div>
-
 
                 <!-- Submit Button -->
                 <div>
@@ -91,9 +97,9 @@
                 placeholder: 'Select Lead Committee',
             });
 
-            $('select[name="expanded_committee"]').select2({
+            $('select[name="expanded_committee[]"]').select2({
                 placeholder: 'Select Expanded Committee',
-
+                maximumSelectionLength: 2,
             });
 
             document.addEventListener('click', event => {

@@ -26,7 +26,7 @@ class UpdateCommitteeRequest extends FormRequest
             'name' => ['required'],
             'file' => ['nullable', 'mimes:doc,docx,pdf'],
             'lead_committee' => ['required', 'exists:agendas,id'],
-            'expanded_committee' => ['required', 'exists:agendas,id'],
+            'expanded_committee' => ['required', 'array', 'max:2'],
         ];
     }
 }

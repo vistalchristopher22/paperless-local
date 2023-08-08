@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Setting;
+use App\Models\ReferenceSession;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -13,9 +14,33 @@ final class SettingRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    public static function getSettingsForBoardSession(): array
+    {
+        $missingStatus = [];
+
+        $settingNames = ['unassigned_business', 'announcement'];
+
+        foreach ($settingNames as $settingName) {
+            $settingValue = self::getValueByName($settingName);
+            if ($settingValue === null) {
+                $missingStatus[$settingName] = false;
+            }
+        }
+        return $missingStatus;
+    }
+
+
     public static function getValueByName(string $column)
     {
         return Setting::where('name', $column)?->first()?->value;
+    }
+
+    public static function getAvailableRegularSessionThisYear(): array
+    {
+        // $usedReferenceSessions = ReferenceSession::where('year', date('Y'))->get()->map(fn ($session) => (int) $session->number)->toArray();
+        return collect(range(SettingRepository::getValueByName('current_session'), SettingRepository::getValueByName('current_session') + SettingRepository::getValueByName('current_session_increment')))
+                    // ->filter(fn ($session) => !in_array($session, $usedReferenceSessions))
+                    ->toArray();
     }
 
     public function getByNames(string $column, array $values = [])
@@ -23,10 +48,6 @@ final class SettingRepository extends BaseRepository
         return $this->model->whereIn($column, $values)->get();
     }
 
-    /**
-     *
-     * @return  Collection
-     */
     public function get(): Collection
     {
         return $this->model->get();

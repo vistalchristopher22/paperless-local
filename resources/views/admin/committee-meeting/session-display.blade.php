@@ -26,8 +26,17 @@
                             data-bs-target="#panel-{{ $date }}" aria-expanded="true"
                             aria-controls="panel-{{ $date }}">
                         <div class="card-title">
-                            <span class="text-capitalize me-1 text-dark fw-bolder">Session </span> (<span
-                                class="">{{ date('F d, Y', strtotime($date)) }}</span>)
+                            {{--                            The 56th regular session of 2023 is scheduled for July 26th.--}}
+                            @isset($record?->first()?->regular_session)
+                                <span class="text-capitalize me-1 text-primary fw-bolder">Session - </span>
+                                - <span
+                                    class="text-primary fw-bolder">{{ $record?->first()?->regular_session?->number }}</span>
+                                Regular
+                                Session <span
+                                    class="text-lowercase">of</span> {{ $record?->first()?->regular_session?->year }}
+                                <span class="text-lowercase">is scheduled for</span> <span
+                                    class="fw-bolder text-primary">{{ date('F d, Y', strtotime($date)) }}</span>
+                            @endisset
                         </div>
                     </button>
                 </h2>
@@ -100,22 +109,6 @@
                                                         Unassigned Business
                                                     </span>
                                                 </button>
-                                                <button
-                                                    class="btn-sm btn btn-dark fw-medium btn-preview-document rounded-0 px-3 fw-medium d-flex align-items-center"
-                                                    data-url="{{ $session->board_sessions[0]->unassigned_business_file_path_view }}"
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                         width="16"
-                                                         height="16" fill="currentColor"
-                                                         class="bi bi-file-text me-2"
-                                                         viewBox="0 0 16 16">
-                                                        <path
-                                                            d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/>
-                                                        <path
-                                                            d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
-                                                    </svg>
-                                                    Document
-                                                </button>
                                             </h2>
 
                                             <div id="session-{{ $session->id }}-un-assigned-business"
@@ -123,10 +116,10 @@
                                                  aria-labelledby="orderBusiness"
                                                  data-bs-parent="#session-{{ $session->id }}">
                                                 <div class="accordion-body">
-                                                    @isset($session->board_sessions[0]->unassigned_business_note)
-                                                        {!! $session->board_sessions[0]->unassigned_business_note !!}
+                                                    @isset($session->board_sessions[0]->unassigned_content)
+                                                        {!! $session->board_sessions[0]->unassigned_content !!}
                                                     @else
-                                                        Note Not Available
+                                                        Content Not Available
                                                     @endisset
                                                 </div>
                                             </div>

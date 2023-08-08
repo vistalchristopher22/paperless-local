@@ -1,4 +1,4 @@
-<div class="dropdown" data-id="{{ $boardSession->id }}" data-file-path="{{ $boardSession->file_path }}" data-unassigned-file-path="{{ $boardSession->unassigned_business_file_path }}">
+<div class="dropdown" data-id="{{ $boardSession->id }}" data-file-path="{{ $boardSession->file_path }}">
     <button class="btn btn-dark dropdown-toggle fw-medium" type="button" id="dropdownAction" data-bs-toggle="dropdown"
             aria-expanded="false">
         Actions
@@ -9,12 +9,13 @@
         </svg>
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownAction" style="">
-        <li><a href="{{ route('board-sessions.edit', $boardSession->id) }}" class="dropdown-item">Edit</a></li>
-        <li><a href="{{ route('board-sessions.show', $boardSession->id) }}" class="dropdown-item">View</a></li>
+        <li><a href="{{ route('board-sessions.edit', $boardSession->id) }}" class="dropdown-item">Edit Session</a></li>
+        <li><a href="{{ route('board-sessions.show', $boardSession->id) }}" target="_blank" class="dropdown-item">View
+                Order Business</a></li>
         <li class="dropdown-divider"></li>
         <li>
             <a data-id="{{ $boardSession->id }}" class="dropdown-item btn-delete-session cursor-pointer text-danger">
-                Delete
+                Delete Session
             </a>
         </li>
     </ul>

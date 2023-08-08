@@ -48,6 +48,15 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label for="current_session" class="col-md-2 col-form-label text-md-right">Max Current Regular Session</label>
+                        <div class="col-md-10">
+                            <input type="number" name="current_session_increment" id="current_session_increment" class="form-control"
+                                   value="{{ $settingRepository->getValueByName('current_session_increment') }}"
+                                   placeholder="">
+                        </div>
+                    </div>
+
                 </div>
 
                 <hr class="border-dashed">
@@ -66,7 +75,7 @@
                 <hr class="border-dashed">
 
                 <h5 class="card-title text-dark">File Reading</h5>
-                <div class="form-group row mt-2">
+                {{-- <div class="form-group row mt-2">
                     <label for="first_reading" class="col-md-2 col-form-label text-md-right">First Reading Character
                         (Begin &
                         End)</label>
@@ -75,9 +84,9 @@
                                placeholder=""
                                value="{{ $settingRepository->getValueByName('first_reading') }}">
                     </div>
-                </div>
+                </div> --}}
 
-                <div class="form-group row mt-2">
+                {{-- <div class="form-group row mt-2">
                     <label for="second_reading" class="col-md-2 col-form-label text-md-right">Second Reading Character
                         (Begin &
                         End)</label>
@@ -86,9 +95,9 @@
                                placeholder=""
                                value="{{ $settingRepository->getValueByName('second_reading') }}">
                     </div>
-                </div>
+                </div> --}}
 
-                <div class="form-group row mt-2">
+                {{-- <div class="form-group row mt-2">
                     <label for="third_reading" class="col-md-2 col-form-label text-md-right">Third Reading Character
                         (Begin &
                         End)</label>
@@ -97,12 +106,10 @@
                                placeholder=""
                                value="{{ $settingRepository->getValueByName('third_reading') }}">
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="form-group row mt-2">
-                    <label for="unassigned_business" class="col-md-2 col-form-label text-md-right">Unassigned Business
-                        (Begin &
-                        End)</label>
+                    <label for="unassigned_business" class="col-md-2 col-form-label text-md-right">Unassigned Business</label>
                     <div class="col-md-10">
                         <input type="text" name="unassigned_business" id="unassigned_business" class="form-control"
                                placeholder=""

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -12,8 +14,6 @@ class Committee extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
-    public $connection = 'sqlsrv';
 
     public $table = 'committees';
 
@@ -37,32 +37,37 @@ class Committee extends Model
         );
     }
 
-    public function lead_committee_information()
+    public function lead_committee_information(): HasOne
     {
         return $this->hasOne(Agenda::class, 'id', 'lead_committee');
     }
 
-    public function schedule_information()
+    public function schedule_information(): BelongsTo
     {
         return $this->belongsTo(Schedule::class, 'schedule_id', 'id');
     }
 
-    public function submitted()
+    public function submitted(): BelongsTo
     {
         return $this->belongsTo(User::class, 'submitted_by', 'id');
     }
 
-    public function expanded_committee_information()
+    public function expanded_committee_information(): HasOne
     {
         return $this->hasOne(Agenda::class, 'id', 'expanded_committee');
     }
 
-    public function getFileNameAttribute()
+    public function other_expanded_committee_information(): HasOne
+    {
+        return $this->hasOne(Agenda::class, 'id', 'expanded_committee_2');
+    }
+
+    public function getFileNameAttribute(): string
     {
         return Str::afterLast(basename($this->file_path), '_');
     }
 
-    public function getFileAttribute()
+    public function getFileAttribute(): string
     {
         return basename($this->file_path);
     }

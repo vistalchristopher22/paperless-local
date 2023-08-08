@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Archive;
 
+use App\Http\Controllers\Controller;
+use App\Services\ArchiveFileService;
+use App\Utilities\FileUtility;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
-use App\Services\ArchiveFileService;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 final class FileController extends Controller
 {
@@ -37,20 +39,39 @@ final class FileController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+
         try {
             $file = $request->file('file');
-            $filename = $file->getClientOriginalName();
+            $originalFilename = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+            $filename = $originalFilename;
+
+            $filename = FileUtility::addTimePrefixToFileName($filename);
+
+            $filename = pathinfo($filename, PATHINFO_FILENAME);
+
+            $filename = Str::of($filename)
+                ->replace(" ", "_")
+                ->upper()
+                ->append('.')
+                ->append($extension)
+                ->value();
+
             $file->storeAs('source', $filename);
             $filePath = storage_path('app/source/' . $filename);
+            $realPath = realpath($filePath);
             $mTime = filemtime($filePath);
             $fileSize = filesize($filePath);
+
             $response = [
                 'message' => 'File uploaded successfully',
                 'path' => storage_path('app/source/'),
                 'fileName' => $filename,
+                'fullPath' => $realPath,
                 'mTime' => $mTime,
                 'fileSize' => $fileSize,
             ];
+
             $code = Response::HTTP_OK;
         } catch (Exception $e) {
             $response = ['message' => $e->getMessage()];

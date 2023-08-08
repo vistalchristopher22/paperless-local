@@ -16,7 +16,7 @@ abstract class AccountService
         return $data;
     }
 
-    public function verify(string $key, User $account)
+    public function verify(string $key, User $account): bool
     {
         return Hash::check($key, $account->password);
     }

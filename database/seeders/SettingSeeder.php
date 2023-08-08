@@ -25,6 +25,35 @@ class SettingSeeder extends Seeder
                 'name' => 'libre_office_path',
                 'value' => 'C:\\Program Files\\LibreOffice\\program\\soffice',
             ],
+            [
+                'name' => 'current_session',
+                'value' => '52',
+            ],
+            [
+                'name' => 'current_session_increment',
+                'value' => 3,
+            ],
+            [
+                'name' => 'first_reading',
+                'value' => 'FIRST_READING',
+            ],
+            [
+                'name' => 'second_reading',
+                'value' => 'SECOND_READING',
+            ],
+            [
+                'name' => 'third_reading',
+                'value' => 'THIRD_READING',
+            ],
+            [
+                'name' => 'unassigned_business',
+                'value' => '{unassigned}',
+            ],
+            [
+                'name' => 'announcement',
+                'value' => '{announcement}',
+            ],
+
         ];
 
         foreach ($settings as $setting) {

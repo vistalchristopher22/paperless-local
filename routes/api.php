@@ -2,29 +2,17 @@
 
 use App\Http\Controllers\Admin\Api\AgendaMemberController;
 use App\Http\Controllers\Admin\Api\ScheduleController;
+use App\Http\Controllers\Admin\BoardSessionAddScheduleController;
 use App\Http\Controllers\Admin\CommitteeController as AdminCommitteeController;
 use App\Http\Controllers\Api\CommitteeScheduleController;
-use App\Models\BoardSession;
 use App\Models\Committee;
-use App\Models\Schedule;
 use App\Models\User;
 use App\Models\UserNotification;
 use Illuminate\Support\Facades\Route;
 
-Route::get('committee-list/{lead?}/{expanded?}/{ids?}', [AdminCommitteeController::class, 'list'])->name('committee.list');
+Route::get('committee-list/{lead?}/{expanded?}/{ids?}/{regularSession?}', [AdminCommitteeController::class, 'list'])->name('committee.list');
 Route::get('agenda-members/{agenda}', [AgendaMemberController::class, 'members']);
 
-Route::put('board-session/add-schedule', function () {
-    try {
-        $boardSession = BoardSession::find(request()->board_session_id);
-        $boardSession->schedule_id = request()->schedule_id;
-        $boardSession->save();
-    } catch (\Exception $e) {
-        // find the schedule then delete
-        $schedule = Schedule::find(request()->schedule_id);
-        $schedule->delete();
-    }
-});
 
 Route::get('schedules', [ScheduleController::class, 'index'])->name('schedules.index');
 Route::post('schedule', [ScheduleController::class, 'store'])->name('schedule.store');
@@ -32,6 +20,7 @@ Route::get('schedule/{id}', [ScheduleController::class, 'show'])->name('schedule
 Route::delete('schedule/{id}', [ScheduleController::class, 'destroy'])->name('schedule.destroy');
 Route::put('schedule-move/{schedule}', [ScheduleController::class, 'move'])->name('schedule.move');
 Route::put('schedule', [ScheduleController::class, 'update'])->name('schedule.update');
+Route::put('board-session/add-schedule', BoardSessionAddScheduleController::class);
 
 
 Route::get('committee-schedule-information/{schedule}', [CommitteeScheduleController::class, 'show'])->name('committee-schedule-information.show');
@@ -44,6 +33,7 @@ Route::put('committee-approved', function () {
 
     return response()->json(['success' => true, 'sender' => $committee->submitted_by, 'committee' => $committee->id]);
 });
+
 Route::put('committee-returned', function () {
     $committee = Committee::find(request()->id);
     $committee->status = 'returned';

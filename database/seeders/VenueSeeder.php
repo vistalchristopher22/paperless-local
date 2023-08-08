@@ -14,10 +14,10 @@ class VenueSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'TSP - Session Hall',
+                'name' => 'Tandag City',
             ],
             [
-                'name' => 'Second District',
+                'name' => 'Bislig City',
             ],
         ];
 

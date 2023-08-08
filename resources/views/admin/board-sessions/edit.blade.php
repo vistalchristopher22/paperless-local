@@ -55,23 +55,13 @@
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <div class="mb-3">
-                            <label for="orderBusinessNote" class="form-label">Order Business Note</label>
-                            <textarea class="form-control" id="orderBusinessNote" name="orderBusinessNote">{{ old('orderBusinessNote', $boardSession->order_business_note) }}</textarea>
-                            @error('orderBusinessNote')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-
                     </div>
 
                     <div class="p-3 border border-start-0 border-end-0 bg-light">
                         <div class="card-title">Unassigned Business</div>
                     </div>
                     <div class="p-3">
-                        <div class="mb-3">
+                        <div class="d-none mb-3">
                             <label for="unassigned_title" class="form-label">Unassigned Business Title</label>
                             <input type="text"
                                    class="form-control {{ $errors->has('unassigned_title') ? 'is-invalid' : '' }}"
@@ -84,23 +74,14 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="file_path" class="form-label">Unassigned Business Content</label>
-                            <input type="file" class="form-control" id="unassigned_business"
-                                   name="unassigned_business">
-                            @error('unassigned_business')
+                            <label for="unassigned_business_content" class="form-label">Unassigned Business
+                                Content</label>
+                            <textarea class="form-control" id="unassigned_business_content"
+                                      name="unassigned_business_content">{!! $boardSession->unassigned_content !!}</textarea>
+                            @error('unassigned_business_content')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <div class="mb-3">
-                            <label for="unAssignedBusinessNote" class="form-label">Unassigned Business Note</label>
-                            <textarea class="form-control" id="unAssignedBusinessNote"
-                                      name="unAssignedBusinessNote">{{ old('unAssignedBusinessNote', $boardSession->unassigned_business_note) }}</textarea>
-                            @error('unAssignedBusinessNote')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
 
                     </div>
 
@@ -109,7 +90,7 @@
                     </div>
 
                     <div class="p-3">
-                        <div class="mb-3">
+                        <div class="d-none mb-3">
                             <label for="announcement_title" class="form-label">Announcement Title</label>
                             <input type="text" class="form-control @error('announcement_title') is-invalid @enderror"
                                    value="{{ old('announcement_title', $boardSession->announcement_title) }}"
@@ -147,8 +128,6 @@
             </div>
         </form>
 
-
-
         @push('page-scripts')
             <script type="text/javascript"
                     src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
@@ -157,11 +136,14 @@
                     tabSpaces: 10
                 });
             </script>
+            
+
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
                     const unassignedBusinessFilePath = document.querySelector('#unassigned_business');
                     const fileInput = document.querySelector('#file_path');
                     const fileExtensions = ['pdf', 'docx', 'doc'];
+
 
                     $('#btnSubmit').click(e => {
                         e.preventDefault();

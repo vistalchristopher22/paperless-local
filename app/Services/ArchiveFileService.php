@@ -70,7 +70,7 @@ final class ArchiveFileService
         ],
     ];
 
-    public function getFilesByType(string $type, string $directory)
+    public function getFilesByType(string $type, string $directory): array
     {
         if ($type === 'folder') {
             return $this->getFolderContents($directory);
@@ -96,7 +96,7 @@ final class ArchiveFileService
         ];
     }
 
-    protected function getFolderContents(string $directory)
+    protected function getFolderContents(string $directory): array
     {
         $finder = (new Finder())->in($directory)->directories();
 
@@ -139,7 +139,7 @@ final class ArchiveFileService
         ];
     }
 
-    protected function getFileInformation($item)
+    protected function getFileInformation($item): array
     {
         return [
             'basename' => $item->getBasename(),
@@ -154,19 +154,15 @@ final class ArchiveFileService
         ];
     }
 
-    public function getFileInDirectory(string $directoryPath)
+    public function getFileInDirectory(string $directoryPath): array
     {
-        // Create a new Finder instance and set it to search the given directory path
         $finder = new Finder();
         $finder->depth(0)->in($directoryPath)->sortByModifiedTime();
 
-        // Initialize empty arrays to hold the directories and files found in the directory
         $directories = [];
         $files = [];
 
-        // Iterate over each item in the Finder results
         foreach ($finder as $item) {
-            // Create an array to hold the file info for the current item
             $fileInfo = [
                 'basename' => $item->getBasename(),
                 'type' => $item->getType(),
@@ -178,13 +174,10 @@ final class ArchiveFileService
                 'mTime' => $item->getMTime(),
             ];
 
-            // If the item is a directory, find its subdirectories and files
             if ($item->isDir()) {
-                // Create a new Finder instance and set it to search the current directory
                 $subFinder = new Finder();
                 $subFinder->depth('== 0')->in($fileInfo['path'])->sortByModifiedTime();
 
-                // Initialize empty arrays to hold the subdirectories and files found in the current directory
                 $subDirectories = [];
                 $subFiles = [];
 
