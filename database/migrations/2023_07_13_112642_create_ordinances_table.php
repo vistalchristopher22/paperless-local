@@ -15,6 +15,7 @@ return new class () extends Migration {
             $table->string('file');
             $table->unsignedBigInteger('author')->nullable();
             $table->foreign('author')->references('id')->on('sanggunian_members');
+            $table->string('type');
             $table->date('session_date');
             $table->timestamps();
         });

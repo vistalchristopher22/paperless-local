@@ -15,7 +15,7 @@ return new class () extends Migration {
             $table->string('no')->unique();
             $table->string('title');
             $table->text('description');
-            $table->string('type');
+            $table->enum('classification', ['ordinance', 'resolution']);
             $table->integer('legislable_id');
             $table->string('legislable_type');
             $table->timestamps();

@@ -44,6 +44,7 @@ Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePrevie
 Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
 Route::get('archive/list', [FileController::class, 'list'])->name('file.list');
 
+Route::get('session_screen', [ScreenController::class, 'session_screen']);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'features:administrator'], function () {
@@ -52,11 +53,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
 
 
+        Route::get('legislation/list/{dates}', [LegislationController::class, 'list']);
         Route::get('legislation', [LegislationController::class, 'index'])->name('legislation.index');
         Route::get('legislation/create', [LegislationController::class, 'create'])->name('legislation.create');
         Route::post('legislation', [LegislationController::class, 'store'])->name('legislation.store');
-        Route::get('legislation/list', [LegislationController::class, 'list']);
+        Route::get('legislation/edit/{id}', [LegislationController::class, 'edit'])->name('legislation.edit');
+        Route::put('legislation/{id}', [LegislationController::class, 'update'])->name('legislation.update');
 
+        Route::get('types/list', [TypeController::class, 'list']);
+        Route::get('types', [TypeController::class, 'index'])->name('types.index');
+        Route::post('type-store', [TypeController::class, 'store'])->name('types.store');
 
         Route::get('schedule/committees/{dates}', [CommitteeMeetingScheduleController::class, 'show'])->name('committee-meeting-schedule.show');
         Route::get('schedule/committees-and-session/{dates}', [CommitteeMeetingScheduleController::class, 'committeesAndSession'])->name('committee-meeting.schedule.show.committees-and-session');

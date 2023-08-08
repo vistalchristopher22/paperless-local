@@ -10,14 +10,11 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('resolutions', function (Blueprint $table) {
+        Schema::create('types', function (Blueprint $table) {
             $table->id();
-            $table->string('file');
-            $table->unsignedBigInteger('author')->nullable();
-            $table->foreign('author')->references('id')->on('sanggunian_members');
-            $table->string('type');
-            $table->date('session_date');
+            $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +23,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('resolutions');
+        Schema::dropIfExists('types');
     }
 };
