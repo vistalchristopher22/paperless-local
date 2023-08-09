@@ -1,15 +1,16 @@
 @extends('layouts.app-2')
-
+@prepend('page-css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+@endprepend
 @section('content')
-    <div class="card">
-
-        @if (Session::has('success'))
-            <div class="card mb-2 bg-success shadow-sm text-white">
-                <div class="card-body">
-                    {{ Session::get('success') }}
-                </div>
+    @if (Session::has('success'))
+        <div class="card mb-2 bg-success shadow-sm text-white">
+            <div class="card-body">
+                {{ Session::get('success') }}
             </div>
-        @endif
+        </div>
+    @endif
+    <div class="card">
 
         <div class="card-header bg-light p-3">
             <div class="card-title h6 fw-medium">
@@ -84,7 +85,7 @@
                         </span>
                     @enderror
                 </div>
-                <div class="form-group mb-5">
+                <div class="form-group mt-3">
                     <label class="form-label" for="author">Author</label>
                     <select name="author" id="author" class="form-select @error('author') is-invalid @enderror">
                         @foreach ($spMembers as $spMember)
@@ -98,6 +99,21 @@
                     <span class="text-danger">
                         {{ $message }}
                     </span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="sponsors">Sponsors</label>
+                    <select name="sponsors[]" multiple id="sponsors"
+                            class="form-select @error('sponsors') is-invalid @enderror">
+                        @foreach ($spMembers as $sp_member)
+                            <option value="{{ $sp_member->id }}">{{ $sp_member->fullname }}</option>
+                        @endforeach
+                    </select>
+                    @error('sponsors')
+                    <span class="text-danger">
+                            {{ $message }}
+                        </span>
                     @enderror
                 </div>
 
@@ -120,4 +136,15 @@
             </form>
         </div>
     </div>
+
+    @push('page-scripts')
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            const sponsors = @json($sponsors);
+
+            $('select#author').select2({});
+            let legislateSponsorsSelect2 = $('select#sponsors').select2({});
+            legislateSponsorsSelect2.val(sponsors).trigger('change');
+        </script>
+    @endpush
 @endsection

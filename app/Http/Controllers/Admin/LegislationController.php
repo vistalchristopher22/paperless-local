@@ -11,6 +11,7 @@ use App\Pipes\Legislation\CreateLegislation;
 use App\Pipes\Legislation\CreateSponsors;
 use App\Pipes\Legislation\UpdateClassificationType;
 use App\Pipes\Legislation\UpdateLegislation;
+use App\Pipes\Legislation\UpdateSponsors;
 use App\Pipes\Ordinance\CreateOrdinance;
 use App\Pipes\Ordinance\UpdateOrdinance;
 use App\Pipes\Ordinance\UploadFile;
@@ -87,6 +88,7 @@ final class LegislationController extends Controller
             'spMembers' => $this->sanggunianMemberRepository->get(),
             'classifications' => LegislateType::values(),
             'types' => $this->legislationTypeRepository->get(),
+            'sponsors' => $legislation->sponsors->pluck('id')->toArray()
         ]);
     }
 
@@ -99,13 +101,15 @@ final class LegislationController extends Controller
                     UploadFile::class,
                     UpdateOrdinance::class,
                     UpdateClassificationType::class,
-                    UpdateLegislation::class
+                    UpdateLegislation::class,
+                    UpdateSponsors::class,
                 ],
                 default => [
                     UploadFile::class,
                     UpdateResolution::class,
                     UpdateClassificationType::class,
-                    UpdateLegislation::class
+                    UpdateLegislation::class,
+                    UpdateSponsors::class,
                 ],
             };
 

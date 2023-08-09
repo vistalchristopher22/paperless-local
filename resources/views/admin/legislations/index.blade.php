@@ -85,7 +85,7 @@
         </div>
         <div class="card-body p-4">
             <div class="table-responsive">
-                <table class="table table-bordered" id="legislationTable">
+                <table class="table table-bordered" id="legislationTable" width="100%">
                     <thead>
                     <tr class="bg-light">
                         <th class="p-3 text-dark text-uppercase text-center fw-medium">No</th>
@@ -135,7 +135,7 @@
                         },
                         {
                             name: 'legislable.author_information',
-                            className: 'p-2',
+                            className: 'p-2 text-truncate',
                             render: data => data?.fullname,
                         },
                         {
