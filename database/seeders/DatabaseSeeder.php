@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             VenueSeeder::class,
 //            CommitteeSeeder::class,
             LegislationSeeder::class,
+            LegislationTypeSeeder::class,
         ]);
     }
 }

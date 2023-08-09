@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ReferenceSession;
 use App\Repositories\ReferenceSessionRepository;
-use Illuminate\Http\Request;
 
 final class RegularSessionController extends Controller
 {

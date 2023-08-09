@@ -10,7 +10,6 @@ class Legislation extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $fillable = ['id', 'no', 'title', 'description', 'classification', 'created_at'];
 
     public function legislable()
     {

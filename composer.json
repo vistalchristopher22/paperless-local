@@ -23,8 +23,7 @@
         "symfony/http-client": "^6.3",
         "tecnickcom/tcpdf": "^6.6",
         "tightenco/ziggy": "^1.5",
-        "yajra/laravel-datatables": "10.0",
-        "ext-imagick": "*"
+        "yajra/laravel-datatables": "10.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",

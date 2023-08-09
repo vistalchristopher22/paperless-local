@@ -62,7 +62,7 @@ final class BoardSessionController extends Controller
                     StoreBoardSession::class,
                     FileUpload::class,
                     CreateWordDocumentContent::class,
-                ])->then(fn($data) => redirect()->back()->with('success', 'Board session created successfully'));
+                ])->then(fn ($data) => redirect()->back()->with('success', 'Board session created successfully'));
         });
     }
 
@@ -102,7 +102,7 @@ final class BoardSessionController extends Controller
                     UpdateWordDocumentContent::class,
                     UpdateBoardSession::class,
                     FileUpload::class,
-                ])->then(fn($data) => redirect()->back()->with('success', 'Board session updated successfully'));
+                ])->then(fn ($data) => redirect()->back()->with('success', 'Board session updated successfully'));
         });
     }
 
@@ -121,7 +121,7 @@ final class BoardSessionController extends Controller
                     DeleteBoardSession::class,
                     DeleteFileUpload::class,
                 ])
-                ->then(fn($data) => $data);
+                ->then(fn ($data) => $data);
         });
 
         return response()->json(['success' => true, 'message' => 'Board session deleted successfully']);

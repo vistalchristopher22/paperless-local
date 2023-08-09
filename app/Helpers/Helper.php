@@ -67,6 +67,7 @@ function getIconByFileName(string $fileName): string
     return match ($extension) {
         'pdf' => asset('/assets-2/images/widgets/pdf-icon.svg'),
         'docx' => asset('/assets-2/images/widgets/word-icon.svg'),
+        'doc' => asset('/assets-2/images/widgets/word-icon.svg'),
         'xlsx' => asset('/assets-2/images/widgets/google-sheets-icon.svg'),
         'pptx' => asset('/assets-2/images/widgets/google-slides-icon.svg'),
         default => asset('/assets-2/images/widgets/image-placeholder.svg'),

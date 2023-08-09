@@ -6,7 +6,7 @@ use App\Enums\LegislateType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class LegislationStoreRequest extends FormRequest
+class LegislationUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,7 +30,7 @@ class LegislationStoreRequest extends FormRequest
             'type' => ['required', Rule::exists('types', 'id')],
             'author' => ['required', Rule::exists('sanggunian_members', 'id')],
             'description' => ['required', 'max:200'],
-            'attachment' => ['required', 'mimes:pdf,doc,docx,txt'],
+            'attachment' => ['nullable', 'mimes:pdf,doc,docx,txt'],
         ];
     }
 }

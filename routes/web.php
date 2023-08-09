@@ -45,6 +45,7 @@ Route::get('board-session/{dates}/published/preview', BoardSessionPublishPreview
 Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePreviewController::class)->name('committee-meeting-schedule.preview');
 Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
 Route::get('archive/list', [FileController::class, 'list'])->name('file.list');
+Route::get('legislation/list/{dates}/{author}/{type}/{classification}', [LegislationController::class, 'list'])->name('legislation.list');
 
 Route::get('session_screen', [ScreenController::class, 'session_screen']);
 
@@ -55,12 +56,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
 
 
-        Route::get('legislation/list/{dates}', [LegislationController::class, 'list']);
         Route::get('legislation', [LegislationController::class, 'index'])->name('legislation.index');
         Route::get('legislation/create', [LegislationController::class, 'create'])->name('legislation.create');
         Route::post('legislation', [LegislationController::class, 'store'])->name('legislation.store');
-        Route::get('legislation/edit/{id}', [LegislationController::class, 'edit'])->name('legislation.edit');
-        Route::put('legislation/{id}', [LegislationController::class, 'update'])->name('legislation.update');
+        Route::get('legislation/edit/{legislation}', [LegislationController::class, 'edit'])->name('legislation.edit');
+        Route::put('legislation/{legislation}', [LegislationController::class, 'update'])->name('legislation.update');
 
         Route::get('types/list', [TypeController::class, 'list']);
         Route::get('types', [TypeController::class, 'index'])->name('types.index');
