@@ -45,7 +45,7 @@ Route::get('board-session/{dates}/published/preview', BoardSessionPublishPreview
 Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePreviewController::class)->name('committee-meeting-schedule.preview');
 Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
 Route::get('archive/list', [FileController::class, 'list'])->name('file.list');
-Route::get('legislation/list/{dates}/{author}/{type}/{classification}', [LegislationController::class, 'list'])->name('legislation.list');
+Route::get('legislation/list/{dates}/{author}/{type}/{classification}/{sponsors}', [LegislationController::class, 'list'])->name('legislation.list');
 
 Route::get('session_screen', [ScreenController::class, 'session_screen']);
 

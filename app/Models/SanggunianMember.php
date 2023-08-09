@@ -55,4 +55,9 @@ class SanggunianMember extends Model
     {
         return $this->hasMany(AgendaMember::class, 'member', 'id');
     }
+
+    public function legislations()
+    {
+        return $this->belongsToMany(Legislation::class, 'legislation_sponsors', 'sanggunian_member_id', 'legislation_id')->withTimestamps();
+    }
 }

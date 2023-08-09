@@ -29,6 +29,7 @@ class LegislationStoreRequest extends FormRequest
             'title' => ['required'],
             'type' => ['required', Rule::exists('types', 'id')],
             'author' => ['required', Rule::exists('sanggunian_members', 'id')],
+            'sponsors' => ['required'],
             'description' => ['required', 'max:200'],
             'attachment' => ['required', 'mimes:pdf,doc,docx,txt'],
         ];

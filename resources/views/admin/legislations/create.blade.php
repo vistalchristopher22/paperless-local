@@ -1,5 +1,8 @@
 @extends('layouts.app-2')
 @section('tab-title', 'Create Legislation')
+@prepend('page-css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+@endprepend
 @section('content')
     <div class="card">
         @if (Session::has('success'))
@@ -22,7 +25,7 @@
                     <input type="date" class="form-control @error('sessionDate') is-invalid @enderror"
                            name="sessionDate" id="sessionDate" value="{{ old('sessionDate') }}">
                     @error('sessionDate')
-                        <span class="text-danger">
+                    <span class="text-danger">
                             {{ $message }}
                         </span>
                     @enderror
@@ -36,7 +39,7 @@
                         @endforeach
                     </select>
                     @error('classification')
-                        <span class="text-danger">
+                    <span class="text-danger">
                             {{ $message }}
                         </span>
                     @enderror
@@ -46,7 +49,7 @@
                     <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" id="title"
                            placeholder="Enter title here" value="{{ old('title') }}">
                     @error('title')
-                        <span class="text-danger">
+                    <span class="text-danger">
                             {{ $message }}
                         </span>
                     @enderror
@@ -59,7 +62,7 @@
                         @endforeach
                     </select>
                     @error('type')
-                        <span class="text-danger">
+                    <span class="text-danger">
                             {{ $message }}
                         </span>
                     @enderror
@@ -70,7 +73,7 @@
                               name="description" id="description"
                               placeholder="Enter description here..">{{ old('description') }}</textarea>
                     @error('description')
-                        <span class="text-danger">
+                    <span class="text-danger">
                             {{ $message }}
                         </span>
                     @enderror
@@ -83,7 +86,21 @@
                         @endforeach
                     </select>
                     @error('author')
-                        <span class="text-danger">
+                    <span class="text-danger">
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="sponsors">Sponsors</label>
+                    <select name="sponsors[]" multiple id="sponsors"
+                            class="form-select @error('sponsors') is-invalid @enderror">
+                        @foreach ($spMembers as $sp_member)
+                            <option value="{{ $sp_member->id }}">{{ $sp_member->fullname }}</option>
+                        @endforeach
+                    </select>
+                    @error('sponsors')
+                    <span class="text-danger">
                             {{ $message }}
                         </span>
                     @enderror
@@ -93,7 +110,7 @@
                     <input type="file" class="form-control @error('attachment') is-invalid @enderror" name="attachment"
                            id="attachment">
                     @error('attachment')
-                        <span class="text-danger">
+                    <span class="text-danger">
                             {{ $message }}
                         </span>
                     @enderror
@@ -105,4 +122,10 @@
             </form>
         </div>
     </div>
+    @push('page-scripts')
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            $('select#author, select#sponsors').select2({});
+        </script>
+    @endpush
 @endsection

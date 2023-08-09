@@ -27,6 +27,9 @@ final class CreateLegislation implements IPipeHandler
 
         $legislation->legislable()->associate($payload['associate_data']);
         $legislation->save();
+
+        $payload['legislation'] = $legislation;
+
         return $next($payload);
     }
 }

@@ -15,4 +15,9 @@ class Legislation extends Model
     {
         return $this->morphTo();
     }
+
+    public function sponsors()
+    {
+        return $this->belongsToMany(SanggunianMember::class, 'legislation_sponsors', 'legislation_id', 'sanggunian_member_id')->withTimestamps();
+    }
 }

@@ -13,6 +13,18 @@ class LegislationLaraTables
         };
     }
 
+    public static function laratablesSponsorsRelationQuery()
+    {
+        return function ($query) {
+            $query->with('sponsors');
+        };
+    }
+
+    public static function laratablesCustomSponsors($legislate)
+    {
+        return $legislate->sponsors->implode('fullname', '|');
+    }
+
     public static function laratablesQueryConditions($query)
     {
         $query = $query->query();
@@ -22,11 +34,15 @@ class LegislationLaraTables
                 $query->whereDate('session_date', '>=', $fromDate)->whereDate('session_date', '<=', $toDate);
             });
         })->when(request()->author !== '*', function ($query) {
-            $query->whereHas('legislable', fn($query) => $query->where('author', request()->author));
+            $query->whereHas('legislable', fn ($query) => $query->where('author', request()->author));
         })->when(request()->type !== '*', function ($query) {
-            $query->whereHas('legislable', fn($query) => $query->where('type', request()->type));
+            $query->whereHas('legislable', fn ($query) => $query->where('type', request()->type));
         })->when(request()->classification !== '*', function ($query) {
             $query->where('classification', Str::lower(request()->classification));
+        })->when(request()->sponsors !== "*", function ($query) {
+            $query->whereHas('sponsors', function ($query) {
+                $query->whereIn('sanggunian_member_id', explode(',', request()->sponsors));
+            });
         });
 
         return $query;

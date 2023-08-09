@@ -8,6 +8,7 @@ use App\Http\Requests\LegislationStoreRequest;
 use App\Http\Requests\LegislationUpdateRequest;
 use App\Models\Legislation;
 use App\Pipes\Legislation\CreateLegislation;
+use App\Pipes\Legislation\CreateSponsors;
 use App\Pipes\Legislation\UpdateClassificationType;
 use App\Pipes\Legislation\UpdateLegislation;
 use App\Pipes\Ordinance\CreateOrdinance;
@@ -63,12 +64,14 @@ final class LegislationController extends Controller
             LegislateType::ORDINANCE->value => [
                 UploadFile::class,
                 CreateOrdinance::class,
-                CreateLegislation::class
+                CreateLegislation::class,
+                CreateSponsors::class,
             ],
             default => [
                 UploadFile::class,
                 CreateResolution::class,
-                CreateLegislation::class
+                CreateLegislation::class,
+                CreateSponsors::class,
             ],
         };
 
