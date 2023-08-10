@@ -14,7 +14,7 @@
         @endif
 
         <div class="card-header bg-light p-3">
-            <div class="card-title h6 fw-medium">Create Legislation Form</div>
+            <div class="card-title h6 fw-medium">Create Legislation</div>
         </div>
 
         <div class="card-body p-4">
