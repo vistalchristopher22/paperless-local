@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\RegularSessionController;
 use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
 use App\Http\Controllers\Admin\SanggunianMemberController;
 use App\Http\Controllers\Admin\ScheduleController;
+use App\Http\Controllers\Admin\ScreenController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SubmittedCommitteeController;
 use App\Http\Controllers\Admin\UserAccessController;
@@ -54,13 +55,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('submitted-committee/list', SubmittedCommitteeController::class);
         Route::post('re-order/agenda', [AgendaController::class, 'reOrder'])->name('agenda.re-order');
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
-
-
-        Route::get('legislation', [LegislationController::class, 'index'])->name('legislation.index');
-        Route::get('legislation/create', [LegislationController::class, 'create'])->name('legislation.create');
-        Route::post('legislation', [LegislationController::class, 'store'])->name('legislation.store');
-        Route::get('legislation/edit/{legislation}', [LegislationController::class, 'edit'])->name('legislation.edit');
-        Route::put('legislation/{legislation}', [LegislationController::class, 'update'])->name('legislation.update');
 
         Route::get('types/list', [TypeController::class, 'list']);
         Route::get('types', [TypeController::class, 'index'])->name('types.index');
@@ -109,7 +103,8 @@ Route::group(['middleware' => 'auth'], function () {
             'board-sessions' => BoardSessionController::class,
             'venue' => VenueController::class,
             'files' => FileController::class,
-            'regular-session' => RegularSessionController::class
+            'regular-session' => RegularSessionController::class,
+            'legislation' => LegislationController::class,
         ]);
     });
 });

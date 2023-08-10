@@ -119,10 +119,4 @@ final class LegislationController extends Controller
         });
     }
 
-
-    public function destroy(string $id)
-    {
-        //
-    }
-
 }

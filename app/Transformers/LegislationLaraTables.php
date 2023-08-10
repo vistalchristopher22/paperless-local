@@ -55,7 +55,6 @@ class LegislationLaraTables
         $query->whereHas('sponsors', fn($query) => $query->whereIn('sanggunian_member_id', explode(',', $sponsors)));
     }
 
-
     public static function laratablesQueryConditions($query)
     {
         $query = $query->query();
