@@ -75,7 +75,6 @@ final class ScheduleController extends Controller
 
     public function destroy(int $id)
     {
-        $isSuccess = $this->scheduleRepository->deleteSchedule($id);
-        return response()->json(['success' => $isSuccess]);
+        return response()->json(['success' => $this->scheduleRepository->deleteSchedule($id)]);
     }
 }

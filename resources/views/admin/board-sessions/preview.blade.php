@@ -45,7 +45,6 @@
         }
 
 
-
         .container {
             max-width: 1500px;
             padding: 50px;
@@ -196,42 +195,20 @@
 </main>
 
 <script type="text/javascript" src="{{ asset('scripts.mine280.js?v=0eb413625a') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"
+        integrity="sha512-AI5A3zIoeRSEEX9z3Vyir8NqSMC1pY7r5h2cE+9J6FLsoEmSSGLFaqMQw8SWvoONXogkfFrkQiJfLeHLz3+HOg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
-    // Select the containers
+
+    let socket = io(`http://localhost:3030/`);
+
     const container = document.querySelector('.card');
     const orderBusinessContainer = document.querySelector('#order-business');
-    const unassignedBusinessContainer = document.querySelector('#unassigned-business');
-    const announcementsContainer = document.querySelector('#announcements');
-
-    let orderBusinessTab = document.querySelector('#order-business-tab');
-    let unassignedBusinessTab = document.querySelector('#unassigned-business-tab');
-    let announcementsTab = document.querySelector('#announcements-tab');
-
 
     document.querySelector('#orderBusinessFile').style.height = (window.innerHeight - (document.querySelector('.site-nav').clientHeight + 5)) + 'px';
-    document.querySelector('#unassignedBusiness').style.height = (window.innerHeight - (document.querySelector('.site-nav').clientHeight + 5)) + 'px';
 
-
-    // Add event listeners to the tabs
-    orderBusinessTab.addEventListener('click', () => {
-        orderBusinessContainer.classList.remove('d-none');
-        unassignedBusinessContainer.classList.add('d-none');
-        announcementsContainer.classList.add('d-none');
-    });
-
-    unassignedBusinessTab.addEventListener('click', () => {
-        orderBusinessContainer.classList.add('d-none');
-        unassignedBusinessContainer.classList.remove('d-none');
-        announcementsContainer.classList.add('d-none');
-    });
-
-    announcementsTab.addEventListener('click', () => {
-        orderBusinessContainer.classList.add('d-none');
-        unassignedBusinessContainer.classList.add('d-none');
-        announcementsContainer.classList.remove('d-none');
-    });
-
+    socket.on('TRIGGER_REFRESH_ON_CLIENTS', () => window.location.reload());
 </script>
 
 </body>

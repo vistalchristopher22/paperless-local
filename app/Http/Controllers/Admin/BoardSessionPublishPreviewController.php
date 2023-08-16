@@ -10,6 +10,7 @@ final class BoardSessionPublishPreviewController extends Controller
     public function __invoke(BoardSessionRespository $boardSessionRepository, string $dates)
     {
         $session = $boardSessionRepository->fetchByDate($dates);
+
         if ($session) {
             return view('admin.board-sessions.preview', [
                 'dates' => $dates,

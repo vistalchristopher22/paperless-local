@@ -1,4 +1,3 @@
-@php use App\Repositories\SettingRepository; @endphp
 @extends('layouts.app-2')
 @section('tab-title', 'Settings')
 @section('content')
@@ -49,9 +48,11 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="current_session" class="col-md-2 col-form-label text-md-right">Max Current Regular Session</label>
+                        <label for="current_session" class="col-md-2 col-form-label text-md-right">Max Current Regular
+                            Session</label>
                         <div class="col-md-10">
-                            <input type="number" name="current_session_increment" id="current_session_increment" class="form-control"
+                            <input type="number" name="current_session_increment" id="current_session_increment"
+                                   class="form-control"
                                    value="{{ $settingRepository->getValueByName('current_session_increment') }}"
                                    placeholder="">
                         </div>
@@ -109,7 +110,8 @@
                 </div> --}}
 
                 <div class="form-group row mt-2">
-                    <label for="unassigned_business" class="col-md-2 col-form-label text-md-right">Unassigned Business</label>
+                    <label for="unassigned_business" class="col-md-2 col-form-label text-md-right">Unassigned
+                        Business</label>
                     <div class="col-md-10">
                         <input type="text" name="unassigned_business" id="unassigned_business" class="form-control"
                                placeholder=""
@@ -128,37 +130,51 @@
                 </div>
 
                 <hr class="border-dashed">
-{{--                <h5 class="card-title text-dark">Notifications</h5>--}}
-{{--                <div class="form-group row mt-2">--}}
-{{--                    <div class="col-sm-10 ms-auto">--}}
-{{--                        <div class="form-check">--}}
-{{--                            <input type="checkbox"--}}
-{{--                                   {{ $settingRepository->getValueByName('smsAlerts') === 'on' ? 'checked' : '' }} name="smsAlerts"--}}
-{{--                                   class="form-check-input" id="smsAlerts">--}}
-{{--                            <label class="form-check-label" for="smsAlerts">SMS Alert</label>--}}
-{{--                        </div>--}}
-{{--                        <p class="text-muted">SMS Alerts is a feature that allows a system to send SMS notifications to--}}
-{{--                            its users. With this feature, each user will receive alerts via SMS whenever there is an--}}
-{{--                            update or important information related to their account or the system they are using. This--}}
-{{--                            feature ensures that users stay informed in real-time, regardless of their location or--}}
-{{--                            internet connectivity.</p>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
 
-{{--                <div class="form-group row mt-2">--}}
-{{--                    <div class="col-sm-10 ms-auto">--}}
-{{--                        <div class="form-check">--}}
-{{--                            <input type="checkbox"--}}
-{{--                                   {{ $settingRepository->getValueByName('scheduleAlert') === 'on' ? 'checked' : '' }} name="scheduleAlert"--}}
-{{--                                   class="form-check-input" id="scheduleAlert">--}}
-{{--                            <label class="form-check-label" for="scheduleAlert">Schedule Alert</label>--}}
-{{--                        </div>--}}
-{{--                        <p class="text-muted">A Schedule Alert (SMS) is a feature that sends SMS notifications to users--}}
-{{--                            at a specific time or schedule. This feature is useful for reminding users of upcoming--}}
-{{--                            sessions. With Schedule Alert (SMS), users can receive notifications directly to their--}}
-{{--                            mobile devices, ensuring that they are always aware of important events.</p>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+                <h5 class="card-title text-dark">Actions</h5>
+                <div class="form-group row mt-2">
+                    <label for="announcement" class="col-md-2 col-form-label text-md-right">Refresh Clients</label>
+                    <div class="col-md-10">
+                        <button class="btn btn-primary" id="refreshClients">Refresh Clients</button>
+                        <p class="text-muted">
+                            This feature allows you to instantly update all connected clients with the
+                            latest data available on the server.
+                        </p>
+                    </div>
+                </div>
+
+
+                {{--                <h5 class="card-title text-dark">Notifications</h5>--}}
+                {{--                <div class="form-group row mt-2">--}}
+                {{--                    <div class="col-sm-10 ms-auto">--}}
+                {{--                        <div class="form-check">--}}
+                {{--                            <input type="checkbox"--}}
+                {{--                                   {{ $settingRepository->getValueByName('smsAlerts') === 'on' ? 'checked' : '' }} name="smsAlerts"--}}
+                {{--                                   class="form-check-input" id="smsAlerts">--}}
+                {{--                            <label class="form-check-label" for="smsAlerts">SMS Alert</label>--}}
+                {{--                        </div>--}}
+                {{--                        <p class="text-muted">SMS Alerts is a feature that allows a system to send SMS notifications to--}}
+                {{--                            its users. With this feature, each user will receive alerts via SMS whenever there is an--}}
+                {{--                            update or important information related to their account or the system they are using. This--}}
+                {{--                            feature ensures that users stay informed in real-time, regardless of their location or--}}
+                {{--                            internet connectivity.</p>--}}
+                {{--                    </div>--}}
+                {{--                </div>--}}
+
+                {{--                <div class="form-group row mt-2">--}}
+                {{--                    <div class="col-sm-10 ms-auto">--}}
+                {{--                        <div class="form-check">--}}
+                {{--                            <input type="checkbox"--}}
+                {{--                                   {{ $settingRepository->getValueByName('scheduleAlert') === 'on' ? 'checked' : '' }} name="scheduleAlert"--}}
+                {{--                                   class="form-check-input" id="scheduleAlert">--}}
+                {{--                            <label class="form-check-label" for="scheduleAlert">Schedule Alert</label>--}}
+                {{--                        </div>--}}
+                {{--                        <p class="text-muted">A Schedule Alert (SMS) is a feature that sends SMS notifications to users--}}
+                {{--                            at a specific time or schedule. This feature is useful for reminding users of upcoming--}}
+                {{--                            sessions. With Schedule Alert (SMS), users can receive notifications directly to their--}}
+                {{--                            mobile devices, ensuring that they are always aware of important events.</p>--}}
+                {{--                    </div>--}}
+                {{--                </div>--}}
 
                 <hr class="border-dashed">
                 <div class="form-group
@@ -177,5 +193,12 @@
             </form>
         </div>
     </div>
-
+    @push('page-scripts')
+        <script>
+            $('#refreshClients').click(function (e) {
+                e.preventDefault();
+                socket.emit('TRIGGER_REFRESH');
+            });
+        </script>
+    @endpush
 @endsection

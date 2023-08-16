@@ -1,4 +1,3 @@
-@php use App\Enums\ScheduleType;use App\Repositories\SettingRepository; @endphp
 @extends('layouts.app-2')
 @section('tab-title', 'Schedules')
 @prepend('page-css')
@@ -150,7 +149,7 @@
                     <div class="form-group">
                         <label for="type" class="form-label text-capitalize">Type</label>
                         <select name="type" id="type" class="form-control text-capitalize" disabled>
-                            @foreach(ScheduleType::values() as $schedule)
+                            @foreach($scheduleTypes as $schedule)
                                 <option value="{{ $schedule }}">{{ $schedule }}</option>
                             @endforeach
                         </select>
@@ -198,7 +197,7 @@
 
                 </div>
                 <div class="modal-footer border">
-                    <button type="button" class="btn btn-danger btn-md text-white shadow" id="btnDeleteSchedule">
+                    <button type="button" class="btn btn-danger text-white shadow d-none" id="btnDeleteSchedule">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              class="bi bi-trash" viewBox="0 0 16 16">
                             <path
@@ -211,7 +210,9 @@
                             Delete
                         </span>
                     </button>
-                    <button type="button" class="btn btn-dark btn-md align-middle shadow" id="btnSaveSchedule">
+
+
+                    <button type="button" class="btn btn-dark shadow" id="btnSaveSchedule">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              class="bi bi-save2-fill" viewBox="0 0 16 16">
                             <path
@@ -233,8 +234,8 @@
         <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
         <script>
             $(document).ready(function () {
-                const SESSION_TYPE = "{{ ScheduleType::SESSION->value }}";
-                const COMMITTEE_TYPE = "{{ ScheduleType::MEETING->value }}";
+                const SESSION_TYPE = "{{ $ScheduleType::SESSION->value }}";
+                const COMMITTEE_TYPE = "{{ $ScheduleType::MEETING->value }}";
 
                 let selectedDate = null;
                 let selectedEvent = null;
@@ -251,7 +252,6 @@
                         }
                     });
                 };
-
 
 
                 $('#calendar-events .fc-event').each(function () {
@@ -321,6 +321,7 @@
                             success: function (response) {
                                 $('#withGuests').removeAttr('checked');
                                 type = 'PUT';
+                                $('#btnDeleteSchedule').removeClass('d-none');
                                 $('#addScheduleModalLabel').text('EDIT SCHEDULE');
                                 $('#name').val(response.name);
                                 $('#time').val(response.time);
@@ -332,14 +333,24 @@
                                 $("#withGuests").val(response.with_invited_guest === 1 ? "on" : "off");
                                 if (response.with_invited_guest == 1) {
                                     $('#withGuests').attr('checked', true);
-                                    $('#addGuest').fadeIn(300);
-                                    $('#dynamicGuestContainer').fadeIn(300);
+                                    $('#addGuest, #dynamicGuestContainer').fadeIn(300);
 
-                                    $("#dynamicGuestContainer").html(response.guests.map((guest, index) => `
-                                        <div class="form-group" id="${index === 0 ? 'defaultGuestField' : ''}">
+                                    const guestFields = response.guests.map(guest => `
+                                        <div class="form-group">
                                             <input type="text" name="guests[]" value="${guest.fullname}" class="form-control mb-2" />
                                         </div>
-                                    `).join(''));
+                                    `).join('');
+
+                                    $("#dynamicGuestContainer").html(guestFields);
+                                } else {
+                                    $('#addGuest, #dynamicGuestContainer').fadeOut(80);
+                                    const defaultGuestField = `
+                                        <div class="form-group" id="defaultGuestField">
+                                            <input type="text" name="guests[]" value="" class="form-control mb-2" />
+                                        </div>
+                                    `;
+
+                                    $("#dynamicGuestContainer").html(defaultGuestField);
                                 }
                                 $('#scheduleModal').modal('toggle');
                             }
@@ -368,6 +379,7 @@
                             $('#type').val(COMMITTEE_TYPE);
                             $('#addScheduleModalLabel').text('ADD SCHEDULE');
                             clearAllDynamicGeneratedFields();
+                            $('#btnDeleteSchedule').addClass('d-none');
                             $('#scheduleModal').modal('toggle');
                         }
 

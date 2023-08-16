@@ -120,7 +120,6 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <a href="{{ route('board-sessions.index') }}"
                        class="btn btn-default text-primary text-decoration-underline fw-bold">Back</a>
-
                     <button type="button" id="btnSubmit" class="btn btn-success text-white float-end">Update
                     </button>
                 </div>

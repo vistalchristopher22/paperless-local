@@ -15,18 +15,24 @@ final class AddGuests implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        if ($payload['guests'] === "on") {
+        $payload['schedule']->guests()->delete();
+
+        if ($this->isInvitedGuestChecked($payload['guests'])) {
             $payload['invited_guests'] = Arr::whereNotNull($payload['invited_guests']);
-            $payload['schedule']->guests()->delete();
             Arr::map($payload['invited_guests'], function ($guest) use ($payload) {
                 $payload['schedule']->guests()->create([
                     'schedule_id' => $payload['schedule']->id,
                     'fullname' => Str::upper($guest),
                 ]);
             });
-        } else {
-            $payload['schedule']->guests()->delete();
         }
+
         return $next($payload['schedule']->id);
+    }
+
+
+    private function isInvitedGuestChecked(string $guest): bool
+    {
+        return $guest === "on";
     }
 }

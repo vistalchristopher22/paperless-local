@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\ScheduleType;
 use App\Http\Controllers\Controller;
 use App\Repositories\BoardSessionRespository;
 use App\Repositories\SettingRepository;
@@ -19,6 +20,8 @@ final class ScheduleController extends Controller
             'venues' => $this->venueRepository->get(),
             'upcomingSessions' => $this->boardSessionRepository->getNoScheduleEvents(),
             'regularSessions' => SettingRepository::getAvailableRegularSessionThisYear(),
+            'scheduleTypes' => ScheduleType::values(),
+            'ScheduleType' => ScheduleType::class,
         ]);
     }
 }

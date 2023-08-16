@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\FileSearchController;
+use App\Http\Controllers\Admin\InvitedGuestsController;
 use App\Http\Controllers\Admin\LegislationController;
 use App\Http\Controllers\Admin\RegularSessionController;
 use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
@@ -91,6 +92,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('show-attachment/{url}/{location}', [CommitteeFileAttachmentController::class, 'show'])->name('show-attachment');
 
+        Route::get('invited-guests', InvitedGuestsController::class)->name('invited-guests.index');
+
         Route::resources([
             'account' => UserController::class,
             'account-access-control' => UserAccessController::class,
@@ -104,7 +107,7 @@ Route::group(['middleware' => 'auth'], function () {
             'files' => FileController::class,
             'regular-session' => RegularSessionController::class,
             'legislation' => LegislationController::class,
-            'types' => TypeController::class
+            'types' => TypeController::class,
         ]);
     });
 });

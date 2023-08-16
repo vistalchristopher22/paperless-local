@@ -305,15 +305,18 @@
                     <span>Regular Sessions</span>
                 </a>
             </li>
-
             <li>
-                <a href="{{ route('files.index') }}"><i data-feather="layers"
-                                                        class="align-self-center menu-icon"></i><span>File Manager</span></a>
+                <a href="{{ route('invited-guests.index') }}">
+                    <i data-feather="users" class="align-self-center menu-icon"></i>
+                    <span>Invited Guests</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('files.index') }}"><i data-feather="layers" class="align-self-center menu-icon"></i><span>File Manager</span></a>
             </li>
             <hr class="hr-dashed hr-menu">
             <li>
-                <a href="{{ route('settings.index') }}"><i data-feather="settings"
-                                                           class="align-self-center menu-icon"></i><span>Settings</span></a>
+                <a href="{{ route('settings.index') }}"><i data-feather="settings" class="align-self-center menu-icon"></i><span>Settings & Actions</span></a>
             </li>
             @endfeature
 
