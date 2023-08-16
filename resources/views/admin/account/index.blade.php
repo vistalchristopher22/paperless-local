@@ -14,10 +14,10 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0 text-white">Accounts</h6>
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h6 class="card-title h6 fw-medium">Accounts</h6>
             <div class="dropdown">
-                <a href="{{ route('account.create') }}" class="btn btn-light fw-bold" title="Add New User"
+                <a href="{{ route('account.create') }}" class="btn btn-dark shadow-lg fw-medium" title="Add New User"
                     data-bs-toggle="tooltip" data-bs-placement="top">
                     <i class="mdi mdi-account-multiple-plus"></i> Add New User
                 </a>

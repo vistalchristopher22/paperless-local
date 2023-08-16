@@ -23,8 +23,8 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
-            <h6 class="card-title m-0 text-white">User Details</h6>
+        <div class="card-header bg-light justify-content-between align-items-center d-flex">
+            <h6 class="card-title m-0 h6 fw-medium">User Details</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('account.update', $account->id) }}" enctype="multipart/form-data">
@@ -155,8 +155,8 @@
 
                 <!-- Submit Button -->
                 <div class="d-flex justify-content-between align-items-center mt-4">
-                    <a href="{{ route('account.index') }}" class="text-decoration-underline fw-bold">Back</a>
-                    <button type="submit" class="btn btn-success text-white float-end mt-3">Update</button>
+                    <a href="{{ route('account.index') }}" class="text-decoration-underline text-primary fw-bold">Back</a>
+                    <button type="submit" class="btn btn-dark shadow-lg float-end mt-3">Update</button>
                 </div>
             </form>
         </div>

@@ -11,7 +11,7 @@
     @endif
     <div class="card">
         <div class="card-header bg-light py-3">
-            <h6 class="fw-bold card-title h6 text-dark">Application Settings</h6>
+            <h6 class="fw-medium card-title h6 text-dark">Application Settings</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('settings.update') }}">
