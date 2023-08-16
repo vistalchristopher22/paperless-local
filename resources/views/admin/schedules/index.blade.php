@@ -113,12 +113,8 @@
 
     </div>
 
-
-
-
-
     <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header bg-light">
                     <h5 class="modal-title text-dark  fw-medium text-uppercase" id="addScheduleModalLabel">Add
@@ -164,17 +160,39 @@
                         <label for="reference_session" class="form-label text-capitalize">Regular Session</label>
                         <select name="reference_session" id="reference_session" class="form-control text-capitalize">
                             @foreach($regularSessions as $regularSession)
-                                <option value="{{addNumberSuffix($regularSession) }}">{{ addNumberSuffix($regularSession) }} Regular Session</option>
+                                <option
+                                    value="{{addNumberSuffix($regularSession) }}">{{ addNumberSuffix($regularSession) }}
+                                    Regular Session
+                                </option>
                             @endforeach
                         </select>
                     </div>
 
                     <input class="form-control" type="hidden" id="id" name="id">
 
-                    <div class="form-group">
+                    <div class="form-group d-flex align-items-center justify-content-between">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="withGuests" name="with_guests">
                             <label class="form-check-label" for="withGuests">With Invited Guests</label>
+                        </div>
+
+                        <div>
+                            <button type="button" class="btn btn-info btn-md" id="addGuest">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path
+                                        d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1
+                                    h3v-3A.5.5 0 0 1 8 4z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="dynamicGuestContainer">
+
+                        <div class="form-group mt-2" id="defaultGuestField">
+                            <input type="text" class="form-control" placeholder="Enter guest name" name="guests[]">
                         </div>
                     </div>
 
@@ -223,7 +241,18 @@
                 let droppedEventId = 0;
                 let type = null;
 
-                let selectedDates = [];
+                $('#addGuest').hide();
+                $('#dynamicGuestContainer').hide();
+
+                const clearAllDynamicGeneratedFields = () => {
+                    $('#dynamicGuestContainer').children().each(function () {
+                        if ($(this).attr('id') !== 'defaultGuestField') {
+                            $(this).remove();
+                        }
+                    });
+                };
+
+
 
                 $('#calendar-events .fc-event').each(function () {
                     // store data so the calendar knows to render an event upon drop
@@ -284,6 +313,7 @@
                         $('#scheduleModal').modal('toggle');
                     },
                     eventClick: function (info) {
+                        clearAllDynamicGeneratedFields();
                         selectedDate = $.fullCalendar.formatDate(info.start, "MM/DD/YYYY");
                         selectedEvent = info;
                         $.ajax({
@@ -302,6 +332,14 @@
                                 $("#withGuests").val(response.with_invited_guest === 1 ? "on" : "off");
                                 if (response.with_invited_guest == 1) {
                                     $('#withGuests').attr('checked', true);
+                                    $('#addGuest').fadeIn(300);
+                                    $('#dynamicGuestContainer').fadeIn(300);
+
+                                    $("#dynamicGuestContainer").html(response.guests.map((guest, index) => `
+                                        <div class="form-group" id="${index === 0 ? 'defaultGuestField' : ''}">
+                                            <input type="text" name="guests[]" value="${guest.fullname}" class="form-control mb-2" />
+                                        </div>
+                                    `).join(''));
                                 }
                                 $('#scheduleModal').modal('toggle');
                             }
@@ -329,6 +367,7 @@
                             $('#withGuests').val('');
                             $('#type').val(COMMITTEE_TYPE);
                             $('#addScheduleModalLabel').text('ADD SCHEDULE');
+                            clearAllDynamicGeneratedFields();
                             $('#scheduleModal').modal('toggle');
                         }
 
@@ -353,6 +392,11 @@
                 });
 
                 $('#btnSaveSchedule').click(function () {
+                    // get all the values of guests[] fields
+                    let guests = [];
+
+                    $('#dynamicGuestContainer input[name="guests[]"]').each((_, element) => guests.push($(element).val()));
+
                     let schedule = {
                         id: $('#id').val(),
                         name: $('#name').val(),
@@ -360,9 +404,10 @@
                         description: $('#shortDescription').val(),
                         venue: $('#venue').val(),
                         type: $('#type').val(),
-                        reference_session : $('#reference_session').val(),
+                        reference_session: $('#reference_session').val(),
                         guests: $('#withGuests').is(':checked') ? "on" : "off",
                         selected_date: selectedDate,
+                        invited_guests: guests
                     };
 
                     $.ajax({
@@ -379,11 +424,11 @@
                                             schedule_id: response.id,
                                             board_session_id: droppedEventId,
                                         },
-                                        success: function (response) {
+                                        success: function () {
                                             notyf.success('Successfully set new committee meeting');
-                                            $('#calendar').fullCalendar('removeEvents', droppedEventId);
-                                            $('#calendar').fullCalendar('refetchEvents');
-                                            $('#scheduleModal').modal('toggle');
+                                            $("#calendar").fullCalendar('removeEvents', droppedEventId);
+                                            $("#calendar").fullCalendar('refetchEvents');
+                                            $("#scheduleModal").modal('toggle');
                                         },
                                     });
                                 } else {
@@ -451,6 +496,25 @@
                             });
                         }
                     });
+                });
+
+
+                $('#withGuests').change(function () {
+                    if ($(this).is(':checked')) {
+                        $('#addGuest').fadeIn(400);
+                        $('#dynamicGuestContainer').fadeIn(400);
+                    } else {
+                        $('#addGuest').fadeOut(400);
+                        $('#dynamicGuestContainer').fadeOut(400);
+                    }
+                });
+
+                $('#addGuest').click(function () {
+                    const $clone = $('#defaultGuestField').clone();
+                    $clone.removeAttr('id');
+                    $clone.find('input').val('');
+                    $clone.appendTo('#dynamicGuestContainer');
+                    $clone.find('input').focus();
                 });
             });
         </script>

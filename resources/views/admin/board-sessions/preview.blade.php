@@ -171,59 +171,10 @@
         }
     </style>
 </head>
-<body class="home-template">
+<body class="">
 <main>
 
-    <aside class="sidebar no-image">
-
-        <div style="display:flex; align-items:center;">
-            <div>
-                <a href="index.html" class="site-logo">
-                    <img src="{{ asset('paperless-logo.png') }}" width="50" alt="{{ config('app.name') }}"/>
-                </a>
-            </div>
-            <div>
-                <h2 style="color:white; margin : 0px 0px 0px 15px; letter-spacing: 1.5px;">
-                    PAPERLESS
-                </h2>
-            </div>
-        </div>
-
-
-        <span class="sidebar-nav-toggle">
-      </span>
-
-
-        <div class="sidebar-inner">
-            <nav class="sidebar-nav ">
-                <ul>
-                    <li style="display:flex;" class="sanggunian-member-item list-group-members-item"
-                        id="order-business-tab">
-                        <a href="#" class="member-name">
-                            I. Order business
-                        </a>
-                    </li>
-
-                    <li style="display:flex;" class="sanggunian-member-item list-group-members-item"
-                        id="unassigned-business-tab">
-                        <a href="#" class="member-name">
-                            II. Unassigned Business
-                        </a>
-                    </li>
-
-                    <li style="display:flex;" class="sanggunian-member-item list-group-members-item"
-                        id="announcements-tab">
-                        <a href="#" class="member-name">
-                            III. announcements
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </aside>
-
-
-    <section class="content" style="background: #f2f3f6;">
+    <section class="content" style="background: #f2f3f6; margin:0px;">
         <nav class="site-nav" style="background: white;">
             <ul class="nav" role="menu">
                 <li class="nav-home" role="menuitem"><a
@@ -236,44 +187,6 @@
         <div id="order-business" class="show">
             <embed src="{{ $orderBusinessView }}#zoom=190&toolbar=0" allowfullscreen="true"
                    id="orderBusinessFile" allowtransparency="true" style=" width : 100%;"></embed>
-        </div>
-
-        <div id="unassigned-business" class="d-none">
-            <embed src="{{ $unassignedBusinessView }}#zoom=190&toolbar=0" allowfullscreen="true" id="unassignedBusiness"
-                   allowtransparency="true" style="height : 100vh; width : 100%;"></embed>
-        </div>
-
-        <div id="announcements" class="d-none">
-
-            <section class="site-title no-image">
-                <div class="container" style="margin-top: 15px;">
-                    <div class="hero-content">
-                        <div class="header-logo">
-                            <img src="{{ asset('session/logo.png') }}" alt="" width="12%" style="margin-right: auto;">
-                            <div style="display: flex; flex-direction: column; align-items: center; line-height: 29px;">
-                                <span style="color: #212529; font-size: 1.1rem;">Republic of the Philippines</span>
-                                <span style="color: #212529; font-size: 1.1rem;">PROVINCE OF SURIGAO DEL SUR</span>
-                                <span
-                                    style="color: #212529; font-size: 1.1rem;">Tandag City</span>
-                                <span
-                                    style="color: #212529; font-size: 1.1rem;">TANGGAPAN NG SANGGUNIANG PANLALAWIGAN</span>
-                                <span
-                                    style="color: #212529; font-size: 1.1rem;">(Office of the Provincial Council)</span>
-                            </div>
-                            <img src="{{ asset('assets/tsp.png') }}" alt="" width="13%" style="margin-left: auto;">
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <main id="site-main" class="container">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="text-center">{{ $announcementTitle }}</h2>
-                        {!! $announcementContent !!}
-                    </div>
-            </main>
-            <br>
         </div>
 
 

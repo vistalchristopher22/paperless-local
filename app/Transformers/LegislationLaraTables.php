@@ -50,7 +50,7 @@ class LegislationLaraTables
         $query->where('classification', Str::lower($classification));
     }
 
-    private static function applySponsorsFilter($query, array $sponsors): void
+    private static function applySponsorsFilter($query, string $sponsors): void
     {
         $query->whereHas('sponsors', fn($query) => $query->whereIn('sanggunian_member_id', explode(',', $sponsors)));
     }

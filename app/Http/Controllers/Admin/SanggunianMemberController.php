@@ -13,13 +13,14 @@ use App\Repositories\SanggunianMemberRepository;
 use App\Services\SanggunianMemberService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Pipeline;
 
 final class SanggunianMemberController extends Controller
 {
     private UserService $userService;
 
-    public function __construct(private SanggunianMemberRepository $sanggunianMemberRepository, private SanggunianMemberService $sanggunianMemberService)
+    public function __construct(private SanggunianMemberRepository $sanggunianMemberRepository)
     {
         $this->userService = app()->make(UserService::class);
     }
@@ -38,12 +39,12 @@ final class SanggunianMemberController extends Controller
 
     public function store(SanggunianMemberStoreRequest $request)
     {
-        $pipe = Pipeline::send($request)->through([
-            ProfilePicture::class,
-            StoreSanggunianMember::class,
-        ])->then(fn ($data) => $data);
-
-        return back()->with('success', 'Successfully add new Sangguniang Panlalawigan Member');
+        return DB::transaction(function () use ($request) {
+            return Pipeline::send($request)->through([
+                ProfilePicture::class,
+                StoreSanggunianMember::class,
+            ])->then(fn($data) => back()->with('success', 'Successfully add new Sangguniang Panlalawigan Member'));
+        });
     }
 
     public function edit(SanggunianMember $sanggunianMember)
@@ -59,7 +60,7 @@ final class SanggunianMemberController extends Controller
             ->through([
                 ProfilePicture::class,
                 UpdateSanggunianMember::class,
-            ])->then(fn ($data) => $data);
+            ])->then(fn($data) => $data);
 
         return back()->with('success', 'Success! Sangguniang Panlalawigan Member updated successfully.');
     }

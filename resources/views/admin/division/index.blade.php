@@ -52,7 +52,7 @@
                     <tr>
                         <th class="text-center text-dark border bg-light">Name</th>
                         <th class="text-center text-dark border bg-light">Description</th>
-                        <th class="text-center text-dark border bg-light">Board</th>
+                        <th class="text-center text-dark border bg-light">Board Member</th>
                         <th class="text-center text-dark border bg-light">Action</th>
                     </tr>
                     </thead>
@@ -63,14 +63,14 @@
                             <td class="text-center ">{{ $data->description }}</td>
                             <td class="text-center text-dark ">{{ $data->board_member->fullname }}</td>
                             <td class="align-middle text-center ">
-                                <form action="{{ route('division.destroy', $data) }}" method="POST">
+                                <form id="deleteDivisionForm" action="{{ route('division.destroy', $data) }}" method="POST">
                                     @method('DELETE')
                                     @csrf
                                     <a href="{{ route('division.edit', $data) }}" class="btn btn-success text-white"
                                        title="Edit Division" data-bs-toggle="tooltip" data-bs-placement="top">
                                         <i class="mdi mdi-pencil-outline"></i>
                                     </a>
-                                    <button class="btn btn-danger text-white" title="Delete Division"
+                                    <button class="btn btn-danger text-white" id="btnSubmit" title="Delete Division"
                                             data-bs-toggle="tooltip" data-bs-placement="top"><i
                                             class="mdi mdi-trash-can-outline"></i></button>
                                 </form>
@@ -116,7 +116,21 @@
         <script>
             $(document).ready(function () {
                 $('#division-table').DataTable({});
+
+                $('#btnSubmit').click(e => {
+                    e.preventDefault();
+                    alertify.confirm('Are you sure you want to perform this action?', () => {
+                        $('#deleteDivisionForm').submit();
+                    }, () => {
+                    }).set({
+                        labels: {
+                            ok: 'Yes',
+                            cancel: 'No'
+                        }
+                    }).setHeader('Confirmation');
+                });
             });
+
         </script>
     @endpush
 

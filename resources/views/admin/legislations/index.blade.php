@@ -186,6 +186,8 @@
                 }
 
                 $(document).on('click', '.applyBtn', filterLegislationTable);
+                $(document).on('click', '.cancelBtn', () => $('#daterange').val(''));
+
                 $('#author').change(filterLegislationTable);
                 $('#type').change(filterLegislationTable);
                 $('#classification').change(filterLegislationTable);

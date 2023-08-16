@@ -60,7 +60,7 @@
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <a href="{{ route('division.index') }}" class="text-decoration-underline fw-bold
                     text-primary">Back</a>
-                    <button class="btn btn-dark shadow-dark-lg text-white">Update</button>
+                    <button class="btn btn-dark shadow-lg text-white">Update</button>
                 </div>
             </form>
         </div>

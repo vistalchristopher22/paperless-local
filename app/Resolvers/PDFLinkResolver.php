@@ -15,7 +15,17 @@ final class PDFLinkResolver implements IResolver
     {
         try {
             shell_exec("python.exe {$directory}\\reader.py -f {$path}");
-            Log::info('PDF Link: ' . $path);
+        } catch(\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+
+    public static function resolveCommittees(string $path, string $directory): void
+    {
+        try {
+            $path = escapeshellarg($path);
+            $directory = escapeshellarg($directory);
+            shell_exec("C:\Users\christopher\AppData\Local\Programs\Python\Python39\python.exe {$directory}\\creader.py -d {$path} 2>&1");
         } catch(\Exception $e) {
             dd($e->getMessage());
         }

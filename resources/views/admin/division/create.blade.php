@@ -15,7 +15,7 @@
     <div class="card">
         <div class="card-header bg-light">
             <div class="card-title">
-                <h6 class="card-title m-0 text-dark h6">Create Division Form</h6>
+                <h6 class="card-title m-0 text-dark h6">Create Division</h6>
             </div>
         </div>
 
@@ -53,7 +53,7 @@
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <a href="{{ route('division.index') }}" class="text-decoration-underline fw-bold
                     text-primary">Back</a>
-                    <button class="btn btn-dark shadow-dark-lg fw-medium btn-md">Submit</button>
+                    <button class="btn btn-dark shadow-lg fw-medium btn-md">Submit</button>
                 </div>
             </form>
         </div>

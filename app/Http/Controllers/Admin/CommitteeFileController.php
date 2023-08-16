@@ -7,6 +7,9 @@ use App\Models\Committee;
 use App\Resolvers\PDFLinkResolver;
 use App\Utilities\FileUtility;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 final class CommitteeFileController extends Controller
 {
@@ -19,26 +22,26 @@ final class CommitteeFileController extends Controller
     {
         $committee = Committee::find($committee, ['id', 'file_path']);
 
-        $filePath = FileUtility::correctDirectorySeparator($committee->file_path);
-
-        $fileName = basename($filePath);
-
-        $outputDirectory = FileUtility::publicDirectoryForViewing();
-
-        Artisan::call('convert:path "' . $filePath . '" --output="' . $outputDirectory . '"');
-
-        $pathForView = FileUtility::generatePathForViewing($outputDirectory, $fileName);
-
-        new PDFLinkResolver(FileUtility::publicDirectoryForViewing() . FileUtility::changeExtension($fileName));
+        $pathForView = Cache::rememberForever('committee_file_' . $committee->id, function () use ($committee) {
+            PDFLinkResolver::resolveCommittees(dirname(FileUtility::correctDirectorySeparator($committee->file_path)), base_path());
+            return "/storage/committees/" . FileUtility::changeExtension(basename($committee->file_path));
+        });
 
         return view('admin.committee.file-displays.show', [
             'filePathForView' => $pathForView,
         ]);
+
+
     }
 
 
     public function edit(Committee $committee_file)
     {
         return $committee_file;
+    }
+
+    public function download(Committee $committee)
+    {
+        return Response::download(FileUtility::correctDirectorySeparator($committee->file_path), removeTimestampPrefix(basename($committee->file_path)));
     }
 }

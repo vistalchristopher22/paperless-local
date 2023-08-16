@@ -184,8 +184,6 @@
                                                                             <div class="accordion-body">
                                                                                 @isset($session->board_sessions[0]->order_business_note)
                                                                                     {!! $session->board_sessions[0]->order_business_note !!}
-                                                                                @else
-                                                                                    Note Not Available
                                                                                 @endisset
                                                                             </div>
 
@@ -370,7 +368,7 @@
                                             <span class="text-white">
                                                 <span class="count-index">{{ $countIndex }}. </span>
                                                 {{ $committee->lead_committee_information->title }} /
-                                                {{ $committee->expanded_committee_information->title }}
+                                                {{ $committee->expanded_committee_information->title }} & {{ Str::remove('Committee on', $committee?->other_expanded_committee_information?->title) }}
                                             </span>
                                                                                         @php $countIndex++; @endphp
                                                                                     </li>
@@ -397,7 +395,7 @@
                                             <span class="text-white">
                                                 <span class="count-index">{{ $countIndex }}. </span>
                                                 {{ $committee->lead_committee_information->title }} /
-                                                {{ $committee->expanded_committee_information->title }}
+                                                  {{ $committee->expanded_committee_information->title }} & {{ Str::remove('Committee on', $committee?->other_expanded_committee_information?->title) }}
                                             </span>
                                                                                         @php $countIndex++; @endphp
                                                                                     </li>

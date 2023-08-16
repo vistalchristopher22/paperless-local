@@ -17,8 +17,7 @@ final class CreateSchedule implements IPipeHandler
     {
         $reference = $payload['reference'];
 
-        $data = $this->scheduleRepository->createSchedule($payload, $reference['id']);
-
-        return $next($data->id);
+         $payload['schedule'] = $this->scheduleRepository->createSchedule($payload, $reference['id']);
+        return $next($payload);
     }
 }

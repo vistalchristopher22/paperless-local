@@ -31,4 +31,9 @@ class Schedule extends Model
     {
         return $this->belongsTo(ReferenceSession::class, 'reference_session_id', 'id');
     }
+
+    public function guests(): HasMany
+    {
+        return $this->hasMany(ScheduleGuest::class, 'schedule_id', 'id');
+    }
 }

@@ -41,8 +41,9 @@ Auth::routes();
 Route::get('/', LandingPageController::class);
 Route::get('home', [HomeController::class, 'index'])->name('home');
 
+Route::get("committee-file/{committee}/download", [CommitteeFileController::class, 'download'])->name('committee-file.download');
 Route::resource('committee-file', CommitteeFileController::class);
-Route::get('board-session/{dates}/published/preview', BoardSessionPublishPreviewController::class)->name('board-sessions-published.preview');
+Route::get('board-session/{dates}/publishe/preview', BoardSessionPublishPreviewController::class)->name('board-sessions-published.preview');
 Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePreviewController::class)->name('committee-meeting-schedule.preview');
 Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
 Route::get('archive/list', [FileController::class, 'list'])->name('file.list');
@@ -57,8 +58,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
 
         Route::get('types/list', [TypeController::class, 'list']);
-        Route::get('types', [TypeController::class, 'index'])->name('types.index');
-        Route::post('type-store', [TypeController::class, 'store'])->name('types.store');
 
         Route::get('schedule/committees/{dates}', [CommitteeMeetingScheduleController::class, 'show'])->name('committee-meeting-schedule.show');
         Route::get('schedule/committees-and-session/{dates}', [CommitteeMeetingScheduleController::class, 'committeesAndSession'])->name('committee-meeting.schedule.show.committees-and-session');
@@ -105,6 +104,7 @@ Route::group(['middleware' => 'auth'], function () {
             'files' => FileController::class,
             'regular-session' => RegularSessionController::class,
             'legislation' => LegislationController::class,
+            'types' => TypeController::class
         ]);
     });
 });
@@ -179,3 +179,4 @@ Route::get('/scheduled/committee-meeting', function () {
     }
 
 })->name('scheduled.committee-meeting.today');
+

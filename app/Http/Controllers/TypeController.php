@@ -2,29 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TypeEditRequest;
+use App\Http\Requests\TypeStoreRequest;
 use App\Models\Type;
+use App\Repositories\TypeRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 final class TypeController extends Controller
 {
+
+    public function __construct(private readonly TypeRepository $typeRepository)
+    {
+
+    }
+
     public function list()
     {
-        $types = DB::table('types')->select('name', 'created_at')->orderBy('created_at', 'desc')->get();
+        return DataTables::of($this->typeRepository->get())
+            ->addColumn('action', function ($record) {
+                $btnEdit = "<button class='btn btn-success text-white btn-edit-type'  data-content=" . json_encode($record) . "
+                                       title='Edit Type' data-bs-toggle='tooltip' data-bs-placement='top'>
+                                        <i class='mdi mdi-pencil-outline'></i>
+                                    </button>";
 
-        return DataTables::of($types)
-            ->addColumn('action', function () {
+                $btnDelete = "<button class='btn btn-danger text-white btn-delete-type' id='btnSubmit' title='Delete Division' data-id=" . $record->id . "
+                                            data-bs-toggle='tooltip' data-bs-placement='top'><i
+                                            class='mdi mdi-trash-can-outline'></i></button>";
 
-                $btnEdit = '<a href="#" class="btn btn-sm btn-info" data-key="editBtn">
-                <i class="mdi mdi-pencil-outline"></i>
-                </a>';
-
-                $btnDelete = '<a href="#" class="btn btn-sm btn-danger" data-key="deleteBtn">
-                <i class="mdi mdi-trash-can-outline"></i>
-                </a>';
-
-                return $btnEdit .'&nbsp'. $btnDelete;
+                return $btnEdit . '&nbsp' . $btnDelete;
             })->make(true);
     }
 
@@ -35,41 +42,22 @@ final class TypeController extends Controller
     }
 
 
-    public function create()
+    public function store(TypeStoreRequest $request)
     {
-    }
-
-
-    public function store(Request $request)
-    {
-        Type::create([
-            'name' => $request->name
-        ]);
-
+        $this->typeRepository->store($request->all());
         return response()->json(['success' => true]);
     }
 
 
-    public function show(string $id)
+    public function update(TypeEditRequest $request, Type $type)
     {
-        //
+        $this->typeRepository->update($type, $request->all());
+        return response()->json(['success' => true]);
     }
 
 
-    public function edit(string $id)
+    public function destroy(Type $type)
     {
-        //
-    }
-
-
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-
-    public function destroy(string $id)
-    {
-        //
+        return response()->json(['success' => $this->typeRepository->delete($type)]);
     }
 }

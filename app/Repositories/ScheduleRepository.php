@@ -2,7 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Enums\CommitteeStatus;
+use App\Enums\ScheduleType;
 use App\Http\Resources\ScheduleResource;
+use App\Models\Committee;
 use App\Models\Schedule;
 use App\Utilities\FileUtility;
 use Carbon\Carbon;
@@ -46,6 +49,7 @@ final class ScheduleRepository extends BaseRepository
         $schedule->type = $data['type'];
         $schedule->reference_session_id = $reference;
         $schedule->save();
+
         return $schedule;
     }
 
@@ -68,12 +72,23 @@ final class ScheduleRepository extends BaseRepository
 
     public function groupedByDate(array $dates = [])
     {
-        return $this->model->with(['committees:id,lead_committee,expanded_committee,schedule_id', 'committees.lead_committee_information', 'committees.expanded_committee_information', 'board_sessions', 'regular_session'])
+        return $this->model->with(['committees:id,lead_committee,expanded_committee,schedule_id,expanded_committee_2', 'committees.lead_committee_information', 'committees.expanded_committee_information', 'committees.other_expanded_committee_information', 'board_sessions', 'regular_session'])
             ->whereIn(DB::raw('CONVERT(date, date_and_time)'), $dates)
             ->orderBy('with_invited_guest', 'DESC')
             ->orderBy('date_and_time', 'ASC')
             ->get()
-            ->groupBy(fn ($record) => $record->date_and_time->format('Y-m-d'));
+            ->groupBy(fn($record) => $record->date_and_time->format('Y-m-d'));
+    }
+
+    public function groupedByDateCommittees(array $dates = [])
+    {
+        return $this->model->with(['committees:id,lead_committee,expanded_committee,schedule_id,expanded_committee_2', 'committees.lead_committee_information', 'committees.expanded_committee_information', 'committees.other_expanded_committee_information', 'board_sessions', 'regular_session'])
+            ->whereIn(DB::raw('CONVERT(date, date_and_time)'), $dates)
+            ->orderBy('with_invited_guest', 'DESC')
+            ->orderBy('date_and_time', 'ASC')
+            ->where('type', ScheduleType::MEETING)
+            ->get()
+            ->groupBy(fn($record) => $record->date_and_time->format('Y-m-d'));
     }
 
 }

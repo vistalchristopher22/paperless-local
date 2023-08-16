@@ -21,9 +21,7 @@ final class StoreSanggunianMember implements IPipeHandler
             'fullname' => $payload['fullname'],
             'district' => $payload['district'],
             'sanggunian' => $payload['sanggunian'],
-            'profile_picture' => $payload['profile_picture'],
-            // 'username' => $payload['username'],
-            // 'password' => $payload['password'],
+            'profile_picture' => $payload['profile_picture'] ?? 'no_image.png',
         ]);
 
         return $next($payload);

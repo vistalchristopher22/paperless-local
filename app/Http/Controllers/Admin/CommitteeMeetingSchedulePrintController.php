@@ -19,11 +19,10 @@ final class CommitteeMeetingSchedulePrintController extends Controller
         $pdf = App::make('snappy.pdf.wrapper');
         $pdf->setOption('header-html', view('admin.committee-meeting.print-header'));
         $pdf->loadView('admin.committee-meeting.print', [
-            'schedules' => $this->scheduleRepository->groupedByDate($dates),
+            'schedules' => $this->scheduleRepository->groupedByDateCommittees($dates),
             'settings' => $this->settingRepository->getByNames('name', ['prepared_by', 'noted_by']),
             'dates' => implode('&', $dates),
         ])->setPaper('legal')->setOption('enable-local-file-access', true)->setOrientation('portrait');
-
         return $pdf->stream();
     }
 }

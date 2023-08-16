@@ -101,15 +101,15 @@
                 <table class="table table-striped table-bordered" id="committees-table" width="100%">
                     <thead>
                     <tr class="bg-light">
-                        <th class="p-3 border text-dark align-middle" style="width:130px;">Name</th>
-                        <th class="p-3 border text-dark text-center" style="width:180px;">Submitted By</th>
-                        <th class="p-3 border text-dark">Lead Committee</th>
-                        <th class="p-3 border text-dark">Expanded Committee</th>
-                        <th class="p-3 border text-dark">Other Expanded Committee</th>
-                        <th class="p-3 border text-dark">Regular Session</th>
-                        <th class="p-3 border text-dark text-center">Status</th>
-                        <th class="p-3 border text-dark text-center">Submitted At</th>
-                        <th class="p-3 border text-center text-dark">Actions</th>
+                        <th class="p-3 border text-dark align-middle text-uppercase" style="width:130px;">Name</th>
+                        <th class="p-3 border text-dark text-center text-uppercase" style="width:180px;">Submitted By</th>
+                        <th class="p-3 border text-dark text-uppercase">Lead committee</th>
+                        <th class="p-3 border text-dark text-uppercase">Expanded committee</th>
+                        <th class="p-3 border text-dark text-uppercase">Other Expanded committee</th>
+                        <th class="p-3 border text-dark text-uppercase">Regular Session</th>
+                        <th class="p-3 border text-dark text-center text-uppercase">Status</th>
+                        <th class="p-3 border text-dark text-center text-uppercase">Submitted At</th>
+                        <th class="p-3 border text-center text-dark text-uppercase">Actions</th>
                     </tr>
                     </thead>
                 </table>

@@ -126,8 +126,8 @@
                             className: 'border text-start',
                             name: 'title',
                             render: function(data, type, row) {
-                                let filePath = $(row[5]).attr('data-file-path');
-                                let id = $(row[5]).attr('data-id');
+                                let filePath = $(row[3]).attr('data-file-path');
+                                let id = $(row[3]).attr('data-id');
                                 return `<span class="text-decoration-underline mx-4 fw-medium text-capitalize text-primary cursor-pointer btn-view-file" data-path="${filePath}" data-id="${id}">${data}</span>`;
                             }
                         },

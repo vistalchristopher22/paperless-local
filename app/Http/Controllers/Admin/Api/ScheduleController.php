@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\ReferenceSession;
 use App\Models\Schedule;
 use App\Pipes\ReferenceSession\CreateIfNotExistsReferenceSession;
+use App\Pipes\Schedule\AddGuests;
 use App\Pipes\Schedule\CreateSchedule;
 use App\Pipes\Schedule\GenerateRegularSessionChildDirectories;
 use App\Pipes\Schedule\GenerateRegularSessionDirectory;
+use App\Pipes\Schedule\UpdateSchedule;
 use App\Repositories\ScheduleRepository;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -36,6 +38,7 @@ final class ScheduleController extends Controller
                     GenerateRegularSessionDirectory::class,
                     GenerateRegularSessionChildDirectories::class,
                     CreateSchedule::class,
+                    AddGuests::class,
                 ])->then(fn ($scheduleID) => response()->json(['success' => true, 'type' => $request->type, 'id' =>
                     $scheduleID]));
         });
@@ -43,7 +46,7 @@ final class ScheduleController extends Controller
 
     public function show(int $id)
     {
-        $schedule = $this->scheduleRepository->findBy(column: 'id', value: $id)->load('regular_session');
+        $schedule = $this->scheduleRepository->findBy(column: 'id', value: $id)->load(['regular_session:id,number,year', 'guests:id,schedule_id,fullname']);
         $schedule->time = Carbon::parse($schedule->date_and_time);
         $schedule->time = $schedule->time->format('H:i');
         return $schedule;
@@ -60,16 +63,14 @@ final class ScheduleController extends Controller
 
     public function update(Request $request)
     {
-        $reference = ReferenceSession::firstOrCreate([
-            'number' => $request->reference_session,
-            'year' => Carbon::parse($request->selected_date)->format('Y'),
-        ], [
-            'number' => $request->reference_session,
-            'year' => Carbon::parse($request->selected_date)->format('Y'),
-        ]);
-
-        $this->scheduleRepository->updateSchedule($request->all(), $reference->id);
-        return response()->json(['success' => true]);
+        return DB::transaction(function () use ($request) {
+            return Pipeline::send($request->all())
+                ->through([
+                    CreateIfNotExistsReferenceSession::class,
+                    UpdateSchedule::class,
+                    AddGuests::class,
+                ])->then(fn ($scheduleID) => response()->json(['success' => true]));
+        });
     }
 
     public function destroy(int $id)
