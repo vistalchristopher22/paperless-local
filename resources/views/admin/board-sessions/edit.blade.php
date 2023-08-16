@@ -120,8 +120,13 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <a href="{{ route('board-sessions.index') }}"
                        class="btn btn-default text-primary text-decoration-underline fw-bold">Back</a>
-                    <button type="button" id="btnSubmit" class="btn btn-success text-white float-end">Update
-                    </button>
+                    <div class="d-flex align-items-center">
+                        <button type="button" id="btnRefreshClients" class="btn btn-primary text-white mx-3">Refresh
+                            Clients
+                        </button>
+                        <button type="button" id="btnSubmit" class="btn btn-success text-white">Update
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -139,7 +144,6 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                const unassignedBusinessFilePath = document.querySelector('#unassigned_business');
                 const fileInput = document.querySelector('#file_path');
                 const fileExtensions = ['pdf', 'docx', 'doc'];
 
@@ -166,15 +170,14 @@
                     }
                 });
 
-                unassignedBusinessFilePath.addEventListener('change', () => {
-                    const ext = unassignedBusinessFilePath.value.split('.').pop().toLowerCase();
-                    if (!fileExtensions.includes(ext)) {
-                        unassignedBusinessFilePath.value = '';
-                        unassignedBusinessFilePath.classList.add('is-invalid');
-                        unassignedBusinessFilePath.insertAdjacentHTML('afterend', `<div class="invalid-feedback">Only formats are allowed: ${fileExtensions.join(', ')}</div>`);
-                    }
+
+                document.querySelector('#btnRefreshClients').addEventListener('click', () => {
+                   socket.emit('TRIGGER_REFRESH');
                 });
             });
+
+
+
         </script>
     @endpush
 @endsection

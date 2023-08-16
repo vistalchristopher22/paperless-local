@@ -11,6 +11,7 @@ use App\Pipes\BoardSession\CreateWordDocumentContent;
 use App\Pipes\BoardSession\DeleteBoardSession;
 use App\Pipes\BoardSession\DeleteFileUpload;
 use App\Pipes\BoardSession\FileUpload;
+use App\Pipes\BoardSession\GeneratePDFDocumentForViewing;
 use App\Pipes\BoardSession\StoreBoardSession;
 use App\Pipes\BoardSession\UpdateBoardSession;
 use App\Pipes\BoardSession\UpdateWordDocumentContent;
@@ -102,6 +103,7 @@ final class BoardSessionController extends Controller
                     UpdateWordDocumentContent::class,
                     UpdateBoardSession::class,
                     FileUpload::class,
+                    GeneratePDFDocumentForViewing::class,
                 ])->then(fn ($data) => redirect()->back()->with('success', 'Board session updated successfully'));
         });
     }

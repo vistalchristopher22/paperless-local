@@ -21,6 +21,8 @@ final class FileUpload implements IPipeHandler
     public function handle(mixed $payload, Closure $next)
     {
 
+        $payload['file_updated'] = false;
+
         if (request()->has('file_path')) {
             try {
                 $session = $payload['boardSession'] ?? $payload['session'];
@@ -42,15 +44,17 @@ final class FileUpload implements IPipeHandler
                 $boardSessionPathForView = FileUtility::generatePathForViewing($outputDirectory, $fileName);
 
                 $session->file_path_view = $boardSessionPathForView;
-                // $session->file_template =
 
                 $session->save();
 
                 new PDFLinkResolver($outputDirectory . FileUtility::changeExtension($fileName));
+                $payload['file_updated'] = true;
             } catch(\Exception $e) {
                 dd($e->getMessage());
             }
         }
+
+
 
 
         return $next($payload);
