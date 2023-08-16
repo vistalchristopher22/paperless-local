@@ -40,7 +40,7 @@ final class CommitteeMeetingScheduleController extends Controller
                 }
             }
 
-            rename(FileUtility::correctDirectorySeparator($draggedCommittee->file_path), $newLocation);
+            copy(FileUtility::correctDirectorySeparator($draggedCommittee->file_path), $newLocation);
 
             $draggedCommittee->update([
                 'file_path' => $newLocation,
@@ -69,8 +69,10 @@ final class CommitteeMeetingScheduleController extends Controller
         foreach ($data['attachments'] as $attachment) {
             if (count($attachment) > 0) {
                 $newLocation = dirname($baseDirectory);
-                rename($attachment['file_path'], FileUtility::correctDirectorySeparator($newLocation) . DIRECTORY_SEPARATOR .  basename($attachment['file_path']));
-                $this->organizeCommitteeAttachments($attachment, $baseDirectory);
+                if (isset($attachment['file_path'])) {
+                    copy($attachment['file_path'], FileUtility::correctDirectorySeparator($newLocation) . DIRECTORY_SEPARATOR . basename($attachment['file_path']));
+                    $this->organizeCommitteeAttachments($attachment, $baseDirectory);
+                }
             }
         }
     }
@@ -113,8 +115,8 @@ final class CommitteeMeetingScheduleController extends Controller
     {
         $dates = explode(separator: "&", string: $dates);
         $records = $this->scheduleRepository->groupedByDate($dates);
-        $groupByDateAndType = $records->map(fn ($record) => $record->groupBy(fn ($data) => $data->type . " | " . $data->venue));
-        $groupByDateAndType = $groupByDateAndType->sortBy(fn ($item, $key) => strtotime($key));
+        $groupByDateAndType = $records->map(fn($record) => $record->groupBy(fn($data) => $data->type . " | " . $data->venue));
+        $groupByDateAndType = $groupByDateAndType->sortBy(fn($item, $key) => strtotime($key));
 
         return view('admin.committee-meeting.session-and-committee-display', [
             'settings' => $this->settingRepository->getByNames('name', ['prepared_by', 'noted_by']),
