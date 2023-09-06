@@ -8519,7 +8519,7 @@ jQuery.extend( jQuery.event, {
 
 } );
 
-jQuery.fn.extend( {
+jQuery.fn.extend( {ree
 
 	trigger: function( type, data ) {
 		return this.each( function() {

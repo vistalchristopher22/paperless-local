@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Admin\Archive;
 
-use App\Http\Controllers\Controller;
-use App\Services\ArchiveFileService;
-use App\Utilities\FileUtility;
 use Exception;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Utilities\FileUtility;
+use App\Models\CommitteeFileLink;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Services\ArchiveFileService;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 final class FileController extends Controller
 {
@@ -63,6 +65,24 @@ final class FileController extends Controller
             $mTime = filemtime($filePath);
             $fileSize = filesize($filePath);
 
+            $outputDirectory = FileUtility::publicDirectoryForViewing();
+
+            if(!FileUtility::isPDF($filePath)) {
+                Artisan::call('convert:path "' . FileUtility::correctDirectorySeparator($filePath) . '" --output="' . $outputDirectory . '"');
+            }  else {
+                copy($filePath, $outputDirectory . basename(FileUtility::changeExtension($filePath)));
+            }
+
+
+            $uuid = Str::uuid();
+
+            CommitteeFileLink::create([
+                'uuid' => $uuid,
+                'view_link' => url()->to('/') . "/" . "committee-file/link/{$uuid}",
+                'public_path' => $outputDirectory . basename(FileUtility::changeExtension($filePath)),
+                // 'committee_id' => $payload['id']
+            ]);
+
             $response = [
                 'message' => 'File uploaded successfully',
                 'path' => storage_path('app/source/'),
@@ -73,6 +93,7 @@ final class FileController extends Controller
             ];
 
             $code = Response::HTTP_OK;
+
         } catch (Exception $e) {
             $response = ['message' => $e->getMessage()];
             $code = Response::HTTP_INTERNAL_SERVER_ERROR;
@@ -114,5 +135,4 @@ final class FileController extends Controller
         $fileInformation = $this->archiveFileService->getFilesByType($request->type, $request->directory);
         return response()->json($fileInformation);
     }
-
 }

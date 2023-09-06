@@ -20,6 +20,7 @@ class AgendaController extends Controller
     {
         return view('admin.agendas.index', [
             'agendas' => $this->agendaRepository->get(),
+            'sanggunians' => $this->agendaRepository->getDistinctedSanggunian(),
         ]);
     }
 

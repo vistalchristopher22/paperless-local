@@ -248,6 +248,21 @@
             <div class="offcanvas-body"></div>
         </div>
 
+        <div class="modal fade" tabindex="-1" id="viewLink">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title card-title h6">View Link</h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" style="overflow-y: hidden">
+                        <label for="viewLinkText" class="form-label">Link for viewing</label>
+                        <input id="viewLinkText" class="fw-bold form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" tabindex="-1" id="previewModal">
             <div class="modal-dialog modal-xl modal-fullscreen">
                 <div class="modal-content">
@@ -330,28 +345,21 @@
 
 
             $('#files').on('contextmenu', '.card', function (event) {
-                // Prevent the default context menu from appearing
                 event.preventDefault();
 
-                // Close the current context menu if it exists
                 if (currentContextMenu) {
                     currentContextMenu.remove();
                 }
 
-                // Get the card element that was right-clicked
                 const card = $(event.target).closest('.card');
 
-                // Get the file ID from the data-file-id attribute
                 const fileId = card.data('file-id');
 
-                // Create a new context menu element
                 const contextMenu = $('<div class="context-menu"></div>');
 
-                // Add some options to the context menu
                 const detailsOption = $(`<div>
                     <i class="mdi mdi-file-document-outline "></i> Details
                 </div>`);
-
                 detailsOption.on('click', function () {
                     let directory = card.find('.file-name').attr('data-path');
                     let fileName = card.find(`.file-name`).text();
@@ -447,11 +455,9 @@
                 });
                 contextMenu.append(detailsOption);
 
-                // Add some options to the context menu
                 const showInExplorerOption = $(`<div>
-                    <i class="mdi mdi-folder-outline "></i> Show in explorer
+                    <i class="mdi mdi-folder-outline "></i> Open in explorer
                 </div>`);
-
                 showInExplorerOption.on('click', function () {
                     let directory = card.find('.file-name').attr('data-path');
                     let fileName = card.find(`.file-name`).text();
@@ -467,13 +473,31 @@
                         },
                     });
                 });
-
                 contextMenu.append(showInExplorerOption);
 
-                const previewOption = $(`<div>
-                    <i class="mdi mdi-eye-circle-outline"></i> Preview
-                </div>`);
+                const inspectLink = $(`<div>
+                    <i class="mdi mdi-link"></i> Inspect Link</div>`);
+                inspectLink.on('click', function () {
+                    let fileName = card.find('.file-name').text();
+                    let path = card.find('.file-name').attr('data-path');
+                    $.ajax({
+                        url : route('file.inspect-link'),
+                        method : "POST",
+                        data : {
+                            fileName,
+                            path,
+                        },
+                        success : function (response) {
+                            document.querySelector("#viewLinkText").value = response.view_link;
+                            $("#viewLink").modal("toggle");
+                        }
+                    });
+                });
+                contextMenu.append(inspectLink);
 
+                const previewOption = $(`<div>
+                    <i class="mdi mdi-eye-circle-outline"></i> View
+                </div>`);
                 previewOption.on('click', function () {
                     let fileName = card.find('.file-name').text();
                     let path = card.find('.file-name').attr('data-path');
@@ -505,34 +529,28 @@
                 const downloadOption = $(`<div>
                     <i class="mdi mdi-download-outline"></i> Download
                 </div>`);
-
                 downloadOption.on('click', function () {
                     let fileName = card.find(`.file-name`).text();
                     let directory = card.find('.file-name').attr('data-path');
                     alert(fileName, directory);
                 });
-
                 contextMenu.append(downloadOption);
 
                 const renameOption = $(`<div>
                     <i class="mdi mdi-pencil-outline"></i> Rename
                 </div>`);
-
                 renameOption.on('click', function () {
                     $('#currentDirectory').val(card.find('.file-name').attr('data-path'));
                     $('#currentFileName').val(card.find(`.file-name`).text());
                     selectedCard = card;
                     $('#renameModal').modal('show');
                 });
-
                 contextMenu.append(renameOption);
-
                 contextMenu.append(`<hr>`)
 
                 const deleteOption = $(`<div>
                     <i class="mdi mdi-trash-can-outline"></i> Remove
                 </div>`);
-
                 deleteOption.on('click', function () {
                     let directory = card.find('.file-name').attr('data-path');
                     let fileName = card.find(`.file-name`).text();
@@ -578,7 +596,6 @@
                 });
                 contextMenu.append(deleteOption);
 
-                // Position the context menu at the mouse pointer
                 contextMenu.css({
                     left: event.pageX + 'px',
                     top: event.pageY + 'px',
@@ -1156,7 +1173,6 @@
                                         } else {
                                             fileIcon = $('<img>').addClass('img-fluid w-25').attr('src',
                                                 '/assets-2/images/widgets/word-icon.svg').attr(
-
                                                 'File Icon');
                                         }
 
@@ -1195,11 +1211,9 @@
             let myDropzone = new Dropzone("#files", {
                 url: route('file.store'),
                 success: function (file, response) {
-                    setTimeout(() => {
-                        var progressBar = document.querySelector(".progress-bar");
-                        progressBar.style.width = 0 + "%";
-                        progressBar.setAttribute("aria-valuenow", 0);
-                    }, 3000);
+                    var progressBar = document.querySelector(".progress-bar");
+                    progressBar.style.width = 0 + "%";
+                    progressBar.setAttribute("aria-valuenow", 0);
 
                     var $col = $('<div>').addClass('col mb-3 mb-lg-5');
                     var $card = $('<div>').addClass(

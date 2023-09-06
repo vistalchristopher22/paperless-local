@@ -19,6 +19,7 @@ final class CreateResolution implements IPipeHandler
         $payload['associate_data'] = $this->resolutionRepository->store([
             'file' => $payload['file'],
             'author' => $payload['author'],
+            'co_author' => $payload['co_author'],
             'type' => $payload['type'],
             'session_date' => $payload['sessionDate'],
         ]);

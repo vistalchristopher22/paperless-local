@@ -89,10 +89,11 @@
                     <thead>
                     <tr class="bg-light">
                         <th class="p-3 text-dark text-uppercase text-center fw-medium">No</th>
+                        <th class="p-3 text-dark text-uppercase text-center fw-medium">Reference No.</th>
                         <th class="p-3 text-dark text-uppercase text-center fw-medium">Title</th>
                         <th class="p-3 text-dark text-uppercase text-center fw-medium">Type</th>
                         <th class="p-3 text-dark text-uppercase text-center fw-medium">Author</th>
-                        <th class="p-3 text-dark text-uppercase text-center fw-medium">Sponsors</th>
+                        <th class="p-3 text-dark text-uppercase text-center fw-medium">Co-Author</th>
                         <th class="p-3 text-dark text-uppercase text-center fw-medium">Description</th>
                         <th class="p-3 text-dark text-uppercase text-center fw-medium">Classification</th>
                         <th class="p-3 text-dark text-uppercase text-center fw-medium">Session Date</th>
@@ -127,26 +128,28 @@
                     ajax: 'legislation/list/*/*/*/*/*',
                     columns: [
                         {name: 'no', className: 'p-2 text-center'},
+                        {name: 'reference_no', className: 'p-2 text-center'},
                         {name: 'title', className: 'p-2'},
                         {
                             name: 'legislable.record_type',
                             className: 'p-2 text-center',
+                            orderable: false,
+                            searchable: false,
                             render: data => `<span class="badge bg-primary">${data?.name}</span>`,
                         },
                         {
                             name: 'legislable.author_information',
                             className: 'p-2 text-truncate',
-                            render: data => data?.fullname,
+                            orderable: false,
+                            searchable: false,
+                            render: data => data?.fullname || '',
                         },
                         {
-                            name: 'sponsors',
-                            className: 'p-2 text-center',
-                            render: data => {
-                                if (data) {
-                                    const sponsors = data.split("|");
-                                    return sponsors.map(sponsor => `<span class="badge bg-primary mx-2 my-2">${sponsor}</span>`).join('');
-                                }
-                            },
+                            name: 'legislable.co_author_information',
+                            className: 'p-2 text-truncate',
+                            orderable: false,
+                            searchable: false,
+                            render: data => data?.fullname || '',
                         },
                         {
                             name: 'description',
@@ -166,8 +169,17 @@
                             name: 'id',
                             className: 'p-2 text-center',
                             render: id => `
+
+                                <a class="btn btn-primary" href="${route('legislation.attachment.download', id)}">
+                                    <i class="mdi mdi-download"></i>
+                                </a>
+
                                 <a class="btn btn-success" href="${route('legislation.edit', id)}">
                                     <i class="mdi mdi-pencil-outline"></i>
+                                </a>
+
+                                <a class="btn btn-info" target="_blank" href="${route('legislation.show', id)}">
+                                    <i class="mdi mdi-file-pdf"></i>
                                 </a>
                             `,
                         }

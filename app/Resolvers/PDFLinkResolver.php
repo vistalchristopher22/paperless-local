@@ -2,8 +2,6 @@
 
 namespace App\Resolvers;
 
-use Illuminate\Support\Facades\Log;
-
 final class PDFLinkResolver implements IResolver
 {
     public function __construct(string $path, string $directory = null)

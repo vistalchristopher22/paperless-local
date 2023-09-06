@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Contracts\ScreenDisplayRepositoryInterface;
 use App\Enums\UserTypes;
 use App\Models\User;
+use App\Repositories\ScreenDisplayRepository;
 use App\ViewComposers\CommitteeViewComposer;
 use App\ViewComposers\NotificationViewComposer;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(ScreenDisplayRepositoryInterface::class, ScreenDisplayRepository::class);
     }
 
     /**

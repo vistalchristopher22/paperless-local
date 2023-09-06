@@ -26,4 +26,9 @@ class ReferenceSession extends Model
     {
         return $this->hasMany(Schedule::class)->where('type', ScheduleType::SESSION->value);
     }
+
+    public function reference_session_screen_display()
+    {
+        return $this->hasMany(ScreenDisplay::class, 'reference_session_id', 'id');
+    }
 }

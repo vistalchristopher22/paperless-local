@@ -19,7 +19,7 @@ final class CreateWordDocumentContent implements IPipeHandler
             $this->updateContent($template, $payload, 'unassigned', 'unassigned_business_content');
             $this->updateContent($template, $payload, 'announcement', 'announcement_content');
             $template->saveAs($payload['session']['file_path']);
-
+            $payload['boardSession'] = $payload['session'];
         } catch (CopyFileException|CreateTemporaryFileException $e) {
             Log::info('Something went wrong in board session create word document : ' . $e->getMessage());
         }

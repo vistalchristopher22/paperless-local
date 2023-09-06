@@ -10,6 +10,7 @@ use App\Models\ReferenceSession;
 use App\Pipes\BoardSession\CreateWordDocumentContent;
 use App\Pipes\BoardSession\DeleteBoardSession;
 use App\Pipes\BoardSession\DeleteFileUpload;
+use App\Pipes\BoardSession\ExtractTextFromWordDocument;
 use App\Pipes\BoardSession\FileUpload;
 use App\Pipes\BoardSession\GeneratePDFDocumentForViewing;
 use App\Pipes\BoardSession\StoreBoardSession;
@@ -63,6 +64,7 @@ final class BoardSessionController extends Controller
                     StoreBoardSession::class,
                     FileUpload::class,
                     CreateWordDocumentContent::class,
+                    ExtractTextFromWordDocument::class,
                 ])->then(fn ($data) => redirect()->back()->with('success', 'Board session created successfully'));
         });
     }
@@ -70,21 +72,7 @@ final class BoardSessionController extends Controller
     public function show(int $id)
     {
         $boardSession = $this->boardSessionRepository->findBy('id', $id);
-        $filePath = FileUtility::correctDirectorySeparator($boardSession->file_path);
-
-        $fileName = basename($filePath);
-
-        $outputDirectory = FileUtility::publicDirectoryForViewing();
-
-        Artisan::call('convert:path "' . $filePath . '" --output="' . $outputDirectory . '"');
-
-        $pathForView = FileUtility::generatePathForViewing($outputDirectory, $fileName);
-
-        new PDFLinkResolver(FileUtility::publicDirectoryForViewing() . FileUtility::changeExtension($fileName));
-
-        return view('admin.board-sessions.show', [
-            'filePathForView' => $pathForView
-        ]);
+        return redirect()->to($boardSession->file_link->view_link);
     }
 
     public function edit(int $id)

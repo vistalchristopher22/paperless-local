@@ -73,3 +73,9 @@ function getIconByFileName(string $fileName): string
         default => asset('/assets-2/images/widgets/image-placeholder.svg'),
     };
 }
+
+
+function generateHTMLSpace(int $times): string
+{
+    return str_repeat("&nbsp;", $times);
+}

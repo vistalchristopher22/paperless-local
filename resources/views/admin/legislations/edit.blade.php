@@ -48,6 +48,19 @@
                     </span>
                     @enderror
                 </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label" id="resolution_no">No.</label>
+                    <input type="text" class="form-control @error('reference_no') is-invalid @enderror"
+                           name="reference_no"
+                           id="reference_no" value="{{ old('reference_no', $legislation->reference_no) }}">
+                    @error('reference_no')
+                    <span class="text-danger">
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+
                 <div class="form-group mt-3">
                     <label class="form-label" for="title">Title</label>
                     <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" id="title"
@@ -89,6 +102,7 @@
                 <div class="form-group mt-3">
                     <label class="form-label" for="author">Author</label>
                     <select name="author" id="author" class="form-select @error('author') is-invalid @enderror">
+                        <option value="">None</option>
                         @foreach ($spMembers as $spMember)
                             <option
                                 {{ old('author', $legislation->legislable->author) == $spMember->id ? 'selected' : '' }} value="{{ $spMember->id }}">
@@ -104,9 +118,25 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label" for="co_author">Co-Author</label>
+                    <select name="co_author" id="co_author" class="form-select @error('co_author') is-invalid @enderror">
+                        <option value="">None</option>
+                        @foreach ($spMembers as $sp_member)
+                            <option {{ old('author', $legislation->legislable->co_author) == $spMember->id ? 'selected' : '' }} value="{{ $sp_member->id }}">{{ $sp_member->fullname }}</option>
+                        @endforeach
+                    </select>
+                    @error('co_author')
+                    <span class="text-danger">
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
                     <label class="form-label" for="sponsors">Sponsors</label>
                     <select name="sponsors[]" multiple id="sponsors"
                             class="form-select @error('sponsors') is-invalid @enderror">
+                        <option value="">None</option>
                         @foreach ($spMembers as $sp_member)
                             <option value="{{ $sp_member->id }}">{{ $sp_member->fullname }}</option>
                         @endforeach
@@ -142,10 +172,13 @@
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script>
             const sponsors = @json($sponsors);
+            const coAuthor = @json($coAuthor);
 
             $('select#author').select2({});
             let legislateSponsorsSelect2 = $('select#sponsors').select2({});
+            let legislateCoAuthorSelect2 = $('select#co_author').select2({});
             legislateSponsorsSelect2.val(sponsors).trigger('change');
+            legislateCoAuthorSelect2.val(coAuthor).trigger('change');
         </script>
     @endpush
 @endsection

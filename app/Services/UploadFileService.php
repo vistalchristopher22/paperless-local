@@ -19,13 +19,13 @@ final class UploadFileService implements IUploadService
         $filename = FileUtility::addTimePrefixToFileName($filename);
 
         $filename = Str::of($filename)
-            ->replace(" ", "_")
+            ->replace(" ", FileUtility::FILE_SEPARATOR)
             ->substr(0, -(strlen($extension)))
             ->upper()
             ->append($extension)
             ->value();
 
-        $directoryName = Str::of($directoryName)->replace(" ", "_")->upper()->value();
+        $directoryName = Str::of($directoryName)->replace(" ", FileUtility::FILE_SEPARATOR)->upper()->value();
 
         $directory = Storage::disk('source')->putFileAs($directoryName, $file, $filename);
         return Storage::disk('source')->path($directory);

@@ -22,6 +22,7 @@
 
         * {
             font-family: 'Inter', sans-serif;
+            font-weight: normal;
         }
 
 
@@ -30,6 +31,11 @@
             font-weight: 500;
             font-size: 0.9rem;
         }
+
+        .sidebar {
+            width: 200px;
+        }
+
 
         .sidebar-nav > ul > li > a {
             font-weight: normal;
@@ -150,25 +156,15 @@
 </head>
 <body class="home-template">
 <main>
-
-    <aside class="sidebar no-image shadow">
-
-        <div style="display:flex; align-items:center;">
+    <aside class="sidebar no-image">
+        <div style="display:flex; justify-content:center; align-items:center;">
             <div>
-                <a href="index.html" class="site-logo">
-                    <img src="{{ asset('paperless-logo.png') }}" width="50" alt="{{ config('app.name') }}"/>
+                <a href="#" class="site-logo">
+                    <img src="{{ asset('/assets/tsp.png') }}" width="50" alt="{{ config('app.name') }}"/>
                 </a>
-            </div>
-            <div>
-                <h2 style="color:white; margin : 0px 0px 0px 15px; letter-spacing: 1.5px;">
-                    PAPERLESS
-                </h2>
             </div>
         </div>
 
-
-        <span class="sidebar-nav-toggle">
-      </span>
 
         <div class="sidebar-inner" style="overflow-y: hidden;">
             <nav class="sidebar-nav ">
@@ -258,7 +254,7 @@
                                                 @endif
                                             </span>
                                         </span>
-                                        <p>{{ $schedule->description }}</p>
+                                        {{--                                        <p>{{ $schedule->description }}</p>--}}
                                     </div>
                                     @php $countIndex = 1; @endphp
                                 @endif
@@ -266,7 +262,9 @@
                                 @if ($schedule->with_invited_guest == 1)
                                     <p class="text-uppercase text-center mt-3 fs-2"
                                        style="letter-spacing : 2px;">
-                                        COMMITTEE WITH INVITED GUESTS
+                                        <u>
+                                            COMMITTEE WITH INVITED GUESTS
+                                        </u>
                                     </p>
                                     <div class="">
                                         <ol class="committee-container" id="{{ $schedule->id }}">
@@ -279,13 +277,18 @@
                                                        class="">
                                                         <span class="text-dark">
                                                         <span class="count-index">{{ $countIndex }}. </span>
+                                                            Committee on
                                                         <span
-                                                            class="agenda"
-                                                            data-lead-committee="{{ $committee->lead_committee }}">{{ $committee->lead_committee_information->title }}</span>
-                                                        <span>/</span>
+                                                            class="agenda fw-bold"
+                                                            data-lead-committee="{{ $committee->lead_committee }}">
+                                                                     {{ Str::remove('COMMITTEE ON', Str::upper($committee->lead_committee_information->title)) }}
+                                                        </span>
+                                                            @if(!is_null($committee->expanded_committee))
+                                                                <span>/</span>
+                                                            @endif
                                                         <span
-                                                            class="agenda"
-                                                            data-expanded-committee="{{ $committee->expanded_committee }}">{{ Str::remove('Committee on', $committee->expanded_committee_information->title) }}</span>
+                                                            class="agenda fw-bold"
+                                                            data-expanded-committee="{{ $committee?->expanded_committee }}">{{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}</span>
                                                     </span>
                                                     </a>
                                                     @php $countIndex++; @endphp
@@ -311,10 +314,14 @@
                                             @endforeach
                                         </ol>
                                     </div>
+                                    <br>
+                                    <br>
                                 @else
                                     <p class="text-uppercase text-center fs-2"
                                        style="letter-spacing : 2px;">
-                                        COMMITTEE WITHOUT INVITED GUESTS
+                                        <u>
+                                            COMMITTEE WITHOUT INVITED GUESTS
+                                        </u>
                                     </p>
                                     <div class="">
                                         <ol class="committee-container" id="{{ $schedule->id }}">
@@ -327,13 +334,16 @@
                                                        class="">
                                                         <span class="text-dark">
                                                             <span class="count-index">{{ $countIndex }}. </span>
+                                                            Committee on
                                                             <span
-                                                                class="agenda"
-                                                                data-lead-committee="{{ $committee->lead_committee }}">{{ $committee->lead_committee_information->title }}</span>
-                                                            <span>/</span>
+                                                                class="agenda fw-bold"
+                                                                data-lead-committee="{{ $committee->lead_committee }}">{{ Str::remove('COMMITTEE ON', Str::upper($committee->lead_committee_information->title)) }}</span>
+                                                            @if(!is_null($committee->expanded_committee))
+                                                                <span>/</span>
+                                                            @endif
                                                             <span
-                                                                class="agenda"
-                                                                data-expanded-committee="{{ $committee->expanded_committee }}">{{ Str::remove('Committee on', $committee->expanded_committee_information->title) }}</span>
+                                                                class="agenda fw-bold"
+                                                                data-expanded-committee="{{ $committee?->expanded_committee }}">{{ Str::remove('COMMITTEE ON',  Str::upper($committee?->expanded_committee_information?->title)) }}</span>
                                                         </span>
                                                     </a>
                                                     @php $countIndex++; @endphp

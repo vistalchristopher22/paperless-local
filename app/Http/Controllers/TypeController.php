@@ -6,13 +6,10 @@ use App\Http\Requests\TypeEditRequest;
 use App\Http\Requests\TypeStoreRequest;
 use App\Models\Type;
 use App\Repositories\TypeRepository;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 final class TypeController extends Controller
 {
-
     public function __construct(private readonly TypeRepository $typeRepository)
     {
 

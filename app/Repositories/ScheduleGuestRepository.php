@@ -3,8 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\ScheduleGuest;
-use App\Repositories\BaseRepository;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 final class ScheduleGuestRepository extends BaseRepository

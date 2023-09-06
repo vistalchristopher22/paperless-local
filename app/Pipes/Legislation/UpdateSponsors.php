@@ -14,7 +14,12 @@ final class UpdateSponsors implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        $payload['legislation']->sponsors()->sync($payload['sponsors']);
+        if (array_key_exists('sponsors', $payload)) {
+            $payload['sponsors'] = array_filter($payload['sponsors']);
+            if (isset($payload['sponsors'])) {
+                $payload['legislation']->sponsors()->sync($payload['sponsors']);
+            }
+        }
         return $next($payload);
     }
 }

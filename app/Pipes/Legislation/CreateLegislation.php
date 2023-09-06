@@ -20,6 +20,7 @@ final class CreateLegislation implements IPipeHandler
     {
         $legislation = new Legislation([
             'no' => $this->legislationRepository->generateUniqueNumber(LegislateType::from($payload['classification'])),
+            'reference_no' => $payload['reference_no'],
             'title' => $payload['title'],
             'description' => $payload['description'],
             'classification' => LegislateType::from($payload['classification']),

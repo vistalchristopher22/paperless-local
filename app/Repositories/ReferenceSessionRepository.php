@@ -18,7 +18,6 @@ final class ReferenceSessionRepository extends BaseRepository
         return $this->model->get();
     }
 
-
     public function store(array $data = []): ReferenceSession
     {
         return ReferenceSession::firstOrCreate([

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\CheckFilename;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreCommitteeRequest extends FormRequest
 {
@@ -23,9 +25,16 @@ class StoreCommitteeRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'file' => ['required', 'mimes:doc,docx,pdf'],
+            'file' => ['nullable', new CheckFilename(), 'mimes:docx,pdf'],
             'lead_committee' => ['required', 'exists:agendas,id'],
-            'expanded_committee' => ['required', 'array', 'max:2'],
+            'expanded_committee' => ['nullable', 'array', 'max:2'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'file.mimes' => 'Only doc, docx and pdf files are allowed.',
         ];
     }
 }

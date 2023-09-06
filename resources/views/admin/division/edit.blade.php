@@ -1,10 +1,6 @@
 @extends('layouts.app-2')
 @section('tab-title', 'Edit Division')
 @prepend('page-css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endprepend
 @section('content')
     @if (Session::has('success'))
@@ -37,7 +33,8 @@
 
                 <div class="form-group">
                     <label for="description" class="form-label">Descrption</label>
-                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="2"
+                    <textarea name="description" class="form-control @error('description') is-invalid @enderror"
+                              rows="2"
                               id="description">{{ old('description', $division->description) }}</textarea>
                     @error('description')
                     <span class="text-danger">{{ $message }}</span>
@@ -46,12 +43,11 @@
 
                 <div class="form-group">
                     <label for="select-board" class="form-label">Board Member</label>
-                    <select name="board" class="form-select" id="select-board">
-                        @foreach ($members as $member)
-                            <option {{ old('board', $division->board) == $member->id ? 'selected' : '' }}
-                                    value="{{ $member->id }}">{{ $member->fullname }}</option>
-                        @endforeach
-                    </select>
+                    <input type="text" class="form-control @error('select-board') is-invalid @enderror"
+                           id="select-board" name="board" value="{{ old('board', $division->board) }}">
+                    @error('board')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                     @error('board')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -66,11 +62,5 @@
         </div>
     </div>
     @push('page-scripts')
-        <script>
-            $('select[name="board"]').select2({
-                placeholder: 'Select members',
-                theme: "classic",
-            });
-        </script>
     @endpush
 @endsection

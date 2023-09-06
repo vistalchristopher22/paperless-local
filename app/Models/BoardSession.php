@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BoardSession extends Model
@@ -18,5 +19,14 @@ class BoardSession extends Model
         return $this->belongsTo(Schedule::class, 'schedule_id', 'id');
     }
 
+    public function display(): MorphOne
+    {
+        return $this->morphOne(ScreenDisplay::class, 'screen_displayable');
+    }
+
+    public function file_link()
+    {
+        return $this->hasOne(BoardSessionCommitteeLink::class);
+    }
 
 }

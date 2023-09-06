@@ -36,7 +36,7 @@
 
                 <div class="form-group">
                     <label for="sanggunian" class="form-label">Sanggunian</label>
-                    <input type="text" name="sanggunian" id="sanggunian" value="{{ old('sanggunian') }}"
+                    <input type="text" name="sanggunian" id="sanggunian" value="{{ old('sanggunian', \App\Repositories\SettingRepository::getValueByName('current_sanggunian')) }}"
                            class="form-control @error('sanggunian') is-invalid @enderror">
                     @error('sanggunian')
                     <span class="text-danger"> {{ $message }}</span>

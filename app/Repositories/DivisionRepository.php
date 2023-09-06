@@ -11,9 +11,4 @@ final class DivisionRepository extends BaseRepository
     {
         parent::__construct($model);
     }
-
-    public function get(): Collection
-    {
-        return $this->model->with('board_member')->get();
-    }
 }

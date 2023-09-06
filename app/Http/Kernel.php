@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\ScreenReader;
 use App\Http\Middleware\VerifyUser;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\Authenticate;
@@ -47,8 +48,9 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
-        GlobalFileAttachmentMiddleware::class,
-//        URLShortener::class,
+//        GlobalFileAttachmentMiddleware::class,
+//        ScreenReader::class,
+        // URLShortener::class,
     ];
 
     /**

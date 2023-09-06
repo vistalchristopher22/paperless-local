@@ -31,46 +31,50 @@ final class CommitteeMeetingScheduleController extends Controller
 
             $draggedCommittee = $committeeMeetingRepository->findById($data['id'])->load('lead_committee_information');
 
-            $newLocation = (FileUtility::correctDirectorySeparator($scheduleRootDirectory . DIRECTORY_SEPARATOR . "COMMITTEES" . DIRECTORY_SEPARATOR . Str::replace([" ", "-", "/"], "_", $draggedCommittee->lead_committee_information->title) . DIRECTORY_SEPARATOR . basename($draggedCommittee->file_path)));
-            $newFolderDestination = (FileUtility::correctDirectorySeparator($scheduleRootDirectory . DIRECTORY_SEPARATOR . "COMMITTEES" . DIRECTORY_SEPARATOR . Str::replace([" ", "-", "/"], "_", $draggedCommittee->lead_committee_information->title) . DIRECTORY_SEPARATOR));
+            if (!is_null($draggedCommittee->file_path)) {
+                $newLocation = (FileUtility::correctDirectorySeparator($scheduleRootDirectory . DIRECTORY_SEPARATOR . "COMMITTEES" . DIRECTORY_SEPARATOR . Str::replace([" ", "-", "/"], "_", Str::upper($draggedCommittee->lead_committee_information->title)) . DIRECTORY_SEPARATOR . basename($draggedCommittee->file_path)));
 
-            if (!file_exists($newFolderDestination)) {
-                if (!mkdir(($newFolderDestination), 0777, true) && !is_dir($newFolderDestination)) {
-                    throw new Error(sprintf('Directory "%s" was not created', $newFolderDestination));
+                $newFolderDestination = (FileUtility::correctDirectorySeparator($scheduleRootDirectory . DIRECTORY_SEPARATOR . "COMMITTEES" . DIRECTORY_SEPARATOR . Str::replace([" ", "-", "/"], "_", Str::upper($draggedCommittee->lead_committee_information->title)) . DIRECTORY_SEPARATOR));
+
+                if (!file_exists($newFolderDestination)) {
+                    if (!mkdir(($newFolderDestination), 0777, true) && !is_dir($newFolderDestination)) {
+                        throw new Error(sprintf('Directory "%s" was not created', $newFolderDestination));
+                    }
                 }
+
+                rename(FileUtility::correctDirectorySeparator($draggedCommittee->file_path), $newLocation);
+
+                $draggedCommittee->update([
+                    'file_path' => $newLocation,
+                ]);
             }
 
-            copy(FileUtility::correctDirectorySeparator($draggedCommittee->file_path), $newLocation);
-
-            $draggedCommittee->update([
-                'file_path' => $newLocation,
-            ]);
 
             $committeeMeetingRepository->addCommitteeMeetingToSchedule(scheduleId: $data['parent'], data: $data);
 
-            $directory = base_path();
-            $path = FileUtility::isInputDirectoryEscaped($draggedCommittee->file_path);
-            $output = shell_exec('python.exe ' . $directory . '\\parser.py -f "' . $path . '"');
+            if (!is_null($draggedCommittee->file_path)) {
+                $directory = base_path();
+                $path = FileUtility::isInputDirectoryEscaped($draggedCommittee->file_path);
+                $output = shell_exec('python.exe ' . $directory . '\\parser.py -f "' . $path . '"');
 
-            $attachments = json_decode($output, true, 512, JSON_THROW_ON_ERROR);
-
-            $draggedCommittee->update([
-                'file_map' => json_encode($attachments),
-            ]);
-
-            $this->organizeCommitteeAttachments($attachments, $draggedCommittee->file_path);
+                $attachments = json_decode($output, true, 512, JSON_THROW_ON_ERROR);
+                $this->organizeCommitteeAttachments($attachments, $draggedCommittee->file_path);
+                $draggedCommittee->update([
+                    'file_map' => json_encode($attachments),
+                ]);
+            }
 
             return response()->json(['success' => true]);
         });
     }
 
-    private function organizeCommitteeAttachments(array &$data, $baseDirectory): void
+    private function organizeCommitteeAttachments(array $data, $baseDirectory): void
     {
-        foreach ($data['attachments'] as $attachment) {
+        foreach ($data['attachments'] as &$attachment) {
             if (count($attachment) > 0) {
                 $newLocation = dirname($baseDirectory);
                 if (isset($attachment['file_path'])) {
-                    copy($attachment['file_path'], FileUtility::correctDirectorySeparator($newLocation) . DIRECTORY_SEPARATOR . basename($attachment['file_path']));
+                    rename($attachment['file_path'], FileUtility::correctDirectorySeparator($newLocation) . DIRECTORY_SEPARATOR . basename($attachment['file_path']));
                     $this->organizeCommitteeAttachments($attachment, $baseDirectory);
                 }
             }
@@ -97,7 +101,6 @@ final class CommitteeMeetingScheduleController extends Controller
             'settings' => $this->settingRepository->getByNames('name', ['prepared_by', 'noted_by']),
             'dates' => implode('&', $arrayDates),
         ]);
-
     }
 
     public function sessions($dates): View
@@ -125,5 +128,4 @@ final class CommitteeMeetingScheduleController extends Controller
             'groupByDateAndType' => $groupByDateAndType,
         ]);
     }
-
 }

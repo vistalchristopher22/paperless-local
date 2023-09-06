@@ -13,7 +13,7 @@
     @endif
     <div class="card">
         <div class="card-header bg-light p-3 justify-content-between align-items-center d-flex">
-            <h6 class="card-title h6 fw-medium">Edit Agenda</h6>
+            <h6 class="card-title h6 fw-medium">Edit Committee</h6>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('agendas.update', $agenda) }}">
@@ -63,6 +63,16 @@
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
+
+                <div class="form-group">
+                    <label class="form-label text-dark">Sanggunian</label>
+                    <input type="text" class="form-control @error('sanggunian') is-invalid @enderror" name="sanggunian"
+                           value="{{ old('sanggunian', (int) $member->sanggunian ?? \App\Repositories\SettingRepository::getValueByName('current_sanggunian')) }}">
+                    @error('sanggunian')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
                 <div class="form-group">
                     <label class="form-label">Members</label>
                     <div class="@error('members') rounded border border-danger @enderror">

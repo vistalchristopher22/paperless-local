@@ -13,6 +13,7 @@ return new class () extends Migration {
         Schema::create('legislations', function (Blueprint $table) {
             $table->id();
             $table->string('no')->unique();
+            $table->string('reference_no')->unique();
             $table->string('title');
             $table->text('description');
             $table->enum('classification', ['ordinance', 'resolution']);

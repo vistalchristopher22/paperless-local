@@ -10,7 +10,6 @@ use App\Pipes\SanggunianMember\StoreSanggunianMember;
 use App\Pipes\SanggunianMember\UpdateSanggunianMember;
 use App\Pipes\User\ProfilePicture;
 use App\Repositories\SanggunianMemberRepository;
-use App\Services\SanggunianMemberService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -43,7 +42,7 @@ final class SanggunianMemberController extends Controller
             return Pipeline::send($request)->through([
                 ProfilePicture::class,
                 StoreSanggunianMember::class,
-            ])->then(fn($data) => back()->with('success', 'Successfully add new Sangguniang Panlalawigan Member'));
+            ])->then(fn ($data) => back()->with('success', 'Successfully add new Sangguniang Panlalawigan Member'));
         });
     }
 
@@ -60,7 +59,7 @@ final class SanggunianMemberController extends Controller
             ->through([
                 ProfilePicture::class,
                 UpdateSanggunianMember::class,
-            ])->then(fn($data) => $data);
+            ])->then(fn ($data) => $data);
 
         return back()->with('success', 'Success! Sangguniang Panlalawigan Member updated successfully.');
     }

@@ -14,7 +14,7 @@
     <div class="card">
         <div class="card-header bg-light p-3 justify-content-between align-items-center d-flex">
             <div class="card-title">
-                <h6 class="fw-medium h6">Create new Agenda</h6>
+                <h6 class="fw-medium h6">Create new Committee</h6>
             </div>
         </div>
         <div class="card-body">
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label text-dark fw-bolder">Vice Chairman</label>
+                    <label class="form-label text-dark">Vice Chairman</label>
                     <div class="@error('vice_chairman') border border-danger rounded @enderror">
                         <select name="vice_chairman" class="form-select @error('vice_chairman') is-invalid @enderror"
                                 aria-label="select
@@ -62,7 +62,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="members" class="form-label text-dark fw-bolder">Members</label>
+                    <label class="form-label text-dark">Sanggunian</label>
+                    <input type="text" class="form-control @error('sanggunian') is-invalid @enderror" name="sanggunian"
+                           value="{{ old('sanggunian', \App\Repositories\SettingRepository::getValueByName('current_sanggunian')) }}">
+                    @error('sanggunian')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="members" class="form-label text-dark">Members</label>
                     <div class="@error('members') border border-danger rounded @enderror">
                         <select name="members[]" class="form-select"
                                 multiple>
@@ -75,6 +84,7 @@
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
+
 
                 <!-- Submit Button -->
                 <div>

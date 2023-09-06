@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\ReferenceSession;
 use App\Models\Schedule;
 use App\Pipes\ReferenceSession\CreateIfNotExistsReferenceSession;
 use App\Pipes\Schedule\AddGuests;
@@ -75,6 +74,12 @@ final class ScheduleController extends Controller
 
     public function destroy(int $id)
     {
-        return response()->json(['success' => $this->scheduleRepository->deleteSchedule($id)]);
+        $result = $this->scheduleRepository->deleteSchedule($id);
+//
+//        if($result['no_of_remaining_set_schedule'] == 0) {
+//            $result['schedule']->regular_session()->delete();
+//        }
+
+        return response()->json(['success' => $result['isDeleted'] ]);
     }
 }

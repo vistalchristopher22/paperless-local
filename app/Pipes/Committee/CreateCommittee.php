@@ -27,7 +27,7 @@ final class CreateCommittee implements IPipeHandler
             'lead_committee' => $payload['lead_committee'],
             'expanded_committee' => $expanded,
             'expanded_committee_2' => $others,
-            'file_path' => $payload['file_path'],
+            'file_path' => $payload['file_path'] ?? null,
             'submitted_by' => $payload['submitted_by'],
             'status' => (auth()->user()?->account_type === UserTypes::ADMIN->value) ? CommitteeStatus::APPROVED->value : CommitteeStatus::REVIEW->value,
         ]);

@@ -2,7 +2,7 @@
 @section('tab-title', 'Settings')
 @section('content')
 
-    @if(session()->has('success'))
+    @if (session()->has('success'))
         <div class="card bg-success mb-3">
             <div class="card-body text-white">
                 {{ session()->get('success') }}
@@ -23,8 +23,8 @@
                         <label for="prepared_by" class="col-md-2 col-form-label text-md-right">Prepared By</label>
                         <div class="col-md-10">
                             <input type="text" name="prepared_by" id="prepared_by" class="form-control"
-                                   placeholder="Enter Fullname"
-                                   value="{{ $settingRepository->getValueByName('prepared_by') }}">
+                                placeholder="Enter Fullname"
+                                value="{{ $settingRepository->getValueByName('prepared_by') }}">
                         </div>
                     </div>
 
@@ -32,8 +32,7 @@
                         <label for="noted_by" class="col-md-2 col-form-label text-md-right">Noted By</label>
                         <div class="col-md-10">
                             <input type="text" name="noted_by" id="noted_by" class="form-control"
-                                   value="{{ $settingRepository->getValueByName('noted_by') }}"
-                                   placeholder="Enter Fullname">
+                                value="{{ $settingRepository->getValueByName('noted_by') }}" placeholder="Enter Fullname">
                         </div>
                     </div>
 
@@ -42,8 +41,15 @@
                             Session</label>
                         <div class="col-md-10">
                             <input type="number" name="current_session" id="current_session" class="form-control"
-                                   value="{{ $settingRepository->getValueByName('current_session') }}"
-                                   placeholder="">
+                                value="{{ $settingRepository->getValueByName('current_session') }}" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="current_session" class="col-md-2 col-form-label text-md-right">Current Sanggunian</label>
+                        <div class="col-md-10">
+                            <input type="number" name="current_sanggunian" id="current_sanggunian" class="form-control"
+                                value="{{ $settingRepository->getValueByName('current_sanggunian') }}" placeholder="">
                         </div>
                     </div>
 
@@ -52,9 +58,9 @@
                             Session</label>
                         <div class="col-md-10">
                             <input type="number" name="current_session_increment" id="current_session_increment"
-                                   class="form-control"
-                                   value="{{ $settingRepository->getValueByName('current_session_increment') }}"
-                                   placeholder="">
+                                class="form-control"
+                                value="{{ $settingRepository->getValueByName('current_session_increment') }}"
+                                placeholder="">
                         </div>
                     </div>
 
@@ -68,7 +74,7 @@
                         Path</label>
                     <div class="col-md-10">
                         <input type="text" name="libre_office_path" id="libre_office_path" class="form-control"
-                               placeholder="C:\ProgramFiles\LibreOffice\"
+                            placeholder="C:\ProgramFiles\LibreOffice\"
                                value="{{ $settingRepository->getValueByName('libre_office_path') }}">
                     </div>
                 </div>
@@ -114,8 +120,7 @@
                         Business</label>
                     <div class="col-md-10">
                         <input type="text" name="unassigned_business" id="unassigned_business" class="form-control"
-                               placeholder=""
-                               value="{{ $settingRepository->getValueByName('unassigned_business') }}">
+                            placeholder="" value="{{ $settingRepository->getValueByName('unassigned_business') }}">
                     </div>
                 </div>
 
@@ -123,9 +128,8 @@
                     <label for="announcement" class="col-md-2 col-form-label text-md-right">Announcement (Begin &
                         End)</label>
                     <div class="col-md-10">
-                        <input type="text" name="announcement" id="announcement" class="form-control"
-                               placeholder=""
-                               value="{{ $settingRepository->getValueByName('announcement') }}">
+                        <input type="text" name="announcement" id="announcement" class="form-control" placeholder=""
+                            value="{{ $settingRepository->getValueByName('announcement') }}">
                     </div>
                 </div>
 
@@ -144,37 +148,38 @@
                 </div>
 
 
-                {{--                <h5 class="card-title text-dark">Notifications</h5>--}}
-                {{--                <div class="form-group row mt-2">--}}
-                {{--                    <div class="col-sm-10 ms-auto">--}}
-                {{--                        <div class="form-check">--}}
-                {{--                            <input type="checkbox"--}}
-                {{--                                   {{ $settingRepository->getValueByName('smsAlerts') === 'on' ? 'checked' : '' }} name="smsAlerts"--}}
-                {{--                                   class="form-check-input" id="smsAlerts">--}}
-                {{--                            <label class="form-check-label" for="smsAlerts">SMS Alert</label>--}}
-                {{--                        </div>--}}
-                {{--                        <p class="text-muted">SMS Alerts is a feature that allows a system to send SMS notifications to--}}
-                {{--                            its users. With this feature, each user will receive alerts via SMS whenever there is an--}}
-                {{--                            update or important information related to their account or the system they are using. This--}}
-                {{--                            feature ensures that users stay informed in real-time, regardless of their location or--}}
-                {{--                            internet connectivity.</p>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
 
-                {{--                <div class="form-group row mt-2">--}}
-                {{--                    <div class="col-sm-10 ms-auto">--}}
-                {{--                        <div class="form-check">--}}
-                {{--                            <input type="checkbox"--}}
-                {{--                                   {{ $settingRepository->getValueByName('scheduleAlert') === 'on' ? 'checked' : '' }} name="scheduleAlert"--}}
-                {{--                                   class="form-check-input" id="scheduleAlert">--}}
-                {{--                            <label class="form-check-label" for="scheduleAlert">Schedule Alert</label>--}}
-                {{--                        </div>--}}
-                {{--                        <p class="text-muted">A Schedule Alert (SMS) is a feature that sends SMS notifications to users--}}
-                {{--                            at a specific time or schedule. This feature is useful for reminding users of upcoming--}}
-                {{--                            sessions. With Schedule Alert (SMS), users can receive notifications directly to their--}}
-                {{--                            mobile devices, ensuring that they are always aware of important events.</p>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
+                {{--                <h5 class="card-title text-dark">Notifications</h5> --}}
+                {{--                <div class="form-group row mt-2"> --}}
+                {{--                    <div class="col-sm-10 ms-auto"> --}}
+                {{--                        <div class="form-check"> --}}
+                {{--                            <input type="checkbox" --}}
+                {{--                                   {{ $settingRepository->getValueByName('smsAlerts') === 'on' ? 'checked' : '' }} name="smsAlerts" --}}
+                {{--                                   class="form-check-input" id="smsAlerts"> --}}
+                {{--                            <label class="form-check-label" for="smsAlerts">SMS Alert</label> --}}
+                {{--                        </div> --}}
+                {{--                        <p class="text-muted">SMS Alerts is a feature that allows a system to send SMS notifications to --}}
+                {{--                            its users. With this feature, each user will receive alerts via SMS whenever there is an --}}
+                {{--                            update or important information related to their account or the system they are using. This --}}
+                {{--                            feature ensures that users stay informed in real-time, regardless of their location or --}}
+                {{--                            internet connectivity.</p> --}}
+                {{--                    </div> --}}
+                {{--                </div> --}}
+
+                {{--                <div class="form-group row mt-2"> --}}
+                {{--                    <div class="col-sm-10 ms-auto"> --}}
+                {{--                        <div class="form-check"> --}}
+                {{--                            <input type="checkbox" --}}
+                {{--                                   {{ $settingRepository->getValueByName('scheduleAlert') === 'on' ? 'checked' : '' }} name="scheduleAlert" --}}
+                {{--                                   class="form-check-input" id="scheduleAlert"> --}}
+                {{--                            <label class="form-check-label" for="scheduleAlert">Schedule Alert</label> --}}
+                {{--                        </div> --}}
+                {{--                        <p class="text-muted">A Schedule Alert (SMS) is a feature that sends SMS notifications to users --}}
+                {{--                            at a specific time or schedule. This feature is useful for reminding users of upcoming --}}
+                {{--                            sessions. With Schedule Alert (SMS), users can receive notifications directly to their --}}
+                {{--                            mobile devices, ensuring that they are always aware of important events.</p> --}}
+                {{--                    </div> --}}
+                {{--                </div> --}}
 
                 <hr class="border-dashed">
                 <div class="form-group
@@ -182,9 +187,9 @@
                     <div class="col-md-10 text-end offset-md-2">
                         <button type="submit" class="btn btn-primary btn-dark shadow-dark">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-send mx-1" viewBox="0 0 16 16">
+                                class="bi bi-send mx-1" viewBox="0 0 16 16">
                                 <path
-                                    d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                                    d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
                             </svg>
                             Save Setting
                         </button>
@@ -195,7 +200,7 @@
     </div>
     @push('page-scripts')
         <script>
-            $('#refreshClients').click(function (e) {
+            $('#refreshClients').click(function(e) {
                 e.preventDefault();
                 socket.emit('TRIGGER_REFRESH');
             });

@@ -2,10 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Enums\CommitteeStatus;
 use App\Enums\ScheduleType;
 use App\Http\Resources\ScheduleResource;
-use App\Models\Committee;
 use App\Models\Schedule;
 use App\Utilities\FileUtility;
 use Carbon\Carbon;
@@ -56,9 +54,14 @@ final class ScheduleRepository extends BaseRepository
     public function deleteSchedule(int $id): mixed
     {
         return DB::transaction(function () use ($id) {
-            $schedule = $this->model->with('committees')->find($id);
+            $schedule = $this->model->with(['committees', 'regular_session', 'regular_session.schedules'])->find($id);
+            $isDeleted = $schedule->delete();
             $this->removeCommitteeSchedule($schedule);
-            return $schedule->delete();
+            return [
+                'no_of_remaining_set_schedule' => $schedule->regular_session->schedules()->count(),
+                'isDeleted' => $isDeleted,
+                'schedule' => $schedule,
+            ];
         });
     }
 

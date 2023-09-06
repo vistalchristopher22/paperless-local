@@ -2,14 +2,20 @@
 
 namespace App\Pipes\Committee;
 
-use App\Contracts\Pipes\IPipeHandler;
+use Closure;
+use App\Models\FileLinks;
+use Illuminate\Support\Str;
+use App\Utilities\FileUtility;
 use App\Services\CommitteeService;
 use App\Services\UploadFileService;
-use Closure;
+use App\Contracts\Pipes\IPipeHandler;
+use App\Models\CommitteeFileLink;
+use Illuminate\Support\Facades\Artisan;
 
 final class UploadFile implements IPipeHandler
 {
     private CommitteeService $committeeService;
+
 
     public function __construct()
     {
@@ -18,7 +24,6 @@ final class UploadFile implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-
         $data = $this->committeeService->uploadFile($payload, new UploadFileService());
         return $next($data);
     }

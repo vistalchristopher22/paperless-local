@@ -80,7 +80,7 @@
     <h1 class="code_error">401</h1>
     <p class="code_text">Unauthorized Access</p>
     <div class="button_wrapper">
-        <button class="custom-btn btn-1">Go Back</button>
+        <a href="{{ route('login') }}" class="custom-btn btn-1">Go Login</a>
     </div>
 </div>
 </body>

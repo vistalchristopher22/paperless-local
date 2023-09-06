@@ -12,7 +12,7 @@ final class CommitteeMeetingSchedulePreviewController extends Controller
     public function __invoke(ScheduleRepository $scheduleRepository, string $dates)
     {
         $dates = explode('&', $dates);
-        $allSchedules = Schedule::with(['committees:id,schedule_id,lead_committee,expanded_committee,display_index', 'committees.lead_committee_information', 'committees.expanded_committee_information'])
+        $allSchedules = Schedule::with(['committees:id,schedule_id,lead_committee,expanded_committee,expanded_committee_2,display_index', 'committees.lead_committee_information', 'committees.expanded_committee_information', 'committees.other_expanded_committee_information'])
             ->where(function ($query) use ($dates) {
                 foreach ($dates as $date) {
                     $day = date('d', strtotime($date));

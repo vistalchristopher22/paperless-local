@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Committee;
-use App\Resolvers\PDFLinkResolver;
+use Illuminate\Support\Str;
 use App\Utilities\FileUtility;
+use App\Resolvers\PDFLinkResolver;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 
 final class CommitteeFileController extends Controller
 {
@@ -20,18 +19,8 @@ final class CommitteeFileController extends Controller
 
     public function show(int $committee)
     {
-        $committee = Committee::find($committee, ['id', 'file_path']);
-
-        $pathForView = Cache::rememberForever('committee_file_' . $committee->id, function () use ($committee) {
-            PDFLinkResolver::resolveCommittees(dirname(FileUtility::correctDirectorySeparator($committee->file_path)), base_path());
-            return "/storage/committees/" . FileUtility::changeExtension(basename($committee->file_path));
-        });
-
-        return view('admin.committee.file-displays.show', [
-            'filePathForView' => $pathForView,
-        ]);
-
-
+        $committee = Committee::with('file_link')->find($committee, ['id', 'file_path']);
+        return redirect()->to($committee->file_link->view_link);
     }
 
 

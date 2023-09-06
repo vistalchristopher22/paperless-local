@@ -16,8 +16,7 @@ class CommitteeSeeder extends Seeder
     public function run(): void
     {
         $agendaCount = Agenda::count();
-        foreach (range(1, 10) as $range) {
-            echo "Insert #{$range} committee record\n";
+        foreach (range(1, 20) as $range) {
             $user = User::inRandomOrder()->limit(1)->first()->id;
             $leadCommittee = Agenda::inRandomOrder()->limit(rand(1, $agendaCount))->first()->id;
             $expandedCommittee = Agenda::inRandomOrder()->limit(rand(1, $agendaCount))->first()->id;

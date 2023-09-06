@@ -20,7 +20,8 @@
                 @csrf
                 <div class="form-group">
                     <label for="name" class="form-label">Name</label>
-                    <input id="name" type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                    <input id="name" readonly type="text"
+                           class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
                            name="name" value="{{ old('name') }}">
                     @error('name')
                     <span class="text-danger">{{ $message }}</span>
@@ -81,6 +82,11 @@
             $('select[name="lead_committee"]').select2({
                 placeholder: 'Select Lead Committee',
             });
+
+            $('select[name="lead_committee"]').change(function () {
+                $('#name').val($(this).find('option:selected').text().toUpperCase().replace('COMMITTEE ON', ''));
+            });
+
 
             $('select[name="expanded_committee[]"]').select2({
                 placeholder: 'Select Expanded Committee',

@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <label for="sanggunian">Sanggunian</label>
                     <input type="text" name="sanggunian" id="sanggunian"
-                           value="{{ old('sanggunian', $member->sanggunian) }}"
+                           value="{{ old('sanggunian', (int) $member->sanggunian) }}"
                            class="form-control @error('sanggunian') is-invalid @enderror">
                     @error('sanggunian')
                     <span class="text-danger"> {{ $message }}</span>

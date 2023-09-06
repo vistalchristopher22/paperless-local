@@ -9,6 +9,7 @@
         "barryvdh/laravel-snappy": "^1.0",
         "freshbitsweb/laratables": "^3.0",
         "guzzlehttp/guzzle": "^7.2",
+        "hashids/hashids": "^5.0",
         "laravel/framework": "^10.0",
         "laravel/pennant": "^1.2",
         "laravel/sanctum": "^3.2",

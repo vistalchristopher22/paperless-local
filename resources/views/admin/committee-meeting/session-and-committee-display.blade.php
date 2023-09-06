@@ -350,7 +350,7 @@
                                                                                 @endif
                                                         </span>
                                                                         @endif
-                                                                        <p class="my-2">{{ $schedule->description }}</p>
+                                                                        {{--                                                                        <p class="my-2">{{ $schedule->description }}</p>--}}
                                                                     </h5>
 
 
@@ -367,8 +367,18 @@
                                                                                         data-id="{{ $committee->id }}">
                                             <span class="text-white">
                                                 <span class="count-index">{{ $countIndex }}. </span>
-                                                {{ $committee->lead_committee_information->title }} /
-                                                {{ $committee->expanded_committee_information->title }} & {{ Str::remove('Committee on', $committee?->other_expanded_committee_information?->title) }}
+                                                {{ $committee->lead_committee_information->title }}
+                                                @if(!is_null($committee->expanded_committee_information))
+                                                    <br>
+                                                    <span class="letter-spacing-2" style="margin-left :120px;">
+                                                (<small>
+                                                        {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
+                                                            @if(!is_null($committee?->other_expanded_committee_information))
+                                                                & {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
+                                                            @endif
+                                                </small>)
+                                            </span>
+                                                @endif
                                             </span>
                                                                                         @php $countIndex++; @endphp
                                                                                     </li>
@@ -394,8 +404,18 @@
                                                                                         data-id="{{ $committee->id }}">
                                             <span class="text-white">
                                                 <span class="count-index">{{ $countIndex }}. </span>
-                                                {{ $committee->lead_committee_information->title }} /
-                                                  {{ $committee->expanded_committee_information->title }} & {{ Str::remove('Committee on', $committee?->other_expanded_committee_information?->title) }}
+                                                {{ $committee->lead_committee_information->title }}
+                                                  @if(!is_null($committee->expanded_committee_information))
+                                                    <br>
+                                                    <span class="letter-spacing-2" style="margin-left :120px;">
+                                                (<small>
+                                                        {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
+                                                            @if(!is_null($committee?->other_expanded_committee_information))
+                                                                & {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
+                                                            @endif
+                                                </small>)
+                                            </span>
+                                                @endif
                                             </span>
                                                                                         @php $countIndex++; @endphp
                                                                                     </li>

@@ -119,4 +119,9 @@ final class AgendaRepository extends BaseRepository
     {
         return $this->model->whereIn('id', $agendas)->get();
     }
+
+    public function getDistinctedSanggunian()
+    {
+        return $this->model->distinct('sanggunian')->pluck('sanggunian')->filter()->all();
+    }
 }

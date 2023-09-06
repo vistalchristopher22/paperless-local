@@ -1,8 +1,5 @@
 @extends('layouts.app-2')
 @section('tab-title', 'Create Division')
-@prepend('page-css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
-@endprepend
 @section('content')
     @if (Session::has('success'))
         <div class="card mb-2 bg-success shadow-sm text-white">
@@ -32,19 +29,17 @@
 
                 <div class="form-group">
                     <label for="description" class="form-label">Descrption</label>
-                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="2" id="description"></textarea>
+                    <textarea name="description" class="form-control @error('description') is-invalid @enderror"
+                              rows="2" id="description"></textarea>
                     @error('description')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="select-board" class="form-label">Board Member</label>
-                    <select name="board" class="form-select" id="select-board">
-                        @foreach ($members as $member)
-                            <option value="{{ $member->id }}">{{ $member->fullname }}</option>
-                        @endforeach
-                    </select>
+                    <label for="select-board" class="form-label">Division Chief</label>
+                    <input type="text" class="form-control @error('select-board') is-invalid @enderror"
+                           id="select-board" name="board" value="{{ old('board') }}">
                     @error('board')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -58,12 +53,4 @@
             </form>
         </div>
     </div>
-    @push('page-scripts')
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        <script>
-            $('select[name="board"]').select2({
-                placeholder: 'Select members',
-            });
-        </script>
-    @endpush
 @endsection

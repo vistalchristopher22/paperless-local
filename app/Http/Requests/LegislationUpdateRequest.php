@@ -28,8 +28,8 @@ class LegislationUpdateRequest extends FormRequest
             'classification' => ['required', Rule::in(LegislateType::values())],
             'title' => ['required'],
             'type' => ['required', Rule::exists('types', 'id')],
-            'author' => ['required', Rule::exists('sanggunian_members', 'id')],
-            'sponsors' => ['required'],
+            'author' => ['nullable', Rule::exists('sanggunian_members', 'id')],
+            'sponsors' => ['nullable'],
             'description' => ['required', 'max:200'],
             'attachment' => ['nullable', 'mimes:pdf,doc,docx,txt'],
         ];

@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             UserSeeder::class,
             VenueSeeder::class,
-//            CommitteeSeeder::class,
+            // CommitteeSeeder::class,
             LegislationSeeder::class,
             LegislationTypeSeeder::class,
         ]);

@@ -18,6 +18,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('vice_chairman')->nullable();
             $table->foreign('vice_chairman')->references('id')->on('sanggunian_members');
             $table->unsignedBigInteger('index');
+            $table->unsignedBigInteger('sanggunian')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

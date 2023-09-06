@@ -189,7 +189,6 @@
                     </div>
 
                     <div id="dynamicGuestContainer">
-
                         <div class="form-group mt-2" id="defaultGuestField">
                             <input type="text" class="form-control" placeholder="Enter guest name" name="guests[]">
                         </div>
@@ -244,6 +243,7 @@
 
                 $('#addGuest').hide();
                 $('#dynamicGuestContainer').hide();
+
 
                 const clearAllDynamicGeneratedFields = () => {
                     $('#dynamicGuestContainer').children().each(function () {
@@ -335,9 +335,9 @@
                                     $('#withGuests').attr('checked', true);
                                     $('#addGuest, #dynamicGuestContainer').fadeIn(300);
 
-                                    const guestFields = response.guests.map(guest => `
-                                        <div class="form-group">
-                                            <input type="text" name="guests[]" value="${guest.fullname}" class="form-control mb-2" />
+                                    const guestFields = response.guests.map((guest, index) => `
+                                        <div class="form-group" id="${index === 0 ? 'defaultGuestField' : ''}">
+                                            <input type="text" name="guests[]" value="${guest.fullname}" class="form-control mb-2" placeholder="Enter guest name"  />
                                         </div>
                                     `).join('');
 

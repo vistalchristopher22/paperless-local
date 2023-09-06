@@ -41,7 +41,9 @@
                                    name="title">
                         </div>
 
-                        <div class="mb-3 d-flex flex-column align-items-start justify-content-center cursor-pointer view-order-business-file"  data-file-path="{{ $session->file_path_view }}">
+                        <div
+                            class="mb-3 d-flex flex-column align-items-start justify-content-center cursor-pointer view-order-business-file"
+                            data-file-path="{{ $session->file_path_view }}">
                             <img src="{{ getIconByFileName($session->file_path) }}"
                                  style="width : 150px;"
                                  alt="">
@@ -108,14 +110,31 @@
                     <h6 class="fw-medium h6 text-white card-title">{{ Str::remove('Committee on', $committee?->lead_committee_information?->title) }}</h6>
                 </div>
                 <div class="card-body p-4">
-                    <div class="row">
-                        @php
-                            $fileMap = json_decode($committee->file_map, TRUE);
-                        @endphp
-                        <div class="dd-list">
-                            @include('admin.regular-sessions.treeview', ['data' => $fileMap])
+                    @isset($committee->file_map)
+                        <div class="row">
+                            @php
+                                $fileMap = json_decode($committee->file_map, TRUE);
+                            @endphp
+                            <div class="dd-list">
+                                @include('admin.regular-sessions.treeview', ['data' => $fileMap, 'base_directory' => dirname($scheduleCommittee?->committees?->first()->file_path)])
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="dd" style="max-width:  100%;">
+                            <div class="dd-item cursor-pointer" data-file-path="{{ $committee->file_path }}">
+                                <div class="dd-handle">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ getIconByFileName($committee->file_path) }}"
+                                             style="width : 20px;"
+                                             alt="" class="mx-1 border">
+                                        <span class="fw-medium">
+                                                {{ removeTimestampPrefix(removeFileExtension($committee->file)) }}
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endisset
                 </div>
             </div>
         @endforeach
@@ -127,7 +146,9 @@
             $(document).on('click', '.dd-item', function (e) {
                 e.stopPropagation();
                 let fileName = $(this).attr('data-file-path');
-                alert(fileName);
+                socket.emit("PREVIEW_DOC_FILE", {
+                    file_path : fileName,
+                })
             });
 
             $(document).on('click', '.view-order-business-file', function (e) {

@@ -1,291 +1,505 @@
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-        <link href="{{ asset('/assets-2/css/style_session.css') }}" rel="stylesheet">
-    </head>
-    <body onload="timelaps1();">
-        <div class="container-fluid rectangle1">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-2 mt-2 mb-2">
-                        <img src="{{ asset('/assets-2/images/logo-screen/logo.png') }}" width="25%" alt="">
-                    </div>
-                    <div class="col-8">
-                        <center>
-                            <p class="top-head">
-                                <i>S E S S I O N</i>
-                            </p>
-                        </center>
-                    </div>
-                    <div class="col-2"><br>
-                        <img class="float-end" src="{{ asset('/assets-2/images/logo-screen/logo2.png') }}" width="30%" alt="" style="margin-top: -20px;">
-                    </div>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <link href="{{ asset('/assets-2/css/style_session.css') }}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+            font-size: {{ $fontSize }}vw;
+        }
+
+        .chairman-title {
+            font-size: {{ $chairmanNameFontSize }}vw;
+        }
+
+        .member-title {
+            font-size: {{ $membersNameFontSize }}vw;
+        }
+
+        .bg-primary {
+            background: #347c00 !important;
+            background-color: #347c00 !important;
+        }
+
+        .border-primary {
+            border-color: #347c00 !important;
+        }
+
+        .letter-spacing-1 {
+            letter-spacing: 1px;
+        }
+
+        .letter-spacing-2 {
+            letter-spacing: 2px;
+        }
+
+
+        .text-primary {
+            color: #347c00 !important;
+        }
+
+        .scroll-container {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .scroll-text {
+            white-space: nowrap;
+            animation: scroll {{ $announcementRunningSpeed }}s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .font-weight-600 {
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+<body>
+<div class="d-flex flex-column">
+    {{--    <div class="container-fluid bg-primary d-flex align-items-center justify-content-between p-0">--}}
+    {{--        <img src="{{ asset('/assets-2/images/logo-screen/logo.png') }}" class="img-fluid mx-2" width="5%" alt="">--}}
+    {{--        <span class="text-white fw-bold text-uppercase letter-spacing-1">{{ $data['number'] }} REGULAR SESSION</span>--}}
+    {{--            <img src="{{ asset('/assets-2/images/logo-screen/logo2.png') }}" class="img-fluid mx-2" width="6.5%" alt=""/>--}}
+    {{--    </div>--}}
+    @isset($dataToPresent)
+        <div
+            class="bg-primary text-white  p-0 d-flex justify-content-between text-center"
+            style="border : 4px solid #f2f3f6; border-right :0px; border-left : 0px; border-top: 0px; border-collapse : collapse;">
+            @if($dataToPresent?->schedule?->type == 'session')
+                <div class="mx-2">
+                    <span class="letter-spacing-1">&nbsp;</span>
                 </div>
+            @else
+                <div class="mx-2">
+                <span
+                    class="text-uppercase fw-bold letter-spacing-1 text-truncate">{{Str::limit($dataToPresent?->screen_displayable?->lead_committee_information?->title, 78, '...')  }}</span>
+                </div>
+            @endif
+            <div class="mx-2">
+                <!-- <span id="startTime" class="fw-bold">{{ $dataToPresent?->start_time?->format('h:i A - ') }}</span> -->
+                <span id="elapsed-time" class="fw-bold d-none">00:00:00</span>
             </div>
         </div>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-4 rectangle2">
-                    <p id="dateTime">
-                        
-                    </p>
-                </div>
-                <div class="col-8 rectangle3">
-                    <center>
-                        <p class="venue float-start">
-                            VENUE: TANGGAPAN NG SANGGUNIANG PANLALAWIGAN
-                        </p>
-                    </center>
-                </div>
-            </div>
-        </div>
-        <div class="container-fluid">
-            <center>
-                <table class="table_committee1 mt-2">
-                    <thead>
-                        <tr>
-                            <th class="th1"><center>&nbsp;ONGOING&nbsp;</center></th>
-                            <th class="th2" colspan="3"><center>ORDER OF BUSINESS ORDER OF BUSINESS ORDER OF <br> 27TH REGULAR SESSION</center></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="td1" colspan="2">&nbsp;&nbsp;CHAIRMAN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: HON. MANUEL O. ALAMEDA<br>&nbsp;&nbsp;V-CHAIRMAN : HON. ANTONIO C. AZARCON</td>
-                            <td class="td2"><center>INVITED GUEST</center></td>
-                            <td class="td3"><center>TIME</center></td>
-                        </tr>
-                        <tr>
-                            <td class="td11" colspan="2">&nbsp;&nbsp;<span style="font-size: 20px;">MEMBERS:</span><span class="br" style="margin-bottom: -1px;"></span>
-                                <div class="containers1">
-                                    <ul>
-                                        <li>
-                                            {!! $space1 !!}HON. VALERIO T. MONTESCLAROS, JR.
-                                        </li>
-                                        <li>
-                                            {!! $space1 !!}HON. ANTHONY JOSEPH P. CAÑEDO
-                                        </li>
-                                        <li>
-                                            {!! $space1 !!}HON. GINES RICKY J. SAYAWAN, JR.
-                                        </li>
-                                        <li>
-                                            {!! $space1 !!}HON. GINES RICKY J. SAYAWAN, JR.
-                                        </li>
-                                        <li>
-                                            {!! $space1 !!}HON. GINES RICKY J. SAYAWAN, JR111.
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                            <td class="td12">
-                                <div class="containers2">
-                                    <ul>
-                                        <li>
-                                            {!! $space11 !!}HON. ALEXANDER T. PIMENTEL
-                                        </li>
-                                        <li>
-                                            {!! $space11 !!}HON. JOHN PAUL C. PIMENTEL
-                                        </li>
-                                        <li>
-                                            {!! $space11 !!}HON. VICENTE H. PIMENTEL, III
-                                        </li>
-                                        <li>
-                                            {!! $space11 !!}HON. VICENTE H. PIMENTEL, III
-                                        </li>
-                                        <li>
-                                            {!! $space11 !!}HON. VICENTE H. PIMENTEL, III
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                            <td class="td13"><center>10:00 AM<span class="br" style="margin-bottom: -10px;"></span><span style="font-size: 40px;">00:00</span><span class="br"></span><span style="font-size: 10px;">HOURS&nbsp;&nbsp;&nbsp;&nbsp;MINUTES</span></center></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table class="table_committee2" style="margin-top: -30px;">
-                    <thead>
-                        <tr style="visibility:hidden;">
-                            <th class="th11"><center>ONGOING</center></th>
-                            <th class="th12" colspan="3"><center>ORDE</center></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="td21" colspan="4"><i><center>N&nbsp;&nbsp;E&nbsp;&nbsp;X&nbsp;&nbsp;T&nbsp;&nbsp;. . .</center></i></td>
-                        </tr>
-                        <tr>
-                            <td class="td31"><center>UPCOMING</center></td>
-                            <td class="td32"><center>MEMBERS</center></td>
-                            <td class="td33"><center>INVITED GUEST</center></td>
-                            <td class="td34"><center>DATE & TIME</center></td>
-                        </tr>
-                        <tr>
-                            <td class="td41" rowspan="2"><center>ORDER OF BUSINESS</center></td>
-                            <td class="td42">&nbsp;&nbsp;CHAIRMAN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: HON. MANUEL O. ALAMEDA&nbsp;&nbsp;<br>&nbsp;&nbsp;V-CHAIRMAN : HON. ANTONIO C. AZARCON&nbsp;&nbsp;</td>
-                            <td class="td43" rowspan="2">
-                                <div class="containers3">
-                                    <ul>
-                                        <li>
-                                            {!! $space2 !!}HON. ALEXANDER T. PIMENTEL
-                                        </li>
-                                        <li>
-                                            {!! $space2 !!}HON. JOHN PAUL C. PIMENTEL
-                                        </li>
-                                        <li>
-                                            {!! $space2 !!}HON. VICENTE H. PIMENTEL, IIIsss
-                                        </li>
-                                        <li>
-                                            {!! $space2 !!}HON. ALEXANDER T. PIMENTEL
-                                        </li>
-                                        <li>
-                                            {!! $space2 !!}HON. ALEXANDER T. PIMENTEL
-                                        </li>
-                                        <li>
-                                            {!! $space2 !!}HON. ALEXANDER T. PIMENTEL
-                                        </li>
-                                        <li>
-                                            {!! $space2 !!}HON. ALEXANDER T. PIMENTEL
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                            <td class="td44" rowspan="2"><center>FEBRUARY 29, 2023<br/></center></td>
-                        </tr>
-                        <tr>
-                            <td class="td51" rowspan="2">
-                            &nbsp;&nbsp;<span style="font-size: 15px;">MEMBERS:</span><span class="br" style="margin-bottom: -10px;"></span>
-                            <div class="containers4">
+        {{-- PRESENT DATA --}}
+        <div class="container-fluid d-flex align-items-center justify-content-between p-0">
+            @if($dataToPresent?->schedule?->type != 'session')
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
+                            width="36%"
+                            style="letter-spacing : 1px;">
+                            Chairman
+                        </th>
+                        <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
+                            style="letter-spacing : 1px;">Vice Chairman
+                        </th>
+                        <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
+                            style="letter-spacing : 1px;"> {!! generateHTMLSpace(8) !!} Invited Guest/s {!! generateHTMLSpace(8) !!}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="p-0 text-center align-middle" style="border-right : 5px solid #f2f3f6;" rowspan="4">
+                            <div class="d-flex flex-column justify-content-around align-items-center">
+                                <img
+                                    src="{{ asset('storage/user-images/' .  $dataToPresent?->screen_displayable?->lead_committee_information?->chairman_information?->profile_picture) }}"
+                                    class="mt-1 rounded" width="50%" alt="">
+                                <span
+                                    class="text-uppercase text-primary fw-bold chairman-title">{{ $dataToPresent?->screen_displayable?->lead_committee_information?->chairman_information->fullname }}</span>
+                            </div>
+                        </th>
+                        <td class="align-middle text-center">
+                    <span class="text-uppercase text-primary fw-bold chairman-title">
+                        @if(method_exists($dataToPresent->screen_displayable, 'lead_committee_information'))
+                            {{ $dataToPresent?->screen_displayable?->lead_committee_information?->vice_chairman_information->fullname }}
+                        @endif
+                    </span>
+                        </td>
+                        <td headers="co1 c1" rowspan="4">
+                            <div class="containers2 p-0 mt-1">
                                 <ul>
-                                    <li>
-                                        {!! $space1 !!}HON. VALERO T. MONTESCLAROS
-                                    </li>
-                                    <li>
-                                        {!! $space1 !!}HON. ANTHONY JOSEPH P. CAÑEDO
-                                    </li>
-                                    <li>
-                                        {!! $space1 !!}HON. GINES RICKY J. SAYAWAN, JR.
-                                    </li>
-                                    <li>
-                                        {!! $space1 !!}HON. GINES RICKY J. SAYAWAN, JR.
-                                    </li>
+                                    @if($dataToPresent?->screen_displayable?->committee_invited_guests->count() == 1)
+                                        @foreach($dataToPresent?->screen_displayable?->committee_invited_guests as $guest)
+                                            <li class="font-weight-600">
+                                                {!! generateHTMLSpace(1) !!}{{ $guest->fullname }}
+                                            </li>
+                                            <li class="font-weight-600">
+                                                {!! generateHTMLSpace(1) !!}{{ $guest->fullname }}
+                                            </li>
+                                        @endforeach
+                                    @else
+                                        @foreach($dataToPresent?->screen_displayable?->committee_invited_guests as $key => $guest)
+                                            <li class="text-start font-weight-600 text-truncate">
+                                                {{ $loop->index + 1 }}. {!! generateHTMLSpace(1) !!}{{ $guest->fullname }}
+                                            </li>
+                                        @endforeach
+                                    @endif
                                 </ul>
                             </div>
-                            </td>
-                        </tr>
-                    </tbody>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-uppercase text-center align-middle bg-primary border border-primary text-white letter-spacing-1 p-0">
+                            Members
+                        </th>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" class="p-0 text-truncate" style="border-right : 5px solid #f2f3f6;">
+                            <br>
+                            <div class="containers3">
+                                <ul>
+                                    @if(method_exists($dataToPresent->screen_displayable, 'lead_committee_information'))
+                                        @foreach($dataToPresent?->screen_displayable?->lead_committee_information?->members as $member)
+                                            @foreach($member->sanggunian_member as $m)
+                                                <li>
+                                                    {!! generateHTMLSpace(1) !!}
+                                                    <span class="text-uppercase fw-bold">{{ $m->fullname }}</span>
+                                                    <br>
+                                                </li>
+                                            @endforeach
+                                        @endforeach
+                                    @endif
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
-            </center>
+            @else
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
+                            width="36%"
+                            style="letter-spacing : 1px;">
+                            &nbsp;
+                        </th>
+                        <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
+                            style="letter-spacing : 1px;">
+                            &nbsp;
+                        </th>
+                        <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
+                            style="letter-spacing : 1px;">
+                            &nbsp;
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="p-1 text-center align-middle" colspan="3" rowspan="4">
+                            <div class="d-flex flex-column justify-content-around align-items-center letter-spacing-2 text-primary p-3">
+                                <img src="{{ asset('/assets-2/images/logo-screen/logo2.png') }}" alt="">
+                                <span class="fs-4 fw-bolder">COMMITTEE MEETINGS</span>
+                            </div>
+                        </th>
+                    </tr>
+                </table>
+            @endif
         </div>
-        <div class="body">
-            <div class="marquee" style="background-color:#096AEB;" width="100%">
-                <div class="marquee__group"><b style="font-family:Arial; font-size: 50px; color:white;">{!! $space3 !!}<span class="marque_texts"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 15px;">Powered by: PADMO-ITU</span> <span class="logo_marque">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></b>
-                </div>
+        {{-- END OF PRESENT DATA --}}
+    @endisset
 
-                <div aria-hidden="true" class="marquee__group"><b style="font-family:Arial; font-size: 50px; color:white;">{!! $space3 !!}<span class="marque_texts"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 15px;">Powered by: PADMO-ITU</span> <span class="logo_marque">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></b>
+    @isset($upNextData)
+        <div class="bg-light p-0 d-flex justify-content-between text-center">
+            @if($upNextData?->schedule?->type == 'session')
+                <div class="mx-2">
+                    <span class="letter-spacing-1">&nbsp;</span>
                 </div>
+            @else
+                <div class="mx-2">
+                <span
+                    class="text-uppercase fw-bold letter-spacing-1">NEXT COMMITTEE :  {{ $upNextData?->screen_displayable?->lead_committee_information?->title }}</span>
+                </div>
+            @endif
+        </div>
+
+        <div class="container-fluid mb-0 pb-0 d-flex align-items-center justify-content-between p-0">
+            <table class="table table-bordered">
+                <tr>
+                    <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white" width="25%"
+                        style="letter-spacing : 1px;">
+                        Chairman
+                    </th>
+                    <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
+                        style="letter-spacing : 1px;">Vice Chairman
+                    </th>
+                    <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
+                        style="letter-spacing : 1px;">Without invited Guest/s
+                    </th>
+                </tr>
+                <tr>
+                    <th class="p-0 text-center align-middle" style="border-right : 5px solid #f2f3f6;" rowspan="4">
+                        <div class="d-flex flex-column justify-content-around align-items-center">
+                            <img
+                                src="{{ asset('storage/user-images/' .  $upNextData?->screen_displayable?->lead_committee_information?->chairman_information->profile_picture) }}"
+                                class="mt-1 rounded" width="50%" alt="">
+                            @if($upNextData?->schedule?->type != 'session')
+                                <span
+                                    class="text-uppercase text-primary fw-bold chairman-title">{{ $upNextData?->screen_displayable?->lead_committee_information?->chairman_information->fullname }}</span>
+                            @endif
+                        </div>
+                    </th>
+                    <td class="align-middle text-center">
+                    <span class="text-uppercase text-primary fw-bold chairman-title">
+                        {{ $upNextData?->screen_displayable?->lead_committee_information?->vice_chairman_information->fullname }}
+                    </span>
+                    </td>
+                    <td headers="co1 c1 text-truncate" rowspan="4">
+                        <div class="containers1 p-0 mt-1">
+                            <ul>
+                                @if($upNextData?->screen_displayable?->committee_invited_guests->count() == 1)
+                                    @foreach($upNextData?->screen_displayable?->committee_invited_guests as $guest)
+                                        <li class="font-weight-600 text-truncate">
+                                            {!! generateHTMLSpace(1) !!}{{ $guest->fullname }}
+                                        </li>
+                                        <li class="font-weight-600">
+                                            {!! generateHTMLSpace(1) !!}{{ $guest->fullname }}
+                                        </li>
+                                    @endforeach
+                                @else
+                                    @foreach($upNextData?->screen_displayable?->committee_invited_guests as $guest)
+                                        <li class="text-start font-weight-600">
+                                            {!! generateHTMLSpace(1) !!}{{ Str::limit($guest->fullname, 19, '.') }}
+                                        </li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="text-uppercase text-center align-middle bg-primary border border-primary text-white letter-spacing-1 p-0">
+                        Members
+                    </th>
+                </tr>
+                <tr>
+                    <td rowspan="2" class="p-0 text-truncate" style="border-right : 5px solid #f2f3f6;">
+                        <br>
+                        <div class="containers4">
+                            <ul>
+                                @foreach($upNextData?->screen_displayable?->lead_committee_information?->members as $member)
+                                    @foreach($member->sanggunian_member as $m)
+                                        <li>
+                                            {!! generateHTMLSpace(1) !!}
+                                            <span class="text-uppercase fw-bold">{{ $m->fullname}}</span>
+                                            <br>
+                                        </li>
+                                    @endforeach
+                                @endforeach
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    @endisset
+
+    <div class="bg-primary mt-auto fixed-bottom">
+        <div class="scroll-container">
+            <div class="scroll-text text-white fw-bold">
+                <img src="{{ asset('/assets-2/images/logo-screen/logo.png') }}" class="img-fluid " width="2.5%"
+                     alt="">
+                <span class="text-white fw-bold text-uppercase letter-spacing-1">{{ $data['number'] }} REGULAR SESSION @ {{ $dataToPresent?->schedule?->venue }} | {{ $data?->schedules?->first()?->date_and_time->format('F d, Y') }}<img
+                        src="{{ asset('/assets-2/images/logo-screen/logo2.png') }}" class="img-fluid "
+                        width="3%"
+                        alt=""/> | {{ $announcement }} </span>
+                <span class="text-uppercase"> | Powered by : <img
+                        src="{{ asset('/itu.gif') }}" class="img-fluid"
+                        width="2.5%"
+                        alt=""/> PADMO-ITU </span>
             </div>
         </div>
-        <script>
-            $(".marque_texts").html('ANNOUNCEMENT !!!');
-            function <?php echo "timelaps1"; ?>() {
-                var intsecond = setInterval(fncsecond1, 1000);
-                function fncsecond1() {
-                    var today = new Date();
-                    var mm = today.getMonth();
-                    const mmn = ["JANUARY", "FEBRUARY", "MARCH","APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-                    var dd = today.getDate();
-                    var yy = today.getFullYear();
-                    var h = (12 > today.getHours()) ? today.getHours() : today.getHours() - 12;
-                    h = hour(h);
-                    var m = today.getMinutes();
-                    var s = today.getSeconds();
-                    var amOrPm = (today.getHours() > 11) ? "PM" : "AM";
-                    m = checkTime(m);
-                    s = checkTime(s);
-                    document.getElementById('dateTime').innerHTML =
-                    "DATE: &nbsp;" + mmn[ mm] + " " + dd + ", " + yy + "&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;TIME: " + h + ":" + m + " " + amOrPm;
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"
+        integrity="sha512-AI5A3zIoeRSEEX9z3Vyir8NqSMC1pY7r5h2cE+9J6FLsoEmSSGLFaqMQw8SWvoONXogkfFrkQiJfLeHLz3+HOg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    let socket = io(`http://192.168.1.100:3030/`);
+    let dataToPresent = @json($dataToPresent);
+
+    function formatTwoDigits(value) {
+        return value < 10 ? `0${value}` : value;
+    }
+
+
+    function updateElapsedTime(startTime) {
+        const currentTime = new Date();
+        const startDate = new Date(startTime);
+
+        const elapsedTime = new Date(currentTime - startDate);
+
+        const hours = formatTwoDigits(elapsedTime.getUTCHours());
+        const minutes = formatTwoDigits(elapsedTime.getUTCMinutes());
+        const seconds = formatTwoDigits(elapsedTime.getUTCSeconds());
+
+        document.getElementById('elapsed-time').textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    if (dataToPresent && dataToPresent.start_time && !dataToPresent.end_time) {
+        setInterval(() => updateElapsedTime(dataToPresent.start_time), 1000);
+    }
+
+
+    socket.on('SCREEN_TIMER_START', function () {
+        if (!dataToPresent.start_time) {
+            $.ajax({
+                url: `/api/screen/start/${dataToPresent.id}`,
+                method: 'PUT',
+                success: function (response) {
+                    dataToPresent.start_time = response.start_time;
+                    document.querySelector('#startTime').innerText = moment(response.start_time).format("hh:mm A");
+                    setInterval(() => updateElapsedTime(response.start_time), 1000);
+                },
+                error: function (response) {
+                    location.reload();
                 }
-            }
-            function checkTime(i) {
-                if (10 > i) {i = "0" + i};
-                    return i;
-            }
-            function hour(hh) {
-                if (0 == hh) {hh = "12"};
-                    return hh;
-            }
-        </script>
-        <script>
-            $(function(){
-                var tickerLength = $('.containers1 ul li').length;
-                var tickerHeight = $('.containers1 ul li').outerHeight();
-                $('.containers1 ul li:last-child').prependTo('.containers1 ul');
-                $('.containers1 ul').css('marginTop',-tickerHeight);
-                function moveTop(){
-                    $('.containers1 ul').animate({
-                    top : -tickerHeight
-                    }, 300, function(){
-                    $('.containers1 ul li:first-child').appendTo('.containers1 ul');
-                    $('.containers1 ul').css('top','');
-                    });
-                }
-                setInterval( function(){
-                    moveTop();
-                }, 4000);
             });
-            $(function(){
-                var tickerLength = $('.containers2 ul li').length;
-                var tickerHeight = $('.containers2 ul li').outerHeight();
-                $('.containers2 ul li:last-child').prependTo('.containers2 ul');
-                $('.containers2 ul').css('marginTop',-tickerHeight);
-                function moveTop(){
-                    $('.containers2 ul').animate({
-                    top : -tickerHeight
-                    }, 300, function(){
-                    $('.containers2 ul li:first-child').appendTo('.containers2 ul');
-                    $('.containers2 ul').css('top','');
-                    });
+        }
+    });
+
+    socket.on('SCREEN_TIMER_END', function () {
+        if (dataToPresent.start_time) {
+            $.ajax({
+                url: `/api/screen/end/${dataToPresent.id}`,
+                method: 'PUT',
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (response) {
+                    location.reload();
                 }
-                setInterval( function(){
-                    moveTop();
-                }, 4000);
             });
-            $(function(){
-                var tickerLength = $('.containers3 ul li').length;
-                var tickerHeight = $('.containers3 ul li').outerHeight();
-                $('.containers3 ul li:last-child').prependTo('.containers3 ul');
-                $('.containers3 ul').css('marginTop',-tickerHeight);
-                function moveTop(){
-                    $('.containers3 ul').animate({
-                    top : -tickerHeight
-                    }, 300, function(){
-                    $('.containers3 ul li:first-child').appendTo('.containers3 ul');
-                    $('.containers3 ul').css('top','');
-                    });
-                }
-                setInterval( function(){
-                    moveTop();
-                }, 4000);
+        }
+    });
+
+    socket.on('TRIGGER_REFRESH_ON_CLIENTS', function () {
+        location.reload();
+    });
+</script>
+<script>
+    $(".marque_texts").html();
+
+    function checkTime(i) {
+        if (10 > i) {
+            i = "0" + i
+        }
+        ;
+        return i;
+    }
+
+    function hour(hh) {
+        if (0 == hh) {
+            hh = "12"
+        }
+        ;
+        return hh;
+    }
+</script>
+<script>
+    const INTERVAL_MOVE_UP = 800;
+
+    $(function () {
+        var tickerLength = $('.containers1 ul li').length;
+        var tickerHeight = $('.containers1 ul li').outerHeight();
+        $('.containers1 ul li:last-child').prependTo('.containers1 ul');
+        $('.containers1 ul').css('marginTop', -tickerHeight);
+
+        function moveTop() {
+            $('.containers1 ul').animate({
+                top: -tickerHeight
+            }, 300, function () {
+                $('.containers1 ul li:first-child').appendTo('.containers1 ul');
+                $('.containers1 ul').css('top', '');
             });
-            $(function(){
-                var tickerLength = $('.containers4 ul li').length;
-                var tickerHeight = $('.containers4 ul li').outerHeight();
-                $('.containers4 ul li:last-child').prependTo('.containers4 ul');
-                $('.containers4 ul').css('marginTop',-tickerHeight);
-                function moveTop(){
-                    $('.containers4 ul').animate({
-                    top : -tickerHeight
-                    }, 300, function(){
-                    $('.containers4 ul li:first-child').appendTo('.containers4 ul');
-                    $('.containers4 ul').css('top','');
-                    });
-                }
-                setInterval( function(){
-                    moveTop();
-                }, 4000);
+        }
+
+        setInterval(function () {
+            moveTop();
+        }, 6000);
+    });
+
+    $(function () {
+        // var tickerLength = $('.containers2 ul li').length;
+        // var tickerHeight = $('.containers2 ul li').outerHeight();
+        // $('.containers2 ul li:last-child').prependTo('.containers2 ul');
+        // $('.containers2 ul').css('marginTop', -tickerHeight);
+
+        // function invitedGuestMoveTop() {
+        //     $('.containers2 ul').animate({
+        //         top: -tickerHeight
+        //     }, 300, function () {
+        //         $('.containers2 ul li:first-child').appendTo('.containers2 ul');
+        //         $('.containers2 ul li:first-child').removeClass('bg-primary').removeClass('text-white');
+        //         $('.containers2 ul li:first-child').next().addClass('bg-primary').addClass('text-white');
+        //         $('.containers2 ul').css('top', '');
+        //     });
+        // }
+
+        // socket.on('MOVE_GUEST_TO_TOP', () => {
+        //     invitedGuestMoveTop();
+        // });
+
+        // setInterval(function () {
+            
+        // }, 6000);
+    });
+    $(function () {
+        var tickerLength = $('.containers3 ul li').length;
+        var tickerHeight = $('.containers3 ul li').outerHeight();
+        $('.containers3 ul li:last-child').prependTo('.containers3 ul');
+        $('.containers3 ul').css('marginTop', -tickerHeight);
+
+        function moveTop() {
+            $('.containers3 ul').animate({
+                top: -tickerHeight
+            }, 300, function () {
+                $('.containers3 ul li:first-child').appendTo('.containers3 ul');
+                $('.containers3 ul').css('top', '');
             });
-        </script>
-    </body>
+        }
+
+        setInterval(function () {
+            moveTop();
+        }, 3800);
+    });
+    $(function () {
+        var tickerLength = $('.containers4 ul li').length;
+        var tickerHeight = $('.containers4 ul li').outerHeight();
+        $('.containers4 ul li:last-child').prependTo('.containers4 ul');
+        $('.containers4 ul').css('marginTop', -tickerHeight);
+
+        function moveTop() {
+            $('.containers4 ul').animate({
+                top: -tickerHeight
+            }, 300, function () {
+                $('.containers4 ul li:first-child').appendTo('.containers4 ul');
+                $('.containers4 ul').css('top', '');
+            });
+        }
+
+        setInterval(function () {
+            moveTop();
+        }, 3800);
+    });
+</script>
+</body>
 </html>

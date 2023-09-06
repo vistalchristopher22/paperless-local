@@ -19,12 +19,13 @@ final class UpdateCommittee implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        list($expanded_committee, $other_expanded_committee) = $payload['expanded_committee'];
+        $expanded = $payload['expanded_committee'][0] ?? null;
+        $others = $payload['expanded_committee'][1] ?? null;
         $this->committeeRepository->update($payload['committee'], [
             'name' => $payload['name'],
             'lead_committee' => $payload['lead_committee'],
-            'expanded_committee' => $expanded_committee,
-            'expanded_committee_2' => $other_expanded_committee,
+            'expanded_committee' => $expanded,
+            'expanded_committee_2' => $others,
             'file_path' => $payload['file_path'] ?? $payload['committee']->file_path,
             'status' => (auth()->user()?->account_type === UserTypes::ADMIN->value) ? CommitteeStatus::APPROVED->value : $payload['status'],
         ]);

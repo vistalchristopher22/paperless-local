@@ -84,7 +84,7 @@
     <h1 class="code_error text-center">401</h1>
     <p class="code_text">Sorry but there's no available session or committee meeting for today</p>
     <div class="button_wrapper">
-        <button class="custom-btn btn-1">Go Back</button>
+        <a href="{{ route('login') }}" class="custom-btn btn-1 text-decoration-none">Go Login</a>
     </div>
 </div>
 </body>

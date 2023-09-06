@@ -27,7 +27,7 @@ final class AccountController extends Controller
                     ProfilePicture::class,
                     ChangePassword::class,
                     UpdateUser::class,
-                ])->then(fn($data) => $data);
+                ])->then(fn ($data) => $data);
         });
 
         return back()->with('success', 'Success! account details have been updated.');

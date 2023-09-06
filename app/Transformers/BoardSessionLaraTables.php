@@ -28,6 +28,13 @@ class BoardSessionLaraTables
         };
     }
 
+    public static function laratablesFileLinkRelationQuery()
+    {
+        return function ($query) {
+            $query->with('file_link');
+        };
+    }
+
     public static function laratablesQueryConditions($query)
     {
         if(request()->regularSession !== '*') {

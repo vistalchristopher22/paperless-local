@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\CheckFilename;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,9 +25,9 @@ class UpdateCommitteeRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'file' => ['nullable', 'mimes:doc,docx,pdf'],
+            'file' => ['nullable', new CheckFilename(), 'mimes:docx,pdf'],
             'lead_committee' => ['required', 'exists:agendas,id'],
-            'expanded_committee' => ['required', 'array', 'max:2'],
+            'expanded_committee' => ['nullable', 'array', 'max:2'],
         ];
     }
 }

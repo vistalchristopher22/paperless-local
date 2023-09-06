@@ -26,4 +26,9 @@ class Ordinance extends Model
     {
         return $this->hasOne(SanggunianMember::class, 'id', 'author');
     }
+
+    public function co_author_information()
+    {
+        return $this->hasOne(SanggunianMember::class, 'id', 'co_author');
+    }
 }

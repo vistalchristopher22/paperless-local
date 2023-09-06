@@ -41,6 +41,13 @@ class CommitteeLaraTables
         return view('admin.committee.includes.action', compact('committee'))->render();
     }
 
+    public static function laratablesFileLinkRelationQuery()
+    {
+        return function ($query) {
+            $query->with('file_link');
+        };
+    }
+
     public static function laratablesScheduleRelationQuery()
     {
         return function ($query) {

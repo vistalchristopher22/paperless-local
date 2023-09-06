@@ -1,14 +1,61 @@
 <?php
 
+use App\Contracts\ScreenDisplayRepositoryInterface;
+use App\Enums\ScreenDisplayStatus;
 use App\Http\Controllers\Admin\Api\AgendaMemberController;
 use App\Http\Controllers\Admin\Api\ScheduleController;
 use App\Http\Controllers\Admin\BoardSessionAddScheduleController;
 use App\Http\Controllers\Admin\CommitteeController as AdminCommitteeController;
 use App\Http\Controllers\Api\CommitteeScheduleController;
 use App\Models\Committee;
+use App\Models\ScreenDisplay;
 use App\Models\User;
 use App\Models\UserNotification;
 use Illuminate\Support\Facades\Route;
+
+Route::put('screen/start/{id}', function (int $id) {
+    $screenDisplay = tap(ScreenDisplay::where('status', ScreenDisplayStatus::ON_GOING)->find($id))->update([
+        'start_time' => now(),
+    ]);
+    return response()->json(['start_time' => $screenDisplay->start_time]);
+});
+
+Route::put('screen/end/{id}', function (int $id) {
+    $screenDisplay = tap(ScreenDisplay::with('reference_session')->where('status', ScreenDisplayStatus::ON_GOING)->find($id))->update([
+        'end_time' => now(),
+        'status' => ScreenDisplayStatus::DONE,
+    ]);
+
+    $newOnGoingData = tap(app()->make(ScreenDisplayRepositoryInterface::class)->getUpNextScreenDisplay($screenDisplay->reference_session))?->update([
+        'status' => ScreenDisplayStatus::ON_GOING,
+    ]);
+
+    $upNextData = ScreenDisplay::where('index', ++$newOnGoingData->index)->update([
+        'status' => ScreenDisplayStatus::NEXT,
+    ]);
+
+    return response()->json(['end_time' => $screenDisplay->end_time]);
+});
+
+Route::put('screen/repeat/{id}', function (int $id) {
+    $nextData = ScreenDisplay::where('status', ScreenDisplayStatus::NEXT)->update([
+        'status' => ScreenDisplayStatus::PENDING,
+        'end_time'  => null
+    ]);
+
+    $currentOnGoing = ScreenDisplay::where('status', ScreenDisplayStatus::ON_GOING)->update([
+        'end_time' => null,
+        'status' => ScreenDisplayStatus::NEXT,
+    ]);
+
+    $display = ScreenDisplay::find($id)->update([
+        'status' => ScreenDisplayStatus::ON_GOING,
+        'end_time' => null
+    ]);
+
+    return response()->json(['success' => true]);
+});
+
 
 Route::get('committee-list/{lead?}/{expanded?}/{ids?}/{regularSession?}', [AdminCommitteeController::class, 'list'])->name('committee.list');
 Route::get('agenda-members/{agenda}', [AgendaMemberController::class, 'members']);

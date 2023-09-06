@@ -20,7 +20,9 @@ use App\Pipes\Resolution\UpdateResolution;
 use App\Repositories\LegislationTypeRepository;
 use App\Repositories\SanggunianMemberRepository;
 use App\Transformers\LegislationLaraTables;
+use App\Utilities\FileUtility;
 use Freshbitsweb\Laratables\Laratables;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Pipeline;
 
@@ -47,6 +49,26 @@ final class LegislationController extends Controller
             'types' => $this->legislationTypeRepository->get(),
             'classifications' => LegislateType::cases(),
         ]);
+    }
+
+    public function show(int $id)
+    {
+        $data = Legislation::with(['legislable'])->find($id);
+        $file = $data->legislable->file;
+
+        if (FileUtility::isPDF($file)) {
+            $outputDirectory = FileUtility::publicDirectoryForViewing();
+            return view('admin.legislations.view-attachment', [
+                'viewURL' =>  copy($file, $outputDirectory . '/' . basename($file)),
+            ]);
+        } else {
+            $outputDirectory = FileUtility::publicDirectoryForViewing();
+            $location = FileUtility::correctDirectorySeparator($file);
+            Artisan::call('convert:path "' . FileUtility::isInputDirectoryEscaped($location) . '" --output="' . $outputDirectory . '"');
+            return view('admin.legislations.view-attachment', [
+                'viewURL' => FileUtility::generatePathForViewing($outputDirectory, basename($file)),
+            ]);
+        }
     }
 
 
@@ -77,7 +99,7 @@ final class LegislationController extends Controller
         };
 
         return DB::transaction(function () use ($request, $pipes) {
-            return Pipeline::send($request->all())->through($pipes)->then(fn () => back()->with('success', 'You have successfully added a new legislation'));
+            return Pipeline::send($request->all())->through($pipes)->then(fn() => back()->with('success', 'You have successfully added a new legislation'));
         });
     }
 
@@ -88,7 +110,8 @@ final class LegislationController extends Controller
             'spMembers' => $this->sanggunianMemberRepository->get(),
             'classifications' => LegislateType::values(),
             'types' => $this->legislationTypeRepository->get(),
-            'sponsors' => $legislation->sponsors->pluck('id')->toArray()
+            'sponsors' => $legislation->sponsors->pluck('id')->toArray(),
+            'coAuthor' => $legislation->legislable->co_author,
         ]);
     }
 
@@ -115,7 +138,7 @@ final class LegislationController extends Controller
 
             $request->merge(['attachment' => $request->file('attachment'), 'legislation' => $legislation]);
 
-            return Pipeline::send($request->all())->through($pipes)->then(fn () => back()->with('success', 'You have successfully updated the legislation'));
+            return Pipeline::send($request->all())->through($pipes)->then(fn() => back()->with('success', 'You have successfully updated the legislation'));
         });
     }
 

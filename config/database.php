@@ -81,11 +81,11 @@ return [
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
-            'host' => 'DESKTOP-VFHNFGB',
+            'host' => env('DB_HOST'),
             'port' => env('DB_PORT', '1433'),
             'database' => env('DB_DATABASE', 'Paperless'),
             'username' => env('DB_USERNAME', 'sa'),
-            'password' => env('DB_PASSWORD', 'christopher'),
+            'password' => env('DB_PASSWORD', 'paperless'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,

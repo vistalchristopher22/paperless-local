@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -62,6 +63,11 @@ class Committee extends Model
         return $this->hasOne(Agenda::class, 'id', 'expanded_committee_2');
     }
 
+    public function display(): MorphOne
+    {
+        return $this->morphOne(ScreenDisplay::class, 'screen_displayable');
+    }
+
     public function getFileNameAttribute(): string
     {
         return Str::afterLast(basename($this->file_path), '_');
@@ -70,5 +76,15 @@ class Committee extends Model
     public function getFileAttribute(): string
     {
         return basename($this->file_path);
+    }
+
+    public function file_link()
+    {
+        return $this->hasOne(CommitteeFileLink::class);
+    }
+
+    public function committee_invited_guests()
+    {
+        return $this->hasMany(CommitteeInvitedGuest::class);
     }
 }

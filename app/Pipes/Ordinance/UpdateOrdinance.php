@@ -12,6 +12,7 @@ final class UpdateOrdinance implements IPipeHandler
         $payload['legislation']->legislable->update([
             'type' => $payload['type'],
             'author' => $payload['author'],
+            'co_author' => $payload['co_author'],
             'session_date' => $payload['sessionDate'],
             'file' => $payload['file'] ?? $payload['legislation']->legislable->file,
         ]);

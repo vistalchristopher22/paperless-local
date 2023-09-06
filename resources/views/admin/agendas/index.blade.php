@@ -33,10 +33,20 @@
             </div>
         </div>
     @endif
+    <div class="form-group">
+        <label for="filterBySanggunian" class="form-label">Filter By Sanggunian</label>
+        <select id="filterBySanggunian" class="form-control">
+            <option value="">All</option>
+            @foreach($sanggunians as $sanggunian)
+                <option
+                    value="{{ $sanggunian }}">{{ addNumberSuffix($sanggunian) . " Sanggunian Panlalawigan" }}</option>
+            @endforeach
+        </select>
+    </div>
     <div class="card mb-4">
         <div class="card-header bg-light p-3 justify-content-between align-items-center d-flex">
             <h6 class="card-title h6 text-dark fw-medium">Complete Listing <span class="text-lowercase">of</span>
-                Agendas</h6>
+                Committees</h6>
             <div class="dropdown">
                 <a href="{{ route('agendas.create') }}" class="btn btn-light btn-dark shadow-dark fw-medium">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -45,13 +55,12 @@
                         <path
                             d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                     </svg>
-                    Add New Agenda
+                    Add New Committee
                 </a>
             </div>
         </div>
         <div class="card-body">
 
-            <!-- User Listing Table-->
             <div class="table-responsive">
                 <table class="table table-striped border" id="agendas-table">
                     <thead>
@@ -60,6 +69,7 @@
                         <th class="p-3 text-center bg-light border">Title</th>
                         <th class="p-3 text-center bg-light border">Chairman</th>
                         <th class="p-3 text-center bg-light border">Vice Chairman</th>
+                        <th class="p-3 text-center bg-light border">Sanggunian</th>
                         <th class="p-3 text-center bg-light border">Members</th>
                         <th class="p-3 text-center bg-light border">Actions</th>
                     </tr>
@@ -76,6 +86,13 @@
                             </td>
                             <td class="text-truncate">{{ $agenda->chairman_information->fullname }}</td>
                             <td>{{ $agenda->vice_chairman_information->fullname }}</td>
+                            <td>
+                                @if(!is_null($agenda->sanggunian) && $agenda->sanggunian !== 0)
+                                    {{ addNumberSuffix($agenda->sanggunian) . " Sanggunian Panlalawigan" }}
+                                @else
+                                    <span class="text-center">-</span>
+                                @endif
+                            </td>
                             <td class="text-center">
                                 @if ($agenda->members->count() > 0)
                                     <a class="text-primary fw-medium view-lead-committees cursor-pointer text-decoration-underline"
@@ -151,7 +168,7 @@
                             data: {
                                 id: `${row.node.getAttribute('data-id')}`,
                                 index: `${row.newPosition + 1}`,
-                            },
+                            }
                         });
                     });
 
@@ -159,6 +176,16 @@
                         notyf.success('Re-order successfully!');
                     }
                 });
+
+                $('#filterBySanggunian').on('change', function () {
+                    let selectedSanggunian = $(this).val();
+                    if (selectedSanggunian !== "") {
+                        table.column(4).search(selectedSanggunian).draw();
+                    } else {
+                        table.column(4).search('').draw();
+                    }
+                });
+
             });
         </script>
 

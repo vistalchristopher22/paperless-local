@@ -17,12 +17,15 @@ final class FileUtility
         'docx' => 'pdf',
         'doc' => 'pdf',
         'pdf' => 'pdf',
+        'txt' => 'pdf',
     ];
 
     public const REVERSED_EXTENSION_CONVERT = [
         'xcod' => 'pdf',
         'cod' => 'pdf',
     ];
+
+    public const FILE_SEPARATOR = "_";
 
     public static function generatePathForViewing(string $outputDirectory, string $fileName): string
     {
@@ -98,7 +101,7 @@ final class FileUtility
         $timePrefixRegex = '/^\d{10}_/';
 
         if (!preg_match($timePrefixRegex, $filename)) {
-            $filename = time() . '_' . $filename;
+            $filename =  time() . self::FILE_SEPARATOR . Str::random(4) . self::FILE_SEPARATOR . $filename;
         }
 
         return $filename;
@@ -106,7 +109,7 @@ final class FileUtility
 
     public static function secureName(string $name): string
     {
-        return Str::of($name)->headline()->replace([" ", "/", "\\"], "_")->upper();
+        return Str::of($name)->headline()->replace([" ", "/", "\\"], self::FILE_SEPARATOR)->upper();
     }
 
 
@@ -122,7 +125,7 @@ final class FileUtility
     }
 
 
-    public function isPDF(string $file_path): bool
+    public static function isPDF(string $file_path): bool
     {
         $fileExtension = pathinfo($file_path, PATHINFO_EXTENSION);
 

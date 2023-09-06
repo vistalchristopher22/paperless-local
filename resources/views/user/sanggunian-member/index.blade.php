@@ -55,7 +55,7 @@
                                     </span>
                                 </td>
                                 <td class="text-dark text-center">{{ $member->district }}</td>
-                                <td class="text-dark text-center">{{ $member->sanggunian }}</td>
+                                <td class="text-dark text-center">{{ addNumberSuffix($member->sanggunian) }}</td>
                                 <td class="text-dark text-center">{{ $member->created_at->format('jS M, Y h:i A') }}
                                 </td>
                             </tr>

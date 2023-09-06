@@ -23,6 +23,7 @@ final class UpdateLegislation implements IPipeHandler
 
             $payload['legislation']->update([
                 'no' => $this->legislationRepository->generateUniqueNumber(LegislateType::from($payload['classification'])),
+                'reference_no' => $payload['reference_no'],
                 'title' => $payload['title'],
                 'description' => $payload['description'],
                 'classification' => $payload['classification'],
@@ -36,6 +37,7 @@ final class UpdateLegislation implements IPipeHandler
             $payload['legislation']->update([
                 'no' => $payload['legislation']->no,
                 'title' => $payload['title'],
+                'reference_no' => $payload['reference_no'],
                 'description' => $payload['description'],
                 'classification' => $payload['classification'],
             ]);

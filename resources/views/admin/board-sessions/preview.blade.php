@@ -172,14 +172,13 @@
 </head>
 <body class="">
 <main>
-
     <section class="content" style="background: #f2f3f6; margin:0px;">
         <nav class="site-nav" style="background: white;">
             <ul class="nav" role="menu">
                 <li class="nav-home" role="menuitem"><a
-                        href="{{ route('scheduled.committee-meeting.today', $dates) }}">Committee Meeting</a></li>
+                        href="{{ $committeeUrl }}">Committee Meeting</a></li>
                 <li class="nav-style-guide nav-current" role="menuitem"><a
-                        href="{{ route('board-sessions-published.preview', $dates) }}">Session</a></li>
+                        href="{{ $committeeUrl }}">Session</a></li>
             </ul>
         </nav>
 
@@ -187,11 +186,7 @@
             <embed src="{{ $orderBusinessView }}#zoom=190&toolbar=0" allowfullscreen="true"
                    id="orderBusinessFile" allowtransparency="true" style=" width : 100%;"></embed>
         </div>
-
-
     </section>
-
-
 </main>
 
 <script type="text/javascript" src="{{ asset('scripts.mine280.js?v=0eb413625a') }}"></script>

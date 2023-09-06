@@ -9,6 +9,7 @@
     <style>
         * {
             -webkit-box-sizing: border-box;
+            font-size : 18px;
         }
 
         .d-flex {
@@ -599,6 +600,13 @@
             height: 2px;
             background-color: black;
         }
+
+
+
+        .letter-spacing-2 {
+            letter-spacing : 2px;
+        }
+
     </style>
 </head>
 
@@ -620,7 +628,7 @@
                 @if (
                                      $key === 0 ||
                                          $schedule->date_and_time->format('Y-m-d') !== $grouppedSchedules[$key - 1]->date_and_time->format('Y-m-d'))
-                    <h5 class="fw-medium text-center mt-5">
+                    <h5 class="fw-medium text-center mt-5 letter-spacing-2">
                                 <span class="text-uppercase">
                                     @if ($schedule->date_and_time->hour === 0)
                                         {{ $schedule->date_and_time->format('F d, Y') }}
@@ -628,7 +636,7 @@
                                         {{ $schedule->date_and_time->format('F d, Y @ h:i A') }}
                                     @endif
                                 </span>
-                        <p class="">{{ $schedule->description }}</p>
+                        {{--                        <p class="">{{ $schedule->description }}</p>--}}
                     </h5>
                     @php $countIndex = 1; @endphp
                 @endif
@@ -646,13 +654,20 @@
                                         <span class="text-white">
                                             <span class="count-index">{{ $countIndex }}. </span>
                                             Committee on
-                                            <span class="fw-bold">
-                                                {{ $committee->lead_committee_information->title }}
+                                            <span class="fw-bold letter-spacing-1">
+                                                {{ Str::remove('COMMITTEE ON', Str::upper($committee->lead_committee_information->title)) }}
                                             </span>
-                                            /
-                                            <span class="fw-bold">
-                                                {{ $committee->expanded_committee_information->title }} & {{ Str::remove('Committee on', $committee?->other_expanded_committee_information?->title) }}
+                                            @if(!is_null($committee->expanded_committee_information))
+                                                <br>
+                                                <span class="letter-spacing-2" style="margin-left :120px;">
+                                                (<small>
+                                                        {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
+                                                        @if(!is_null($committee?->other_expanded_committee_information))
+                                                            & {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
+                                                        @endif
+                                                </small>)
                                             </span>
+                                            @endif
                                         </span>
                                     @php $countIndex++; @endphp
                                 </li>
@@ -672,13 +687,20 @@
                                         <span class="text-white">
                                             <span class="count-index">{{ $countIndex }}. </span>
                                             Committee on
-                                            <span class="fw-bold ">
-                                                {{ str_replace('Committee on', '', $committee->lead_committee_information->title) }}
+                                            <span class="fw-bold letter-spacing-1">
+                                                {{ Str::remove('COMMITTEE ON', Str::upper($committee->lead_committee_information->title)) }}
                                             </span>
-                                            /
-                                            <span class="fw-bold ">
-                                                {{ $committee->expanded_committee_information->title }} & {{ Str::remove('Committee on', $committee?->other_expanded_committee_information?->title) }}
+                                            @if(!is_null($committee->expanded_committee_information))
+                                                <br>
+                                                <span class="letter-spacing-2" style="margin-left :120px;">
+                                                (<small>
+                                                        {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
+                                                        @if(!is_null($committee?->other_expanded_committee_information))
+                                                            & {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
+                                                        @endif
+                                                </small>)
                                             </span>
+                                            @endif
                                         </span>
                                     @php $countIndex++; @endphp
                                 </li>

@@ -52,7 +52,7 @@
                     <tr>
                         <th class="text-center text-dark border bg-light">Name</th>
                         <th class="text-center text-dark border bg-light">Description</th>
-                        <th class="text-center text-dark border bg-light">Board Member</th>
+                        <th class="text-center text-dark border bg-light">Division Chief</th>
                         <th class="text-center text-dark border bg-light">Action</th>
                     </tr>
                     </thead>
@@ -61,7 +61,7 @@
                         <tr>
                             <td class="text-center ">{{ $data->name }}</td>
                             <td class="text-center ">{{ $data->description }}</td>
-                            <td class="text-center text-dark ">{{ $data->board_member->fullname }}</td>
+                            <td class="text-center ">{{ $data?->board }}</td></td>
                             <td class="align-middle text-center ">
                                 <form id="deleteDivisionForm" action="{{ route('division.destroy', $data) }}" method="POST">
                                     @method('DELETE')
@@ -74,31 +74,6 @@
                                             data-bs-toggle="tooltip" data-bs-placement="top"><i
                                             class="mdi mdi-trash-can-outline"></i></button>
                                 </form>
-
-                                {{-- <button type="button" class="btn btn-danger text-white" data-bs-toggle="modal" data-bs-target="#deleteBtn">Delete</button>
-
-                                <div class="modal fade" id="deleteBtn" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="staticBackdropLabel">Attention!</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <h3>Are you sure you want to delete this data?</h3>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-
-                                            <form action="{{ route('division.destroy', $data->id ) }}" method="POST">
-                                            @method('DELETE')
-                                            @csrf
-                                                <button type="submit" class="btn btn-primary">Yes</button>
-                                            </form>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
                             </td>
                         </tr>
                     @endforeach

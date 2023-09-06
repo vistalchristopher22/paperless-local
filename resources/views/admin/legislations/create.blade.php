@@ -44,10 +44,21 @@
                         </span>
                     @enderror
                 </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label" id="resolution_no">No.</label>
+                    <input type="text" class="form-control @error('reference_no') is-invalid @enderror" name="reference_no" value="{{ old('reference_no') }}"
+                           id="resolution_no">
+                    @error('reference_no')
+                    <span class="text-danger">
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+
                 <div class="form-group mb-3">
                     <label class="form-label" for="title">Title</label>
-                    <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" id="title"
-                           placeholder="Enter title here" value="{{ old('title') }}">
+                    <textarea name="title" id="title" class="form-control @error('title') is-invalid @enderror" placeholder="Enter title here..">{{ old('title') }}</textarea>
                     @error('title')
                     <span class="text-danger">
                             {{ $message }}
@@ -81,6 +92,7 @@
                 <div class="form-group">
                     <label class="form-label" for="author">Author</label>
                     <select name="author" id="author" class="form-select @error('author') is-invalid @enderror">
+                        <option value="">None</option>
                         @foreach ($spMembers as $sp_member)
                             <option value="{{ $sp_member->id }}">{{ $sp_member->fullname }}</option>
                         @endforeach
@@ -91,10 +103,27 @@
                         </span>
                     @enderror
                 </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="co_author">Co-Author</label>
+                    <select name="co_author" id="co_author" class="form-select @error('co_author') is-invalid @enderror">
+                        <option value="">None</option>
+                        @foreach ($spMembers as $sp_member)
+                            <option value="{{ $sp_member->id }}">{{ $sp_member->fullname }}</option>
+                        @endforeach
+                    </select>
+                    @error('co_author')
+                    <span class="text-danger">
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+
                 <div class="form-group">
                     <label class="form-label" for="sponsors">Sponsors</label>
                     <select name="sponsors[]" multiple id="sponsors"
                             class="form-select @error('sponsors') is-invalid @enderror">
+                        <option value="">None</option>
                         @foreach ($spMembers as $sp_member)
                             <option value="{{ $sp_member->id }}">{{ $sp_member->fullname }}</option>
                         @endforeach
@@ -125,7 +154,7 @@
     @push('page-scripts')
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script>
-            $('select#author, select#sponsors').select2({});
+            $('select#author, select#sponsors, select#co_author').select2({});
         </script>
     @endpush
 @endsection

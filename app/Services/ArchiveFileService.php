@@ -241,6 +241,7 @@ final class ArchiveFileService
 
         return [
             'name' => $fileName,
+            'view_link' => '',
             'type' => $file->getExtension(),
             'size' => formatSizeUnits($file->getSize()),
             'inode' => $file->getInode(),
