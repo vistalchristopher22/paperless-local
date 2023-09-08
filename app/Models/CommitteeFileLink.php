@@ -9,7 +9,7 @@ class CommitteeFileLink extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    
+
     public function committee()
     {
         return $this->belongsTo(Committee::class);

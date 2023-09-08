@@ -118,8 +118,8 @@ final class CommitteeMeetingScheduleController extends Controller
     {
         $dates = explode(separator: "&", string: $dates);
         $records = $this->scheduleRepository->groupedByDate($dates);
-        $groupByDateAndType = $records->map(fn($record) => $record->groupBy(fn($data) => $data->type . " | " . $data->venue));
-        $groupByDateAndType = $groupByDateAndType->sortBy(fn($item, $key) => strtotime($key));
+        $groupByDateAndType = $records->map(fn ($record) => $record->groupBy(fn ($data) => $data->type . " | " . $data->venue));
+        $groupByDateAndType = $groupByDateAndType->sortBy(fn ($item, $key) => strtotime($key));
 
         return view('admin.committee-meeting.session-and-committee-display', [
             'settings' => $this->settingRepository->getByNames('name', ['prepared_by', 'noted_by']),

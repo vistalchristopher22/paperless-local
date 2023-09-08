@@ -7,9 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ReferenceSession;
 use App\Models\SanggunianMember;
 use App\Models\ScreenDisplay;
-use App\Repositories\ReferenceSessionRepository;
 use App\Repositories\SettingRepository;
-use Illuminate\Support\Facades\Cache;
 
 final class ScreenController extends Controller
 {
@@ -34,7 +32,7 @@ final class ScreenController extends Controller
         // $totalDataToDisplay = $totalCommittees + $totalSessions;
 
         // if (ScreenDisplay::where('reference_session_id', $data['id'])->count() !== $totalDataToDisplay) {
-            $this->screenDisplayRepository->updateScreenDisplays($data);
+        $this->screenDisplayRepository->updateScreenDisplays($data);
         // }
 
         $dataToPresent = $this->screenDisplayRepository->getCurrentScreenDisplay($data);

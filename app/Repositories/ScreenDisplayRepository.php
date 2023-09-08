@@ -63,7 +63,7 @@ final class ScreenDisplayRepository extends BaseRepository implements ScreenDisp
                     foreach ($scheduleCommittees->committees as $committee) {
                         if ($committeeIndex === 1) {
                             $status = ScreenDisplayStatus::ON_GOING;
-                        } else if ($committeeIndex == 2) {
+                        } elseif ($committeeIndex == 2) {
                             $status = ScreenDisplayStatus::NEXT;
                         } else {
                             $status = ScreenDisplayStatus::PENDING;
@@ -91,10 +91,10 @@ final class ScreenDisplayRepository extends BaseRepository implements ScreenDisp
                 foreach ($data->scheduleSessions as $scheduleSession) {
                     foreach ($scheduleSession->board_sessions as $boardSession) {
                         $status = ScreenDisplayStatus::DONE;
-                        
+
                         if ($boardSession->id == $onGoing->screen_displayable_id && $onGoing->screen_displayable_type == get_class($boardSession)) {
                             $status = ScreenDisplayStatus::ON_GOING;
-                        } else if ($boardSession->id == $next->screen_displayable_id && $next->screen_displayable_type == get_class($boardSession)) {
+                        } elseif ($boardSession->id == $next->screen_displayable_id && $next->screen_displayable_type == get_class($boardSession)) {
                             $status = ScreenDisplayStatus::NEXT;
                         }
 
@@ -125,7 +125,7 @@ final class ScreenDisplayRepository extends BaseRepository implements ScreenDisp
 
                     if ($committee->id == $onGoing?->screen_displayable_id && $onGoing?->screen_displayable_type == get_class($committee)) {
                         $status = ScreenDisplayStatus::ON_GOING;
-                    } else if ($committee->id == $next?->screen_displayable_id && $next?->screen_displayable_type == get_class($committee)) {
+                    } elseif ($committee->id == $next?->screen_displayable_id && $next?->screen_displayable_type == get_class($committee)) {
                         $status = ScreenDisplayStatus::NEXT;
                     }
 

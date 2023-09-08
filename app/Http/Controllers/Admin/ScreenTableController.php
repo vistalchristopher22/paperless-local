@@ -3,13 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Contracts\ScreenDisplayRepositoryInterface;
-use App\Enums\ScreenDisplayStatus;
 use App\Http\Controllers\Controller;
-use App\Models\ReferenceSession;
 use App\Models\SanggunianMember;
-use App\Models\ScreenDisplay;
 use App\Repositories\SettingRepository;
-use Illuminate\Http\Request;
 
 final class ScreenTableController extends Controller
 {

@@ -1,20 +1,23 @@
 <?php
 
 
-function addNumberSuffix($num): string
+function addNumberSuffix($num = null): string
 {
-    if ($num % 100 >= 11 && $num % 100 <= 13) {
-        return $num . 'th';
-    } else {
-        $lastDigit = $num % 10;
+    if (is_int($num)) {
+        if ($num % 100 >= 11 && $num % 100 <= 13) {
+            return $num . 'th';
+        } else {
+            $lastDigit = $num % 10;
 
-        return match ($lastDigit) {
-            1 => $num . 'st',
-            2 => $num . 'nd',
-            3 => $num . 'rd',
-            default => $num . 'th',
-        };
+            return match ($lastDigit) {
+                1 => $num . 'st',
+                2 => $num . 'nd',
+                3 => $num . 'rd',
+                default => $num . 'th',
+            };
+        }
     }
+    return "";
 }
 
 function formatSizeUnits($bytes): string

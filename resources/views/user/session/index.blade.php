@@ -1,4 +1,4 @@
-{{--@extends('layouts.app-2')--}}
+@extends('layouts.app-2')
 @section('tab-title', 'Ordered Business')
 @prepend('page-css')
     <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
@@ -25,12 +25,8 @@
                 <thead>
                     <tr class="bg-light">
                         <th class="text-center border text-dark">Order Business Title</th>
-                        <th class="text-center border text-dark">Unassigned Title</th>
-                        <th class="text-center border text-dark">Unassigned Content</th>
-                        <th class="text-center border text-dark">Announcement Title</th>
-                        <th class="text-center border text-dark">Announcement Content</th>
                         <th class="text-center border text-dark">Published</th>
-                        <th class="text-center border text-dark">Status</th>
+                        <th class="text-center border text-dark">Filename</th>
                         <th class="text-center border text-dark">Created At</th>
                         <th class="text-center border text-dark">Action</th>
                     </tr>
@@ -55,26 +51,10 @@
                                 return `<span class="text-decoration-underline fw-medium text-capitalize text-primary cursor-pointer btn-view-file" data-path="${row.file_path}" data-id="${row.id}">${data}</span>`;
                             }
                         },
-                        {
-                            data: 'unassigned_title',
-                            name: 'unassigned_title'
-                        },
-                        {
-                            data: 'unassigned_business',
-                            name: 'unassigned_business'
-                        },
-                        {
-                            data: 'announcement_title',
-                            name: 'announcement_title'
-                        },
-                        {
-                            data: 'announcement_content',
-                            name: 'announcement_content'
-                        },
-                        {
+                       {
                             className: 'text-center',
-                            data: 'published',
-                            name: 'published'
+                            data: 'status',
+                            name: 'status'
                         },
                         {
                             className: 'text-center',

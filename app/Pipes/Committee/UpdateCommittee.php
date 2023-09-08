@@ -27,7 +27,7 @@ final class UpdateCommittee implements IPipeHandler
             'expanded_committee' => $expanded,
             'expanded_committee_2' => $others,
             'file_path' => $payload['file_path'] ?? $payload['committee']->file_path,
-            'status' => (auth()->user()?->account_type === UserTypes::ADMIN->value) ? CommitteeStatus::APPROVED->value : $payload['status'],
+            'status' => (auth()->user()?->account_type === UserTypes::ADMIN->value) ? CommitteeStatus::APPROVED->value : $payload['committee']['status'],
         ]);
 
         return $next($payload['committee']);

@@ -27,6 +27,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('locked_by')->nullable();
             $table->unsignedBigInteger('is_published')->nullable()->default(0);
             $table->foreignIdFor(Schedule::class)->nullable();
+            $table->foreignIdFor(User::class, 'submitted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

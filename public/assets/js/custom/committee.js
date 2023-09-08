@@ -1,5 +1,4 @@
-let token = $("meta[name='token']").content;
-
+$('.button-menu-mobile').trigger('click');
 $("#filterByContent").val("");
 String.prototype.limit = function (limit) {
     let text = this.trim();
@@ -23,7 +22,8 @@ let table = $("#committees-table").DataTable({
     columns: [
         {
             name: "name",
-            render: (data) => `<span class="mx-2">${data}</span>`,
+            className : "text-truncate",
+            render: (data) => `<span class="mx-2">${data?.limit(30)}</span>`,
         },
         {
             className: "text-center",

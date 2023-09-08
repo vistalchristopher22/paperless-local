@@ -54,9 +54,16 @@ final class ScheduleRepository extends BaseRepository
     public function deleteSchedule(int $id): mixed
     {
         return DB::transaction(function () use ($id) {
-            $schedule = $this->model->with(['committees', 'regular_session', 'regular_session.schedules'])->find($id);
+            $schedule = $this->model->with(['committees', 'board_sessions', 'regular_session', 'regular_session.schedules'])->find($id);
+
+            if ($schedule->type === 'session') {
+                $this->removeOrderBusinessSchedule($schedule);
+            } else {
+                $this->removeCommitteeSchedule($schedule);
+            }
+
             $isDeleted = $schedule->delete();
-            $this->removeCommitteeSchedule($schedule);
+
             return [
                 'no_of_remaining_set_schedule' => $schedule->regular_session->schedules()->count(),
                 'isDeleted' => $isDeleted,
@@ -65,6 +72,14 @@ final class ScheduleRepository extends BaseRepository
         });
     }
 
+
+    private function removeOrderBusinessSchedule($schedule): void
+    {
+        $schedule->board_sessions->each(function ($boardSession) {
+            $boardSession->schedule_id = null;
+            $boardSession->save();
+        });
+    }
     private function removeCommitteeSchedule($schedule): void
     {
         $schedule->committees->each(function ($committee) {
@@ -80,7 +95,7 @@ final class ScheduleRepository extends BaseRepository
             ->orderBy('with_invited_guest', 'DESC')
             ->orderBy('date_and_time', 'ASC')
             ->get()
-            ->groupBy(fn($record) => $record->date_and_time->format('Y-m-d'));
+            ->groupBy(fn ($record) => $record->date_and_time->format('Y-m-d'));
     }
 
     public function groupedByDateCommittees(array $dates = [])
@@ -91,7 +106,6 @@ final class ScheduleRepository extends BaseRepository
             ->orderBy('date_and_time', 'ASC')
             ->where('type', ScheduleType::MEETING)
             ->get()
-            ->groupBy(fn($record) => $record->date_and_time->format('Y-m-d'));
+            ->groupBy(fn ($record) => $record->date_and_time->format('Y-m-d'));
     }
-
 }

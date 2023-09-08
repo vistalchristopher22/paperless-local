@@ -1,11 +1,11 @@
 <?php
+
 // TODO the file manager rename must be update the committee file also or the committee file links
 
 use App\Models\Setting;
 use App\Models\Schedule;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\ScreenDisplay;
 use App\Utilities\FileUtility;
 use App\Models\ReferenceSession;
 use App\Models\SanggunianMember;
@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TypeController;
-use SebastianBergmann\CodeUnit\FileUnit;
 use App\Models\BoardSessionCommitteeLink;
 use App\Http\Controllers\AccountController;
 use App\Repositories\ScreenDisplayRepository;
@@ -64,7 +63,7 @@ Route::get('home', [HomeController::class, 'index'])->name('home');
 
 Route::get("committee-file/{committee}/download", [CommitteeFileController::class, 'download'])->name('committee-file.download');
 Route::resource('committee-file', CommitteeFileController::class);
-Route::get('board-session/{dates}/publishe/preview', BoardSessionPublishPreviewController::class)->name('board-sessions-published.preview');
+Route::get('board-session/{dates}/published/preview', BoardSessionPublishPreviewController::class)->name('board-sessions-published.preview');
 Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePreviewController::class)->name('committee-meeting-schedule.preview');
 Route::get('schedule/committees/{dates}/print', CommitteeMeetingSchedulePrintController::class)->name('committee-meeting-schedule.print');
 Route::get('archive/list', [FileController::class, 'list'])->name('file.list');
@@ -80,7 +79,7 @@ Route::get('screen-session/{id}', function (int $id) {
     $settingRepository = app()->make(SettingRepository::class);
 
     $data = ReferenceSession::with(['scheduleSessions', 'scheduleCommittees.committees', 'scheduleCommittees.committees.committee_invited_guests', 'scheduleCommittees.committees.lead_committee_information', 'scheduleSessions.board_sessions'])->find($id);
-    
+
 
     $session = $data->scheduleSessions->first();
 

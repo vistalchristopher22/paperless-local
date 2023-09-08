@@ -9,7 +9,7 @@ class BoardSessionCommitteeLink extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    
+
     public function board_session()
     {
         return $this->belongsTo(BoardSession::class);

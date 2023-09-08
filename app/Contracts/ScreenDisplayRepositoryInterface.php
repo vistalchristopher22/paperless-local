@@ -4,7 +4,6 @@ namespace App\Contracts;
 
 use App\Models\ReferenceSession;
 
-
 interface ScreenDisplayRepositoryInterface
 {
     public function updateScreenDisplays(ReferenceSession $data, $totalDataToDisplay);
@@ -15,5 +14,5 @@ interface ScreenDisplayRepositoryInterface
 
     public function getByReferenceSession(int $id);
 
-    public function reOrderDisplay(array $data = []):bool;
+    public function reOrderDisplay(array $data = []): bool;
 }

@@ -20,8 +20,8 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth', 'features:user']], fu
         Route::get('sessions', [SessionController::class, 'list'])->name('sessions.list');
         Route::get('session', [SessionController::class, 'index'])->name('sessions.index');
 
-        Route::get('sanggunian-members', BoardMembersController::class)->name('sanggunian-members.index');
-        Route::get('sanggunian-members/{member}/agendas/show', BoardMembersController::class)->name('sanggunian-member.agendas.show');
+        Route::get('sanggunian-members', [BoardMembersController::class, 'index'])->name('sanggunian-members.index');
+        Route::get('sanggunian-members/{member}/agendas/show', [BoardMembersController::class, 'show'])->name('sanggunian-member.agendas.show');
         Route::get('schedules/{dates}', DisplayScheduleController::class)->name('schedules.index');
         Route::get('schedules/{dates}/print', DisplaySchedulePrintController::class)->name('schedules.print');
     });

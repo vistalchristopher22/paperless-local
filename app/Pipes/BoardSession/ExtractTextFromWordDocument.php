@@ -3,11 +3,8 @@
 namespace App\Pipes\BoardSession;
 
 use Closure;
-use App\Models\Committee;
 use Illuminate\Support\Str;
-use App\Models\BoardSession;
 use App\Utilities\FileUtility;
-use App\Models\CommitteeFileLink;
 use Illuminate\Support\Facades\Http;
 use App\Contracts\Pipes\IPipeHandler;
 use App\Models\BoardSessionCommitteeLink;
@@ -15,8 +12,6 @@ use Illuminate\Support\Facades\Artisan;
 
 final class ExtractTextFromWordDocument implements IPipeHandler
 {
-
-
     public function handle(mixed $payload, Closure $next)
     {
         $escaped_path = escapeshellarg($payload['boardSession']['file_path']);
@@ -25,7 +20,7 @@ final class ExtractTextFromWordDocument implements IPipeHandler
         $filePath = FileUtility::correctDirectorySeparator($payload['boardSession']['file_path']);
         $outputDirectory = FileUtility::publicDirectoryForViewing();
         Artisan::call('convert:path "' . FileUtility::correctDirectorySeparator($filePath) . '" --output="' . $outputDirectory . '"');
-       
+
         $uuid = Str::uuid();
         BoardSessionCommitteeLink::create([
             'uuid' => $uuid,

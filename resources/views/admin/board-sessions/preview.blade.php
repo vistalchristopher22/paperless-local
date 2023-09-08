@@ -179,6 +179,8 @@
                         href="{{ $committeeUrl }}">Committee Meeting</a></li>
                 <li class="nav-style-guide nav-current" role="menuitem"><a
                         href="{{ $committeeUrl }}">Session</a></li>
+                    <li class="nav-current" style="float:right;" role="menuitem"><a
+                            href="{{ route('login') }}">Sign In</a></li>
             </ul>
         </nav>
 

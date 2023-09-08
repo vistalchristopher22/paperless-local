@@ -16,7 +16,7 @@ final class LegislationDownloadController extends Controller
         $file = $data->legislable->file;
 
         if (FileUtility::isPDF($file)) {
-            return Response::download( dirname($file) . DIRECTORY_SEPARATOR . basename(FileUtility::changeExtension($file)), basename($file));
+            return Response::download(dirname($file) . DIRECTORY_SEPARATOR . basename(FileUtility::changeExtension($file)), basename($file));
         } else {
             $outputDirectory = FileUtility::publicDirectoryForViewing();
             $location = FileUtility::correctDirectorySeparator($file);

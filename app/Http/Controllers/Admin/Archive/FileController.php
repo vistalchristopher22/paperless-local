@@ -69,7 +69,7 @@ final class FileController extends Controller
 
             if(!FileUtility::isPDF($filePath)) {
                 Artisan::call('convert:path "' . FileUtility::correctDirectorySeparator($filePath) . '" --output="' . $outputDirectory . '"');
-            }  else {
+            } else {
                 copy($filePath, $outputDirectory . basename(FileUtility::changeExtension($filePath)));
             }
 

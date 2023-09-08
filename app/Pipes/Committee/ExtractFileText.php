@@ -23,7 +23,7 @@ final class ExtractFileText implements IPipeHandler
         $filePath = FileUtility::correctDirectorySeparator($payload['file_path']);
         $outputDirectory = FileUtility::publicDirectoryForViewing();
         Artisan::call('convert:path "' . FileUtility::correctDirectorySeparator($filePath) . '" --output="' . $outputDirectory . '"');
-       
+
         $uuid = Str::uuid();
 
         CommitteeFileLink::create([

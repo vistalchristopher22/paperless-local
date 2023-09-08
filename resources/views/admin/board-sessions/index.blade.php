@@ -160,7 +160,7 @@
                             className: 'border text-center',
                             name: 'file_path',
                             render: (data) => {
-                                let fileName = data.split(["/"]).pop();
+                                let fileName = data.split(["\\"]).pop();
                                 return removeTimestampPrefix(fileName);
                             }
                         },
@@ -178,7 +178,6 @@
 
                 $('#availableSession').change(function () {
                     tableUrl = route('board-sessions.list', $(this).val());
-                    // table.ajax.url(`/api/committee-list/${lead}/${expanded}/*/${this.value}`).load(null, false);
                     table.ajax.url(tableUrl).load(null, false);
                 });
 

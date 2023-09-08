@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Committee;
-use Illuminate\Support\Str;
 use App\Utilities\FileUtility;
-use App\Resolvers\PDFLinkResolver;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Response;
 
 final class CommitteeFileController extends Controller

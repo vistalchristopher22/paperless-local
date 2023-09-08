@@ -3,14 +3,9 @@
 namespace App\Pipes\Committee;
 
 use Closure;
-use App\Models\FileLinks;
-use Illuminate\Support\Str;
-use App\Utilities\FileUtility;
 use App\Services\CommitteeService;
 use App\Services\UploadFileService;
 use App\Contracts\Pipes\IPipeHandler;
-use App\Models\CommitteeFileLink;
-use Illuminate\Support\Facades\Artisan;
 
 final class UploadFile implements IPipeHandler
 {

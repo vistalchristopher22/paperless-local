@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Contracts\ScreenDisplayRepositoryInterface;
 use App\Enums\ScreenDisplayStatus;
 use App\Http\Controllers\Controller;
-use App\Models\ScreenDisplay;
 use App\Repositories\SettingRepository;
 use Illuminate\Http\Request;
-
 
 final class ScreenDisplayController extends Controller
 {
@@ -19,7 +17,7 @@ final class ScreenDisplayController extends Controller
     public function show(int $id)
     {
         return view('admin.screen-display.index', [
-            'data' => $this->screenDisplayRepository->getByReferenceSession($id)->sortBy(fn($model) => array_search($model->status, ScreenDisplayStatus::values()))->values(),
+            'data' => $this->screenDisplayRepository->getByReferenceSession($id)->sortBy(fn ($model) => array_search($model->status, ScreenDisplayStatus::values()))->values(),
             'settingRepository' => $this->settingRepository,
         ]);
     }

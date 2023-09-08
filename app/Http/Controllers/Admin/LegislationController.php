@@ -99,7 +99,7 @@ final class LegislationController extends Controller
         };
 
         return DB::transaction(function () use ($request, $pipes) {
-            return Pipeline::send($request->all())->through($pipes)->then(fn() => back()->with('success', 'You have successfully added a new legislation'));
+            return Pipeline::send($request->all())->through($pipes)->then(fn () => back()->with('success', 'You have successfully added a new legislation'));
         });
     }
 
@@ -138,7 +138,7 @@ final class LegislationController extends Controller
 
             $request->merge(['attachment' => $request->file('attachment'), 'legislation' => $legislation]);
 
-            return Pipeline::send($request->all())->through($pipes)->then(fn() => back()->with('success', 'You have successfully updated the legislation'));
+            return Pipeline::send($request->all())->through($pipes)->then(fn () => back()->with('success', 'You have successfully updated the legislation'));
         });
     }
 

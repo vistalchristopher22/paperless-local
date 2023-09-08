@@ -16,8 +16,8 @@ return new class () extends Migration {
             $table->string('division_code')->nullable();
             $table->string('description');
             $table->string('board');
-//            $table->unsignedBigInteger('board')->nullable();
-//            $table->foreign('board')->references('id')->on('sanggunian_members');
+            //            $table->unsignedBigInteger('board')->nullable();
+            //            $table->foreign('board')->references('id')->on('sanggunian_members');
             $table->softDeletes();
             $table->timestamps();
         });

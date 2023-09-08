@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 final class CommitteeInvitedGuestController extends Controller
 {
     public function create(int $id)
-    {   
+    {
         return view('admin.committee.invited-guest.create', [
             'committee' => Committee::with(['lead_committee_information'])->find($id),
         ]);

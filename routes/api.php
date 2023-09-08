@@ -8,7 +8,6 @@ use App\Models\UserNotification;
 use App\Enums\ScreenDisplayStatus;
 use Illuminate\Support\Facades\Route;
 use App\Contracts\ScreenDisplayRepositoryInterface;
-use App\Enums\ScheduleType;
 use App\Http\Controllers\Admin\Api\ScheduleController;
 use App\Http\Controllers\Api\CommitteeScheduleController;
 use App\Http\Controllers\Admin\Api\AgendaMemberController;

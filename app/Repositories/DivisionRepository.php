@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Division;
-use Illuminate\Support\Collection;
 
 final class DivisionRepository extends BaseRepository
 {

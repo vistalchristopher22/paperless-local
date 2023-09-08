@@ -6,10 +6,7 @@ use App\Contracts\ScreenDisplayRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Models\ReferenceSession;
 use App\Models\SanggunianMember;
-use App\Models\ScreenDisplay;
-use App\Repositories\ReferenceSessionRepository;
 use App\Repositories\SettingRepository;
-use Illuminate\Support\Facades\Cache;
 
 final class ScreenController extends Controller
 {

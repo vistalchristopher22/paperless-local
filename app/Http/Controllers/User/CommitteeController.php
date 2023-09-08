@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCommitteeRequest;
-use App\Http\Requests\UpdateCommitteeRequest;
 use App\Models\Committee;
+use App\Models\ReferenceSession;
+use Illuminate\Support\Facades\DB;
+use App\Pipes\Committee\UploadFile;
+use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
+use App\Pipes\Committee\GetCommittee;
+use App\Repositories\AgendaRepository;
 use App\Pipes\Committee\CreateCommittee;
 use App\Pipes\Committee\ExtractFileText;
-use App\Pipes\Committee\GetCommittee;
-use App\Pipes\Committee\MongoStoreInCollection;
 use App\Pipes\Committee\UpdateCommittee;
-use App\Pipes\Committee\UploadFile;
+use Illuminate\Support\Facades\Pipeline;
+use App\Repositories\CommitteeRepository;
+use App\Http\Requests\StoreCommitteeRequest;
+use App\Http\Requests\UpdateCommitteeRequest;
+use App\Pipes\Committee\MongoStoreInCollection;
 use App\Pipes\Committee\User\DatatablesWrapper;
 use App\Pipes\Notification\NotifyCreatedCommittee;
 use App\Pipes\Notification\NotifyUpdatedCommittee;
-use App\Repositories\AgendaRepository;
-use App\Repositories\CommitteeRepository;
-use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Pipeline;
 
 final class CommitteeController extends Controller
 {
@@ -38,8 +39,11 @@ final class CommitteeController extends Controller
 
     public function index()
     {
+        $availableRegularSessions = ReferenceSession::has('scheduleCommittees')->get()->unique('number');
+
         return view('user.committee.index', [
             'agendas' => $this->agendaRepository->get(),
+            'availableRegularSessions' => $availableRegularSessions,
         ]);
     }
 
@@ -59,7 +63,6 @@ final class CommitteeController extends Controller
                     UploadFile::class,
                     CreateCommittee::class,
                     ExtractFileText::class,
-                    NotifyCreatedCommittee::class,
                     MongoStoreInCollection::class,
                 ])->then(fn ($data) => $data);
 
@@ -83,7 +86,6 @@ final class CommitteeController extends Controller
                     UploadFile::class,
                     UpdateCommittee::class,
                     ExtractFileText::class,
-                    NotifyUpdatedCommittee::class,
                 ])->then(fn ($data) => $data);
 
             return back()->with('success', 'Committee updated successfully.');

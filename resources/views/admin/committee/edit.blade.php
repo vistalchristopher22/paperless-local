@@ -22,7 +22,7 @@
 
                 <div class="form-group">
                     <label>Name</label>
-                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" readonly
                            value="{{ old('name', $committee->name) }}">
                     @error('name')
                     <span class="text-danger">{{ $message }}</span>
@@ -100,6 +100,10 @@
             $('select[name="expanded_committee[]"]').select2({
                 placeholder: 'Select Expanded Committee',
                 maximumSelectionLength: 2,
+            });
+
+              $('select[name="lead_committee"]').change(function () {
+                $('#name').val($(this).find('option:selected').text().toUpperCase().replace('COMMITTEE ON', ''));
             });
 
             document.addEventListener('click', event => {

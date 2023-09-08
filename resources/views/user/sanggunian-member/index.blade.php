@@ -19,8 +19,8 @@
     @endif
 
     <div class="card mb-4 ">
-        <div class="card-header justify-content-between align-items-center d-flex bg-dark">
-            <h6 class="card-title m-0 h6 text-white">Sangguniang Panlalawigan Members</h6>
+        <div class="card-header justify-content-between align-items-center d-flex bg-light p-3">
+            <h6 class="card-title m-0 h6 fw-medium">Sangguniang Panlalawigan Members</h6>
         </div>
         <div class="card-body">
 
@@ -46,9 +46,9 @@
                                             width="50px">
                                     </a>
                                 </td>
-                                <td class="text-dark fw-medium">
+                                <td class="text-dark fw-medium text-truncate">
                                     <span class="mx-5">
-                                        <a href="javascript::void(0)" class="text-decoration-underline btn-view-details"
+                                        <a href="javascript::void(0)" class="text-decoration-underline btn-view-details text-primary"
                                             data-bs-toggle="offcanvas" data-bs-target="#offCanvasAgendas"
                                             aria-controls="offCanvasAgendas" data-name="{{ $member->fullname }}"
                                             data-id="{{ $member->id }}">{{ $member->fullname }}</a>
@@ -93,7 +93,13 @@
         <script src="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.js') }}"></script>
         <script>
             $(document).ready(function() {
-                $('#members-table').DataTable({});
+                $('#members-table').DataTable({
+                    "lengthMenu": [
+                        [10, 25, 50, -1],
+                        [10, 25, 50, "All"]
+                    ],
+                    "pageLength": -1
+                });
 
                 $(document).on('click', '.btn-view-details', function() {
                     let id = $(this).attr('data-id');

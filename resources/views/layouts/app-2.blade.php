@@ -190,12 +190,6 @@
                         <a href="{{ route('user.sanggunian-members.index') }}"><i data-feather="users"
                                 class="align-self-center menu-icon"></i><span>Sanggunian Members</span></a>
                     </li>
-                    <li>
-                        <a href="{{ route('user.divisions.index') }}">
-                            <i class="mdi mdi-office-building "></i>
-                            Divisions
-                        </a>
-                    </li>
                 @endfeature
 
 
@@ -209,15 +203,15 @@
                             <span>Committees</span></a>
                     </li>
                     <li>
-                        <a href="{{ route('user.agendas.index') }}">
-                            <i class=" mdi mdi-table "></i>
-                            Chairmanship
-                        </a>
-                    </li>
-                    <li>
                         <a href="{{ route('user.sessions.index') }}">
                             <i class="mdi mdi-hospital-building"></i>
                             Order of Business
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('user.agendas.index') }}">
+                            <i class=" mdi mdi-table "></i>
+                            Chairmanship
                         </a>
                     </li>
                 @endfeature

@@ -16,6 +16,7 @@ class CommitteeRepository extends BaseRepository
     {
         return $this->model->with(['lead_committee_information', 'expanded_committee_information', 'submitted'])
             ->whereNull('deleted_at')
+            ->orderBy('created_at', 'DESC')
             ->get($columns);
     }
 
