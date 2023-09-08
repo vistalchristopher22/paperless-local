@@ -8,8 +8,10 @@ use App\Http\Requests\UpdateCommitteeRequest;
 use App\Models\Committee;
 use App\Models\ReferenceSession;
 use App\Pipes\Committee\CreateCommittee;
+use App\Pipes\Committee\DeleteCommittee;
 use App\Pipes\Committee\ExtractFileText;
 use App\Pipes\Committee\MongoStoreInCollection;
+use App\Pipes\Committee\UnlinkFile;
 use App\Pipes\Committee\UpdateCommittee;
 use App\Pipes\Committee\UploadFile;
 use App\Repositories\AgendaRepository;
@@ -85,6 +87,18 @@ final class CommitteeController extends Controller
                 ])->then(fn ($data) => $data);
 
             return back()->with('success', 'Committee updated successfully.');
+        });
+    }
+
+    public function destroy(Committee $committee)
+    {
+        return DB::transaction(function () use ($committee) {
+            Pipeline::send($committee)
+                ->through([
+                    DeleteCommittee::class,
+                    UnlinkFile::class,
+                ])->then(fn ($data) => $data);
+            return back()->with('success', 'Committee deleted successfully.');
         });
     }
 }

@@ -15,6 +15,7 @@ let table = $("#committees-table").DataTable({
         url: "/api/committee-list/*/*/*/*",
     },
     processing: true,
+    ordering: false,
     language: {
         processing:
             '<div class="spinner-border text-info" role="status"></div>',
@@ -22,7 +23,7 @@ let table = $("#committees-table").DataTable({
     columns: [
         {
             name: "name",
-            render: (data) => `<span class="">${data}</span>`,
+            render: (data) => `<span class="mx-2">${data}</span>`,
         },
         {
             className: "text-center",
@@ -92,6 +93,26 @@ searchInput.off().on("keyup", function () {
         table.search($(this).val()).draw();
     }, delay);
 });
+
+$(document).on("click", ".btn-delete-committee", function () {
+    let id = $(this).attr("data-id");
+    alertify
+        .confirm(
+            "Important Message",
+            "Are you sure to delete this committee record?",
+            function () {
+                $(`#deleteCommitteeForm-${id}`).submit();
+            },
+            function () {}
+        )
+        .set({
+            labels: {
+                ok: "Proceed",
+                cancel: "Cancel",
+            },
+        });
+});
+
 $("#filterLeadCommitee").change(function () {
     let lead = $("#filterLeadCommitee").val();
     let expanded = $("#filterExpandedCommittee").val();
@@ -320,6 +341,4 @@ document.addEventListener("click", (event) => {
         document.querySelector("#viewLinkText").innerHTML = viewLink;
         $("#viewLink").modal("toggle");
     }
-
-  
 });

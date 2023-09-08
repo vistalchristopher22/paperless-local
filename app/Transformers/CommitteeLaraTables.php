@@ -96,6 +96,6 @@ class CommitteeLaraTables
         }
 
 
-        return $query;
+        return $query->orderBy('created_at', 'DESC');
     }
 }
