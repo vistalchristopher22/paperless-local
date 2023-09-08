@@ -8,7 +8,6 @@ use App\Enums\ScreenDisplayStatus;
 use App\Models\ReferenceSession;
 use App\Models\ScreenDisplay;
 use Exception;
-use Illuminate\Support\Facades\DB;
 
 final class ScreenDisplayRepository extends BaseRepository implements ScreenDisplayRepositoryInterface
 {
@@ -20,32 +19,134 @@ final class ScreenDisplayRepository extends BaseRepository implements ScreenDisp
     /**
      * @throws Exception
      */
-    public function updateScreenDisplays(ReferenceSession $data)
+    public function updateScreenDisplays(ReferenceSession $data, $totalDataToDisplay)
     {
-        DB::beginTransaction();
 
-        try {
-            // Update ScreenDisplays for board sessions
-            foreach ($data->scheduleSessions as $scheduleSession) {
-                foreach ($scheduleSession->board_sessions as $key => $boardSession) {
-                    $this->updateOrCreateScreenDisplay($data, $scheduleSession->id, $boardSession, ScheduleType::SESSION, ScreenDisplayStatus::ON_GOING, $key + 1);
-                    $key++;
+        // get the ongoing
+        $onGoing = $this->model::where([
+            'reference_session_id' => $data['id'],
+            'status' => ScreenDisplayStatus::ON_GOING,
+        ])->first();
+
+        // get the next
+        $next = $this->model::where([
+            'reference_session_id' => $data['id'],
+            'status' => ScreenDisplayStatus::NEXT,
+        ])->first();
+
+        // get the done
+        $doneIds = $this->model::where([
+            'reference_session_id' => $data['id'],
+            'status' => ScreenDisplayStatus::DONE,
+        ])->get();
+
+        if ($onGoing?->count() == 0 && $next?->count() == 0 && $doneIds?->count() == 0) {
+            $key = 1;
+            if ($data->scheduleSessions->count() !== 0) {
+                foreach ($data->scheduleSessions as $scheduleSession) {
+                    foreach ($scheduleSession->board_sessions as $boardSession) {
+                        $this->updateOrCreateScreenDisplay($data, $scheduleSession->id, $boardSession, ScheduleType::SESSION, ScreenDisplayStatus::ON_GOING, $key);
+                        $key++;
+                    }
+                }
+
+                foreach ($data->scheduleCommittees as $scheduleCommittees) {
+                    foreach ($scheduleCommittees->committees as $committee) {
+                        $status = ($key == 2) ? ScreenDisplayStatus::NEXT : ScreenDisplayStatus::PENDING;
+                        $this->updateOrCreateScreenDisplay($data, $scheduleCommittees->id, $committee, ScheduleType::MEETING, $status, $key);
+                        $key++;
+                    }
+                }
+            } else {
+                $committeeIndex = 1;
+                foreach ($data->scheduleCommittees as $scheduleCommittees) {
+                    foreach ($scheduleCommittees->committees as $committee) {
+                        if ($committeeIndex === 1) {
+                            $status = ScreenDisplayStatus::ON_GOING;
+                        } else if ($committeeIndex == 2) {
+                            $status = ScreenDisplayStatus::NEXT;
+                        } else {
+                            $status = ScreenDisplayStatus::PENDING;
+                        }
+                        $this->model::create([
+                            'reference_session_id' => $data['id'],
+                            'schedule_id' => $scheduleCommittees->id,
+                            'screen_displayable_id' => $committee->id,
+                            'screen_displayable_type' => get_class($committee),
+                            'index' => $committeeIndex,
+                            'type' => ScheduleType::MEETING,
+                            'status' => $status,
+                        ]);
+                        $committeeIndex++;
+                    }
+                }
+            }
+        } else {
+            $this->model::where([
+                'reference_session_id' => $data['id'],
+            ])->delete();
+
+            $key = 1;
+            if ($data->scheduleSessions->count() !== 0) {
+                foreach ($data->scheduleSessions as $scheduleSession) {
+                    foreach ($scheduleSession->board_sessions as $boardSession) {
+                        $status = ScreenDisplayStatus::DONE;
+                        
+                        if ($boardSession->id == $onGoing->screen_displayable_id && $onGoing->screen_displayable_type == get_class($boardSession)) {
+                            $status = ScreenDisplayStatus::ON_GOING;
+                        } else if ($boardSession->id == $next->screen_displayable_id && $next->screen_displayable_type == get_class($boardSession)) {
+                            $status = ScreenDisplayStatus::NEXT;
+                        }
+
+                        $doneIds->each(function ($doneRecord) use ($boardSession, &$status) {
+                            if ($boardSession->id == $doneRecord->screen_displayable_id && $doneRecord->screen_displayable_type == get_class($boardSession)) {
+                                $status = ScreenDisplayStatus::DONE;
+                            }
+                        });
+
+                        $this->model::create([
+                            'reference_session_id' => $data['id'],
+                            'schedule_id' => $scheduleSession->id,
+                            'screen_displayable_id' => $boardSession->id,
+                            'screen_displayable_type' => get_class($boardSession),
+                            'index' => $key,
+                            'type' => ScheduleType::SESSION,
+                            'status' => $status,
+                        ]);
+
+                        $key++;
+                    }
                 }
             }
 
-            // Update ScreenDisplays for committees
             foreach ($data->scheduleCommittees as $scheduleCommittees) {
                 foreach ($scheduleCommittees->committees as $committee) {
-                    $status = ($key == 1) ? ScreenDisplayStatus::NEXT : ScreenDisplayStatus::PENDING;
-                    $this->updateOrCreateScreenDisplay($data, $scheduleCommittees->id, $committee, ScheduleType::MEETING, $status, $key + 1);
+                    $status = ScreenDisplayStatus::PENDING;
+
+                    if ($committee->id == $onGoing?->screen_displayable_id && $onGoing?->screen_displayable_type == get_class($committee)) {
+                        $status = ScreenDisplayStatus::ON_GOING;
+                    } else if ($committee->id == $next?->screen_displayable_id && $next?->screen_displayable_type == get_class($committee)) {
+                        $status = ScreenDisplayStatus::NEXT;
+                    }
+
+                    $doneIds->each(function ($doneRecord) use ($committee, &$status) {
+                        if ($committee->id == $doneRecord->screen_displayable_id && $doneRecord?->screen_displayable_type == get_class($committee)) {
+                            $status = ScreenDisplayStatus::DONE;
+                        }
+                    });
+
+                    $this->model::create([
+                        'reference_session_id' => $data['id'],
+                        'schedule_id' => $scheduleCommittees->id,
+                        'screen_displayable_id' => $committee->id,
+                        'screen_displayable_type' => get_class($committee),
+                        'index' => $key,
+                        'type' => ScheduleType::MEETING,
+                        'status' => $status,
+                    ]);
                     $key++;
                 }
             }
-
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
         }
     }
 
@@ -102,14 +203,7 @@ final class ScreenDisplayRepository extends BaseRepository implements ScreenDisp
 
     private function updateOrCreateScreenDisplay(ReferenceSession $data, $scheduleId, $displayable, $type, $status, $index)
     {
-        $this->model::updateOrCreate([
-            'reference_session_id' => $data['id'],
-            'schedule_id' => $scheduleId,
-            'screen_displayable_id' => $displayable->id,
-            'screen_displayable_type' => get_class($displayable),
-            'index' => $index,
-            'status' => $status,
-        ], [
+        $this->model::create([
             'reference_session_id' => $data['id'],
             'schedule_id' => $scheduleId,
             'screen_displayable_id' => $displayable->id,

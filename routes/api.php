@@ -1,17 +1,19 @@
 <?php
 
-use App\Contracts\ScreenDisplayRepositoryInterface;
+use App\Models\User;
+use App\Models\Committee;
+use Illuminate\Http\Request;
+use App\Models\ScreenDisplay;
+use App\Models\UserNotification;
 use App\Enums\ScreenDisplayStatus;
-use App\Http\Controllers\Admin\Api\AgendaMemberController;
+use Illuminate\Support\Facades\Route;
+use App\Contracts\ScreenDisplayRepositoryInterface;
+use App\Enums\ScheduleType;
 use App\Http\Controllers\Admin\Api\ScheduleController;
+use App\Http\Controllers\Api\CommitteeScheduleController;
+use App\Http\Controllers\Admin\Api\AgendaMemberController;
 use App\Http\Controllers\Admin\BoardSessionAddScheduleController;
 use App\Http\Controllers\Admin\CommitteeController as AdminCommitteeController;
-use App\Http\Controllers\Api\CommitteeScheduleController;
-use App\Models\Committee;
-use App\Models\ScreenDisplay;
-use App\Models\User;
-use App\Models\UserNotification;
-use Illuminate\Support\Facades\Route;
 
 Route::put('screen/start/{id}', function (int $id) {
     $screenDisplay = tap(ScreenDisplay::where('status', ScreenDisplayStatus::ON_GOING)->find($id))->update([
@@ -38,19 +40,62 @@ Route::put('screen/end/{id}', function (int $id) {
 });
 
 Route::put('screen/repeat/{id}', function (int $id) {
-    $nextData = ScreenDisplay::where('status', ScreenDisplayStatus::NEXT)->update([
-        'status' => ScreenDisplayStatus::PENDING,
-        'end_time'  => null
-    ]);
+    dd('no function in repeat');
+    // $nextData = ScreenDisplay::where('status', ScreenDisplayStatus::NEXT)->update([
+    //     'status' => ScreenDisplayStatus::PENDING,
+    //     'end_time'  => null
+    // ]);
 
-    $currentOnGoing = ScreenDisplay::where('status', ScreenDisplayStatus::ON_GOING)->update([
-        'end_time' => null,
-        'status' => ScreenDisplayStatus::NEXT,
-    ]);
+    // $currentOnGoing = ScreenDisplay::where('status', ScreenDisplayStatus::ON_GOING)->update([
+    //     'end_time' => null,
+    //     'status' => ScreenDisplayStatus::NEXT,
+    // ]);
 
-    $display = ScreenDisplay::find($id)->update([
+    // $display = ScreenDisplay::find($id)->update([
+    //     'status' => ScreenDisplayStatus::ON_GOING,
+    //     'end_time' => null
+    // ]);
+
+    return response()->json(['success' => true]);
+});
+
+Route::put('screen/current', function (Request $request) {
+
+    $onGoing = ScreenDisplay::where([
+        'reference_session_id' => $request->reference_session_id,
         'status' => ScreenDisplayStatus::ON_GOING,
-        'end_time' => null
+    ])->update([
+        'status' => ScreenDisplayStatus::PENDING,
+    ]);
+
+    ScreenDisplay::where([
+        'reference_session_id' => $request->reference_session_id,
+        'screen_displayable_id' => $request->screen_displayable_id,
+        'screen_displayable_type' => $request->screen_displayable_type,
+        'schedule_id' => $request->schedule_id,
+    ])->update([
+        'status' => ScreenDisplayStatus::ON_GOING,
+    ]);
+
+    return response()->json(['success' => true]);
+});
+
+Route::put('screen/next', function (Request $request) {
+
+    ScreenDisplay::where([
+        'reference_session_id' => $request->reference_session_id,
+        'status' => ScreenDisplayStatus::NEXT,
+    ])->update([
+        'status' => ScreenDisplayStatus::PENDING,
+    ]);
+
+    ScreenDisplay::where([
+        'reference_session_id' => $request->reference_session_id,
+        'screen_displayable_id' => $request->screen_displayable_id,
+        'screen_displayable_type' => $request->screen_displayable_type,
+        'schedule_id' => $request->schedule_id,
+    ])->update([
+        'status' => ScreenDisplayStatus::NEXT,
     ]);
 
     return response()->json(['success' => true]);

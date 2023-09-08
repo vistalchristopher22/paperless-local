@@ -33,9 +33,7 @@ final class ScreenController extends Controller
 
         $totalDataToDisplay = $totalCommittees + $totalSessions;
 
-        if (ScreenDisplay::where('reference_session_id', $data['id'])->count() !== $totalDataToDisplay) {
-            $this->screenDisplayRepository->updateScreenDisplays($data);
-        }
+        $this->screenDisplayRepository->updateScreenDisplays($data, $totalDataToDisplay);
 
         $dataToPresent = $this->screenDisplayRepository->getCurrentScreenDisplay($data);
 
@@ -53,5 +51,4 @@ final class ScreenController extends Controller
             'membersNameFontSize' => $this->settingRepository->getValueByName('screen_font_size') ?? 1.9,
         ]);
     }
-
 }

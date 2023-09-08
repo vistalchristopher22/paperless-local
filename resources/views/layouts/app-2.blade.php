@@ -605,7 +605,8 @@
         });
     </script>
     <script>
-        let socket = io(`http://192.168.1.100:3030/`);
+        // let socket = io(`http://192.168.1.100:3030/`);
+        let socket = io(`http://localhost:3030/`);
 
         let notyf = new Notyf({
             dismissible: true,

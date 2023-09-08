@@ -7,7 +7,7 @@ use App\Models\ReferenceSession;
 
 interface ScreenDisplayRepositoryInterface
 {
-    public function updateScreenDisplays(ReferenceSession $data);
+    public function updateScreenDisplays(ReferenceSession $data, $totalDataToDisplay);
 
     public function getCurrentScreenDisplay(ReferenceSession $data);
 

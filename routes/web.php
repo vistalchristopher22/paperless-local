@@ -194,7 +194,7 @@ Route::get('/scheduled/committee-meeting', function () {
     $dates = date('Y-m-d H:i:s');
     $dates = explode("&", $dates);
 
-    $allSchedules = Schedule::with(['committees:id,schedule_id,lead_committee,expanded_committee,display_index', 'committees.lead_committee_information', 'committees.expanded_committee_information'])
+    $allSchedules = Schedule::with(['committees:id,schedule_id,lead_committee,expanded_committee,display_index,invited_guests', 'committees.lead_committee_information', 'committees.expanded_committee_information', 'committees.committee_invited_guests'])
         ->orderBy('with_invited_guest', 'DESC')
         ->orderBy('date_and_time', 'ASC')
         ->whereDay('date_and_time', date('d'))
@@ -306,7 +306,6 @@ Route::get('/scheduled/committee-meeting', function () {
                 !$record->expanded_agenda_chairman->isEmpty() or
                 !$record->expanded_agenda_vice_chairman->isEmpty() or !$record->expanded_agenda_member->isEmpty();
         });
-
         return view('sp-committee-sched-meeting', [
             'members' => $sanggunianMembers,
             'schedules' => $schedules,
