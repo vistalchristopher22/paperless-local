@@ -194,23 +194,32 @@
 
 
                 <hr class="hr-dashed hr-menu">
-                <li class="menu-label my-2">Documents</li>
+                <li class="menu-label my-2">Maintenance</li>
                 @feature('user')
                     <li>
 
                         <a href="{{ route('user.committee.index') }}">
-                            <i class="mdi mdi-file-table-outline"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13"
+                                        fill="currentColor" class="bi bi-record me-2" viewBox="0 0 16 16">
+                                        <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z" />
+                                    </svg>
                             <span>Committees</span></a>
                     </li>
                     <li>
                         <a href="{{ route('user.sessions.index') }}">
-                            <i class="mdi mdi-hospital-building"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13"
+                                        fill="currentColor" class="bi bi-record me-2" viewBox="0 0 16 16">
+                                        <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z" />
+                                    </svg>
                             Order of Business
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('user.agendas.index') }}">
-                            <i class=" mdi mdi-table "></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13"
+                                        fill="currentColor" class="bi bi-record me-2" viewBox="0 0 16 16">
+                                        <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z" />
+                                    </svg>
                             Chairmanship
                         </a>
                     </li>

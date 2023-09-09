@@ -98,6 +98,9 @@ Route::get('screen-session/{id}', function (int $id) {
 Route::get('screen-table/{id}', ScreenTableController::class)->name('display.screen.table');
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('edit-information', [AccountController::class, 'edit'])->name('information.edit');
+    Route::put('edit-information', [AccountController::class, 'update'])->name('information.update');
+
     Route::group(['middleware' => 'features:administrator'], function () {
         Route::post('re-order/agenda', [AgendaController::class, 'reOrder'])->name('agenda.re-order');
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
@@ -118,8 +121,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('settings/update', [SettingController::class, 'update'])->name('settings.update');
 
-        Route::get('edit-information', [AccountController::class, 'edit'])->name('information.edit');
-        Route::put('edit-information', [AccountController::class, 'update'])->name('information.update');
+
 
         Route::prefix('file')->group(function () {
             Route::post('archive/show-in-explorer', FileShowInExplorerController::class)->name('file.show-in-explorer');
@@ -204,7 +206,7 @@ Route::get('/scheduled/committee-meeting', function () {
     $referenceSessionCount = ReferenceSession::count();
     $scheduleCount = Schedule::count();
 
-    if($referenceSessionCount == 0 && $scheduleCount == 0) {
+    if ($referenceSessionCount == 0 && $scheduleCount == 0) {
         return redirect()->route('login');
     }
 
@@ -310,7 +312,6 @@ Route::get('/scheduled/committee-meeting', function () {
             'schedules' => $schedules,
             'dates' => implode('&', $dates)
         ]);
-
     } else {
         return view('sp-committee-sched-meeting', [
             'members' => $sanggunianMembers,

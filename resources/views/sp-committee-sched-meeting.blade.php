@@ -278,7 +278,7 @@
                                 data-expanded-agenda-vice-chairman="{{ $member->expanded_agenda_vice_chairman }}"
                                 data-expanded-agenda-member="{{ $member->expanded_agenda_member }}"
                                 class="sanggunian-member-item list-group-members-item">
-                                <img class="img-fluid rounded-circle" style="margin-right : 5px;"
+                                <img class="img-fluid" style="margin-right : 5px; border-radius : 5px;"
                                     src="{{ asset('storage/user-images/' . $member->profile_picture) }}" width="50px">
                                 <a href="#" class="member-name">
                                     hon. {{ $member->lastname }}

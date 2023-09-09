@@ -46,7 +46,8 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="current_session" class="col-md-2 col-form-label text-md-right">Current Sanggunian</label>
+                        <label for="current_session" class="col-md-2 col-form-label text-md-right">Current
+                            Sanggunian</label>
                         <div class="col-md-10">
                             <input type="number" name="current_sanggunian" id="current_sanggunian" class="form-control"
                                 value="{{ $settingRepository->getValueByName('current_sanggunian') }}" placeholder="">
@@ -180,6 +181,55 @@
                 {{--                            mobile devices, ensuring that they are always aware of important events.</p> --}}
                 {{--                    </div> --}}
                 {{--                </div> --}}
+
+                <h5 class="card-title text-dark">Source Folder</h5>
+
+                <div class="form-group row mt-2">
+                    <label for="unassigned_business" class="col-md-2 col-form-label text-md-right">Path</label>
+                    <div class="col-md-10">
+                        <input type="text" name="source_folder" id="source_folder" class="form-control"
+                            placeholder="" value="{{ $settingRepository->getValueByName('source_folder') }}">
+                    </div>
+                </div>
+
+                <hr class="border-dashed">
+
+                <h5 class="card-title text-dark">Application Type</h5>
+
+                <div class="form-group row mt-2">
+                    <div class="col-sm-10 ms-auto">
+                        <div class="form-check">
+                            <input type="checkbox"
+                                {{ $settingRepository->getValueByName('serverType') === 'on' ? 'checked' : '' }}
+                                name="serverType" class="form-check-input" id="serverType">
+                            <label class="form-check-label" for="serverType">Server Type</label>
+                        </div>
+                        <p class="text-muted">A Schedule Alert (SMS) is a feature that sends SMS notifications to users
+                            at a specific time or schedule. This feature is useful for reminding users of upcoming
+                            sessions. With Schedule Alert (SMS), users can receive notifications directly to their
+                            mobile devices, ensuring that they are always aware of important events.</p>
+                    </div>
+                </div>
+
+                <div class="form-group row mt-2">
+                    <div class="col-sm-10 ms-auto">
+                        <div class="form-check">
+                            <input type="checkbox"
+                                {{ $settingRepository->getValueByName('clientType') === 'on' ? 'checked' : '' }}
+                                name="clientType" class="form-check-input" id="clientType">
+                            <label class="form-check-label" for="clientType">Client Type</label>
+                        </div>
+                        <p class="text-muted">A Schedule Alert (SMS) is a feature that sends SMS notifications to users
+                            at a specific time or schedule. This feature is useful for reminding users of upcoming
+                            sessions. With Schedule Alert (SMS), users can receive notifications directly to their
+                            mobile devices, ensuring that they are always aware of important events.</p>
+                    </div>
+                </div>
+
+
+
+
+
 
                 <hr class="border-dashed">
                 <div class="form-group
