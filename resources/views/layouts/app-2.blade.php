@@ -12,6 +12,7 @@
     <meta content="{{ $isServer }}" name="application-type" />
     <meta content="{{ $sourceFolder }}" name="source-folder" />
     <meta content="{{ $networkFolder }}" name="network-folder" />
+    <meta content="{{ auth()->user()->id }}" name="auth-key">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     @routes

@@ -143,6 +143,21 @@
         </div>
     </div>
 
+    <div class="offcanvas offcanvas-bottom border-0" tabindex="-1" id="offCanvasSchedule"
+        aria-labelledby="offCanvasScheduleTitle">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title mt-0" id="offcanvasExampleLabel">Schedule Information</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
+            <div class="overflow-auto py-2">
+                <div class="overflow-hidden" id="scheduleInformationContent">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     @push('page-scripts')
         <script src="{{ asset('/assets-2/plugins/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.js') }}"></script>
@@ -249,18 +264,6 @@
                                 editCommitteeElement.textContent = 'Edit Committee';
 
                                 liElement.appendChild(editCommitteeElement);
-
-                                const itemDivider = document.createElement('li');
-                                itemDivider.classList.add('dropdown-divider');
-                                liElement.appendChild(itemDivider);
-
-
-                                const deleteCommitteeElement = document.createElement('button');
-                                deleteCommitteeElement.classList.add('dropdown-item');
-                                deleteCommitteeElement.classList.add('text-danger');
-                                deleteCommitteeElement.textContent = 'Delete Committee';
-
-                                liElement.appendChild(deleteCommitteeElement);
 
                                 element.querySelector('.dropdown-menu').appendChild(liElement);
                             }
@@ -465,6 +468,49 @@
                         .then(response => response.json())
                         .then(data => loadCanvasContent(data))
                         .catch(error => console.error(error));
+                }
+
+                if (event.target.matches(".view-schedule-information")) {
+                    const schedule = event.target.getAttribute("data-id");
+                    let endpoint = route("committee-schedule-information.show", schedule);
+                    fetch(endpoint)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            let {
+                                schedule
+                            } = data;
+                            $("#scheduleInformationContent").html(``);
+                            $("#scheduleInformationContent").append(`
+                                <div class="list-group">
+                                    <div class="list-group-item align-middle">
+                                        <strong>Name</strong> : ${schedule.name}
+                                    </div>
+
+                                    <div class="list-group-item align-middle">
+                                        <strong>Description</strong> : ${
+                                            schedule.description
+                                        }
+                                    </div>
+
+                                    <div class="list-group-item align-middle">
+                                        <strong>Date & Time</strong> : ${moment(
+                                            schedule.date_and_time
+                                        ).format("MMMM Do YYYY")}
+                                    </div>
+
+                                    <div class="list-group-item align-middle">
+                                        <strong>Venue</strong> : ${schedule.venue}
+                                    </div>
+
+                                    <div class="list-group-item align-middle">
+                                        <strong>With Guest</strong> : ${
+                                            schedule.with_invited_guest == 1 ? "Yes" : "No"
+                                        }
+                                    </div>
+                                </div>
+                            `);
+                        })
+                        .catch((error) => console.error(error));
                 }
             });
         </script>

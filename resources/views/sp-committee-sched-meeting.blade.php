@@ -296,7 +296,7 @@
                     <li class="nav-home nav-current" role="menuitem"><a
                             href="{{ route('scheduled.committee-meeting.today', $dates) }}">Committee Meeting</a></li>
                     <li class="nav-style-guide" role="menuitem"><a
-                            href="{{ route('board-sessions-published.preview', $dates) }}">Session</a></li>
+                            href="{{ route('board-sessions-published.today') }}">Session</a></li>
                     <li class="nav-current" style="float:right;" role="menuitem"><a
                             href="{{ route('login') }}">Sign In</a></li>
                 </ul>

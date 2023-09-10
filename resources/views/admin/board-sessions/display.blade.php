@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
 <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <title>{{ config('app.name') }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet">
+        rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('styles.mine280.css?v=0eb413625a') }}">
 
     <style>
-
         :root {
             --ghost-accent-color: #04142c;
         }
@@ -26,7 +26,7 @@
         }
 
 
-        .sidebar-nav > ul > li > a {
+        .sidebar-nav>ul>li>a {
             font-weight: normal;
             letter-spacing: 1.5px;
         }
@@ -133,7 +133,8 @@
             flex-direction: column;
             text-indent: 30px;
             line-height: 23px;
-            transition: all 0.3s ease; /* add a transition */
+            transition: all 0.3s ease;
+            /* add a transition */
         }
 
 
@@ -170,41 +171,45 @@
         }
     </style>
 </head>
+
 <body class="">
-<main>
-    <section class="content" style="background: #f2f3f6; margin:0px;">
-        <nav class="site-nav" style="background: white;">
-            <ul class="nav" role="menu">
-                <li class="nav-home" role="menuitem"><a
-                        href="{{ $committeeUrl }}">Committee Meeting</a></li>
-                <li class="nav-style-guide nav-current" role="menuitem"><a
-                        href="{{ $committeeUrl }}">Session</a></li>
-            </ul>
-        </nav>
+    <main>
+        <section class="content" style="background: #f2f3f6; margin:0px;">
+            <nav class="site-nav" style="background: white;">
+                <ul class="nav" role="menu">
+                    <li class="nav-home" role="menuitem"><a
+                            href="{{ route('scheduled.committee-meeting.today') }}">Committee Meeting</a></li>
+                    <li class="nav-style-guide nav-current" role="menuitem"><a
+                            href="{{ route('board-sessions-published.today') }}">Session</a></li>
+                    <li class="nav-current" style="float:right;" role="menuitem"><a href="{{ route('login') }}">Sign
+                            In</a></li>
+                </ul>
+            </nav>
 
-        <div id="order-business" class="show">
-            <embed src="{{ $orderBusinessView }}#zoom=190&toolbar=0" allowfullscreen="true"
-                   id="orderBusinessFile" allowtransparency="true" style=" width : 100%;"></embed>
-        </div>
-    </section>
-</main>
+            <div id="order-business" class="show">
+                <embed src="{{ $orderBusinessView }}#zoom=190&toolbar=0" allowfullscreen="true" id="orderBusinessFile"
+                    allowtransparency="true" style=" width : 100%;"></embed>
+            </div>
+        </section>
+    </main>
 
-<script type="text/javascript" src="{{ asset('scripts.mine280.js?v=0eb413625a') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"
+    <script type="text/javascript" src="{{ asset('scripts.mine280.js?v=0eb413625a') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"
         integrity="sha512-AI5A3zIoeRSEEX9z3Vyir8NqSMC1pY7r5h2cE+9J6FLsoEmSSGLFaqMQw8SWvoONXogkfFrkQiJfLeHLz3+HOg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script>
+    <script>
+        let socket = io(`http://localhost:3030/`);
 
-    let socket = io(`http://localhost:3030/`);
+        const container = document.querySelector('.card');
+        const orderBusinessContainer = document.querySelector('#order-business');
 
-    const container = document.querySelector('.card');
-    const orderBusinessContainer = document.querySelector('#order-business');
+        document.querySelector('#orderBusinessFile').style.height = (window.innerHeight - (document.querySelector(
+            '.site-nav').clientHeight + 5)) + 'px';
 
-    document.querySelector('#orderBusinessFile').style.height = (window.innerHeight - (document.querySelector('.site-nav').clientHeight + 5)) + 'px';
-
-    socket.on('TRIGGER_REFRESH_ON_CLIENTS', () => window.location.reload());
-</script>
+        socket.on('TRIGGER_REFRESH_ON_CLIENTS', () => window.location.reload());
+    </script>
 
 </body>
+
 </html>

@@ -2,6 +2,7 @@
 
 // TODO the file manager rename must be update the committee file also or the committee file links
 
+use App\Enums\ScheduleType;
 use App\Models\Setting;
 use App\Models\Schedule;
 use Illuminate\Support\Str;
@@ -55,6 +56,7 @@ use App\Http\Controllers\Admin\Archive\FileShowInExplorerController;
 use App\Http\Controllers\Admin\BoardSessionPublishPreviewController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
+use App\Models\BoardSession;
 
 Auth::routes();
 
@@ -191,7 +193,6 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 
-// Route for SP-Member
 Route::get('/scheduled/committee-meeting', function () {
     $dates = date('Y-m-d H:i:s');
     $dates = explode("&", $dates);
@@ -203,6 +204,7 @@ Route::get('/scheduled/committee-meeting', function () {
         ->whereYear('date_and_time', date('Y'))
         ->where('type', 'committee')
         ->get();
+
 
     $referenceSessionCount = ReferenceSession::count();
     $scheduleCount = Schedule::count();
@@ -256,27 +258,25 @@ Route::get('/scheduled/committee-meeting', function () {
             !$record->expanded_agenda_chairman->isEmpty() or
             !$record->expanded_agenda_vice_chairman->isEmpty() or !$record->expanded_agenda_member->isEmpty();
     });
-
     if ($allSchedules->count() === 0) {
-        $data = ReferenceSession::with(['scheduleCommittees' => function ($query) {
-            $query->orderBy('with_invited_guest', 'DESC')->orderBy('date_and_time', 'ASC');
-        }])->latest()->first();
-
-        $allSchedules = $data->scheduleCommittees;
-
-        $schedules = $allSchedules->groupBy(function ($record) {
+        $latestCommittees = ReferenceSession::with('scheduleCommittees')->whereHas('scheduleCommittees')->whereHas('scheduleCommittees.committees')->orderBy('number', 'DESC')->first();
+        $schedules = $latestCommittees->scheduleCommittees->groupBy(function ($record) {
             return $record->date_and_time->format('Y-m-d');
         });
 
-        $leadCommitteeIds = $allSchedules->map(function ($schedule) {
+        $schedules = $latestCommittees->scheduleCommittees->groupBy(function ($record) {
+            return $record->date_and_time->format('Y-m-d');
+        });
+    
+        $leadCommitteeIds = $latestCommittees->scheduleCommittees->map(function ($schedule) {
             return $schedule->committees->pluck('lead_committee')->toArray();
         })->flatten()->toArray();
-
-        $expandedCommitteeIds = $allSchedules->map(function ($schedule) {
+    
+        $expandedCommitteeIds = $latestCommittees->scheduleCommittees->map(function ($schedule) {
             return $schedule->committees->pluck('expanded_committee')->toArray();
         })->flatten()->toArray();
-
-
+    
+    
         $sanggunianMembers = SanggunianMember::with([
             'agenda_chairman' => function ($query) use ($leadCommitteeIds) {
                 $query->whereIn('id', $leadCommitteeIds);
@@ -299,7 +299,7 @@ Route::get('/scheduled/committee-meeting', function () {
             },
             'expanded_agenda_member.agenda',
         ])->get();
-
+    
         $sanggunianMembers = $sanggunianMembers->filter(function ($record) {
             return
                 !$record->agenda_chairman->isEmpty() or
@@ -308,6 +308,7 @@ Route::get('/scheduled/committee-meeting', function () {
                 !$record->expanded_agenda_chairman->isEmpty() or
                 !$record->expanded_agenda_vice_chairman->isEmpty() or !$record->expanded_agenda_member->isEmpty();
         });
+
         return view('sp-committee-sched-meeting', [
             'members' => $sanggunianMembers,
             'schedules' => $schedules,
@@ -321,6 +322,21 @@ Route::get('/scheduled/committee-meeting', function () {
         ]);
     }
 })->name('scheduled.committee-meeting.today');
+
+Route::get('/scheduled/order-of-business', function () {
+    $latestReferenceSession = ReferenceSession::with('scheduleSessions')->whereHas('scheduleSessions')->whereHas('scheduleSessions.board_sessions')->orderBy('number', 'DESC')->first();
+    $session = $latestReferenceSession?->scheduleSessions?->first()?->board_sessions->first();
+
+    $outputDirectory = FileUtility::publicDirectoryForViewing();
+    $location = FileUtility::correctDirectorySeparator($session->file_path);
+    Artisan::call('convert:path "' . FileUtility::isInputDirectoryEscaped($location) . '" --output="' . $outputDirectory . '"');
+
+    return view('admin.board-sessions.display', [
+        'orderBusinessView' => $session->file_path_view,
+        'announcementTitle' => $session->announcement_title,
+        'announcementContent' => $session->announcement_content,
+    ]);
+})->name('board-sessions-published.today');
 
 Route::get('stay', function () {
     dd('Please contact PADMO-ITU to fix this system.');

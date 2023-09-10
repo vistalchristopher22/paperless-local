@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
+use App\Utilities\FileUtility;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BoardSession extends Model
 {
@@ -27,6 +30,11 @@ class BoardSession extends Model
     public function file_link()
     {
         return $this->hasOne(BoardSessionCommitteeLink::class);
+    }
+
+    public function submitted(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'submitted_by', 'id');
     }
 
 }

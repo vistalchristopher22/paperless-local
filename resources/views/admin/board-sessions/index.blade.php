@@ -1,5 +1,5 @@
 @extends('layouts.app-2')
-@section('tab-title', 'Ordered Business')
+@section('tab-title', 'Order of Business')
 @prepend('page-css')
     <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
@@ -22,18 +22,6 @@
             </div>
         </div>
     </div>
-
-    @if (count($settingsMissingStatus) !== 0)
-        <div class="card bg-danger text-white mb-3">
-            <div class="card-body alert-dismissible fade show" role="alert">
-                Oops, it seems that some required <a class="text-white text-decoration-underline fw-bold"
-                    href="{{ route('settings.index') }}">settings</a> are missing.
-                Please make sure all the necessary settings
-                (such as First Reading, Second Reading, Third Reading, Unassigned Business, and Announcement) are
-                properly configured for the feature to work as expected.
-            </div>
-        </div>
-    @endif
 
     <div class="card mb-3">
         <div class="card-header bg-light d-flex justify-content-between align-items-center" id="filterHeader">
@@ -76,7 +64,7 @@
 
     <div class="card mb-4">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
-            <h6 class="fw-medium h6 card-title">Ordered Business</h6>
+            <h6 class="fw-medium h6 card-title">Order of Business</h6>
             <a href="{{ route('board-sessions.create') }}" class="btn btn-dark fw-medium shadow-dark">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-plus-circle me-1" viewBox="0 0 16 16">
@@ -93,11 +81,11 @@
                 <table class="table table-bordered" id="order-business-table">
                     <thead>
                         <tr class="bg-light">
-                            <th class="p-2 text-center text-uppercase text-dark">Order Business Title</th>
-                            <th class="p-2 text-center text-uppercase text-dark">Regular Session</th>
-                            <th class="p-2 text-center text-uppercase text-dark">Filename</th>
-                            <th class="p-2 text-center text-uppercase text-dark">Created At</th>
-                            <th class="p-2 text-center text-uppercase text-dark">Action</th>
+                            <th class="p-3 text-center text-uppercase text-dark">Order Business Title</th>
+                            <th class="p-3 text-center text-uppercase text-dark">Regular Session</th>
+                            <th class="p-3 text-center text-uppercase text-dark">Filename</th>
+                            <th class="p-3 text-center text-uppercase text-dark">Created At</th>
+                            <th class="p-3 text-center text-uppercase text-dark">Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -169,7 +157,8 @@
                             className: 'border text-center',
                             name: 'file_path',
                             render: (data) => {
-                                let fileName = data.split(["\\"]).pop();
+                               let file = data.replace(/\//g, "\\");
+                                let fileName = file.split(["\\"]).pop();
                                 return removeTimestampPrefix(fileName);
                             }
                         },
@@ -285,7 +274,7 @@
                                     </div>
 
                                     <div class="list-group-item align-middle">
-                                        <strong>Description</strong> : ${schedule.description}
+                                        <strong>Description</strong> : ${schedule.description || ''}
                                     </div>
 
                                     <div class="list-group-item align-middle">

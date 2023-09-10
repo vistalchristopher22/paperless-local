@@ -10,7 +10,6 @@ use App\Repositories\SettingRepository;
 use App\Utilities\FileUtility;
 use App\ViewComposers\CommitteeViewComposer;
 use App\ViewComposers\NotificationViewComposer;
-use Illuminate\Contracts\View\ViewCompilationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
@@ -41,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with('sourceFolder', FileUtility::correctDirectorySeparator(SettingRepository::getValueByName('source_folder')));
             $view->with('isServer', request()->ip() == config('app.server_ip'));
         });
-        
+
         Model::preventAccessingMissingAttributes();
         Model::preventSilentlyDiscardingAttributes();
         // Model::preventLazyLoading(!app()->isProduction());

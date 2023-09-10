@@ -1,4 +1,5 @@
 @extends('layouts.app-2')
+@section('tab-title', 'Complete Listing of Chairmanship')
 @prepend('page-css')
     <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
@@ -18,21 +19,20 @@
         </div>
     @endif
     <div class="card mb-4">
-        <div class="card-header bg-dark justify-content-between align-items-center d-flex">
-            <h6 class="h6 text-white border-0 m-0">Complete Listing of Agendas</h6>
+        <div class="card-header bg-light p-3 justify-content-between align-items-center d-flex">
+            <h6 class="h6 card-title">Complete Listing <span class="text-lowercase">of</span> Chairmanship</h6>
         </div>
         <div class="card-body">
-
             <!-- User Listing Table-->
             <div class="table-responsive">
                 <table class="table table-striped border" id="agendas-table">
                     <thead>
                         <tr class="bg-light">
-                            <th class="text-center fw-medium text-uppercase">#</th>
-                            <th class="text-center fw-medium text-uppercase">Title</th>
-                            <th class="text-center fw-medium text-uppercase">Chairman</th>
-                            <th class="text-center fw-medium text-uppercase">Vice Chairman</th>
-                            <th class="text-center fw-medium text-uppercase">Members</th>
+                            <th class="p-2 text-center fw-medium text-uppercase">#</th>
+                            <th class="p-2 text-center fw-medium text-uppercase">Title</th>
+                            <th class="p-2 text-center fw-medium text-uppercase">Chairman</th>
+                            <th class="p-2 text-center fw-medium text-uppercase">Vice Chairman</th>
+                            <th class="p-2 text-center fw-medium text-uppercase">Members</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,7 +67,8 @@
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-end border-0" style="width:400px;" tabindex="-1" id="offCanvasCommittee" aria-labelledby="offCanvasCommitteeTitle">
+    <div class="offcanvas offcanvas-end border-0" style="width:400px;" tabindex="-1" id="offCanvasCommittee"
+        aria-labelledby="offCanvasCommitteeTitle">
         <div class="offcanvas-header position-relative">
             <div class="d-flex flex-column">
                 <h5 class="offcanvas-title mb-3" id="offCanvasCommitteeTitle"></h5>

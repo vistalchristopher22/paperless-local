@@ -23,6 +23,7 @@ final class StoreBoardSession implements IPipeHandler
             'unassigned_content' => $payload['unassigned_business_content'],
             'announcement_title' => $payload['announcement_title'],
             'announcement_content' => $payload['announcement_content'],
+            'submitted_by' => auth()->user()->id,
         ]);
 
         $payload = array_merge($payload, ['session' => $session]);

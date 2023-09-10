@@ -8,7 +8,7 @@ class BoardSessionLaraTables
 {
     public static function laratablesAdditionalColumns()
     {
-        return ['file_path', 'schedule_id'];
+        return ['file_path', 'schedule_id', 'submitted_by', 'status'];
     }
 
     public static function laratablesCustomAction(BoardSession $boardSession)
@@ -16,10 +16,16 @@ class BoardSessionLaraTables
         return view('admin.board-sessions.includes.action', compact('boardSession'))->render();
     }
 
+    public static function laratablesCustomUserAction(BoardSession $boardSession)
+    {
+        return view('user.session.includes.action', compact('boardSession'))->render();
+    }
+
     public static function laratablesCustomSchedule(BoardSession $boardSession)
     {
         return view('admin.board-sessions.includes.schedule', compact('boardSession'))->render();
     }
+
 
     public static function laratablesScheduleRelationQuery()
     {
@@ -43,6 +49,6 @@ class BoardSessionLaraTables
             });
         }
 
-        return $query;
+        return $query->orderBy('created_at', 'DESC');
     }
 }

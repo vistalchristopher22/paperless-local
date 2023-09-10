@@ -6,6 +6,9 @@ enum BoardSessionStatus: string
 {
     case LOCKED = 'LOCKED';
     case UNLOCKED = '';
+    case RETURN = 'returned';
+    case REVIEW = 'review';
+    case APPROVED = 'approved';
 
     public static function values(): array
     {

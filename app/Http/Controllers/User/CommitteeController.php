@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\DB;
 use App\Pipes\Committee\UploadFile;
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Auth;
-use App\Pipes\Committee\GetCommittee;
 use App\Repositories\AgendaRepository;
 use Freshbitsweb\Laratables\Laratables;
 use App\Pipes\Committee\CreateCommittee;
@@ -21,9 +19,6 @@ use App\Transformers\CommitteeLaraTables;
 use App\Http\Requests\StoreCommitteeRequest;
 use App\Http\Requests\UpdateCommitteeRequest;
 use App\Pipes\Committee\MongoStoreInCollection;
-use App\Pipes\Committee\User\DatatablesWrapper;
-use App\Pipes\Notification\NotifyCreatedCommittee;
-use App\Pipes\Notification\NotifyUpdatedCommittee;
 
 final class CommitteeController extends Controller
 {

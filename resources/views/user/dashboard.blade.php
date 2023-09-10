@@ -5,10 +5,8 @@
 @endprepend
 @section('content')
     <div class="card">
-        <div class="card-header bg-dark">
-            <h6 class="card-title text-white h6">
-                Schedules
-            </h6>
+        <div class="card-header bg-light p-3 justify-content-between align-items-center d-flex">
+            <h6 class="h6 card-title">Schedules</h6>
         </div>
         <div class="card-body">
             <div id="calendar"></div>

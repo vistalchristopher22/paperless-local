@@ -2,21 +2,31 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\ReferenceSession;
-use App\Repositories\BoardSessionRespository;
-use App\Utilities\FileUtility;
-use Illuminate\Support\Facades\Artisan;
+use App\Enums\ScheduleType;
+use Carbon\Carbon;
+use App\Models\Schedule;
 use Illuminate\Support\Str;
+use App\Utilities\FileUtility;
+use App\Models\ReferenceSession;
+use App\Http\Controllers\Controller;
+use App\Models\BoardSession;
+use Illuminate\Support\Facades\Artisan;
+use App\Repositories\BoardSessionRespository;
 
 final class BoardSessionPublishPreviewController extends Controller
 {
-    public function __invoke(BoardSessionRespository $boardSessionRepository, string $dates)
+    public function __invoke(string $dates)
     {
-        $session = $boardSessionRepository->fetchByDate($dates);
-        if(!$session) {
-            $data = ReferenceSession::with(['scheduleSessions'])->latest()->first();
-            $session = $data->scheduleSessinos->first();
+        $date = Carbon::parse($dates);
+        $schedule = Schedule::with('board_sessions')
+                            ->whereYear('date_and_time', $date->year)
+                            ->whereMonth('date_and_time', $date->month)
+                            ->whereDay('date_and_time', $date->day)
+                            ->where('type', ScheduleType::SESSION)
+                            ->first();
+
+        if(!$schedule?->board_sessions->isEmpty()) {
+            $session = $schedule->board_sessions->first();
         }
 
         if(Str::contains(url()->previous(), 'preview')) {
@@ -24,7 +34,7 @@ final class BoardSessionPublishPreviewController extends Controller
         } else {
             $committeeUrl = route('scheduled.committee-meeting.today', $dates);
         }
-
+        
         $outputDirectory = FileUtility::publicDirectoryForViewing();
         $location = FileUtility::correctDirectorySeparator($session->file_path);
         Artisan::call('convert:path "' . FileUtility::isInputDirectoryEscaped($location) . '" --output="' . $outputDirectory . '"');

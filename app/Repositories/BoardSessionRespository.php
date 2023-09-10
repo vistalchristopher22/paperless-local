@@ -18,8 +18,6 @@ final class BoardSessionRespository extends BaseRepository
     {
         return $this->model::orderBy('created_at', 'ASC')
             ->whereNull('schedule_id')
-            ->whereDay('created_at', '>=', date('d'))
-            ->whereYear('created_at', '>=', date('Y'))
             ->get(['id', 'title', 'unassigned_title', 'announcement_title']);
     }
 
