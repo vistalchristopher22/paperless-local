@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class CommitteeLaraTables
 {
@@ -39,6 +40,11 @@ class CommitteeLaraTables
     public static function laratablesCustomAction($committee)
     {
         return view('admin.committee.includes.action', compact('committee'))->render();
+    }
+
+    public static function laratablesCustomUserAction($committee)
+    {
+        return view('user.committee.includes.action', compact('committee'))->render();
     }
 
     public static function laratablesFileLinkRelationQuery()

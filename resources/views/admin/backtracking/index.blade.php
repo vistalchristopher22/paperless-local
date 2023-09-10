@@ -79,7 +79,7 @@
                         `);
 
                         $.ajax({
-                            url: 'http://localhost:3030/api/order-business-content/search',
+                            url: 'http://192.168.1.33:3030/api/order-business-content/search',
                             method: 'POST',
                             data: {
                                 key: searchKey,

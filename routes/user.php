@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'user', 'middleware' => ['auth', 'features:user']], function () {
     Route::get('committees', [CommitteeController::class, 'list'])->name('user.committee.list');
+    Route::get('committee-list/{lead?}/{expanded?}/{ids?}/{regularSession?}', [CommitteeController::class, 'list'])->name('committee.list');
     Route::resource('committee', CommitteeController::class, ['as' => 'user'])->except(['destroy', 'show']);
 
     Route::name('user.')->group(function () {
@@ -24,5 +25,6 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth', 'features:user']], fu
         Route::get('sanggunian-members/{member}/agendas/show', [BoardMembersController::class, 'show'])->name('sanggunian-member.agendas.show');
         Route::get('schedules/{dates}', DisplayScheduleController::class)->name('schedules.index');
         Route::get('schedules/{dates}/print', DisplaySchedulePrintController::class)->name('schedules.print');
+
     });
 });

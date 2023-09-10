@@ -9,6 +9,9 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="" name="author" />
     <meta content="{{ csrf_token() }}" name="csrf-token" />
+    <meta content="{{ $isServer }}" name="application-type" />
+    <meta content="{{ $sourceFolder }}" name="source-folder" />
+    <meta content="{{ $networkFolder }}" name="network-folder" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     @routes
@@ -199,27 +202,27 @@
                     <li>
 
                         <a href="{{ route('user.committee.index') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13"
-                                        fill="currentColor" class="bi bi-record me-2" viewBox="0 0 16 16">
-                                        <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z" />
-                                    </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor"
+                                class="bi bi-record me-2" viewBox="0 0 16 16">
+                                <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z" />
+                            </svg>
                             <span>Committees</span></a>
                     </li>
                     <li>
                         <a href="{{ route('user.sessions.index') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13"
-                                        fill="currentColor" class="bi bi-record me-2" viewBox="0 0 16 16">
-                                        <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z" />
-                                    </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor"
+                                class="bi bi-record me-2" viewBox="0 0 16 16">
+                                <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z" />
+                            </svg>
                             Order of Business
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('user.agendas.index') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13"
-                                        fill="currentColor" class="bi bi-record me-2" viewBox="0 0 16 16">
-                                        <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z" />
-                                    </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor"
+                                class="bi bi-record me-2" viewBox="0 0 16 16">
+                                <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z" />
+                            </svg>
                             Chairmanship
                         </a>
                     </li>
@@ -609,7 +612,8 @@
     </script>
     <script>
         // let socket = io(`http://192.168.1.100:3030/`);
-        let socket = io(`http://localhost:3030/`);
+        let socket = io(`http://192.168.1.33:3030/`);
+        let localSocket = io(`http://localhost:3030/`);
 
         let notyf = new Notyf({
             dismissible: true,

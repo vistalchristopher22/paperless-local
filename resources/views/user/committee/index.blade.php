@@ -164,97 +164,109 @@
                 return text;
             };
 
-
-            let table = $('#committees-table').DataTable({
-                ordering : false,
-                destroy: true,
+            let table = $("#committees-table").DataTable({
                 serverSide: true,
+                ajax: {
+                    url: "/api/committee-list/*/*/*/*",
+                },
                 processing: true,
-                ajax: route('user.committee.list'),
+                ordering: false,
+                language: {
+                    processing: '<div class="spinner-border text-info" role="status"></div>',
+                },
                 columns: [{
-                        name: 'name',
-                        data: 'name',
-                        render: function(raw) {
-                            return `<span class"mx-5">&nbsp;${raw}</span>`;
-                        }
+                        name: "name",
+                        className: "text-truncate",
+                        render: (data) => `<span class="mx-2">${data?.limit(30)}</span>`,
                     },
                     {
-                        className: 'text-center',
-                        name: 'submitted_by',
-                        data: 'submitted_by',
-                        render: function(raw, _, data) {
-                            if (data.submitted.id == key) {
-                                return `<span class="badge badge-soft-primary">You</span>`;
-                            }
-                            return raw;
-                        }
+                        className: "text-center",
+                        name: "submitted.fullname",
+                        searchable: false,
+                        orderable: false,
+                        render: (data) => `<span class="mx-2">${data}</span>`,
                     },
                     {
-                        name: 'lead_committee_information.title',
-                        data: 'lead_committee_information.title',
-                        render: function(rowData, _, row) {
-                            return `
-                                <a data-bs-toggle="offcanvas" data-bs-target="#offCanvasCommittee"
-                                aria-controls="offCanvasCommittee"
-                                data-expanded-committee="${row.lead_committee}"
-                                class="cursor-pointer text-primary view-expanded-comittees text-decoration-underline fw-medium">
-                                    ${rowData?.limit(50) || ''}
-                                </a>
-                            `;
-                        }
+                        name: "lead_committee",
+                        searchable: false,
+                        orderable: false,
+                        render: (data) => `<span class="mx-2">${data}</span>`,
                     },
                     {
-                        name: 'expanded_committee_information.title',
-                        data: 'expanded_committee_information.title',
-                        render: function(rowData, _, row) {
-                            return `
-                                <a data-bs-toggle="offcanvas" data-bs-target="#offCanvasCommittee"
-                                aria-controls="offCanvasCommittee"
-                                data-expanded-committee="${row.expanded_committee}"
-                                class="cursor-pointer text-primary view-expanded-comittees text-decoration-underline fw-medium">
-                                    ${rowData?.limit(50) || ''}
-                                </a>
-                            `;
-                        },
+                        name: "expanded_committee",
+                        searchable: false,
+                        orderable: false,
+                        render: (data) => `<span class="mx-2">${data}</span>`,
                     },
                     {
                         name: "other_expanded_committee",
                         searchable: false,
                         orderable: false,
-                        render: (data) => `<span class="mx-2">${data || ''}</span>`,
+                        render: (data) => `<span class="mx-2">${data}</span>`,
                     },
                     {
                         className: "text-center",
                         name: "schedule",
                         searchable: false,
                         orderable: false,
-                        defaultContent : "",
                     },
                     {
-                        name: 'status',
-                        className: 'text-center',
-                        data: 'status',
+                        name: "status",
+                        className: "text-center",
                         render: function(raw) {
-                            if (raw == 'review') {
+                            if (raw == "review") {
                                 return `<span class="badge badge-soft-primary text-uppercase">${raw}</span>`;
-                            } else if (raw == 'approved') {
+                            } else if (raw == "approved") {
                                 return `<span class="badge badge-soft-success text-uppercase">${raw}</span>`;
-                            } else if (raw == 'returned') {
+                            } else if (raw == "returned") {
                                 return `<span class="badge badge-soft-danger text-uppercase">${raw}</span>`;
                             } else {
                                 return `<span class="badge badge-soft-warning text-uppercase">${raw}</span>`;
                             }
+                        },
+                    },
+                    {
+                        className: "text-center",
+                        name: "created_at",
+                    },
+                    {
+                        name: "user_action",
+                        orderable: false,
+                        searchable: false,
+                        render: function(row) {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(row, 'text/html');
+                            const element = doc.querySelector('.dropdown');
+                            const committeeID = element.getAttribute('data-committee-id');
+                            const submittedBy = element.getAttribute('data-submitted-by');
+
+                            if (submittedBy === key) {
+                                const liElement = document.createElement('li');
+
+                                const editCommitteeElement = document.createElement('a');
+                                editCommitteeElement.href = route('user.committee.edit', committeeID);
+                                editCommitteeElement.classList.add('dropdown-item');
+                                editCommitteeElement.textContent = 'Edit Committee';
+
+                                liElement.appendChild(editCommitteeElement);
+
+                                const itemDivider = document.createElement('li');
+                                itemDivider.classList.add('dropdown-divider');
+                                liElement.appendChild(itemDivider);
+
+
+                                const deleteCommitteeElement = document.createElement('button');
+                                deleteCommitteeElement.classList.add('dropdown-item');
+                                deleteCommitteeElement.classList.add('text-danger');
+                                deleteCommitteeElement.textContent = 'Delete Committee';
+
+                                liElement.appendChild(deleteCommitteeElement);
+
+                                element.querySelector('.dropdown-menu').appendChild(liElement);
+                            }
+
+                            return element.outerHTML;
                         }
-                    },
-                    {
-                        className: 'text-center',
-                        name: 'submitted_at',
-                        data: 'submitted_at',
-                    },
-                    {
-                        className: 'text-center',
-                        name: 'actions',
-                        data: 'actions',
                     },
                 ],
             });
@@ -272,28 +284,69 @@
                 }, delay);
             });
 
-            $('#filterLeadCommitee').change(function() {
-                let lead = $('#filterLeadCommitee').val();
-                let expanded = $('#filterExpandedCommittee').val();
-                let content = $('#filterByContent').val();
-                table.ajax.url(`/committee-list/${lead}/${expanded}/${content}`).load(null, false);
+            $("#filterLeadCommitee").change(function() {
+                let lead = $("#filterLeadCommitee").val();
+                let expanded = $("#filterExpandedCommittee").val();
+                let session = $("#availableSession").val();
+                table.ajax
+                    .url(`/api/committee-list/${lead}/${expanded}/*/${session}`)
+                    .load(null, false);
+            });
+            $("#filterExpandedCommittee").change(function() {
+                let lead = $("#filterLeadCommitee").val();
+                let expanded = $("#filterExpandedCommittee").val();
+                let session = $("#availableSession").val();
+                table.ajax
+                    .url(`/api/committee-list/${lead}/${expanded}/*/${session}`)
+                    .load(null, false);
             });
 
-            $('#filterExpandedCommittee').change(function() {
-                let lead = $('#filterLeadCommitee').val();
-                let expanded = $('#filterExpandedCommittee').val();
-                let content = $('#filterByContent').val();
-                table.ajax.url(`/committee-list/${lead}/${expanded}/${content}`).load(null, false);
+            $("#availableSession").change(function() {
+                let lead = $("#filterLeadCommitee").val();
+                let expanded = $("#filterExpandedCommittee").val();
+                table.ajax
+                    .url(`/api/committee-list/${lead}/${expanded}/*/${this.value}`)
+                    .load(null, false);
             });
 
-            $('#filterByContent').keyup(function(e) {
+            $("#filterByContent").keyup(function(e) {
                 if (e.keyCode == 13) {
-                    let lead = $('#filterLeadCommitee').val();
-                    let expanded = $('#filterExpandedCommittee').val();
+                    let lead = $("#filterLeadCommitee").val();
+                    let expanded = $("#filterExpandedCommittee").val();
                     let content = $(this).val();
-                    table.ajax.url(`/committee-list/${lead}/${expanded}/${content}`).load(null, false);
+                    if (content == "") {
+                        table.ajax
+                            .url(`/api/committee-list/${lead}/${expanded}/*/*`)
+                            .load(null, false);
+                    } else {
+                        $.ajax({
+                            url: "http://192.168.1.38/api/committee-content/search",
+                            method: "POST",
+                            data: {
+                                key: content,
+                                page: 1,
+                            },
+                            success: function(response) {
+                                let ids = response.committees.map(
+                                    (committee) => committee.id
+                                );
+                                if (ids.length === 0) {
+                                    table.ajax
+                                        .url(`/api/committee-list/-1/-1/*/*`)
+                                        .load(null, false);
+                                } else {
+                                    table.ajax
+                                        .url(
+                                            `/api/committee-list/${lead}/${expanded}/${
+                                    ids.join(",") || "*"
+                                }/*`
+                                        )
+                                        .load(null, false);
+                                }
+                            },
+                        });
+                    }
                 }
-
             });
 
 

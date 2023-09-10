@@ -1,4 +1,16 @@
-$('.button-menu-mobile').trigger('click');
+let applicationType = document
+    .querySelector('meta[name="application-type"]')
+    .getAttribute("content");
+
+let networkFolder = document
+    .querySelector('meta[name="network-folder"]')
+    .getAttribute("content");
+
+let sourceFolder = document
+    .querySelector('meta[name="source-folder"]')
+    .getAttribute("content");
+
+$(".button-menu-mobile").trigger("click");
 $("#filterByContent").val("");
 String.prototype.limit = function (limit) {
     let text = this.trim();
@@ -22,7 +34,7 @@ let table = $("#committees-table").DataTable({
     columns: [
         {
             name: "name",
-            className : "text-truncate",
+            className: "text-truncate",
             render: (data) => `<span class="mx-2">${data?.limit(30)}</span>`,
         },
         {
@@ -149,7 +161,7 @@ $("#filterByContent").keyup(function (e) {
                 .load(null, false);
         } else {
             $.ajax({
-                url: "http://localhost:3030/api/committee-content/search",
+                url: "http://192.168.1.38/api/committee-content/search",
                 method: "POST",
                 data: {
                     key: content,
@@ -275,7 +287,18 @@ document.addEventListener("click", (event) => {
         const id = event.target.getAttribute("data-id");
         fetch(`/committee-file/${id}/edit`)
             .then((response) => response.json())
-            .then((data) => socket.emit("EDIT_FILE", data))
+            .then((data) => {
+                if (applicationType) {
+                    socket.emit("EDIT_FILE", data);
+                } else {
+                    data.file_path = data.file_path.replace(
+                        sourceFolder,
+                        networkFolder
+                    );
+                    data.file_path = data.file_path.replace(/\//g, '\\');
+                    localSocket.emit("EDIT_FILE", data);
+                }
+            })
             .catch((error) => console.error(error));
     }
 

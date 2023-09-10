@@ -3,7 +3,6 @@ import os
 import subprocess
 import sys
 # python explorer.py "C:/laragon/www/paperless/storage/app/source/BOARD_SESSIONS/1693506050_OB_25TH___REGULAR_SESSION__JANUARY_10,_2023_TANDAG_CITY.docx"
-
 # Check if a file path is provided as a command-line argument
 if len(sys.argv) < 2:
     print('Usage: python explorer.py <file_path>')

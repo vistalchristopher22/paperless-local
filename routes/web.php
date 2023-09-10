@@ -184,6 +184,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('backtracking/show-explorer', function (Request $request) {
             $basePath = base_path();
             $escaped_path = escapeshellarg($request->path);
+            dd("python.exe $basePath\\explorer.py $escaped_path");
             shell_exec("python.exe $basePath\\explorer.py $escaped_path");
         })->name('backtracking.show-explorer');
     });

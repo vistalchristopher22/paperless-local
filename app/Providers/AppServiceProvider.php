@@ -6,8 +6,11 @@ use App\Contracts\ScreenDisplayRepositoryInterface;
 use App\Enums\UserTypes;
 use App\Models\User;
 use App\Repositories\ScreenDisplayRepository;
+use App\Repositories\SettingRepository;
+use App\Utilities\FileUtility;
 use App\ViewComposers\CommitteeViewComposer;
 use App\ViewComposers\NotificationViewComposer;
+use Illuminate\Contracts\View\ViewCompilationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
@@ -33,7 +36,12 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer(['layouts.app', 'layouts.app-2'], CommitteeViewComposer::class);
         View::composer(['layouts.app', 'layouts.app-2'], NotificationViewComposer::class);
-
+        View::composer(['layouts.app', 'layouts.app-2'], function ($view) {
+            $view->with('networkFolder', SettingRepository::getValueByName('network_source_folder'));
+            $view->with('sourceFolder', FileUtility::correctDirectorySeparator(SettingRepository::getValueByName('source_folder')));
+            $view->with('isServer', request()->ip() == config('app.server_ip'));
+        });
+        
         Model::preventAccessingMissingAttributes();
         Model::preventSilentlyDiscardingAttributes();
         // Model::preventLazyLoading(!app()->isProduction());

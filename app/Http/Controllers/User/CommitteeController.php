@@ -8,13 +8,16 @@ use Illuminate\Support\Facades\DB;
 use App\Pipes\Committee\UploadFile;
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Auth;
 use App\Pipes\Committee\GetCommittee;
 use App\Repositories\AgendaRepository;
+use Freshbitsweb\Laratables\Laratables;
 use App\Pipes\Committee\CreateCommittee;
 use App\Pipes\Committee\ExtractFileText;
 use App\Pipes\Committee\UpdateCommittee;
 use Illuminate\Support\Facades\Pipeline;
 use App\Repositories\CommitteeRepository;
+use App\Transformers\CommitteeLaraTables;
 use App\Http\Requests\StoreCommitteeRequest;
 use App\Http\Requests\UpdateCommitteeRequest;
 use App\Pipes\Committee\MongoStoreInCollection;
@@ -30,11 +33,7 @@ final class CommitteeController extends Controller
 
     public function list()
     {
-        return Pipeline::send([])
-            ->through([
-                GetCommittee::class,
-                DataTablesWrapper::class,
-            ])->then(fn ($data) => $data);
+        return Laratables::recordsOf(Committee::class, CommitteeLaraTables::class);
     }
 
     public function index()
@@ -72,10 +71,13 @@ final class CommitteeController extends Controller
 
     public function edit(Committee $committee)
     {
-        return view('user.committee.edit', [
-            'agendas' => $this->agendaRepository->getByIDs(UserRepository::accessibleAgendas(auth()->user())),
-            'committee' => $committee,
-        ]);
+        if (in_array($committee->lead_committee, auth()->user()->access->pluck('id')->toArray())) {
+            return view('user.committee.edit', [
+                'agendas' => $this->agendaRepository->getByIDs(UserRepository::accessibleAgendas(auth()->user())),
+                'committee' => $committee,
+            ]);
+        }
+        return abort(401);
     }
 
     public function update(UpdateCommitteeRequest $request, Committee $committee)
