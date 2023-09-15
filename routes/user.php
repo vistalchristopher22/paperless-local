@@ -7,7 +7,10 @@ use App\Http\Controllers\User\DivisionController;
 use App\Http\Controllers\User\CommitteeController;
 use App\Http\Controllers\User\DisplayScheduleController;
 use App\Http\Controllers\User\DisplaySchedulePrintController;
+use App\Http\Controllers\Admin\CommitteeMeetingScheduleController;
+use App\Http\Controllers\User\CommitteeAndSessionDisplayController;
 use App\Http\Controllers\User\SanggunianMemberController as BoardMembersController;
+use App\Http\Controllers\User\SessionDisplayController;
 
 Route::group(['prefix' => 'user', 'middleware' => ['auth', 'features:user']], function () {
     Route::get('committee-list/{lead?}/{expanded?}/{ids?}/{regularSession?}', [CommitteeController::class, 'list'])->name('user.committee.list');
@@ -28,8 +31,12 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth', 'features:user']], fu
 
         Route::get('sanggunian-members', [BoardMembersController::class, 'index'])->name('sanggunian-members.index');
         Route::get('sanggunian-members/{member}/agendas/show', [BoardMembersController::class, 'show'])->name('sanggunian-member.agendas.show');
-        Route::get('schedules/{dates}', DisplayScheduleController::class)->name('schedules.index');
-        Route::get('schedules/{dates}/print', DisplaySchedulePrintController::class)->name('schedules.print');
+
+        Route::group(['prefix' => 'schedules'], function () {
+            Route::get('{dates}', DisplayScheduleController::class)->name('schedules.index');
+            Route::get('committees-and-session/{dates}', CommitteeAndSessionDisplayController::class)->name('committee-meeting.schedule.show.committees-and-session');
+            Route::get('session-only/{dates}', [SessionDisplayController::class, 'sessions'])->name('committee-meeting.schedule.show.session-only');
+        });
 
     });
 });

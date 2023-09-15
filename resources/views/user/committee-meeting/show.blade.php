@@ -33,6 +33,7 @@
             border-radius: 5px;
             padding: 10px;
             margin-bottom: 25px;
+            cursor: move;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
@@ -157,6 +158,12 @@
                                                     @php $countIndex++; @endphp
                                                 </li>
                                             @endforeach
+                                            <div style="pointer-events: none;"
+                                                 class="shadow-lg kanban-card-placeholder text-uppercase d-flex flex-column justify-content-center align-items-center">
+                                        <span class="text-muted fw-medium">
+                                            Drop committees here
+                                        </span>
+                                            </div>
                                         </ol>
                                     </div>
                                 @else
@@ -186,6 +193,12 @@
                                                     @php $countIndex++; @endphp
                                                 </li>
                                             @endforeach
+                                            <div style="pointer-events: none;"
+                                                 class="shadow-lg kanban-card-placeholder d-flex flex-column justify-content-center align-items-center text-uppercase fw-medium">
+                                                <div class="text-muted fw-medium">
+                                                    Drop committees here
+                                                </div>
+                                            </div>
                                         </ol>
                                     </div>
                                 @endif
@@ -226,6 +239,51 @@
         </div>
     </div>
     @push('page-scripts')
-        
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <script>
+            $(".kanban-cards").sortable({
+                connectWith: ".kanban-cards",
+                placeholder: "kanban-card-placeholder",
+                forcePlaceholderSize: true,
+                start: function (event, ui) {
+                    ui.item.addClass("dragging");
+                    let labelIndex = ui.item.data('index');
+                    $(`#parent-index-${labelIndex}`).hide();
+                },
+                stop: function (event, ui) {
+                    ui.item.removeClass("dragging");
+                    let cardId = ui.item.data("id");
+                    let columnId = ui.item.parent().attr("id");
+                    let items = {};
+                    let labelIndex = ui.item.data('index');
+                    $(`#parent-index-${labelIndex}`).hide();
+
+                    $('.kanban-card').each(function (index, element) {
+                        let currentElementParentId = $(element).parent().attr('id');
+                        if (!items[currentElementParentId]) {
+                            items[currentElementParentId] = [];
+                        }
+                        items[currentElementParentId].push($(element).attr('data-id'));
+                    });
+
+                    $(ui.item.closest('.schedule-container')).find('li.kanban-card').each(function (index, element) {
+                        $(element).find('.count-index').text(`${index + 1}. `);
+                    });
+
+                    $.ajax({
+                        url: route('committee-meeting-schedule.store'),
+                        method: 'POST',
+                        data: {
+                            parent: columnId,
+                            id: cardId,
+                            order: items,
+                        },
+                        success: function (response) {
+                            notyf.success('Committee moved successfully!');
+                        }
+                    });
+                }
+            }).disableSelection();
+        </script>
     @endpush
 @endsection

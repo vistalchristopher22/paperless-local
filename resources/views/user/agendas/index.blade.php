@@ -45,10 +45,8 @@
                                     <span class="mx-3">
                                         {{ Str::limit($agenda->title, 50, '...') }}</span>
                                 </td>
-                                <td class="text-truncate">{{ $agenda->chairman_information->fullname }}</td>
-                                {{-- <td class="text-truncate">{{ $agenda->fullname }}</td> --}}
+                                <td class="text-truncate">{{ $agenda?->chairman_information?->fullname }}</td>
                                 <td>{{ $agenda?->vice_chairman_information?->fullname }}</td>
-                                {{-- <td>{{ $agenda->fullname }}</td> --}}
                                 <td class="text-center">
                                     @if ($agenda->members->count() > 0)
                                         <a class="text-primary fw-medium view-lead-committees cursor-pointer text-decoration-underline"
@@ -71,15 +69,13 @@
         aria-labelledby="offCanvasCommitteeTitle">
         <div class="offcanvas-header position-relative">
             <div class="d-flex flex-column">
-                <h5 class="offcanvas-title mb-3" id="offCanvasCommitteeTitle"></h5>
+                <h5 class="offcanvas-title text-uppercase fw-medium" id="offCanvasCommitteeTitle"></h5>
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="avatar-group me-4" id="pictures">
                         <span class="small fw-bolder ms-2 text-muted text-dark" id="picturesDescription"></span>
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn-close text-reset position-absolute top-20 end-5" data-bs-dismiss="offcanvas"
-                aria-label="Close"></button>
         </div>
         <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
             <div class="overflow-auto py-2">
@@ -94,7 +90,6 @@
         <script src="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.js') }}"></script>
         <script>
             $(document).ready(function() {
-
                 let table = $('#agendas-table').DataTable({
                     ordering: false,
                     pageLength: 100,
@@ -103,6 +98,27 @@
         </script>
 
         <script>
+            function addNumberSuffix(num) {
+                num = parseInt(num);
+                if (Number.isInteger(num)) {
+                    if (num % 100 >= 11 && num % 100 <= 13) {
+                        return num + 'th';
+                    } else {
+                        var lastDigit = num % 10;
+                        switch (lastDigit) {
+                            case 1:
+                                return num + 'st';
+                            case 2:
+                                return num + 'nd';
+                            case 3:
+                                return num + 'rd';
+                            default:
+                                return num + 'th';
+                        }
+                    }
+                }
+                return "";
+            }
             const loadCanvasContent = (response) => {
                 let chairmanAndViceChairmanCount = 2;
                 let {
@@ -110,85 +126,68 @@
                 } = response;
 
                 $('#offCanvasCommitteeTitle').text(agenda.title);
-                $('#picturesDescription').html(`<br>${agenda.members.length + chairmanAndViceChairmanCount} Members`);
+                $('#picturesDescription').html(`<br>${agenda?.members?.length + chairmanAndViceChairmanCount} Members`);
 
                 $('#pictures').find('picture').remove();
-                $('#pictures').prepend(`
-            <picture class="user-avatar user-avatar-group me-4">
-                <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.chairman_information.profile_picture}" >
-            </picture>
-        `);
-
-                $('#pictures').prepend(`
-            <picture class="user-avatar user-avatar-group">
-                <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda?.vice_chairman_information?.profile_picture}" >
-            </picture>
-        `);
 
                 if (agenda.members) {
                     $('#leadCommitteeContent').html(``);
                     $('#leadCommitteeContent').prepend(`
-                <div class="card mb-3">
-                        <div class="card-body fw-medium">
-                            <div class="user-avatar">
-                                <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" alt="${agenda.vice_chairman_information.fullname}">
-                            </div>
-                            <span>${agenda.vice_chairman_information.fullname}</span>
-                            <br>
-                            <span>${agenda.vice_chairman_information.district}</span>
-                            <br>
-                            <span>${agenda.vice_chairman_information.sanggunian}</span>
+                        <div class="card mb-3">
+                                <div class="card-body fw-medium">
+                                    <img class="img-fluid" src="/storage/user-images/${agenda?.vice_chairman_information?.profile_picture}" alt="${agenda?.vice_chairman_information?.fullname}">
+                                    <div class="text-center">
+                                        <span class="fs-4 fw-bold">${agenda?.vice_chairman_information?.fullname}</span>
+                                    </div>
+                                    <div class="text-center">
+                                        <span>${agenda?.vice_chairman_information?.district}</span>
+                                    </div>
+                                    <span class="fs-5 fw-bold">${addNumberSuffix(agenda.vice_chairman_information?.sanggunian)} Sangguniang Panlalawigan Member</span>
+                                </div>
                         </div>
-                </div>
-            `);
+                    `);
 
-                    $('#leadCommitteeContent').prepend(`<span class="fw-bold">Vice Chairman</span>`);
+                    $('#leadCommitteeContent').prepend(`<span class="fw-bold fs-4">Vice Chairman</span>`);
 
 
                     $('#leadCommitteeContent').prepend(`
-                <div class="card mb-3">
-                        <div class="card-body fw-medium">
-                            <div class="user-avatar">
-                                <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.chairman_information.profile_picture}" alt="${agenda.chairman_information.fullname}">
+                        <div class="card mb-3">
+                            <div class="card-body fw-medium">
+                                <img class="img-fluid" src="/storage/user-images/${agenda?.chairman_information?.profile_picture}" alt="${agenda?.chairman_information?.fullname}">
+                                <div class="text-center">
+                                    <span class="fs-4 fw-bold">${agenda?.chairman_information?.fullname}</span>
+                                </div>
+                                <div class="text-center">
+                                    <span>${agenda?.chairman_information?.district}</span>
+                                </div>
+                                <span class="fs-5 fw-bold">${addNumberSuffix(agenda?.chairman_information?.sanggunian)} Sangguniang Panlalawigan Member</span>
                             </div>
-                            <span>${agenda.chairman_information.fullname}</span>
-                            <br>
-                            <span>${agenda.chairman_information.district}</span>
-                            <br>
-                            <span>${agenda.chairman_information.sanggunian}</span>
                         </div>
-                </div>
-            `);
+                    `);
 
-                    $('#leadCommitteeContent').prepend(`<span class="fw-bold">Chairman</span>`);
-                    $('#leadCommitteeContent').append(`<span class="fw-bold">Members</span>`);
+                    $('#leadCommitteeContent').prepend(`<span class="fw-bold fs-4">Chairman</span>`);
+                    $('#leadCommitteeContent').append(`<span class="fw-bold fs-4">Members</span>`);
 
                     agenda.members.forEach((member) => {
                         let {
                             sanggunian_member
                         } = member;
                         let [memberInformation] = sanggunian_member;
-                        $('#pictures').prepend(`
-                    <picture class="user-avatar user-avatar-group">
-                        <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${memberInformation.profile_picture}" alt="${memberInformation.fullname}">
-                    </picture>
-                `);
-
 
                         $('#leadCommitteeContent').append(`
-                <div class="card mb-3">
-                    <div class="card-body fw-medium">
-                        <div class="user-avatar">
-                            <img class="thumb-lg rounded-circle" src="/storage/user-images/${memberInformation.profile_picture}" alt="${memberInformation.fullname}">
-                        </div>
-                        <span class="fw-medium">${memberInformation.fullname}</span>
-                        <br>
-                        <span>${memberInformation.district}</span>
-                        <br>
-                        <span>${memberInformation.sanggunian}</span>
-                    </div>
-                </div>
-            `);
+                            <div class="card mb-3">
+                                <div class="card-body fw-medium">
+                                    <img class="img-fluid" src="/storage/user-images/${memberInformation?.profile_picture}" alt="${memberInformation?.fullname}">
+                                    <div class="text-center">
+                                        <span class="fs-4 fw-bold">${memberInformation?.fullname}</span>
+                                    </div>
+                                    <div class="text-center">
+                                        <span>${memberInformation?.district}</span>
+                                    </div>
+                                    <span class="fs-5 fw-bold">${addNumberSuffix(memberInformation?.sanggunian)} Sangguniang Panlalawigan Member</span>
+                                </div>
+                            </div>
+                        `);
                     });
                 }
             };

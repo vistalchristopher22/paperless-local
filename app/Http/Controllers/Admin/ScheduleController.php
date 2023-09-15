@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\ScheduleType;
 use App\Http\Controllers\Controller;
-use App\Repositories\BoardSessionRespository;
-use App\Repositories\SettingRepository;
 use App\Repositories\VenueRepository;
+use App\Repositories\SettingRepository;
+use App\Repositories\ScheduleRepository;
+use App\Repositories\BoardSessionRespository;
 
 final class ScheduleController extends Controller
 {
@@ -24,4 +25,6 @@ final class ScheduleController extends Controller
             'ScheduleType' => ScheduleType::class,
         ]);
     }
+
+    
 }

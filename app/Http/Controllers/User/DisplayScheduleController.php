@@ -2,53 +2,35 @@
 
 namespace App\Http\Controllers\User;
 
+use Illuminate\View\View;
 use App\Http\Controllers\Controller;
-use App\Repositories\BoardSessionRespository;
-use App\Repositories\ScheduleRepository;
 use App\Repositories\SettingRepository;
-use App\Resolvers\PDFLinkResolver;
-use App\Utilities\FileUtility;
-use Illuminate\Support\Facades\Artisan;
+use App\Repositories\ScheduleRepository;
 
 final class DisplayScheduleController extends Controller
 {
-    private readonly BoardSessionRespository $boardSessionRespository;
-    public function __construct()
-    {
-        $this->boardSessionRespository = app()->make(BoardSessionRespository::class);
-    }
 
     public function __invoke(SettingRepository $settingRepository, ScheduleRepository $scheduleRepository, string $dates)
     {
-        //        $dates = explode('&', $dates);
-        //
-        //        return view('user.schedule.index', [
-        //            'schedules' => $scheduleRepository->groupedByDate($dates),
-        //            'settings' => $settingRepository->getByNames('name', ['prepared_by', 'noted_by']),
-        //            'dates' => implode('&', $dates),
-        //        ]);
+        $arrayDates = explode(separator: "&", string: $dates);
+        $records = $scheduleRepository->groupedByDate($arrayDates);
 
-        $dates = explode('&', $dates);
-        $latestPublishedBoardSession = $this->boardSessionRespository->published();
+        $recordTypes = $records->pluck('*.type')->flatten()->flip();
 
-        $filePath = FileUtility::correctDirectorySeparator($latestPublishedBoardSession->file_path);
+        if ($recordTypes->has('session') && !$recordTypes->has('committee')) {
+            return to_route("user.committee-meeting.schedule.show.session-only", $dates);
+        }
 
-        $fileName = basename($filePath);
-
-        $outputDirectory = FileUtility::publicDirectoryForViewing();
-
-        Artisan::call('convert:path "' . $filePath . '" --output="' . $outputDirectory . '"');
-
-        $boardSessionPathForView = FileUtility::generatePathForViewing($outputDirectory, $fileName);
-
-        new PDFLinkResolver(FileUtility::publicDirectoryForViewing() . FileUtility::changeExtension($fileName));
+        if ($recordTypes->has('session') && $recordTypes->has('committee')) {
+            return to_route("user.committee-meeting.schedule.show.committees-and-session", $dates);
+        }
 
         return view('user.schedule.index', [
-            'schedules' => $scheduleRepository->groupedByDate($dates),
-            'boardSessionPathForView' => $boardSessionPathForView,
-            'boardSession' => $latestPublishedBoardSession,
+            'schedules' => $records->sort(),
             'settings' => $settingRepository->getByNames('name', ['prepared_by', 'noted_by']),
-            'dates' => implode('&', $dates),
+            'dates' => implode('&', $arrayDates),
         ]);
     }
+
+    
 }
