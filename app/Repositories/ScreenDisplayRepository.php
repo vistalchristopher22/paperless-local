@@ -17,24 +17,22 @@ final class ScreenDisplayRepository extends BaseRepository implements ScreenDisp
     }
 
     /**
+     * TODO: refactor this method
      * @throws Exception
      */
-    public function updateScreenDisplays(ReferenceSession $data, $totalDataToDisplay)
+    public function updateScreenDisplays(ReferenceSession $data)
     {
 
-        // get the ongoing
         $onGoing = $this->model::where([
             'reference_session_id' => $data['id'],
             'status' => ScreenDisplayStatus::ON_GOING,
         ])->first();
 
-        // get the next
         $next = $this->model::where([
             'reference_session_id' => $data['id'],
             'status' => ScreenDisplayStatus::NEXT,
         ])->first();
 
-        // get the done
         $doneIds = $this->model::where([
             'reference_session_id' => $data['id'],
             'status' => ScreenDisplayStatus::DONE,
@@ -94,7 +92,7 @@ final class ScreenDisplayRepository extends BaseRepository implements ScreenDisp
 
                         if ($boardSession->id == $onGoing->screen_displayable_id && $onGoing->screen_displayable_type == get_class($boardSession)) {
                             $status = ScreenDisplayStatus::ON_GOING;
-                        } elseif ($boardSession->id == $next->screen_displayable_id && $next->screen_displayable_type == get_class($boardSession)) {
+                        } elseif ($boardSession->id == $next?->screen_displayable_id && $next?->screen_displayable_type == get_class($boardSession)) {
                             $status = ScreenDisplayStatus::NEXT;
                         }
 
@@ -164,23 +162,6 @@ final class ScreenDisplayRepository extends BaseRepository implements ScreenDisp
             ->first();
     }
 
-    // public function getUpNextScreenDisplay(ReferenceSession $data)
-    // {
-    //     return $this->model::with([
-    //         'schedule',
-    //         'schedule.board_sessions',
-    //         'schedule.committees',
-    //         'schedule.guests',
-    //         'screen_displayable',
-    //         'screen_displayable.lead_committee_information',
-    //         'screen_displayable.lead_committee_information.chairman_information',
-    //         'screen_displayable.lead_committee_information.vice_chairman_information',
-    //         'screen_displayable.lead_committee_information.members',
-    //         'screen_displayable.lead_committee_information.members.sanggunian_member'
-    //     ])->where('reference_session_id', $data['id'])
-    //         ->where('status', ScreenDisplayStatus::NEXT)
-    //         ->first();
-    // }
 
     public function getUpNextScreenDisplay(ReferenceSession $data)
     {
@@ -235,6 +216,11 @@ final class ScreenDisplayRepository extends BaseRepository implements ScreenDisp
             ->get();
     }
 
+    public function getSortedByReferenceSession(int $id)
+    {
+        return $this->getByReferenceSession($id)->sortBy(fn ($referenceSession) => array_search($referenceSession->status, ScreenDisplayStatus::values()))->values();
+    }
+
     public function reOrderDisplay(array $data = []): bool
     {
         $status = match ((int) $data['index']) {
@@ -248,4 +234,5 @@ final class ScreenDisplayRepository extends BaseRepository implements ScreenDisp
             'status' => $status,
         ]);
     }
+
 }

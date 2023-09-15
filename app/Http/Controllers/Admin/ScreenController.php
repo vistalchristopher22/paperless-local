@@ -17,6 +17,7 @@ final class ScreenController extends Controller
     public function __invoke(int $id)
     {
         $data = ReferenceSession::with(['scheduleSessions', 'scheduleCommittees.committees', 'scheduleCommittees.committees.committee_invited_guests', 'scheduleCommittees.committees.lead_committee_information', 'scheduleSessions.board_sessions'])->find($id);
+
         $totalCommittees = 0;
         $totalSessions = 0;
 

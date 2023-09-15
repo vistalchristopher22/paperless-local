@@ -234,9 +234,6 @@
                 });
 
                 $(document).on('click', '.btn-view-file', function() {
-
-
-
                     if (applicationType) {
                         let path = $(this).attr('data-path');
 
@@ -253,7 +250,6 @@
                             file_path : path,
                         });
                     }
-
                 });
 
                 $(document).on('click', '.view-schedule-information', function() {

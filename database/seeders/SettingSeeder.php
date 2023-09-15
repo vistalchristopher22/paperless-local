@@ -53,7 +53,18 @@ class SettingSeeder extends Seeder
                 'name' => 'announcement',
                 'value' => '{announcement}',
             ],
-
+            [
+                'name' => 'source_folder',
+                'value' => 'C:\laragon\www\paperless\storage\app\source',
+            ],
+            [
+                'name' => 'announcement_running_speed',
+                'value' => '25',
+            ],
+            [
+                'name' => 'display_announcement',
+                'value' => 'place your text here',
+            ],
         ];
 
         foreach ($settings as $setting) {

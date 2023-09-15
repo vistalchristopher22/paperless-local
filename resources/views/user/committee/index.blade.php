@@ -169,7 +169,22 @@
         </script>
 
         <script>
-            let key = "{{ auth()->user()->id }}";
+            let key = document
+                .querySelector('meta[name="auth-key"]')
+                .getAttribute("content");
+
+            let applicationType = document
+                .querySelector('meta[name="application-type"]')
+                .getAttribute("content");
+
+            let networkFolder = document
+                .querySelector('meta[name="network-folder"]')
+                .getAttribute("content");
+
+            let sourceFolder = document
+                .querySelector('meta[name="source-folder"]')
+                .getAttribute("content");
+
 
             String.prototype.limit = function(limit) {
                 let text = this.trim();
@@ -257,6 +272,20 @@
 
                             if (submittedBy === key) {
                                 const liElement = document.createElement('li');
+                                const liEditFileElement = document.createElement('li');
+                                liEditFileElement.classList.add('cursor-pointer');
+
+                                const editFileElement = document.createElement('a');
+                                editFileElement.classList.add('dropdown-item');
+                                editFileElement.classList.add('btn-view-file');
+                                editFileElement.setAttribute('data-path', element.querySelector('.btn-view-file').getAttribute('data-path'));
+                                editFileElement.setAttribute('data-readonly', false);
+                                editFileElement.textContent = 'Edit File';
+
+
+                                liEditFileElement.appendChild(editFileElement);
+
+                                liElement.appendChild(liEditFileElement);
 
                                 const editCommitteeElement = document.createElement('a');
                                 editCommitteeElement.href = route('user.committee.edit', committeeID);
@@ -468,6 +497,19 @@
                         .then(response => response.json())
                         .then(data => loadCanvasContent(data))
                         .catch(error => console.error(error));
+                }
+
+                if (event.target.matches('.btn-view-file')) {
+                    let isReadOnly = event.target.getAttribute("data-readonly");
+                    let path = event.target.getAttribute('data-path').replace(/\\/g, '/').replace(
+                        sourceFolder,
+                        networkFolder
+                    );
+                    path = path.replace(/\//g, '\\');
+                    localSocket.emit("EDIT_FILE", {
+                        file_path: path,
+                        read_only: isReadOnly,
+                    });
                 }
 
                 if (event.target.matches(".view-schedule-information")) {

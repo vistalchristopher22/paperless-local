@@ -22,7 +22,7 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function __invoke()
     {
         $user = auth()?->user()?->features();
 

@@ -79,26 +79,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-0 m-0" style="overflow-y: hidden">
-                    <iframe src="" width="100%" height="110%"
-                            style="position:absolute; top :0%;"></iframe>
+                    <iframe src="" width="100%" height="110%" style="position:absolute; top :0%;"></iframe>
                 </div>
             </div>
         </div>
     </div>
     <div class="card">
         <div class="card-header bg-light">
-            <div class="card-title fw-medium">List <span class="text-lowercase">of</span> <span class="fw-bolder">Sessions</span>
+            <div class="card-title fw-medium">List <span class="text-lowercase">of</span> <span
+                    class="fw-bolder">Sessions</span>
                 <span class="text-lowercase">and</span> <span class="fw-bolder">Committees</span>
             </div>
         </div>
         <div class="card-body">
-            @foreach($groupByDateAndType as $date => $record)
+            @foreach ($groupByDateAndType as $date => $record)
                 <div class="accordion" style="max-width: 2000px;">
                     <div class="accordion-item border-top-0">
                         <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                             <button class="accordion-button bg-light" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#panel-{{ $date }}" aria-expanded="false"
-                                    aria-controls="panel-{{ $date }}">
+                                data-bs-target="#panel-{{ $date }}" aria-expanded="false"
+                                aria-controls="panel-{{ $date }}">
 
 
                                 <div class="card-title text-capitalize">
@@ -106,8 +106,8 @@
                                         <span
                                             class="text-primary fw-bolder">{{ $record?->first()?->first()?->regular_session?->number }}</span>
                                         Regular
-                                        Session <span
-                                            class="text-lowercase">of</span> {{ $record?->first()?->first()?->regular_session?->year }}
+                                        Session <span class="text-lowercase">of</span>
+                                        {{ $record?->first()?->first()?->regular_session?->year }}
                                         <span class="text-lowercase">is scheduled for</span> <span
                                             class="fw-bolder text-primary">{{ date('F d, Y', strtotime($date)) }}</span>
                                     @endisset
@@ -115,33 +115,31 @@
                             </button>
                         </h2>
                         <div id="panel-{{ $date }}" class="accordion-collapse collapse"
-                             aria-labelledby="panelsStayOpen-headingOne">
+                            aria-labelledby="panelsStayOpen-headingOne">
                             <div class="accordion-body">
-                                @foreach($record as $typeAndVenue => $data)
-                                    @if(Str::contains($typeAndVenue, 'session'))
+                                @foreach ($record as $typeAndVenue => $data)
+                                    @if (Str::contains($typeAndVenue, 'session'))
                                         @php
                                             $id = Str::uuid();
                                         @endphp
                                         <div class="accordion" id="accordionExample">
                                             <div class="accordion-item border-top-0">
                                                 <h2 class="accordion-header">
-                                                    <button class="accordion-button bg-light p-3"
-                                                            type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#session-{{ $id }}"
-                                                            aria-expanded="false"
-                                                            aria-controls="session-{{ $id }}">
+                                                    <button class="accordion-button bg-light p-3" type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#session-{{ $id }}" aria-expanded="false"
+                                                        aria-controls="session-{{ $id }}">
                                                         <div
                                                             class="card-title d-flex flex-row align-items-center justify-content-between">
-                                                    <span
-                                                        class="me-1 text-dark text-capitalize fw-medium">{{ Str::replace('|', 'in', $typeAndVenue ) }}</span>
+                                                            <span
+                                                                class="me-1 text-dark text-capitalize fw-medium">{{ Str::replace('|', 'in', $typeAndVenue) }}</span>
                                                             <span class="mx-2 badge bg-dark">{{ count($data) }}</span>
                                                         </div>
                                                     </button>
                                                 </h2>
                                                 <div id="session-{{ $id }}" class="accordion-collapse collapse">
                                                     <div class="accordion-body">
-                                                        @foreach($data as $key => $session)
+                                                        @foreach ($data as $key => $session)
                                                             <div class="card">
                                                                 <div class="card-header bg-light p-3">
                                                                     <div class="card-title">
@@ -150,37 +148,36 @@
                                                                 </div>
                                                                 <div class="card-body">
                                                                     <div class="accordion-item">
-                                                                        <h2 class="accordion-header mt-0 d-flex flex-row rounded-0">
+                                                                        <h2
+                                                                            class="accordion-header mt-0 d-flex flex-row rounded-0">
                                                                             <button class="accordion-button collapsed"
-                                                                                    type="button"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#order-business-{{ $key . $id }}"
-                                                                                    aria-expanded="false"
-                                                                                    aria-controls="order-business-{{ $key . $id }}">
+                                                                                type="button" data-bs-toggle="collapse"
+                                                                                data-bs-target="#order-business-{{ $key . $id }}"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="order-business-{{ $key . $id }}">
                                                                                 Order Business</span>
                                                                             </button>
                                                                             <button
                                                                                 class="btn-sm btn btn-dark fw-medium btn-preview-document rounded-0 px-3 fw-medium d-flex align-items-center"
-                                                                                data-url="{{ $session->board_sessions[0]->file_path_view }}"
-                                                                            >
+                                                                                data-url="{{ $session->board_sessions[0]->file_path_view }}">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                     width="16"
-                                                                                     height="16" fill="currentColor"
-                                                                                     class="bi bi-file-text me-2"
-                                                                                     viewBox="0 0 16 16">
+                                                                                    width="16" height="16"
+                                                                                    fill="currentColor"
+                                                                                    class="bi bi-file-text me-2"
+                                                                                    viewBox="0 0 16 16">
                                                                                     <path
-                                                                                        d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/>
+                                                                                        d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z" />
                                                                                     <path
-                                                                                        d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
+                                                                                        d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z" />
                                                                                 </svg>
                                                                                 Document
                                                                             </button>
                                                                         </h2>
                                                                         <div id="order-business-{{ $key . $id }}"
-                                                                             class="accordion-collapse collapse"
-                                                                             aria-labelledby="headingOne"
-                                                                             data-bs-parent="#session-{{ $id }}"
-                                                                             style="">
+                                                                            class="accordion-collapse collapse"
+                                                                            aria-labelledby="headingOne"
+                                                                            data-bs-parent="#session-{{ $id }}"
+                                                                            style="">
                                                                             <div class="accordion-body">
                                                                                 @isset($session->board_sessions[0]->order_business_note)
                                                                                     {!! $session->board_sessions[0]->order_business_note !!}
@@ -190,22 +187,22 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="accordion-item">
-                                                                        <h2 class="accordion-header mt-0 d-flex flex-row rounded-0">
+                                                                        <h2
+                                                                            class="accordion-header mt-0 d-flex flex-row rounded-0">
                                                                             <button class="accordion-button collapsed"
-                                                                                    type="button"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#unassigned-business-{{ $key . $id }}"
-                                                                                    aria-expanded="false"
-                                                                                    aria-controls="unassigned-business-{{ $key . $id }}">
+                                                                                type="button" data-bs-toggle="collapse"
+                                                                                data-bs-target="#unassigned-business-{{ $key . $id }}"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="unassigned-business-{{ $key . $id }}">
                                                                                 Unassigned Business</span>
                                                                             </button>
 
                                                                         </h2>
                                                                         <div id="unassigned-business-{{ $key . $id }}"
-                                                                             class="accordion-collapse collapse"
-                                                                             aria-labelledby="headingOne"
-                                                                             data-bs-parent="#session-{{ $id }}"
-                                                                             style="">
+                                                                            class="accordion-collapse collapse"
+                                                                            aria-labelledby="headingOne"
+                                                                            data-bs-parent="#session-{{ $id }}"
+                                                                            style="">
                                                                             <div class="accordion-body">
                                                                                 @isset($session->board_sessions[0]->unassigned_content)
                                                                                     {!! $session->board_sessions[0]->unassigned_content !!}
@@ -217,21 +214,21 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="accordion-item">
-                                                                        <h2 class="accordion-header mt-0 d-flex flex-row rounded-0">
+                                                                        <h2
+                                                                            class="accordion-header mt-0 d-flex flex-row rounded-0">
                                                                             <button class="accordion-button collapsed"
-                                                                                    type="button"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#announcement-{{ $key . $id }}"
-                                                                                    aria-expanded="false"
-                                                                                    aria-controls="announcement-{{ $key . $id }}">
+                                                                                type="button" data-bs-toggle="collapse"
+                                                                                data-bs-target="#announcement-{{ $key . $id }}"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="announcement-{{ $key . $id }}">
                                                                                 Announcements</span>
                                                                             </button>
                                                                         </h2>
                                                                         <div id="announcement-{{ $key . $id }}"
-                                                                             class="accordion-collapse collapse"
-                                                                             aria-labelledby="headingOne"
-                                                                             data-bs-parent="#session-{{ $id }}"
-                                                                             style="">
+                                                                            class="accordion-collapse collapse"
+                                                                            aria-labelledby="headingOne"
+                                                                            data-bs-parent="#session-{{ $id }}"
+                                                                            style="">
                                                                             <div class="accordion-body">
                                                                                 @isset($session->board_sessions[0]->announcement_content)
                                                                                     {!! $session->board_sessions[0]->announcement_content !!}
@@ -253,8 +250,8 @@
                                 @endforeach
 
 
-                                @foreach($record as $typeAndVenue => $data)
-                                    @if(Str::contains($typeAndVenue, 'committee'))
+                                @foreach ($record as $typeAndVenue => $data)
+                                    @if (Str::contains($typeAndVenue, 'committee'))
                                         @php
                                             $id = Str::uuid();
                                         @endphp
@@ -262,22 +259,21 @@
                                             <div class="accordion-item border-top-0">
                                                 <h2 class="accordion-header" id="headingOne">
                                                     <button class="accordion-button bg-light" type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#committee-{{ $id  . $loop->index }}"
-                                                            aria-expanded="false"
-                                                            aria-controls="committee-{{ $id  . $loop->index }}">
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#committee-{{ $id . $loop->index }}"
+                                                        aria-expanded="false"
+                                                        aria-controls="committee-{{ $id . $loop->index }}">
                                                         <div
                                                             class="card-title d-flex flex-row align-items-center justify-content-between">
-                                                    <span
-                                                        class="me-1 text-dark text-capitalize fw-medium">{{ Str::replace('|', 'in', $typeAndVenue ) }}</span>
+                                                            <span
+                                                                class="me-1 text-dark text-capitalize fw-medium">{{ Str::replace('|', 'in', $typeAndVenue) }}</span>
                                                             <span class="mx-2 badge bg-dark">{{ count($data) }}</span>
                                                         </div>
                                                     </button>
                                                 </h2>
-                                                <div id="committee-{{ $id  . $loop->index }}"
-                                                     class="accordion-collapse collapse"
-                                                     aria-labelledby="headingOne"
-                                                     data-bs-parent="#committee-{{ $id }}">
+                                                <div id="committee-{{ $id . $loop->index }}"
+                                                    class="accordion-collapse collapse" aria-labelledby="headingOne"
+                                                    data-bs-parent="#committee-{{ $id }}">
                                                     <div class="accordion-body">
 
                                                         <div class="card">
@@ -286,17 +282,17 @@
                                                                     class="nav-item dropdown btn btn-dark rounded-0 float-end"
                                                                     role="presentation">
                                                                     <a class="nav-link dropdown-toggle text-white"
-                                                                       data-bs-toggle="dropdown" href="#" role="button"
-                                                                       aria-expanded="false">
+                                                                        data-bs-toggle="dropdown" href="#"
+                                                                        role="button" aria-expanded="false">
                                                                         Actions
                                                                         <i class="mdi mdi-chevron-down"></i>
                                                                     </a>
                                                                     <div class="dropdown-menu">
                                                                         <a class="dropdown-item" target="_blank"
-                                                                           href="{{ route('committee-meeting-schedule.preview', $date) }}">Preview</a>
+                                                                            href="{{ route('committee-meeting-schedule.preview', $date) }}">Preview</a>
                                                                         <div class="dropdown-divider"></div>
                                                                         <a class="dropdown-item" target="_blank"
-                                                                           href="{{ route('committee-meeting-schedule.print', $date) }}">Print</a>
+                                                                            href="{{ route('committee-meeting-schedule.print', $date) }}">Print</a>
                                                                     </div>
                                                                 </button>
                                                             </div>
@@ -305,9 +301,8 @@
                                                                 <div
                                                                     class="header d-flex flex-row align-items-center justify-content-center border border-start-0 border-end-0 border-top-0 border-5 border-dark mb-3">
                                                                     <img width="10%"
-                                                                         src="{{ asset('session/logo.png') }}"
-                                                                         alt=""
-                                                                         class="me-auto">
+                                                                        src="{{ asset('session/logo.png') }}"
+                                                                        alt="" class="me-auto">
                                                                     <div class="d-flex flex-column align-items-center">
                                                                         <h4 class="text-dark">Republic of the
                                                                             Philippines</h4>
@@ -322,35 +317,34 @@
                                                                             Council)</h5>
                                                                     </div>
                                                                     <img width="11.5%"
-                                                                         src="{{ asset('assets/tsp.png') }}"
-                                                                         alt=""
-                                                                         class="ms-auto">
+                                                                        src="{{ asset('assets/tsp.png') }}"
+                                                                        alt="" class="ms-auto">
                                                                 </div>
 
                                                                 <div class="text-center">
-                                                                    <h4 class="fw-medium"
-                                                                        style="letter-spacing : 1.8px;">
+                                                                    <h4 class="fw-medium" style="letter-spacing : 1.8px;">
                                                                         SCHEDULE OF COMMITTEE MEETINGS
-                                                                        <h4 class="fw-bold text-uppercase text-decoration-underline">
-                                                                            {{ Str::replace('committee | ', '', $typeAndVenue ) }}
+                                                                        <h4
+                                                                            class="fw-bold text-uppercase text-decoration-underline">
+                                                                            {{ Str::replace('committee | ', '', $typeAndVenue) }}
                                                                         </h4>
                                                                     </h4>
                                                                 </div>
 
                                                                 @php $countIndex = 1; @endphp
 
-                                                                @foreach($data as $schedule)
+                                                                @foreach ($data as $schedule)
                                                                     <h5 class="fw-medium text-center mt-5">
-                                                                        @if($loop->index == 0)
+                                                                        @if ($loop->index == 0)
                                                                             <span class="text-uppercase">
-                                                                @if ($schedule->date_and_time->hour === 0)
+                                                                                @if ($schedule->date_and_time->hour === 0)
                                                                                     {{ $schedule->date_and_time->format('F d, Y') }}
                                                                                 @else
                                                                                     {{ $schedule->date_and_time->format('F d, Y @ h:i A') }}
                                                                                 @endif
-                                                        </span>
+                                                                            </span>
                                                                         @endif
-                                                                        {{--                                                                        <p class="my-2">{{ $schedule->description }}</p>--}}
+                                                                        {{--                                                                        <p class="my-2">{{ $schedule->description }}</p> --}}
                                                                     </h5>
 
 
@@ -365,29 +359,34 @@
                                                                                 @foreach ($schedule->committees as $committee)
                                                                                     <li class="kanban-card shadow-lg"
                                                                                         data-id="{{ $committee->id }}">
-                                            <span class="text-white">
-                                                <span class="count-index">{{ $countIndex }}. </span>
-                                                {{ $committee->lead_committee_information->title }}
-                                                @if(!is_null($committee->expanded_committee_information))
-                                                    <br>
-                                                    <span class="letter-spacing-2" style="margin-left :120px;">
-                                                (<small>
-                                                        {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
-                                                            @if(!is_null($committee?->other_expanded_committee_information))
-                                                                & {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
-                                                            @endif
-                                                </small>)
-                                            </span>
-                                                @endif
-                                            </span>
+                                                                                        <span class="text-white">
+                                                                                            <span
+                                                                                                class="count-index">{{ $countIndex }}.
+                                                                                            </span>
+                                                                                            {{ $committee->lead_committee_information->title }}
+                                                                                            @if (!is_null($committee->expanded_committee_information))
+                                                                                                <br>
+                                                                                                <span
+                                                                                                    class="letter-spacing-2"
+                                                                                                    style="margin-left :120px;">
+                                                                                                    (<small>
+                                                                                                        {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
+                                                                                                        @if (!is_null($committee?->other_expanded_committee_information))
+                                                                                                            &
+                                                                                                            {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
+                                                                                                        @endif
+                                                                                                    </small>)
+                                                                                                </span>
+                                                                                            @endif
+                                                                                        </span>
                                                                                         @php $countIndex++; @endphp
                                                                                     </li>
                                                                                 @endforeach
                                                                                 <div style="pointer-events: none;"
-                                                                                     class="shadow-lg kanban-card-placeholder text-uppercase d-flex flex-column justify-content-center align-items-center">
-                                        <span class="text-muted fw-medium">
-                                            Drop committees here
-                                        </span>
+                                                                                    class="shadow-lg kanban-card-placeholder text-uppercase d-flex flex-column justify-content-center align-items-center">
+                                                                                    <span class="text-muted fw-medium">
+                                                                                        Drop committees here
+                                                                                    </span>
                                                                                 </div>
                                                                             </ol>
                                                                         </div>
@@ -402,26 +401,31 @@
                                                                                 @foreach ($schedule->committees as $committee)
                                                                                     <li class="kanban-card shadow-lg"
                                                                                         data-id="{{ $committee->id }}">
-                                            <span class="text-white">
-                                                <span class="count-index">{{ $countIndex }}. </span>
-                                                {{ $committee->lead_committee_information->title }}
-                                                  @if(!is_null($committee->expanded_committee_information))
-                                                    <br>
-                                                    <span class="letter-spacing-2" style="margin-left :120px;">
-                                                (<small>
-                                                        {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
-                                                            @if(!is_null($committee?->other_expanded_committee_information))
-                                                                & {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
-                                                            @endif
-                                                </small>)
-                                            </span>
-                                                @endif
-                                            </span>
+                                                                                        <span class="text-white">
+                                                                                            <span
+                                                                                                class="count-index">{{ $countIndex }}.
+                                                                                            </span>
+                                                                                            {{ $committee->lead_committee_information->title }}
+                                                                                            @if (!is_null($committee->expanded_committee_information))
+                                                                                                <br>
+                                                                                                <span
+                                                                                                    class="letter-spacing-2"
+                                                                                                    style="margin-left :120px;">
+                                                                                                    (<small>
+                                                                                                        {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
+                                                                                                        @if (!is_null($committee?->other_expanded_committee_information))
+                                                                                                            &
+                                                                                                            {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
+                                                                                                        @endif
+                                                                                                    </small>)
+                                                                                                </span>
+                                                                                            @endif
+                                                                                        </span>
                                                                                         @php $countIndex++; @endphp
                                                                                     </li>
                                                                                 @endforeach
                                                                                 <div style="pointer-events: none;"
-                                                                                     class="shadow-lg kanban-card-placeholder d-flex flex-column justify-content-center align-items-center text-uppercase fw-medium">
+                                                                                    class="shadow-lg kanban-card-placeholder d-flex flex-column justify-content-center align-items-center text-uppercase fw-medium">
                                                                                     <div class="text-muted fw-medium">
                                                                                         Drop committees here
                                                                                     </div>
@@ -441,7 +445,8 @@
                                                                         <h5 class="text-uppercase"
                                                                             style="letter-spacing : 1.09px">
                                                                             {{ $settings->where('name', 'prepared_by')->first()->value }}
-                                                                            <p class="text-start mx-5 fw-bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLSE
+                                                                            <p class="text-start mx-5 fw-bold">
+                                                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLSE
                                                                                 II</p>
                                                                         </h5>
                                                                     </div>
@@ -458,7 +463,8 @@
                                                                         <h5 class="text-uppercase"
                                                                             style="letter-spacing : 1.09px">
                                                                             {{ $settings->where('name', 'noted_by')->first()->value }}
-                                                                            <p class="text-start mx-5 fw-bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLSO
+                                                                            <p class="text-start mx-5 fw-bold">
+                                                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLSO
                                                                                 IV</p>
                                                                         </h5>
                                                                     </div>
@@ -483,8 +489,8 @@
 
     @push('page-scripts')
         <script>
-            $(document).ready(function () {
-                $(document).on('click', '.btn-preview-document', function () {
+            $(document).ready(function() {
+                $(document).on('click', '.btn-preview-document', function() {
                     let url = $(this).attr('data-url');
                     $('#previewModal').find('iframe').attr('src', `${url}#zoom=190&toolbar=0`);
                     $('#previewModal').modal('show');
@@ -500,12 +506,12 @@
                 connectWith: ".kanban-cards",
                 placeholder: "kanban-card-placeholder",
                 forcePlaceholderSize: true,
-                start: function (event, ui) {
+                start: function(event, ui) {
                     ui.item.addClass("dragging");
                     let labelIndex = ui.item.data('index');
                     $(`#parent-index-${labelIndex}`).hide();
                 },
-                stop: function (event, ui) {
+                stop: function(event, ui) {
                     ui.item.removeClass("dragging");
                     let cardId = ui.item.data("id");
                     let columnId = ui.item.parent().attr("id");
@@ -513,7 +519,7 @@
                     let labelIndex = ui.item.data('index');
                     $(`#parent-index-${labelIndex}`).hide();
 
-                    $('.kanban-card').each(function (index, element) {
+                    $('.kanban-card').each(function(index, element) {
                         let currentElementParentId = $(element).parent().attr('id');
                         if (!items[currentElementParentId]) {
                             items[currentElementParentId] = [];
@@ -521,7 +527,7 @@
                         items[currentElementParentId].push($(element).attr('data-id'));
                     });
 
-                    $(ui.item.closest('.schedule-container')).find('li.kanban-card').each(function (index, element) {
+                    $(ui.item.closest('.schedule-container')).find('li.kanban-card').each(function(index, element) {
                         $(element).find('.count-index').text(`${index + 1}. `);
                     });
 
@@ -533,7 +539,7 @@
                             id: cardId,
                             order: items,
                         },
-                        success: function (response) {
+                        success: function(response) {
                             notyf.success('Committee moved successfully!');
                         }
                     });
@@ -541,7 +547,6 @@
             }).disableSelection();
         </script>
 
-        <script>
-        </script>
+        <script></script>
     @endpush
 @endsection

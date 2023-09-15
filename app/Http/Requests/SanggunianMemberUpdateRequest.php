@@ -25,8 +25,8 @@ class SanggunianMemberUpdateRequest extends FormRequest
         return [
             'fullname' => 'required',
             'district' => 'required',
-            'sanggunian' => 'required',
-            // 'image' => 'required'
+            'sanggunian' => ['required', 'numeric'],
+            'image' => ['nullable', 'image'],
         ];
     }
 }

@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Admin\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Schedule;
-use App\Pipes\ReferenceSession\CreateIfNotExistsReferenceSession;
-use App\Pipes\Schedule\AddGuests;
-use App\Pipes\Schedule\CreateSchedule;
-use App\Pipes\Schedule\GenerateRegularSessionChildDirectories;
-use App\Pipes\Schedule\GenerateRegularSessionDirectory;
-use App\Pipes\Schedule\UpdateSchedule;
-use App\Repositories\ScheduleRepository;
 use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
+use App\Pipes\Schedule\AddGuests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Pipes\Schedule\CreateSchedule;
+use App\Pipes\Schedule\UpdateSchedule;
+use App\Http\Resources\ScheduleResource;
+use App\Repositories\ScheduleRepository;
 use Illuminate\Support\Facades\Pipeline;
+use App\Pipes\Schedule\GenerateRegularSessionDirectory;
+use App\Pipes\Schedule\GenerateRegularSessionChildDirectories;
+use App\Pipes\ReferenceSession\CreateIfNotExistsReferenceSession;
 
 final class ScheduleController extends Controller
 {
@@ -25,7 +26,7 @@ final class ScheduleController extends Controller
 
     public function index()
     {
-        return response()->json(data: $this->scheduleRepository->getAllSchedules());
+        return response()->json(data: ScheduleResource::collection($this->scheduleRepository->getAllSchedules()));
     }
 
     public function store(Request $request)

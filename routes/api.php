@@ -76,6 +76,7 @@ Route::put('screen/current', function (Request $request) {
         'status' => ScreenDisplayStatus::ON_GOING,
     ]);
 
+
     return response()->json(['success' => true]);
 });
 

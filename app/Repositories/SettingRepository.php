@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Setting;
-use App\Models\ReferenceSession;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -37,10 +36,8 @@ final class SettingRepository extends BaseRepository
 
     public static function getAvailableRegularSessionThisYear(): array
     {
-        // $usedReferenceSessions = ReferenceSession::where('year', date('Y'))->get()->map(fn ($session) => (int) $session->number)->toArray();
         return collect(range(SettingRepository::getValueByName('current_session'), SettingRepository::getValueByName('current_session') + SettingRepository::getValueByName('current_session_increment')))
-                    // ->filter(fn ($session) => !in_array($session, $usedReferenceSessions))
-                    ->toArray();
+            ->toArray();
     }
 
     public function getByNames(string $column, array $values = [])
@@ -70,5 +67,12 @@ final class SettingRepository extends BaseRepository
                 );
             }
         });
+    }
+
+    public static function setNewValue(string $key, string $databaseKey, array $data = [])
+    {
+        if (array_key_exists($key, $data)) {
+            Setting::updateOrCreate(['name' => $databaseKey], ['value' => $data[$key]]);
+        }
     }
 }

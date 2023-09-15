@@ -7,11 +7,8 @@ use Carbon\Carbon;
 use App\Models\Schedule;
 use Illuminate\Support\Str;
 use App\Utilities\FileUtility;
-use App\Models\ReferenceSession;
 use App\Http\Controllers\Controller;
-use App\Models\BoardSession;
 use Illuminate\Support\Facades\Artisan;
-use App\Repositories\BoardSessionRespository;
 
 final class BoardSessionPublishPreviewController extends Controller
 {
@@ -34,7 +31,7 @@ final class BoardSessionPublishPreviewController extends Controller
         } else {
             $committeeUrl = route('scheduled.committee-meeting.today', $dates);
         }
-        
+
         $outputDirectory = FileUtility::publicDirectoryForViewing();
         $location = FileUtility::correctDirectorySeparator($session->file_path);
         Artisan::call('convert:path "' . FileUtility::isInputDirectoryEscaped($location) . '" --output="' . $outputDirectory . '"');

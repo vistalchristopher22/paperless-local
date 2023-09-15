@@ -10,4 +10,5 @@ final class BackTrackingController extends Controller
     {
         return view('admin.backtracking.index');
     }
+
 }

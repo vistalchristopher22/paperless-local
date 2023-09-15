@@ -22,8 +22,8 @@
 
                 <div class="form-group">
                     <label>Name</label>
-                    <input type="text" readonly class="form-control @error('name') is-invalid @enderror" name="name" id="name"
-                        value="{{ old('name', $committee->name) }}">
+                    <input type="text" readonly class="form-control @error('name') is-invalid @enderror" name="name"
+                        id="name" value="{{ old('name', $committee->name) }}">
                     @error('name')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -68,8 +68,10 @@
                 </div>
 
                 <div class="form-group">
+                    <img src="{{ getIconByFileName($committee->file_path) }}" alt="" width="7%;" class="img-fluid">
+                    <br>
                     <label>File
-                        <a href="#" class="fw-bold text-decoration-underline text-primary btn-edit"
+                        <a href="#" class="fw-medium text-primary"
                             data-id="{{ $committee->id }}">({{ basename($committee->file_path) }})</a>
                     </label>
 
@@ -101,18 +103,18 @@
                 maximumSelectionLength: 2,
             });
 
-              $('select[name="lead_committee"]').change(function () {
+            $('select[name="lead_committee"]').change(function() {
                 $('#name').val($(this).find('option:selected').text().toUpperCase().replace('COMMITTEE ON', ''));
             });
 
             document.addEventListener('click', event => {
-                if (event.target.matches('.btn-edit')) {
-                    const id = event.target.getAttribute('data-id');
-                    fetch(`/committee-file/${id}/edit`)
-                        .then(response => response.json())
-                        .then(data => socket.emit('EDIT_FILE', data))
-                        .catch(error => console.error(error));
-                }
+                /*  if (event.target.matches('.btn-edit')) {
+                      const id = event.target.getAttribute('data-id');
+                      fetch(`/committee-file/${id}/edit`)
+                          .then(response => response.json())
+                          .then(data => socket.emit('EDIT_FILE', data))
+                          .catch(error => console.error(error));
+                  }*/
             });
         </script>
     @endpush

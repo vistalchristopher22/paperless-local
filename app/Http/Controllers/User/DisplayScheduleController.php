@@ -17,6 +17,7 @@ final class DisplayScheduleController extends Controller
     {
         $this->boardSessionRespository = app()->make(BoardSessionRespository::class);
     }
+
     public function __invoke(SettingRepository $settingRepository, ScheduleRepository $scheduleRepository, string $dates)
     {
         //        $dates = explode('&', $dates);

@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
-use App\Utilities\FileUtility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphOne;

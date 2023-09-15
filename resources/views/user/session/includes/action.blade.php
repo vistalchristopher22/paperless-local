@@ -9,7 +9,7 @@
         </svg>
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownAction" style="">
-        <li class="cursor-pointer btn-view-file" data-path="{{ $boardSession->file_path }}"><a href="#" class="dropdown-item">View File</a>
+        <li class="cursor-pointer btn-view-file" data-readonly="true" data-path="{{ $boardSession->file_path }}"><a href="#" class="dropdown-item">View File</a>
         </li>
     </ul>
 </div>

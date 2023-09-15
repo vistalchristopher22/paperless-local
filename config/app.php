@@ -54,7 +54,7 @@ return [
     |
     */
     'node_url' => 'http://localhost:3030/api',
-    'server_ip' => '192.168.1.33',
+    'server_ip' => '10.25.1.249',
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL'),

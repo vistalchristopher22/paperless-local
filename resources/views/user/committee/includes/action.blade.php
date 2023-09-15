@@ -9,6 +9,6 @@
         </svg>
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
-        <li><a href="#" class="dropdown-item">Show File</a></li>
+        <li><a href="#" class="dropdown-item btn-view-file" data-readonly="true" data-path="{{ $committee->file_path }}">View File</a></li>
     </ul>
 </div>

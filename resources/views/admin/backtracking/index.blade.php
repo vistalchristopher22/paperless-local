@@ -44,8 +44,7 @@
             <div class="text-center mb-3">
                 <span class="fw-bolder h1" id="title">S E A R C H</span>
             </div>
-            <input type="text" id="search" class="form-control form-control-lg p-3"
-                placeholder="Type something">
+            <input type="text" id="search" class="form-control form-control-lg p-3" placeholder="Type something">
         </div>
     </div>
 
@@ -56,9 +55,13 @@
     @push('page-scripts')
         <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
         <script>
-
             var typed = new Typed('#title', {
-                strings: ['<span class="fw-bolder">S E A R C H</span>', '<span class="fw-bolder">O R D I N A N C E</span>', '<span class="fw-bolder">C O N T E N T</span>', '<span class="fw-bolder">TYPE SOMETHING</span>', '<span class="fw-bolder">EXAMPLE : LOCAL GOVERNMENT UNIT</span>', '<span class="fw-bolder">EXAMPLE : ORDER OF BUSINESS 49TH</span>',],
+                strings: ['<span class="fw-bolder">S E A R C H</span>',
+                    '<span class="fw-bolder">O R D I N A N C E</span>',
+                    '<span class="fw-bolder">C O N T E N T</span>', '<span class="fw-bolder">TYPE SOMETHING</span>',
+                    '<span class="fw-bolder">EXAMPLE : LOCAL GOVERNMENT UNIT</span>',
+                    '<span class="fw-bolder">EXAMPLE : ORDER OF BUSINESS 49TH</span>',
+                ],
                 typeSpeed: 100,
             });
 
@@ -79,7 +82,7 @@
                         `);
 
                         $.ajax({
-                            url: 'http://192.168.1.33:3030/api/order-business-content/search',
+                            url: `${serverSocketUrl}api/order-business-content/search`,
                             method: 'POST',
                             data: {
                                 key: searchKey,
@@ -216,12 +219,12 @@
                 let filePath = $(this).attr('data-file');
 
                 $.ajax({
-                    url : '/backtracking/show-explorer',
-                    method : 'POST',
-                    data : {
-                        path : filePath,
+                    url: '/backtracking/show-explorer',
+                    method: 'POST',
+                    data: {
+                        path: filePath,
                     },
-                    success : function (response) {
+                    success: function(response) {
 
                     }
                 });

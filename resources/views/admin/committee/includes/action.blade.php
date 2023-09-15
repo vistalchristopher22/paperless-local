@@ -14,7 +14,7 @@
             <li><button class="dropdown-item btn-inspect-link"
                     data-view-link="{{ $committee?->file_link->view_link }}">Inspect Link</button></li>
             <li class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{{ route('committee.invited-guest', $committee->id) }}">Add Invited
+            <li><a class="dropdown-item" href="{{ route('committee.invited-guest.create', $committee->id) }}">Add Invited
                     Guest</a></li>
             <li class="dropdown-divider"></li>
             <li><a href="{{ route('committee-file.show', $committee->id) }}" class="dropdown-item" target="_blank">View

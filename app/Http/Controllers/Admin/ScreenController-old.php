@@ -6,7 +6,6 @@ use App\Contracts\ScreenDisplayRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Models\ReferenceSession;
 use App\Models\SanggunianMember;
-use App\Models\ScreenDisplay;
 use App\Repositories\SettingRepository;
 
 final class ScreenController extends Controller
@@ -18,22 +17,8 @@ final class ScreenController extends Controller
     public function __invoke(int $id)
     {
         $data = ReferenceSession::with(['scheduleSessions', 'scheduleCommittees.committees', 'scheduleCommittees.committees.lead_committee_information', 'scheduleSessions.board_sessions'])->find($id);
-        $totalCommittees = 0;
-        $totalSessions = 0;
 
-        // $data->scheduleCommittees->map(function ($schedule) use (&$totalCommittees) {
-        //     $totalCommittees += $schedule->committees->count();
-        // });
-
-        // $data->scheduleSessions->map(function ($schedule) use (&$totalSessions) {
-        //     $totalSessions += $schedule->board_sessions->count();
-        // });
-
-        // $totalDataToDisplay = $totalCommittees + $totalSessions;
-
-        // if (ScreenDisplay::where('reference_session_id', $data['id'])->count() !== $totalDataToDisplay) {
         $this->screenDisplayRepository->updateScreenDisplays($data);
-        // }
 
         $dataToPresent = $this->screenDisplayRepository->getCurrentScreenDisplay($data);
 

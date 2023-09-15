@@ -8,7 +8,6 @@ use App\Http\Requests\UpdateAgendaRequest;
 use App\Models\Agenda;
 use App\Repositories\AgendaRepository;
 use App\Repositories\SanggunianMemberRepository;
-use Illuminate\Http\Request;
 
 class AgendaController extends Controller
 {
@@ -19,7 +18,7 @@ class AgendaController extends Controller
     public function index()
     {
         return view('admin.agendas.index', [
-            'agendas' => $this->agendaRepository->get(),
+            'agendas'     => $this->agendaRepository->get(),
             'sanggunians' => $this->agendaRepository->getDistinctedSanggunian(),
         ]);
     }
@@ -41,9 +40,9 @@ class AgendaController extends Controller
     public function edit(Agenda $agenda)
     {
         return view('admin.agendas.edit', [
-            'members' => $this->sanggunianMemberRepository->get(),
+            'members'       => $this->sanggunianMemberRepository->get(),
             'agendaMembers' => $this->agendaRepository->getMembersId($agenda),
-            'agenda' => $agenda,
+            'agenda'        => $agenda,
         ]);
     }
 
@@ -51,11 +50,5 @@ class AgendaController extends Controller
     {
         $this->agendaRepository->update($agenda, $request->except(['_token', '_method']));
         return back()->with('success', 'Agenda successfully updated.');
-    }
-
-    public function reOrder(Request $request)
-    {
-        $result = $this->agendaRepository->reOrderIndex($request->all());
-        return response()->json(['success' => $result]);
     }
 }

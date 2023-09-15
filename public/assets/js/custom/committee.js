@@ -161,7 +161,7 @@ $("#filterByContent").keyup(function (e) {
                 .load(null, false);
         } else {
             $.ajax({
-                url: "http://192.168.1.38/api/committee-content/search",
+                url: `${serverSocketUrl}api/committee-content/search`,
                 method: "POST",
                 data: {
                     key: content,

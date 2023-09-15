@@ -47,7 +47,7 @@
                                 </td>
                                 <td class="text-truncate">{{ $agenda->chairman_information->fullname }}</td>
                                 {{-- <td class="text-truncate">{{ $agenda->fullname }}</td> --}}
-                                <td>{{ $agenda->vice_chairman_information->fullname }}</td>
+                                <td>{{ $agenda?->vice_chairman_information?->fullname }}</td>
                                 {{-- <td>{{ $agenda->fullname }}</td> --}}
                                 <td class="text-center">
                                     @if ($agenda->members->count() > 0)
@@ -121,7 +121,7 @@
 
                 $('#pictures').prepend(`
             <picture class="user-avatar user-avatar-group">
-                <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda.vice_chairman_information.profile_picture}" >
+                <img class="thumb-lg rounded-circle img-fluid" src="/storage/user-images/${agenda?.vice_chairman_information?.profile_picture}" >
             </picture>
         `);
 

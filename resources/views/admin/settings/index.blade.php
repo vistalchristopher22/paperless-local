@@ -193,15 +193,36 @@
                 </div>
 
                 <div class="form-group row mt-2">
-                    <label for="unassigned_business" class="col-md-2 col-form-label text-md-right">Network Source Path</label>
+                    <label for="unassigned_business" class="col-md-2 col-form-label text-md-right">Network Source
+                        Path</label>
                     <div class="col-md-10">
-                        <input type="text" name="network_source_folder" id="network_source_folder" class="form-control"
-                            placeholder="" value="{{ $settingRepository->getValueByName('network_source_folder') }}">
+                        <input type="text" name="network_source_folder" id="network_source_folder"
+                            class="form-control" placeholder=""
+                            value="{{ $settingRepository->getValueByName('network_source_folder') }}">
                     </div>
                 </div>
 
                 <hr class="border-dashed">
+
+                <h5 class="card-title text-dark">Network Socket Connections</h5>
                 
+                <div class="form-group row mt-2">
+                    <label for="unassigned_business" class="col-md-2 col-form-label text-md-right">Server Socket URL</label>
+                    <div class="col-md-10">
+                        <input type="text" name="server_socket_url" id="server_socket_url"
+                            class="form-control" placeholder=""
+                            value="{{ $settingRepository->getValueByName('server_socket_url') }}">
+                    </div>
+                </div>
+
+                <div class="form-group row mt-2">
+                    <label for="unassigned_business" class="col-md-2 col-form-label text-md-right">Local Socket URL</label>
+                    <div class="col-md-10">
+                        <input type="text" name="local_socket_url" id="local_socket_url" class="form-control"
+                            placeholder="" value="{{ $settingRepository->getValueByName('local_socket_url') }}">
+                    </div>
+                </div>
+
                 <div class="form-group
                             row mb-0">
                     <div class="col-md-10 text-end offset-md-2">

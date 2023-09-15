@@ -55,6 +55,10 @@ final class FileUtility
         return Str::replace($extension, Str::reverse($extension), $fileName);
     }
 
+    public static function storageDirectoryForViewing(): string
+    {
+        return "storage" . DIRECTORY_SEPARATOR . "committees" . DIRECTORY_SEPARATOR;
+    }
 
     public static function publicDirectoryForViewing(): string
     {

@@ -25,7 +25,8 @@ class SanggunianMemberStoreRequest extends FormRequest
         return [
             'fullname' => 'required',
             'district' => 'required',
-            'sanggunian' => 'required',
+            'sanggunian' => ['required', 'numeric'],
+            'image' => ['required', 'image'],
         ];
     }
 }

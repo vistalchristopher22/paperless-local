@@ -66,13 +66,10 @@ final class CommitteeController extends Controller
 
     public function edit(Committee $committee)
     {
-        if (in_array($committee->lead_committee, auth()->user()->access->pluck('id')->toArray())) {
-            return view('user.committee.edit', [
-                'agendas' => $this->agendaRepository->getByIDs(UserRepository::accessibleAgendas(auth()->user())),
-                'committee' => $committee,
-            ]);
-        }
-        return abort(401);
+        return view('user.committee.edit', [
+            'agendas' => $this->agendaRepository->getByIDs(UserRepository::accessibleAgendas(auth()->user())),
+            'committee' => $committee,
+        ]);
     }
 
     public function update(UpdateCommitteeRequest $request, Committee $committee)

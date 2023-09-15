@@ -287,8 +287,10 @@
                             networkFolder
                         );
                         path = path.replace(/\//g, '\\');
+                        let isReadOnly = $(this).attr('data-readonly');
                         localSocket.emit("EDIT_FILE", {
                             file_path: path,
+                            read_only : isReadOnly,
                         });
                     }
 

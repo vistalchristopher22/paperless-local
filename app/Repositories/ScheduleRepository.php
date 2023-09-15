@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Enums\ScheduleType;
-use App\Http\Resources\ScheduleResource;
-use App\Models\Schedule;
-use App\Utilities\FileUtility;
 use Carbon\Carbon;
+use App\Models\Schedule;
+use App\Enums\ScheduleType;
+use App\Utilities\FileUtility;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 
 final class ScheduleRepository extends BaseRepository
 {
@@ -16,9 +16,14 @@ final class ScheduleRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    public function get(): Collection
+    {
+        return $this->model->get();
+    }
+
     public function getAllSchedules()
     {
-        return ScheduleResource::collection($this->model->get()->load('regular_session'));
+        return$this->model->get()->load('regular_session');
     }
 
     public function createSchedule(array $data = [], int $reference)

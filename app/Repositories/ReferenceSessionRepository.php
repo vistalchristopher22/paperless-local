@@ -28,4 +28,9 @@ final class ReferenceSessionRepository extends BaseRepository
             'year' => Carbon::parse($data['selected_date'])->format('Y'),
         ]);
     }
+
+    public function getUniqueAvailableRegularSession()
+    {
+        return $this->model->has('scheduleCommittees')->get()->unique('number');
+    }
 }

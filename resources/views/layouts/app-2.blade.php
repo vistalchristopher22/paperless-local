@@ -13,6 +13,8 @@
     <meta content="{{ $sourceFolder }}" name="source-folder" />
     <meta content="{{ $networkFolder }}" name="network-folder" />
     <meta content="{{ auth()->user()->id }}" name="auth-key">
+    <meta content="{{ $serverSocketUrl }}" name="server-socket-url">
+    <meta content="{{ $localSocketUrl }}" name="local-socket-url">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     @routes
@@ -576,7 +578,7 @@
             <footer class="footer text-center text-sm-start">
                 {{ date('Y', strtotime('-1 year', time())) }} - {{ date('Y') }} &copy;
                 {{ config('app.name') }} <span class="text-muted d-none d-sm-inline-block float-end">Powered by
-                    4rrPADMO-ITU</span>
+                    : PADMO-ITU</span>
             </footer>
             <!--end footer-->
         </div>
@@ -612,9 +614,17 @@
         });
     </script>
     <script>
-        // let socket = io(`http://192.168.1.100:3030/`);
-        let socket = io(`http://192.168.1.33:3030/`);
-        let localSocket = io(`http://localhost:3030/`);
+        let serverSocketUrl = document
+            .querySelector('meta[name="server-socket-url"]')
+            .getAttribute("content");
+
+        let localSocketUrl = document
+            .querySelector('meta[name="local-socket-url"]')
+            .getAttribute("content");
+
+        let socket = io(serverSocketUrl);
+        let localSocket = io(localSocketUrl);
+
 
         let notyf = new Notyf({
             dismissible: true,
@@ -622,11 +632,12 @@
 
         tippy('.tippy-btn');
         tippy('#myElement', {
-            html: document.querySelector('#feature__html'), // DIRECT ELEMENT option
+            html: document.querySelector('#feature__html'),
             arrow: true,
             animation: 'fade'
         });
     </script>
+
     <script>
         let notifications = {
             'committee_created': function(data) {

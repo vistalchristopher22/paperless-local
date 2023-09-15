@@ -9,11 +9,14 @@
 
     <title>{{ config('app.name') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="{{ $serverSocketUrl }}" name="server-socket-url">
+    <meta content="{{ $localSocketUrl }}" name="local-socket-url">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('styles.mine280.css?v=0eb413625a') }}">
+
 
     <style>
         :root {
@@ -199,7 +202,11 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        let socket = io(`http://localhost:3030/`);
+        let serverSocketUrl = document
+            .querySelector('meta[name="server-socket-url"]')
+            .getAttribute("content");
+
+        let socket = io(serverSocketUrl);
 
         const container = document.querySelector('.card');
         const orderBusinessContainer = document.querySelector('#order-business');

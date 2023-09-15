@@ -35,9 +35,14 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer(['layouts.app', 'layouts.app-2'], CommitteeViewComposer::class);
         View::composer(['layouts.app', 'layouts.app-2'], NotificationViewComposer::class);
+        View::composer(['layouts.app', 'layouts.app-2', 'admin.board-sessions.display', 'admin.committee.file-displays', 'admin.screen.index', 'admin.scree.screen-session', 'admin.screen.screen-question-of-hour', 'admin.screen.screen-privilege-hour'], function ($view) {
+            $view->with('serverSocketUrl', SettingRepository::getValueByName('server_socket_url'));
+            $view->with('localSocketUrl', SettingRepository::getValueByName('local_socket_url'));
+        });
+
         View::composer(['layouts.app', 'layouts.app-2'], function ($view) {
             $view->with('networkFolder', SettingRepository::getValueByName('network_source_folder'));
-            $view->with('sourceFolder', FileUtility::correctDirectorySeparator(SettingRepository::getValueByName('source_folder')));
+            $view->with('sourceFolder', FileUtility::correctDirectorySeparator(SettingRepository::getValueByName('source_folder') ?? ''));
             $view->with('isServer', request()->ip() == config('app.server_ip'));
         });
 

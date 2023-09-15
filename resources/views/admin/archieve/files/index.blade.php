@@ -504,7 +504,7 @@
                         url: route('file.inspect-link'),
                         method: "POST",
                         data: {
-                            fileName,
+                            filename : fileName,
                             path,
                         },
                         success: function(response) {

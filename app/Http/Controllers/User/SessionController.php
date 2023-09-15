@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\BoardSession;
-use Illuminate\Http\Request;
 use App\Models\ReferenceSession;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -61,7 +60,7 @@ final class SessionController extends Controller
         ]);
     }
 
-    
+
     public function update(UpdateBoardSessionRequest $request, BoardSession $session)
     {
         return DB::transaction(function () use ($request, $session) {

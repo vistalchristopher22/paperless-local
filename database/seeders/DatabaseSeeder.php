@@ -22,8 +22,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             VenueSeeder::class,
             // CommitteeSeeder::class,
-            LegislationSeeder::class,
-            LegislationTypeSeeder::class,
+            // LegislationSeeder::class,
+            // LegislationTypeSeeder::class,
         ]);
     }
 }

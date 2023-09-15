@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="{{ $serverSocketUrl }}" name="server-socket-url">
+    <meta content="{{ $localSocketUrl }}" name="local-socket-url">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
+
     <style>
         * {
             font-family: 'Inter', sans-serif;
@@ -24,6 +27,17 @@
             background-repeat: no-repeat;
         }
 
+        .bg-primary {
+            background: #143500 !important;
+            background-color: #143500 !important;
+        }
+
+
+        .bg-primary-2 {
+            background: #347c00 !important;
+            background-color: #347c00 !important;
+        }
+
         .chairman-title {
             font-size: {{ $chairmanNameFontSize }}vw;
         }
@@ -32,13 +46,13 @@
             font-size: {{ $membersNameFontSize }}vw;
         }
 
-        .bg-primary {
+        /* .bg-primary {
             background: #347c00 !important;
             background-color: #347c00 !important;
-        }
+        } */
 
         .border-primary {
-            border-color: #347c00 !important;
+            border-color: #143500 !important;
         }
 
         .letter-spacing-1 {
@@ -51,12 +65,37 @@
 
 
         .text-primary {
-            color: #347c00 !important;
+            color: #143500 !important;
         }
 
 
         .font-weight-600 {
             font-weight: 600;
+        }
+
+
+        .scroll-container {
+            width: 100%;
+            position: absolute;
+            overflow: hidden;
+            right: 0%;
+            bottom: 0%;
+            left: 30%;
+        }
+
+        .scroll-text {
+            white-space: nowrap;
+            animation: scroll {{ $announcementRunningSpeed }}s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
         }
 
 
@@ -97,7 +136,7 @@
 <body>
     <div class="d-flex flex-column flex-nowrap justify-content-center align-items-center p-1">
         @isset($dataToPresent)
-            <div class="bg-light text-dark p-0 d-flex justify-content-between text-center"
+            <div class=" {{ $dataToPresent?->schedule?->type == 'session' ? '' : 'bg-light' }} text-dark p-0 d-flex justify-content-between text-center"
                 style="border-collapse : collapse;">
                 @if ($dataToPresent?->schedule?->type == 'session')
                     <div class="mx-2">
@@ -105,7 +144,7 @@
                     </div>
                 @else
                     <div class="mx-2">
-                        <span class="text-uppercase fw-bold letter-spacing-1 text-truncate">
+                        <span class="text-uppercase letter-spacing-1 text-truncate">
                             {{ Str::limit(Str::remove('COMMITTEE ON', Str::upper($dataToPresent?->screen_displayable?->lead_committee_information?->title)), 45, '...') }}
                         </span>
                         {{-- {{ Str::limit($dataToPresent?->screen_displayable?->lead_committee_information?->title, 78, '...') }} --}}
@@ -197,7 +236,6 @@
                         </tr>
                         <tr>
                             <td rowspan="2" class="p-0 text-truncate" style="">
-                                <br>
                                 <div class="scroll-to-top-sanggunian-members">
                                     <ul>
                                         @if (method_exists($dataToPresent->screen_displayable, 'lead_committee_information'))
@@ -254,7 +292,7 @@
                 @else
                     <div class="mx-2">
                         <span class="text-uppercase letter-spacing-1">NEXT COMMITTEE HEARING :
-                            <span class="fw-bold">
+                            <span>
                                 {{ Str::limit(Str::remove('COMMITTEE ON', Str::upper($upNextData?->screen_displayable?->lead_committee_information?->title)), 23, '...') }}
                             </span>
                         </span>
@@ -285,11 +323,11 @@
                     <tr>
                         <th class="p-0 text-center align-middle" style="" rowspan="4">
                             <div class="d-flex flex-column justify-content-around align-items-center">
-                                <img src="{{ asset('storage/user-images/' . $upNextData?->screen_displayable?->lead_committee_information?->chairman_information->profile_picture) }}"
+                                <img src="{{ asset('storage/user-images/' . $upNextData?->screen_displayable?->lead_committee_information?->chairman_information?->profile_picture) }}"
                                     class="mt-1 rounded" width="50%" alt="">
                                 @if ($upNextData?->schedule?->type != 'session')
                                     <span
-                                        class="text-uppercase text-primary fw-bold chairman-title text-truncate">{{ $upNextData?->screen_displayable?->lead_committee_information?->chairman_information->fullname }}</span>
+                                        class="text-uppercase text-primary fw-bold chairman-title text-truncate p-1">{{ $upNextData?->screen_displayable?->lead_committee_information?->chairman_information?->fullname }}</span>
                                 @endif
                             </div>
                         </th>
@@ -360,18 +398,34 @@
             </div>
         @endisset
 
-        <div class="bg-primary mt-auto fixed-bottom">
+        <div class="bg-primary mt-auto fixed-bottom d-flex">
+            <div class="bg-primary-2"
+                style="position:relative; z-index:9999; width:30%; height :fit-content; bottom:0%; right :0%; top:0%; left :0;">
+                <div class="d-flex align-items-center mx-1">
+                    <span class="font-inter fw-bold text-white">
+                        POWERED BY : PADMO-ITU
+                    </span>
+                    <img src="{{ asset('/itu.gif') }}" class="img-fluid mx-1" width="8.5%" style="padding : 3px;"
+                        alt="" />
+                </div>
+            </div>
             <marquee onmouseover="this.stop();" onmouseout="this.start();" direction="left" behavior="scroll"
-                scrollamount="{{ $announcementRunningSpeed }}">
-                <img src="{{ asset('/assets-2/images/logo-screen/logo.png') }}" class="img-fluid " width="2.5%"
-                    alt="">
-                <span class="text-white fw-bold text-uppercase letter-spacing-1">{{ $data['number'] }} REGULAR SESSION
-                    @ {{ $dataToPresent?->schedule?->venue }} |
-                    {{ $data?->schedules?->first()?->date_and_time->format('F d, Y') }}<img
-                        src="{{ asset('/assets-2/images/logo-screen/logo2.png') }}" class="img-fluid "
-                        width="3%" alt="" /> | {{ $announcement }} </span>
-                <span class="text-uppercase fw-bold text-white"> | Powered by : <img src="{{ asset('/itu.gif') }}"
-                        class="img-fluid" width="2.5%" alt="" /> PADMO-ITU </span>
+                scrollamount="{{ $announcementRunningSpeed }}"
+                style="position:absolute; bottom : 0%; right : 0%; left :30.1%;">
+                <span
+                    class="text-dark fw-bold text-white text-uppercase letter-spacing-1 font-inter">{{ $data['number'] }}
+                    REGULAR SESSION
+                    @if (!empty($dataToPresent?->schedule?->venue))
+                        - {{ $dataToPresent->schedule->venue }}
+                    @endif
+                    @if (!empty($data?->schedules?->first()?->date_and_time))
+                        - {{ $data?->schedules?->first()?->date_and_time->format('F d, Y') }}
+                    @endif
+                    @if (!empty($announcement))
+                        |
+                        {{ $announcement }}
+                    @endif
+                </span>
             </marquee>
         </div>
     </div>
@@ -385,10 +439,13 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        // let socket = io(`http://192.168.1.100:3030/`);
-        let socket = io(`http://localhost:3030/`);
-        let dataToPresent = @json($dataToPresent);
+        let serverSocketUrl = document
+            .querySelector('meta[name="server-socket-url"]')
+            .getAttribute("content");
 
+        let socket = io(serverSocketUrl);
+
+        let dataToPresent = @json($dataToPresent);
 
         function formatTwoDigits(value) {
             return value < 10 ? `0${value}` : value;
@@ -420,12 +477,10 @@
                     method: 'PUT',
                     success: function(response) {
                         dataToPresent.start_time = response.start_time;
-                        document.querySelector('#startTime').innerText = moment(response.start_time)
-                            .format("hh:mm A");
                         setInterval(() => updateElapsedTime(response.start_time), 1000);
                     },
                     error: function(response) {
-                        location.reload();
+                         location.reload();
                     }
                 });
             }
@@ -448,6 +503,10 @@
 
         socket.on('TRIGGER_REFRESH_ON_CLIENTS', function() {
             location.reload();
+        });
+
+        socket.on('UPDATE_SCREEN_DISPLAY', (data) => {
+            window.location.href = data.url;
         });
     </script>
     <script>
@@ -493,11 +552,13 @@
             } else {
                 let images = [];
                 let members = dataToPresent?.screen_displayable?.lead_committee_information?.members;
+                images.push(dataToPresent?.screen_displayable?.lead_committee_information?.vice_chairman_information
+                    ?.profile_picture);
                 members.forEach((member) => images.push(member.sanggunian_member[0]?.profile_picture));
                 let currentImageIndex = 0;
 
                 $('#members-img-container').html(
-                    `<img src="/storage/user-images/${images[currentImageIndex]}"  style="width : 16vw !important; height : 25vh !important;" class="img-fluid mt-2 rounded">`
+                    `<img src="/storage/user-images/${images[currentImageIndex]}"  style="width : fit-content !important; height : 26vh !important;" class="img-fluid mt-2 rounded">`
                 );
 
                 let tickerLength = $(element + ' ul li').length;
@@ -507,10 +568,12 @@
                 $(element + ' ul').css('marginTop', -tickerHeight);
 
                 setInterval(() => {
-                    actionMoveToTop(element);
+                    if (currentImageIndex !== 0) {
+                        actionMoveToTop(element);
+                    }
                     currentImageIndex = (currentImageIndex + 1) % images.length;
                     $('#members-img-container').html(
-                        `<img src="/storage/user-images/${images[currentImageIndex]}"  style="width : 16vw !important; height : 25vh !important;"  class="img-fluid rounded">`
+                        `<img src="/storage/user-images/${images[currentImageIndex]}"  style="width : fit-content !important; height : 26vh !important;"  class="img-fluid rounded">`
                     );
                 }, interval);
             }
@@ -529,11 +592,13 @@
             } else {
                 let images = [];
                 let members = dataToPresent?.screen_displayable?.lead_committee_information?.members;
+                images.push(dataToPresent?.screen_displayable?.lead_committee_information?.vice_chairman_information
+                    ?.profile_picture);
                 members.forEach((member) => images.push(member.sanggunian_member[0]?.profile_picture));
                 let currentImageIndex = 0;
 
                 $('#members-img-container-up-next').html(
-                    `<img src="/storage/user-images/${images[currentImageIndex]}" style="width : 16vw !important; height : 25vh !important;" class="img-fluid rounded">`
+                    `<img src="/storage/user-images/${images[currentImageIndex]}" style="width : fit-content !important; height : 26vh !important;" class="img-fluid rounded">`
                 );
 
 
@@ -544,10 +609,12 @@
                 $(element + ' ul').css('marginTop', -tickerHeight);
 
                 setInterval(() => {
-                    actionMoveToTop(element);
+                    if (currentImageIndex !== 0) {
+                        actionMoveToTop(element);
+                    }
                     currentImageIndex = (currentImageIndex + 1) % images.length;
                     $('#members-img-container-up-next').html(
-                        `<img src="/storage/user-images/${images[currentImageIndex]}" style="width : 16vw !important; height : 25vh !important;" class="img-fluid rounded">`
+                        `<img src="/storage/user-images/${images[currentImageIndex]}" style="width : fit-content !important; height : 26vh !important;" class="img-fluid rounded">`
                     );
                 }, interval);
             }
@@ -555,12 +622,12 @@
 
 
         autoScrollToTop(@json($dataToPresent), 1000, '.scroll-to-top-present-committee-invited-guests');
-        autoScrollToTopSanggunianMembers(@json($dataToPresent), 2000, '.scroll-to-top-sanggunian-members');
+        autoScrollToTopSanggunianMembers(@json($dataToPresent), 5000, '.scroll-to-top-sanggunian-members');
 
         let upNextData = @json($upNextData);
         if (upNextData) {
             autoScrollToTop(upNextData, 1000, '.scroll-to-top-up-next-committee-invited-guests');
-            autoScrollToTopSanggunianMembersUpNext(upNextData, 2000, '.scroll-to-top-sanggunian-members-up-next');
+            autoScrollToTopSanggunianMembersUpNext(upNextData, 5000, '.scroll-to-top-sanggunian-members-up-next');
         }
     </script>
 </body>

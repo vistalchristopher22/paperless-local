@@ -2,29 +2,31 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Contracts\ScreenDisplayRepositoryInterface;
-use App\Enums\ScreenDisplayStatus;
 use App\Http\Controllers\Controller;
 use App\Repositories\SettingRepository;
-use Illuminate\Http\Request;
+use App\Repositories\SanggunianMemberRepository;
+use App\Contracts\ScreenDisplayRepositoryInterface;
 
 final class ScreenDisplayController extends Controller
 {
-    public function __construct(private readonly ScreenDisplayRepositoryInterface $screenDisplayRepository, private readonly SettingRepository $settingRepository)
+    private readonly ScreenDisplayRepositoryInterface $screenDisplayRepository;
+    private readonly SettingRepository $settingRepository;
+    private readonly SanggunianMemberRepository $sanggunianMemberRepository;
+
+    public function __construct()
     {
+        $this->screenDisplayRepository    = app()->make(ScreenDisplayRepositoryInterface::class);
+        $this->settingRepository          = app()->make(SettingRepository::class);
+        $this->sanggunianMemberRepository = app()->make(SanggunianMemberRepository::class);
     }
 
-    public function show(int $id)
+    public function __invoke(int $id)
     {
         return view('admin.screen-display.index', [
-            'data' => $this->screenDisplayRepository->getByReferenceSession($id)->sortBy(fn ($model) => array_search($model->status, ScreenDisplayStatus::values()))->values(),
+            'id'                => $id,
+            'data'              => $this->screenDisplayRepository->getSortedByReferenceSession($id),
+            'sanggunianMembers' => $this->sanggunianMemberRepository->get(),
             'settingRepository' => $this->settingRepository,
         ]);
-    }
-
-    public function reOrder(Request $request)
-    {
-        $reOrdered = $this->screenDisplayRepository->reOrderDisplay($request->all());
-        return response()->json(['success' => $reOrdered]);
     }
 }
