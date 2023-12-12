@@ -15,7 +15,7 @@ export default {
       <Link href="/administrator/home" class="logo">
         <div class="d-flex align-items-center p-2 justify-content-center">
           <img
-            src="http://localhost:8000/paperless-logo.png"
+            src="/paperless-logo.png"
             alt="logo-small"
             class="img-fluid me-3"
             style="width: 2vw"
@@ -151,7 +151,7 @@ export default {
               </Link>
             </li>
             <li class="nav-item">
-              <Link href="/legislation" method="get" class="nav-link">
+              <Link href="/board-sessions" method="get" class="nav-link">
                 <div class="text-white">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -363,7 +363,7 @@ export default {
           >
             <div class="d-flex align-items-center">
               <img
-                src="http://localhost:8000/storage/profile_pictures/default.png"
+                src="/storage/profile_pictures/default.png"
                 alt="profile-user"
                 class="rounded-circle me-2 thumb-sm"
               />

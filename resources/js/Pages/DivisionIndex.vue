@@ -72,7 +72,7 @@ export default {
                 <img
                   class="img-fluid rounded"
                   style="width: 2vw"
-                  :src="`http://localhost:8000/storage/user-images/${division?.board_member?.profile_picture}`"
+                  :src="`/storage/user-images/${division?.board_member?.profile_picture}`"
                 />
                 {{ division?.board_member?.fullname }}
               </td>

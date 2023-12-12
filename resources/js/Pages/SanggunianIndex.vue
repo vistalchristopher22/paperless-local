@@ -144,7 +144,7 @@ export default {
             <td class="text-center border" style="width: 3vw">
               <img
                 class="img-fluid rounded"
-                :src="`http://localhost:8000/storage/user-images/${member.profile_picture}`"
+                :src="`/storage/user-images/${member.profile_picture}`"
               />
             </td>
             <td

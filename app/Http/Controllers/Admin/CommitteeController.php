@@ -39,9 +39,11 @@ final class CommitteeController extends Controller
     {
         $availableRegularSessions = ReferenceSession::has('scheduleCommittees')->get()->unique('number');
         return Inertia::render('CommitteeIndex', [
-            'committees' => $this->committeeRepository->paginated(),
+            'committees' => $this->committeeRepository->paginated(request()->lead, request()->expanded),
             'agendas' => $this->agendaRepository->get()->load('chairman_information'),
             'availableRegularSessions' => $availableRegularSessions,
+            'searchLead' => request()->lead ?? '',
+            'searchExpanded' => request()->expanded ?? '',
         ]);
     }
 

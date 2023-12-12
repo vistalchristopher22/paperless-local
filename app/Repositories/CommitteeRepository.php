@@ -28,9 +28,17 @@ class CommitteeRepository extends BaseRepository
             ->get($columns);
     }
 
-    public function paginated()
+    public function paginated(int|null $lead, int|null $expanded)
     {
-        return $this->model->with(['lead_committee_information', 'expanded_committee_information', 'submitted', 'other_expanded_committee_information'])
+        return $this->model->with(['lead_committee_information', 'expanded_committee_information', 'submitted', 'other_expanded_committee_information', 'file_link'])
+            ->when($lead, function ($query, $lead) {
+                return $query->where('lead_committee', $lead);
+            })
+            ->when($expanded, function ($query, $expanded) {
+                return $query->where('expanded_committee', $expanded);
+            })->when($expanded, function ($query, $expanded) {
+                return $query->orWhere('expanded_committee_2', $expanded);
+            })
             ->whereNull('deleted_at')
             ->orderBy('created_at', 'DESC')
             ->paginate(10);

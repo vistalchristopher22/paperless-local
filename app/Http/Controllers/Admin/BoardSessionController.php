@@ -2,28 +2,29 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBoardSessionRequest;
-use App\Http\Requests\UpdateBoardSessionRequest;
+use Exception;
+use Inertia\Inertia;
 use App\Models\BoardSession;
 use App\Models\ReferenceSession;
-use App\Pipes\BoardSession\CreateWordDocumentContent;
-use App\Pipes\BoardSession\DeleteBoardSession;
-use App\Pipes\BoardSession\DeleteFileUpload;
-use App\Pipes\BoardSession\ExtractTextFromWordDocument;
-use App\Pipes\BoardSession\FileUpload;
-use App\Pipes\BoardSession\GeneratePDFDocumentForViewing;
-use App\Pipes\BoardSession\StoreBoardSession;
-use App\Pipes\BoardSession\UpdateBoardSession;
-use App\Pipes\BoardSession\UpdateWordDocumentContent;
-use App\Repositories\BoardSessionRespository;
-use App\Repositories\SettingRepository;
-use App\Transformers\BoardSessionLaraTables;
-use Exception;
-use Freshbitsweb\Laratables\Laratables;
-use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use App\Pipes\BoardSession\FileUpload;
+use App\Repositories\SettingRepository;
+use Freshbitsweb\Laratables\Laratables;
 use Illuminate\Support\Facades\Pipeline;
+use App\Pipes\BoardSession\DeleteFileUpload;
+use App\Transformers\BoardSessionLaraTables;
+use App\Pipes\BoardSession\StoreBoardSession;
+use App\Repositories\BoardSessionRespository;
+use App\Pipes\BoardSession\DeleteBoardSession;
+use App\Pipes\BoardSession\UpdateBoardSession;
+use App\Http\Requests\StoreBoardSessionRequest;
+use App\Http\Requests\UpdateBoardSessionRequest;
+use App\Pipes\BoardSession\CreateWordDocumentContent;
+use App\Pipes\BoardSession\UpdateWordDocumentContent;
+use App\Pipes\BoardSession\ExtractTextFromWordDocument;
+use App\Pipes\BoardSession\GeneratePDFDocumentForViewing;
 
 final class BoardSessionController extends Controller
 {
@@ -40,11 +41,10 @@ final class BoardSessionController extends Controller
     /**
      * @throws Exception
      */
-    public function index(): View
+    public function index()
     {
-        return view('admin.board-sessions.index', [
+        return Inertia::render('BoardSessionIndex', [
             'availableRegularSessions' => ReferenceSession::has('scheduleSessions')->get()->unique('number'),
-            'settingsMissingStatus' => SettingRepository::getSettingsForBoardSession(),
         ]);
     }
 

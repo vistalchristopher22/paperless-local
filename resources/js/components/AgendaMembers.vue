@@ -33,7 +33,7 @@
     </div>
     <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
       <div class="overflow-auto">
-        <span class="lead fw-medium text-uppercase bg-dark text-white d-flex p-2 mb-1"
+        <span class="lead fw-medium text-capitalize bg-dark text-white d-flex p-2 mb-1"
           >Chairman</span
         >
         <div class="card mb-3">
@@ -41,7 +41,7 @@
             <div class="user-avatar">
               <img
                 class="thumb-lg rounded-circle img-fluid"
-                :src="`http://localhost:8000/storage/user-images/${fetchedMembers?.chairman_information?.profile_picture}`"
+                :src="`/storage/user-images/${fetchedMembers?.chairman_information?.profile_picture}`"
               />
             </div>
             <span class="fw-bold lead">{{
@@ -49,7 +49,7 @@
             }}</span>
           </div>
         </div>
-        <span class="lead fw-medium text-uppercase bg-dark text-white d-flex p-2 mb-1"
+        <span class="lead fw-medium text-capitalize bg-dark text-white d-flex p-2 mb-1"
           >Vice-chairman</span
         >
         <div class="card mb-3">
@@ -57,7 +57,7 @@
             <div class="user-avatar">
               <img
                 class="thumb-lg rounded-circle img-fluid"
-                :src="`http://localhost:8000/storage/user-images/${fetchedMembers?.vice_chairman_information?.profile_picture}`"
+                :src="`/storage/user-images/${fetchedMembers?.vice_chairman_information?.profile_picture}`"
               />
             </div>
             <span class="fw-bold lead">{{
@@ -65,7 +65,7 @@
             }}</span>
           </div>
         </div>
-        <span class="lead fw-medium text-uppercase bg-dark text-white d-flex p-2 mb-1"
+        <span class="lead fw-medium text-capitalize bg-dark text-white d-flex p-2 mb-1"
           >Members</span
         >
         <div class="card mb-3" v-for="(member, key) in fetchedMembers.members" :key="key">
@@ -73,7 +73,7 @@
             <div class="user-avatar">
               <img
                 class="thumb-lg rounded-circle img-fluid"
-                :src="`http://localhost:8000/storage/user-images/${member?.sanggunian_member[0]?.profile_picture}`"
+                :src="`/storage/user-images/${member?.sanggunian_member[0]?.profile_picture}`"
               />
             </div>
             <span class="fw-bold lead">{{ member?.sanggunian_member[0]?.fullname }}</span>
