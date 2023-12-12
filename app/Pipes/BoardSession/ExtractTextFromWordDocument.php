@@ -14,6 +14,10 @@ final class ExtractTextFromWordDocument implements IPipeHandler
 {
     public function handle(mixed $payload, Closure $next)
     {
+        if (!isset($payload['boardSession']['file_path'])) {
+            return $next($payload);
+        }
+
         $escaped_path = escapeshellarg($payload['boardSession']['file_path']);
 
         $data = shell_exec(' ' . escapeshellarg(env('LIBRE_DIRECTORY')) . ' --headless --cat ' . $escaped_path);
@@ -24,7 +28,7 @@ final class ExtractTextFromWordDocument implements IPipeHandler
         $uuid = Str::uuid();
         BoardSessionCommitteeLink::create([
             'uuid' => $uuid,
-            'view_link' => url()->to('/') . "/" . "order-business-file/link/{$uuid}" ,
+            'view_link' => url()->to('/') . "/" . "order-business-file/link/{$uuid}",
             'public_path' => $outputDirectory . basename(FileUtility::changeExtension(basename($filePath))),
             'board_session_id' => $payload['boardSession']['id']
         ]);

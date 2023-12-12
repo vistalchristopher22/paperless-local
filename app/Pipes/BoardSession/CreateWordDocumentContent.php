@@ -15,12 +15,16 @@ final class CreateWordDocumentContent implements IPipeHandler
     public function handle(mixed $payload, Closure $next)
     {
         try {
-            $template = new TemplateProcessor($payload['session']['file_template']);
-            $this->updateContent($template, $payload, 'unassigned', 'unassigned_business_content');
-            $this->updateContent($template, $payload, 'announcement', 'announcement_content');
-            $template->saveAs($payload['session']['file_path']);
-            $payload['boardSession'] = $payload['session'];
-        } catch (CopyFileException|CreateTemporaryFileException $e) {
+            if (isset($payload['session']['file_template'])) {
+                $template = new TemplateProcessor($payload['session']['file_template']);
+                $this->updateContent($template, $payload, 'unassigned', 'unassigned_business_content');
+                $this->updateContent($template, $payload, 'announcement', 'announcement_content');
+                $template->saveAs($payload['session']['file_path']);
+                $payload['boardSession'] = $payload['session'];
+            } else {
+                Log::info('File template is not set in the session array');
+            }
+        } catch (CopyFileException | CreateTemporaryFileException $e) {
             Log::info('Something went wrong in board session create word document : ' . $e->getMessage());
         }
         return $next($payload);
@@ -31,5 +35,4 @@ final class CreateWordDocumentContent implements IPipeHandler
         $content = html_entity_decode(Str::of($payload[$contentKey])->stripTags()->value(), ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $template->setValue($placeholder, $content);
     }
-
 }

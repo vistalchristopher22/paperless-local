@@ -74,7 +74,10 @@ export const getFileBaseName = (file) => {
 };
 
 export const getName = (data) => {
-    let file = data.replace(/\//g, "\\");
-    let fileName = file.split(["\\"]).pop();
-    return removeTimestampPrefix(fileName);
+    if(data) {
+        let file = data.replace(/\//g, "\\");
+        let fileName = file.split(["\\"]).pop();
+        return removeTimestampPrefix(fileName);
+    }
+
 };

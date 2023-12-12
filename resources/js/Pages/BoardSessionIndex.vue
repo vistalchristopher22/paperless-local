@@ -22,15 +22,24 @@ export default {
     const notyf = new Notyf({
       duration: 4000,
     });
-    const displayAgenda = ref(false);
-    const agendas = ref([]);
     const processing = ref(false);
-    const selectedMember = ref(null);
+    const inspectLink = ref("");
+
+    const viewLink = (link) => {
+      console.log(link);
+      if (link) {
+        inspectLink.value = link;
+      } else {
+        inspectLink.value = "NO LINK AVAILABLE";
+      }
+    };
 
     return {
       processing,
       getName,
       moment,
+      inspectLink,
+      viewLink,
     };
   },
 };
@@ -39,6 +48,56 @@ export default {
 <template>
   <div>
     <FullScreenLoader :processing="processing" />
+
+    <div
+      class="modal fade"
+      id="exampleModalCenter"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-dark">
+            <h6 class="modal-title m-0" id="exampleModalCenterTitle">File Link</h6>
+            <button
+              type="button"
+              class="btn-close text-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <!--end modal-header-->
+          <div class="modal-body">
+            <div class="row">
+              <!--end col-->
+              <div class="col-lg-12">
+                <h5 class="text-center fw-bold">
+                  {{ inspectLink }}
+                </h5>
+              </div>
+              <!--end col-->
+            </div>
+            <!--end row-->
+          </div>
+          <!--end modal-body-->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-soft-secondary btn-sm"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+          <!--end modal-footer-->
+        </div>
+        <!--end modal-content-->
+      </div>
+      <!--end modal-dialog-->
+    </div>
+
     <div class="d-flex align-items-center justify-content-between mb-2">
       <div>
         <h5 class="fw-bolder text-uppercase">
@@ -46,7 +105,7 @@ export default {
         </h5>
       </div>
       <div>
-        <Link href="#" class="btn btn-dark shadow">
+        <Link href="/board-sessions/create" class="btn btn-dark shadow">
           <i class="mdi mdi-plus-circle me-1"></i>
           Add New Order of Business
         </Link>
@@ -55,7 +114,7 @@ export default {
     <div>
       <table class="table table-hover border table-bordered">
         <thead>
-          <tr class="bg-light">
+          <tr>
             <th
               class="border text-white bg-dark border border-dark text-uppercase text-center"
             >
@@ -85,14 +144,17 @@ export default {
         </thead>
         <tbody>
           <tr v-for="board_session in boardSessions.data" :key="board_session.id">
-            <td class="text-capitalize">
+            <td class="text-uppercase">
               <span class="ms-2">{{ board_session.title }}</span>
             </td>
             <td>{{ board_session.schedule }}</td>
             <td class="text-center">
-              <span class="fw-bold text-decoration-underline">{{
-                getName(board_session.file_path)
-              }}</span>
+              <span
+                v-if="board_session.file_path"
+                class="fw-medium text-decoration-underline cursor-pointer"
+                >{{ getName(board_session.file_path) }}</span
+              >
+              <span v-else class="text-danger">N/A</span>
             </td>
             <td class="text-center">
               {{ moment(board_session.created_at).format("YYYY-MM-DD hh:mm A") }}
@@ -131,8 +193,12 @@ export default {
                   </li>
                   <li class="dropdown-divider"></li>
                   <li>
-                    <!-- {{ $boardSession?->file_link->view_link }} -->
-                    <button class="dropdown-item btn-inspect-link" data-view-link="#">
+                    <button
+                      class="dropdown-item btn-inspect-link"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModalCenter"
+                      @click="viewLink(board_session?.file_link?.view_link)"
+                    >
                       Inspect Link
                     </button>
                   </li>
