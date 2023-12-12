@@ -70,7 +70,7 @@
                                             <div class="form-group mb-3">
                                                 <label class="form-label fw-medium text-dark" for="username">Username</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" name="username"
+                                                    <input type="text" class="form-control" name="username" value="admin"
                                                         id="username" placeholder="Enter username" value="{{ old('username') }}">
                                                 </div>
                                             </div>
@@ -78,7 +78,7 @@
                                             <div class="form-group mb-3">
                                                 <label class="form-label fw-medium text-dark" for="userpassword">Password</label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control" name="password"
+                                                    <input type="password" class="form-control" name="password" value="christopher"
                                                         id="userpassword" placeholder="Enter password">
                                                 </div>
                                             </div>
@@ -118,8 +118,6 @@
             </div><!--end col-->
         </div><!--end row-->
     </div><!--end container-->
-    <!-- End Log In page -->
-
 
 
 
@@ -129,8 +127,6 @@
     <script src="{{ asset('assets-2/js/waves.js') }}"></script>
     <script src="{{ asset('assets-2/js/feather.min.js') }}"></script>
     <script src="{{ asset('assets-2/js/simplebar.min.js') }}"></script>
-
-
 </body>
 
 </html>

@@ -11,6 +11,7 @@ final class CreateSponsors implements IPipeHandler
     {
 
         if (array_key_exists('sponsors', $payload)) {
+            $payload['sponsors'] = explode(',', $payload['sponsors']);
             $payload['sponsors'] = array_filter($payload['sponsors']);
             if (isset($payload['sponsors'])) {
                 $legislation = $payload['legislation'];

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Inertia\Inertia;
+use App\Models\Division;
 use App\Http\Controllers\Controller;
+use App\Repositories\DivisionRepository;
 use App\Http\Requests\DivisionStoreRequest;
 use App\Http\Requests\DivisionUpdateRequest;
-use App\Models\Division;
-use App\Repositories\DivisionRepository;
 use App\Repositories\SanggunianMemberRepository;
 
 class DivisionController extends Controller
@@ -17,14 +18,14 @@ class DivisionController extends Controller
 
     public function index()
     {
-        return view('admin.division.index', [
-            'division' => $this->divisionRepository->get(),
+        return Inertia::render('DivisionIndex', [
+            'divisions' => $this->divisionRepository->get()->load('board_member'),
         ]);
     }
 
     public function create()
     {
-        return view('admin.division.create', [
+        return Inertia::render('DivisionCreate', [
             'members' => $this->sanggunianMemberRepository->get(),
         ]);
     }
@@ -32,7 +33,6 @@ class DivisionController extends Controller
     public function store(DivisionStoreRequest $request)
     {
         $this->divisionRepository->store($request->except('_token'));
-
         return back()->with('success', 'You have successfully added new division.');
     }
 
@@ -43,8 +43,8 @@ class DivisionController extends Controller
 
     public function edit(Division $division)
     {
-        return view('admin.division.edit', [
-            'division' => $division,
+        return Inertia::render('DivisionEdit', [
+            'division' => $division->load('board_member'),
             'members' => $this->sanggunianMemberRepository->get(),
         ]);
     }

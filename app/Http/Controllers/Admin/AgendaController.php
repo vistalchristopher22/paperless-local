@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Inertia\Inertia;
+use App\Models\Agenda;
 use App\Http\Controllers\Controller;
+use App\Repositories\AgendaRepository;
 use App\Http\Requests\AgendaStoreRequest;
 use App\Http\Requests\UpdateAgendaRequest;
-use App\Models\Agenda;
-use App\Repositories\AgendaRepository;
 use App\Repositories\SanggunianMemberRepository;
 
 class AgendaController extends Controller
@@ -17,15 +18,15 @@ class AgendaController extends Controller
 
     public function index()
     {
-        return view('admin.agendas.index', [
-            'agendas'     => $this->agendaRepository->get(),
+        return Inertia::render('ChairmanshipIndex', [
+            'agendas'     => $this->agendaRepository->get()->load(['chairman_information', 'vice_chairman_information', 'members']),
             'sanggunians' => $this->agendaRepository->getDistinctedSanggunian(),
         ]);
     }
 
     public function create()
     {
-        return view('admin.agendas.create', [
+        return Inertia::render('ChairmanshipCreate', [
             'members' => $this->sanggunianMemberRepository->get(),
         ]);
     }
@@ -39,7 +40,7 @@ class AgendaController extends Controller
 
     public function edit(Agenda $agenda)
     {
-        return view('admin.agendas.edit', [
+        return Inertia::render('ChairmanshipEdit', [
             'members'       => $this->sanggunianMemberRepository->get(),
             'agendaMembers' => $this->agendaRepository->getMembersId($agenda),
             'agenda'        => $agenda,

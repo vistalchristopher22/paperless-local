@@ -18,6 +18,10 @@ final class ProfilePicture implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
+        if (!isset($payload['profile_picture'])) {
+            return $next($payload);
+        }
+
         $payload = $this->userService->isUserWantToChangeProfilePicture($payload, new UploadImageService());
 
         return $next($payload);

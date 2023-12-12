@@ -24,12 +24,12 @@ class LegislationStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sessionDate' => ['required'],
+            'sessionDate' => ['required', 'date'],
             'classification' => ['required', Rule::in(LegislateType::values())],
             'title' => ['required'],
-            'type' => ['required', Rule::exists('types', 'id')],
-            'co_author' => ['nullable', Rule::exists('sanggunian_members', 'id')],
-            'author' => ['nullable', Rule::exists('sanggunian_members', 'id')],
+            'type' => ['required', 'numeric', Rule::exists('types', 'id')],
+            'co_author' => ['nullable', 'numeric', Rule::exists('sanggunian_members', 'id')],
+            'author' => ['nullable', 'numeric', Rule::exists('sanggunian_members', 'id')],
             'sponsors' => ['nullable'],
             'description' => ['required', 'max:200'],
             'attachment' => ['required', 'mimes:pdf,doc,docx,txt'],

@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\User;
 
-use Illuminate\View\View;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\SettingRepository;
 use App\Repositories\ScheduleRepository;
 
 final class CommitteeAndSessionDisplayController extends Controller
 {
-
     public function __invoke(SettingRepository $settingRepository, ScheduleRepository $scheduleRepository, $dates)
     {
         $dates = explode(separator: "&", string: $dates);

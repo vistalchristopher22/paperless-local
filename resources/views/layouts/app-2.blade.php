@@ -135,7 +135,7 @@
 
 </head>
 
-<body>
+<body class="dark-sidenav navy-sidenav">
     <!-- Left Sidenav -->
     <div class="left-sidenav">
         <!-- LOGO -->
@@ -169,12 +169,12 @@
                         </a>
                     </li>
 
-                    <li>
+                    {{-- <li>
                         <a href="{{ route('backtracking.index') }}">
                             <i data-feather="search" class="align-self-center menu-icon"></i>
                             <span>Backtracking</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li>
                         <a href="#">
@@ -538,13 +538,13 @@
 
             </div><!-- container -->
 
-            <div class="offcanvas offcanvas-end border-0" style="width : 380px;" data-bs-backdrop="false"
-                data-bs-scroll="true" tabindex="-1" id="offcanvasSubmittedAgenda"
+            <div id="offcanvasSubmittedAgenda" class="offcanvas offcanvas-end border-0" style="width : 380px;"
+                data-bs-backdrop="false" data-bs-scroll="true" tabindex="-1"
                 aria-labelledby="offcanvasSubmittedAgendaLabel">
                 <div class="offcanvas-header position-relative">
                     <div class="d-flex flex-row w-100 justify-content-between align-items-center">
-                        <h6 class="offcanvas-title text-uppercase text-white fw-bold"
-                            id="offcanvasSubmittedAgendaLabel">
+                        <h6 id="offcanvasSubmittedAgendaLabel"
+                            class="offcanvas-title text-uppercase text-white fw-bold">
                             Approved Agenda</h6>
                         </a>
                         <a class="cursor-pointer text-danger" data-bs-dismiss="offcanvas" aria-label="Close">
@@ -556,10 +556,10 @@
                 <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0 shadow">
                     <div class="overflow-auto py-4">
                         <div class="overflow-hidden">
-                            <ol class="kanban-cards" id="offcanvas-cards" style="padding-left : 0px;">
+                            <ol id="offcanvas-cards" class="kanban-cards" style="padding-left : 0px;">
                                 @foreach ($onReviewData as $committee)
-                                    <span class="text-dark submitted-by" style="pointer-events:none;"
-                                        id="parent-index-{{ $loop->index }}">
+                                    <span id="parent-index-{{ $loop->index }}" class="text-dark submitted-by"
+                                        style="pointer-events:none;">
                                         {{ $committee->submitted->last_name }},
                                         {{ $committee->submitted->first_name }}
                                     </span>

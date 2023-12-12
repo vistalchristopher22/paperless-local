@@ -10,6 +10,7 @@
         "freshbitsweb/laratables": "^3.0",
         "guzzlehttp/guzzle": "^7.2",
         "hashids/hashids": "^5.0",
+        "inertiajs/inertia-laravel": "^0.6.11",
         "laravel/framework": "^10.0",
         "laravel/pennant": "^1.2",
         "laravel/sanctum": "^3.2",
@@ -22,7 +23,7 @@
         "symfony/finder": "^6.2",
         "symfony/http-client": "^6.3",
         "tecnickcom/tcpdf": "^6.6",
-        "tightenco/ziggy": "^1.5",
+        "tightenco/ziggy": "^1.8",
         "yajra/laravel-datatables": "10.0"
     },
     "require-dev": {

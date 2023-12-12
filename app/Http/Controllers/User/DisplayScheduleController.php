@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\User;
 
-use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Repositories\SettingRepository;
 use App\Repositories\ScheduleRepository;
 
 final class DisplayScheduleController extends Controller
 {
-
     public function __invoke(SettingRepository $settingRepository, ScheduleRepository $scheduleRepository, string $dates)
     {
         $arrayDates = explode(separator: "&", string: $dates);
@@ -32,5 +30,5 @@ final class DisplayScheduleController extends Controller
         ]);
     }
 
-    
+
 }

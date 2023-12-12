@@ -48,8 +48,8 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
-//        GlobalFileAttachmentMiddleware::class,
-//        ScreenReader::class,
+        //        GlobalFileAttachmentMiddleware::class,
+        //        ScreenReader::class,
         // URLShortener::class,
     ];
 
@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
+            \App\Http\Middleware\HandleInertiaRequests::class,
         ],
 
         'api' => [

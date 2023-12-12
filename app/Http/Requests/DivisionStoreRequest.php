@@ -25,6 +25,21 @@ class DivisionStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
+            'board' => ['required'],
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'name' => 'name',
+            'description' => 'description',
+            'board' => 'board member / chief',
         ];
     }
 }

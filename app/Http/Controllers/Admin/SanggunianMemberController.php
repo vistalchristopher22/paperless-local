@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Services\UserService;
+use App\Models\SanggunianMember;
+use App\Pipes\User\ProfilePicture;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Pipeline;
+use App\Repositories\SanggunianMemberRepository;
 use App\Http\Requests\SanggunianMemberStoreRequest;
 use App\Http\Requests\SanggunianMemberUpdateRequest;
-use App\Models\SanggunianMember;
 use App\Pipes\SanggunianMember\StoreSanggunianMember;
 use App\Pipes\SanggunianMember\UpdateSanggunianMember;
-use App\Pipes\User\ProfilePicture;
-use App\Repositories\SanggunianMemberRepository;
-use App\Services\UserService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Pipeline;
 
 final class SanggunianMemberController extends Controller
 {
@@ -26,14 +27,17 @@ final class SanggunianMemberController extends Controller
 
     public function index()
     {
-        return view('admin.sanggunian-members.index', [
+        return Inertia::render('SanggunianIndex', [
             'members' => $this->sanggunianMemberRepository->get(),
         ]);
     }
 
     public function create()
     {
-        return view('admin.sanggunian-members.create');
+        return Inertia::render('SanggunianCreate', [
+            'members' => $this->sanggunianMemberRepository->get(),
+        ]);
+        // return view('admin.sanggunian-members.create');
     }
 
     public function store(SanggunianMemberStoreRequest $request)
@@ -48,7 +52,7 @@ final class SanggunianMemberController extends Controller
 
     public function edit(SanggunianMember $sanggunianMember)
     {
-        return view('admin.sanggunian-members.edit', [
+        return Inertia::render('SanggunianEdit', [
             'member' => $sanggunianMember,
         ]);
     }

@@ -1,12 +1,9 @@
 @extends('layouts.app-2')
 @section('page-title', 'Dashboard')
 @prepend('page-css')
-    <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet"
-          type="text/css"/>
-    <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet"
-          type="text/css"/>
-    <link href="{{ asset('/assets-2/plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet"
-          type="text/css"/>
+    <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
 @endprepend
 @section('content')
     <div class="row justify-content-center">
@@ -21,12 +18,12 @@
                         <div class="col-auto align-self-center">
                             <div class="report-main-icon bg-light-alt">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                     class="w-6 h-6">
+                                    class="w-6 h-6">
                                     <path fill-rule="evenodd"
-                                          d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625zM7.5 15a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 017.5 15zm.75 2.25a.75.75 0 000 1.5H12a.75.75 0 000-1.5H8.25z"
-                                          clip-rule="evenodd"/>
+                                        d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625zM7.5 15a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 017.5 15zm.75 2.25a.75.75 0 000 1.5H12a.75.75 0 000-1.5H8.25z"
+                                        clip-rule="evenodd" />
                                     <path
-                                        d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z"/>
+                                        d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
                                 </svg>
                             </div>
                         </div>
@@ -43,17 +40,17 @@
                     <div class="row d-flex justify-content-center">
                         <div class="col">
                             <p class="text-dark mb-0 fw-semibold">Returned Committees</p>
-                            <h3 class="m-0" id="returnedCommitteesCount">{{ $returnedCommittees }}</h3>
+                            <h3 id="returnedCommitteesCount" class="m-0">{{ $returnedCommittees }}</h3>
                         </div>
                         <div class="col-auto align-self-center">
                             <div class="report-main-icon bg-light-alt">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                     class="w-6 h-6">
+                                    class="w-6 h-6">
                                     <path fill-rule="evenodd"
-                                          d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625zM7.5 15a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 017.5 15zm.75 2.25a.75.75 0 000 1.5H12a.75.75 0 000-1.5H8.25z"
-                                          clip-rule="evenodd"/>
+                                        d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625zM7.5 15a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 017.5 15zm.75 2.25a.75.75 0 000 1.5H12a.75.75 0 000-1.5H8.25z"
+                                        clip-rule="evenodd" />
                                     <path
-                                        d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z"/>
+                                        d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
                                 </svg>
                             </div>
                         </div>
@@ -75,12 +72,12 @@
                         <div class="col-auto align-self-center">
                             <div class="report-main-icon bg-light-alt">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                     class="w-6 h-6">
+                                    class="w-6 h-6">
                                     <path
-                                        d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z"/>
+                                        d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z" />
                                     <path fill-rule="evenodd"
-                                          d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z"
-                                          clip-rule="evenodd"/>
+                                        d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z"
+                                        clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </div>
@@ -102,9 +99,9 @@
                         <div class="col-auto align-self-center">
                             <div class="report-main-icon bg-light-alt">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                     class="w-6 h-6">
+                                    class="w-6 h-6">
                                     <path
-                                        d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"/>
+                                        d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z" />
                                 </svg>
                             </div>
                         </div>
@@ -116,6 +113,7 @@
         </div>
         <!--end col-->
     </div>
+
     <div class="row">
         <div class="col-lg-4">
             <div class="card">
@@ -152,16 +150,16 @@
             </h6>
         </div>
         <div class="card-body">
-            <table class="table table-hover border" id="committees-table" width="100%">
+            <table id="committees-table" class="table table-hover border" width="100%">
                 <thead>
-                <tr class="bg-light">
-                    <th class="border text-dark">Name</th>
-                    <th class="border text-dark">Lead Committee</th>
-                    <th class="border text-dark">Expanded Committee</th>
-                    <th class="border text-dark text-center text-capitalize">submitted at</th>
-                    <th class="border text-dark text-center text-capitalize">submitted by</th>
-                    <th class="border text-center text-dark">Actions</th>
-                </tr>
+                    <tr class="bg-light">
+                        <th class="border text-dark">Name</th>
+                        <th class="border text-dark">Lead Committee</th>
+                        <th class="border text-dark">Expanded Committee</th>
+                        <th class="border text-dark text-center text-capitalize">submitted at</th>
+                        <th class="border text-dark text-center text-capitalize">submitted by</th>
+                        <th class="border text-center text-dark">Actions</th>
+                    </tr>
                 </thead>
             </table>
         </div>
@@ -175,68 +173,68 @@
             <div class="table-responsive">
                 <table class="table table-striped datatable table-bordered border">
                     <thead>
-                    <tr class="bg-light">
-                        <th class="fw-medium text-center">&nbsp;</th>
-                        <th class="fw-medium text-center">User</th>
-                        <th class="fw-medium text-center">Account Type</th>
-                        <th class="fw-medium text-center">IP Address</th>
-                        <th class="fw-medium text-center">Type</th>
-                        <th class="fw-medium text-center">Timestamp</th>
-                    </tr>
+                        <tr class="bg-light">
+                            <th class="fw-medium text-center">&nbsp;</th>
+                            <th class="fw-medium text-center">User</th>
+                            <th class="fw-medium text-center">Account Type</th>
+                            <th class="fw-medium text-center">IP Address</th>
+                            <th class="fw-medium text-center">Type</th>
+                            <th class="fw-medium text-center">Timestamp</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    @foreach ($loginHistories as $history)
-                        <tr>
-                            <td class="text-center">
-                                <img class="rounded-circle thumb-lg"
-                                     src="{{ asset('/storage/user-images/' . $history->user->profile_picture) }}"
-                                     alt="Profile Picture">
-                            </td>
-                            <td class="text-dark text-center">
-                                <span class="mx-1"></span>{{ $history->user->fullname }}
-                            </td>
-                            <td class="text-dark text-center">
-                                <span class="badge badge-soft-primary">
-                                    {{ $history->user->account_type }}
-                                </span>
-                            </td>
-                            <td class="text-dark text-center">
-                                {{ $history->ip_address }}
-                            </td>
-                            <td class="text-dark text-center">
-                                <span @class([
-                                    'badge badge-soft-danger' => $history->type === 'logged_out',
-                                    'badge badge-soft-primary' => $history->type === 'logged_in',
-                                ])>
-                                    {{ Str::headline($history->type) }}
-                                </span>
-                            </td>
-                            <td class="text-dark text-center">
-                                <span class="mx-1"></span>{{ $history->logged_in_at->format('F d, Y h:i A') }}
-                            </td>
-                        </tr>
-                    @endforeach
+                        @foreach ($loginHistories as $history)
+                            <tr>
+                                <td class="text-center">
+                                    <img class="rounded-circle thumb-lg"
+                                        src="{{ asset('/storage/user-images/' . $history->user->profile_picture) }}"
+                                        alt="Profile Picture">
+                                </td>
+                                <td class="text-dark text-center">
+                                    <span class="mx-1"></span>{{ $history->user->fullname }}
+                                </td>
+                                <td class="text-dark text-center">
+                                    <span class="badge badge-soft-primary">
+                                        {{ $history->user->account_type }}
+                                    </span>
+                                </td>
+                                <td class="text-dark text-center">
+                                    {{ $history->ip_address }}
+                                </td>
+                                <td class="text-dark text-center">
+                                    <span @class([
+                                        'badge badge-soft-danger' => $history->type === 'logged_out',
+                                        'badge badge-soft-primary' => $history->type === 'logged_in',
+                                    ])>
+                                        {{ Str::headline($history->type) }}
+                                    </span>
+                                </td>
+                                <td class="text-dark text-center">
+                                    <span class="mx-1"></span>{{ $history->logged_in_at->format('F d, Y h:i A') }}
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-end border-0" style="width:450px;" tabindex="-1" id="offCanvasCommittee"
-         aria-labelledby="offCanvasCommitteeTitle">
+    <div id="offCanvasCommittee" class="offcanvas offcanvas-end border-0" style="width:450px;" tabindex="-1"
+        aria-labelledby="offCanvasCommitteeTitle">
         <div class="offcanvas-header position-relative">
             <div class="d-flex flex-column w-100">
-                <h5 class="offcanvas-title mb-3" id="offCanvasCommitteeTitle"></h5>
+                <h5 id="offCanvasCommitteeTitle" class="offcanvas-title mb-3"></h5>
                 <div class="d-flex justify-content-between align-items-center">
-                    <div class="avatar-group me-4" id="pictures">
-                        <span class="small fw-bolder ms-2 text-muted text-dark" id="picturesDescription"></span>
+                    <div id="pictures" class="avatar-group me-4">
+                        <span id="picturesDescription" class="small fw-bolder ms-2 text-muted text-dark"></span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
             <div class="overflow-auto py-2">
-                <div class="overflow-hidden" id="leadCommitteeContent">
+                <div id="leadCommitteeContent" class="overflow-hidden">
                 </div>
             </div>
         </div>
@@ -258,9 +256,9 @@
                     processing: '<div class="spinner-border text-primary" role="status"></div>'
                 },
                 columns: [{
-                    name: 'name',
-                    render: (data) => `<span class="mx-2">${data}</span>`,
-                },
+                        name: 'name',
+                        render: (data) => `<span class="mx-2">${data}</span>`,
+                    },
                     {
                         name: 'lead_committee',
                         searchable: false,
@@ -449,7 +447,7 @@
                 },
                 dataLabels: {
                     enabled: false,
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return parseInt(val);
                     },
                     offsetY: -20,
@@ -493,7 +491,7 @@
                     },
                     labels: {
                         show: false,
-                        formatter: function (val) {
+                        formatter: function(val) {
                             return parseInt(val);
                         }
                     }
@@ -513,7 +511,7 @@
             let barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
             barChart.render();
 
-            $(document).on('click', '.btn-approve', function () {
+            $(document).on('click', '.btn-approve', function() {
                 let id = $(this).attr('data-id');
                 $.ajax({
                     url: '/api/committee-approved',
@@ -522,7 +520,7 @@
                         id: id,
                         user: userID,
                     },
-                    success: function (response) {
+                    success: function(response) {
                         notyf.success('Committee successfully approved!');
                         $(`#row-${id}`).remove();
 
@@ -536,7 +534,7 @@
                 });
             });
 
-            $(document).on('click', '.btn-disapprove', function () {
+            $(document).on('click', '.btn-disapprove', function() {
                 let committeeID = $(this).attr('data-id');
                 alertify.prompt("Reason", "Short Message",
                     (evt, message) => {
@@ -548,7 +546,7 @@
                                     id: committeeID,
                                     message: message,
                                 },
-                                success: function (response) {
+                                success: function(response) {
                                     if (response.success) {
                                         notyf.success(
                                             'Successfully returned to the user who submit it.');
@@ -575,7 +573,7 @@
                 });
             });
 
-            $(document).on('click', '.btn-edit', function () {
+            $(document).on('click', '.btn-edit', function() {
                 const id = $(this).attr('data-id');
                 fetch(`/committee-file/${id}/edit`)
                     .then(response => response.json())

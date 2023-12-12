@@ -27,7 +27,7 @@ class UpdateAgendaRequest extends FormRequest
             'chairman' => ['required', 'numeric'],
             'vice_chairman' => ['required', 'numeric'],
             'members' => ['required'],
-            // 'members.*.member' => ['required', 'numeric'],
+            'sanggunian' => ['nullable', 'numeric'],
         ];
     }
 }

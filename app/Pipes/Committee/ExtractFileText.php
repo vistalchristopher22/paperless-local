@@ -18,23 +18,26 @@ final class ExtractFileText implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        $payload->load('file_link')->file_link()->delete();
+        if (isset($payload['file_path']) && $payload['file_path'] != null) {
+            $payload->load('file_link')->file_link()->delete();
 
-        $filePath = FileUtility::correctDirectorySeparator($payload['file_path']);
-        $outputDirectory = FileUtility::publicDirectoryForViewing();
-        Artisan::call('convert:path "' . FileUtility::correctDirectorySeparator($filePath) . '" --output="' . $outputDirectory . '"');
+            $filePath = FileUtility::correctDirectorySeparator($payload['file_path']);
+            $outputDirectory = FileUtility::publicDirectoryForViewing();
+            Artisan::call('convert:path "' . FileUtility::correctDirectorySeparator($filePath) . '" --output="' . $outputDirectory . '"');
 
-        $uuid = Str::uuid();
+            $uuid = Str::uuid();
 
-        CommitteeFileLink::create([
-            'uuid' => $uuid,
-            'view_link' => url()->to('/') . "/" . "committee-file/link/{$uuid}" ,
-            'public_path' => $outputDirectory . basename(FileUtility::changeExtension($filePath)),
-            'committee_id' => $payload['id']
-        ]);
+            CommitteeFileLink::create([
+                'uuid' => $uuid,
+                'view_link' => url()->to('/') . "/" . "committee-file/link/{$uuid}",
+                'public_path' => $outputDirectory . basename(FileUtility::changeExtension($filePath)),
+                'committee_id' => $payload['id']
+            ]);
+            Artisan::call('extract:file ' . $payload->id);
+        }
 
-        Artisan::call('extract:file ' . $payload->id);
         $committee = Committee::find($payload->id);
+
         return $next($committee);
     }
 }

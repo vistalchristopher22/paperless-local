@@ -19,8 +19,26 @@ final class UpdateCommittee implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        $expanded = $payload['expanded_committee'][0] ?? null;
-        $others = $payload['expanded_committee'][1] ?? null;
+        $expanded = null;
+        $others = null;
+
+        $eCommittee = json_decode($payload['expanded_committee'], true);
+
+        if (isset($payload['expanded_committee'])) {
+
+            if (count($eCommittee) >= 2) {
+                $expanded = $eCommittee[0] ?? null;
+                $others = $eCommittee[1] ?? null;
+            } else {
+                $expanded = $eCommittee[0] ?? null;
+            }
+        } else {
+            $expanded = null;
+            $others = null;
+        }
+
+
+
         $this->committeeRepository->update($payload['committee'], [
             'name' => $payload['name'],
             'lead_committee' => $payload['lead_committee'],

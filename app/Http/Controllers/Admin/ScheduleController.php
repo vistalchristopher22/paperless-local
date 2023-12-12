@@ -6,7 +6,6 @@ use App\Enums\ScheduleType;
 use App\Http\Controllers\Controller;
 use App\Repositories\VenueRepository;
 use App\Repositories\SettingRepository;
-use App\Repositories\ScheduleRepository;
 use App\Repositories\BoardSessionRespository;
 
 final class ScheduleController extends Controller
@@ -26,5 +25,5 @@ final class ScheduleController extends Controller
         ]);
     }
 
-    
+
 }

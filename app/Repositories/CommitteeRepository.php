@@ -27,4 +27,12 @@ class CommitteeRepository extends BaseRepository
             ->where('status', '!=', 'review')
             ->get($columns);
     }
+
+    public function paginated()
+    {
+        return $this->model->with(['lead_committee_information', 'expanded_committee_information', 'submitted', 'other_expanded_committee_information'])
+            ->whereNull('deleted_at')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
+    }
 }

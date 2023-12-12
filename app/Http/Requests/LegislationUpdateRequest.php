@@ -31,7 +31,7 @@ class LegislationUpdateRequest extends FormRequest
             'author' => ['nullable', Rule::exists('sanggunian_members', 'id')],
             'sponsors' => ['nullable'],
             'description' => ['required', 'max:200'],
-            'attachment' => ['nullable', 'mimes:pdf,doc,docx,txt'],
+            'attachment' => ['nullable'],
         ];
     }
 }

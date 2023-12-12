@@ -4,14 +4,14 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\HomeController as AdministratorHomeController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VenueController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Admin\AgendaController;
-use App\Http\Controllers\Admin\AgendaReOrderController;
 use App\Http\Controllers\Admin\ScreenController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\DivisionController;
@@ -26,29 +26,30 @@ use App\Http\Controllers\Admin\ScreenTableController;
 use App\Http\Controllers\Admin\Archive\FileController;
 use App\Http\Controllers\Admin\BackTrackingController;
 use App\Http\Controllers\Admin\BoardSessionController;
+use App\Http\Controllers\Admin\AgendaReOrderController;
 use App\Http\Controllers\Admin\CommitteeFileController;
 use App\Http\Controllers\Admin\InvitedGuestsController;
 use App\Http\Controllers\Admin\ScreenDisplayController;
+use App\Http\Controllers\Admin\ScreenOperateController;
 use App\Http\Controllers\Admin\RegularSessionController;
 use App\Http\Controllers\Admin\SanggunianMemberController;
 use App\Http\Controllers\Admin\SubmittedCommitteeController;
 use App\Http\Controllers\Admin\Archive\FilePreviewController;
+use App\Http\Controllers\Admin\CommitteeFileViewerController;
 use App\Http\Controllers\Admin\LegislationDownloadController;
 use App\Http\Controllers\ScheduledCommitteeMeetingController;
+use App\Http\Controllers\Admin\BacktrackingViewFileController;
+use App\Http\Controllers\Admin\BoardSessionFileViewController;
 use App\Http\Controllers\Admin\ScreenQuestionofHourController;
 use App\Http\Controllers\Admin\CommitteeInvitedGuestController;
 use App\Http\Controllers\Admin\Archive\FileBulkDeleteController;
 use App\Http\Controllers\Admin\SanggunianMemberAgendaController;
+use App\Http\Controllers\Admin\ScheduledOrderBusinessController;
 use App\Http\Controllers\Admin\CommitteeMeetingScheduleController;
 use App\Http\Controllers\Admin\Archive\FileShowInExplorerController;
-use App\Http\Controllers\Admin\BacktrackingViewFileController;
-use App\Http\Controllers\Admin\BoardSessionFileViewController;
 use App\Http\Controllers\Admin\BoardSessionPublishPreviewController;
-use App\Http\Controllers\Admin\CommitteeFileViewerController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
-use App\Http\Controllers\Admin\ScheduledOrderBusinessController;
-use App\Http\Controllers\Admin\ScreenOperateController;
 
 Auth::routes();
 Route::view('stay', 401);
@@ -71,9 +72,6 @@ Route::group(['prefix' => 'committee-file', 'as' => 'committee-file.'], function
 
 Route::get('order-business-file/link/{uuid}', BoardSessionFileViewController::class)->name('board-session-file.viewer');
 Route::get('board-session/{dates}/published/preview', BoardSessionPublishPreviewController::class)->name('board-sessions-published.preview');
-
-Route::get('legislation/download/{id}', LegislationDownloadController::class)->name('legislation.attachment.download');
-Route::get('legislation/list/{dates}/{author}/{type}/{classification}/{sponsors}', [LegislationController::class, 'list'])->name('legislation.list');
 
 Route::get('submitted-committee/list', SubmittedCommitteeController::class);
 
@@ -148,7 +146,6 @@ Route::group(['middleware' => 'auth'], function () {
             'venue'                  => VenueController::class,
             'files'                  => FileController::class,
             'regular-session'        => RegularSessionController::class,
-            'legislation'            => LegislationController::class,
             'types'                  => TypeController::class,
             'backtracking'           => BackTrackingController::class,
             'committee-file'         => CommitteeFileController::class
@@ -162,4 +159,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('sanggunian-member/{member}/agendas/show', SanggunianMemberAgendaController::class)->name('sanggunian-member.agendas.show');
         Route::post('backtracking/show-explorer', BacktrackingViewFileController::class)->name('backtracking.show-explorer');
     });
+});
+
+Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function () {
+    Route::get('home', [AdministratorHomeController::class, 'index'])->name('administrator.home');
+
+
+    Route::get('legislation/download/{id}', LegislationDownloadController::class)->name('legislation.attachment.download');
+    Route::post('update-legislation/{legislation}', [LegislationController::class, 'updateLegislation']);
+
+    Route::resources([
+        'legislation' => LegislationController::class,
+    ]);
 });

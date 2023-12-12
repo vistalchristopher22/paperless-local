@@ -12,11 +12,20 @@ use App\Models\BoardSessionCommitteeLink;
 
 final class FileLinkService
 {
-    public function generateFileForViewing(string $outputDirectory, string $path): string
+    private function pdfConvert(string $outputDirectory, string $path)
     {
         Artisan::call('convert:path "' . FileUtility::correctDirectorySeparator($path) . '" --output="' . $outputDirectory . '"');
+    }
+
+    public function generateFileForViewing(string $outputDirectory, string $path): string
+    {
+        if (!FileUtility::isPDF($path)) {
+            $this->pdfConvert($outputDirectory, $path);
+            return FileUtility::generatePathForViewing($outputDirectory, FileUtility::changeExtension(basename($path)));
+        }
         return FileUtility::generatePathForViewing($outputDirectory, FileUtility::changeExtension(basename($path)));
     }
+
 
     /**
      * Generate file for viewing if it doesn't have a committee.

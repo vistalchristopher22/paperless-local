@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\LegislateType;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\LegislationStoreRequest;
-use App\Http\Requests\LegislationUpdateRequest;
+use Inertia\Inertia;
 use App\Models\Legislation;
-use App\Pipes\Legislation\CreateLegislation;
-use App\Pipes\Legislation\CreateSponsors;
-use App\Pipes\Legislation\UpdateClassificationType;
-use App\Pipes\Legislation\UpdateLegislation;
-use App\Pipes\Legislation\UpdateSponsors;
-use App\Pipes\Ordinance\CreateOrdinance;
-use App\Pipes\Ordinance\UpdateOrdinance;
-use App\Pipes\Ordinance\UploadFile;
-use App\Pipes\Resolution\CreateResolution;
-use App\Pipes\Resolution\UpdateResolution;
-use App\Repositories\LegislationTypeRepository;
-use App\Repositories\SanggunianMemberRepository;
-use App\Transformers\LegislationLaraTables;
+use App\Enums\LegislateType;
 use App\Utilities\FileUtility;
+use Illuminate\Support\Facades\DB;
+use App\Pipes\Ordinance\UploadFile;
+use App\Http\Controllers\Controller;
 use Freshbitsweb\Laratables\Laratables;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
+use App\Pipes\Ordinance\CreateOrdinance;
+use App\Pipes\Ordinance\UpdateOrdinance;
 use Illuminate\Support\Facades\Pipeline;
+use App\Pipes\Legislation\CreateSponsors;
+use App\Pipes\Legislation\UpdateSponsors;
+use App\Pipes\Resolution\CreateResolution;
+use App\Pipes\Resolution\UpdateResolution;
+use App\Transformers\LegislationLaraTables;
+use App\Pipes\Legislation\CreateLegislation;
+use App\Pipes\Legislation\UpdateLegislation;
+use App\Http\Requests\LegislationStoreRequest;
+use App\Http\Requests\LegislationUpdateRequest;
+use App\Repositories\LegislationTypeRepository;
+use App\Repositories\SanggunianMemberRepository;
+use App\Pipes\Legislation\UpdateClassificationType;
 
 final class LegislationController extends Controller
 {
@@ -36,18 +37,50 @@ final class LegislationController extends Controller
     }
 
 
-    public function list()
-    {
-        return Laratables::recordsOf(Legislation::class, LegislationLaraTables::class);
-    }
-
-
     public function index()
     {
-        return view('admin.legislations.index', [
+        $author = (int) request()->author;
+        $type = (int) request()->type;
+        $fromDate = request()->from_date;
+        $toDate = request()->to_date;
+
+        $data = Legislation::with(['sponsors', 'legislable', 'legislable.author_information', 'legislable.co_author_information', 'legislable.record_type'])->when($author != 0, function ($query) {
+            $query->whereHas('legislable', function ($query) {
+                $query->whereHas('author_information', function ($query) {
+                    $query->where('id', request()->author);
+                });
+            });
+        })->when(request()->has('classification') && request()->classification != 'null', function ($query) {
+            $query->where('classification', request()->classification);
+        })->when($type != 0, function ($query) {
+            $query->whereHas('legislable', function ($query) {
+                $query->whereHas('record_type', function ($query) {
+                    $query->where('id', request()->type);
+                });
+            });
+        })->when($fromDate != '', function ($query) {
+            $query->whereHas('legislable', function ($query) {
+                return $query->whereDate('session_date', '>=', request()->from_date);
+            });
+        })->when($toDate != '', function ($query) {
+            $query->whereHas('legislable', function ($query) {
+                return $query->whereDate('session_date', '<=', request()->to_date);
+            });
+        })->paginate(10);
+
+
+
+
+        return Inertia::render('LegislationIndex', [
+            'legislations' => $data,
             'spMembers' => $this->sanggunianMemberRepository->get(),
             'types' => $this->legislationTypeRepository->get(),
             'classifications' => LegislateType::cases(),
+            'author' => request()->author ?? '',
+            'classification' => request()->classification == 'null' ? '' : request()->classification,
+            'type' => request()->type ?? '',
+            'fromDate' => request()->from_date ?? '',
+            'toDate' => request()->to_date ?? '',
         ]);
     }
 
@@ -74,7 +107,7 @@ final class LegislationController extends Controller
 
     public function create()
     {
-        return view('admin.legislations.create', [
+        return Inertia::render('LegislationCreate', [
             'spMembers' => $this->sanggunianMemberRepository->get(),
             'types' => $this->legislationTypeRepository->get(),
             'classifications' => LegislateType::cases(),
@@ -105,7 +138,7 @@ final class LegislationController extends Controller
 
     public function edit(Legislation $legislation)
     {
-        return view('admin.legislations.edit', [
+        return Inertia::render('LegislationEdit', [
             'legislation' => $legislation,
             'spMembers' => $this->sanggunianMemberRepository->get(),
             'classifications' => LegislateType::values(),
@@ -115,8 +148,7 @@ final class LegislationController extends Controller
         ]);
     }
 
-
-    public function update(LegislationUpdateRequest $request, Legislation $legislation)
+    public function updateLegislation(LegislationUpdateRequest $request, Legislation $legislation)
     {
         return DB::transaction(function () use ($request, $legislation) {
             $pipes = match ($request->classification) {
@@ -141,5 +173,4 @@ final class LegislationController extends Controller
             return Pipeline::send($request->all())->through($pipes)->then(fn () => back()->with('success', 'You have successfully updated the legislation'));
         });
     }
-
 }

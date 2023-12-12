@@ -6,8 +6,6 @@ use App\Http\Controllers\User\SessionController;
 use App\Http\Controllers\User\DivisionController;
 use App\Http\Controllers\User\CommitteeController;
 use App\Http\Controllers\User\DisplayScheduleController;
-use App\Http\Controllers\User\DisplaySchedulePrintController;
-use App\Http\Controllers\Admin\CommitteeMeetingScheduleController;
 use App\Http\Controllers\User\CommitteeAndSessionDisplayController;
 use App\Http\Controllers\User\SanggunianMemberController as BoardMembersController;
 use App\Http\Controllers\User\SessionDisplayController;
