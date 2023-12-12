@@ -104,7 +104,6 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         Route::group(['prefix' => 'board-sessions', 'as' => 'board-sessions.'], function () {
-            Route::get('list/{regularSession?}', [BoardSessionController::class, 'list'])->name('list');
             Route::post('locked/{board_session}', [BoardSessionController::class, 'locked'])->name('locked');
             Route::post('unlocked/{board_session}', [BoardSessionController::class, 'unlocked'])->name('unlocked');
             Route::post('published/{board_session}', [BoardSessionController::class, 'published'])->name('published');

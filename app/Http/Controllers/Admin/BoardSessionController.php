@@ -43,7 +43,9 @@ final class BoardSessionController extends Controller
      */
     public function index()
     {
+        $boardSession = BoardSession::with(['schedule_information', 'schedule_information.regular_session'])->orderBy('created_at', 'DESC');
         return Inertia::render('BoardSessionIndex', [
+            'boardSessions' => $boardSession->paginate(10),
             'availableRegularSessions' => ReferenceSession::has('scheduleSessions')->get()->unique('number'),
         ]);
     }
