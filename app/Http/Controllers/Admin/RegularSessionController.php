@@ -10,7 +10,6 @@ final class RegularSessionController extends Controller
 {
     public function __construct(private readonly ReferenceSessionRepository $referenceSessionRepository)
     {
-
     }
     public function index()
     {

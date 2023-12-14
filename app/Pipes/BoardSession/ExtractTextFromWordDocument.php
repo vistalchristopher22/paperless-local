@@ -39,12 +39,6 @@ final class ExtractTextFromWordDocument implements IPipeHandler
 
         $response = Http::post(config('app.node_url') . '/order-business', $payload);
 
-        if ($response->ok()) {
-            dd('success!');
-        } else {
-            $error = $response->json('error');
-        }
-
         return $next($payload);
     }
 }

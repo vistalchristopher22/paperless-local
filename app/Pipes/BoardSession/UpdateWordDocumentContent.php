@@ -16,11 +16,13 @@ final class UpdateWordDocumentContent implements IPipeHandler
     {
         $boardSession = $payload['boardSession'];
         try {
-            $template = new TemplateProcessor($boardSession->file_template);
-            $this->updateContent($template, $payload, 'unassigned', 'unassigned_business_content');
-            $this->updateContent($template, $payload, 'announcement', 'announcement_content');
-            $template->saveAs($boardSession->file_path);
-        } catch (CopyFileException|CreateTemporaryFileException $e) {
+            if (isset($boardSession->file_template)) {
+                $template = new TemplateProcessor($boardSession->file_template);
+                $this->updateContent($template, $payload, 'unassigned', 'unassigned_business_content');
+                $this->updateContent($template, $payload, 'announcement', 'announcement_content');
+                $template->saveAs($boardSession->file_path);
+            }
+        } catch (CopyFileException | CreateTemporaryFileException $e) {
             Log::info('Something went wrong in board session update word document : ' . $e->getMessage());
         }
 

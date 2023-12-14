@@ -20,7 +20,7 @@ final class UploadFileService implements IUploadService
 
         $filename = Str::of($filename)
             ->replace(" ", FileUtility::FILE_SEPARATOR)
-            ->substr(0, -(strlen($extension)))
+            ->substr(0, - (strlen($extension)))
             ->upper()
             ->append($extension)
             ->value();

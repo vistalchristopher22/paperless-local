@@ -77,7 +77,7 @@ final class BoardSessionController extends Controller
     public function edit(int $id)
     {
         $boardSession = $this->boardSessionRepository->findBy('id', $id);
-        return view('admin.board-sessions.edit', [
+        return Inertia::render('BoardSessionEdit', [
             'boardSession' => $boardSession,
         ]);
     }
@@ -91,7 +91,7 @@ final class BoardSessionController extends Controller
                     UpdateBoardSession::class,
                     FileUpload::class,
                     GeneratePDFDocumentForViewing::class,
-                ])->then(fn ($data) => redirect()->back()->with('success', 'Board session updated successfully'));
+                ])->then(fn () => response()->json(['success' => true, 'message' => 'Board session updated successfully']));
         });
     }
 

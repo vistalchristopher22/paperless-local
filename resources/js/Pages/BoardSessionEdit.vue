@@ -9,7 +9,11 @@ import vSelect from "vue-select";
 import axios from "axios";
 
 export default {
-  props: {},
+  props: {
+    boardSession: {
+      required: true,
+    },
+  },
   layout: Layout,
   components: {
     Link,
@@ -33,14 +37,12 @@ export default {
       announcement_content: "",
     });
 
-    const resetForm = () => {
-      form.value.title = "";
-      form.value.file_path = "";
-      form.value.unassigned_title = "";
-      form.value.unassigned_business_content = "";
-      form.value.announcement_title = "";
-      form.value.announcement_content = "";
-    };
+    form.value.title = props.boardSession.title;
+    form.value.file_path = props.boardSession.file_path;
+    form.value.unassigned_title = props.boardSession.unassigned_title;
+    form.value.unassigned_business_content = props.boardSession.unassigned_content;
+    form.value.announcement_title = props.boardSession.announcement_title;
+    form.value.announcement_content = props.boardSession.announcement_content;
 
     const onFileAttached = (event) => {
       const file = event.target.files[0];
@@ -52,6 +54,7 @@ export default {
       formData.append("title", form.value.title);
       formData.append("file_path", form.value.file_path);
       formData.append("unassigned_title", form.value.unassigned_title);
+      formData.append("_method", "put");
       formData.append(
         "unassigned_business_content",
         form.value.unassigned_business_content
@@ -61,11 +64,10 @@ export default {
 
       processing.value = true;
       axios
-        .post("/board-sessions", formData)
+        .post(`/board-sessions/${props.boardSession.id}`, formData)
         .then((response) => {
           processing.value = false;
           errors.value = {};
-          resetForm();
           notyf.success(response.data.message);
         })
         .catch((error) => {
@@ -95,7 +97,7 @@ export default {
     <div
       class="card-header bg-dark justify-content-between p-3 align-items-center d-flex bg-light"
     >
-      <h6 class="card-title h6 fw-medium text-white">New Ordered Business</h6>
+      <h6 class="card-title h6 fw-medium text-white">Edit Ordered Business</h6>
     </div>
     <div class="card-body p-0">
       <form

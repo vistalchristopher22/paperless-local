@@ -170,7 +170,7 @@ export default {
                   <div>
                     <img
                       class="img-fluid rounded"
-                      :src="`http://localhost:8001/storage/user-images/${chairman_information.profile_picture}`"
+                      :src="`/storage/user-images/${chairman_information.profile_picture}`"
                       style="width: 3vw"
                     />
                   </div>

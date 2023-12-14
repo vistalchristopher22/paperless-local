@@ -22,10 +22,13 @@ final class FileUpload implements IPipeHandler
     {
 
         $payload['file_updated'] = false;
-        if (request()->has('file_path') && request()->file_path) {
+        if (request()->has('file_path') && request()->file_path && is_object(request()->file_path)) {
             try {
                 $session = $payload['boardSession'] ?? $payload['session'];
 
+
+                $request = new \Illuminate\Http\Request();
+                $request->merge(['file_path' => $payload['file_path']]);
                 $location = FileUtility::correctDirectorySeparator($this->service->handle($payload['file_path'], 'BOARD_SESSIONS'));
                 $templateFileName = FileUtility::hideFile($location);
 

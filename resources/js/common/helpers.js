@@ -79,5 +79,4 @@ export const getName = (data) => {
         let fileName = file.split(["\\"]).pop();
         return removeTimestampPrefix(fileName);
     }
-
 };
