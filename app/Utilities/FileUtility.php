@@ -27,6 +27,11 @@ final class FileUtility
 
     public const FILE_SEPARATOR = "_";
 
+    public static function isFileExists(string $path): bool
+    {
+        return file_exists($path);
+    }
+
     public static function generatePathForViewing(string $outputDirectory, string $fileName): string
     {
         $fullDirectory = $outputDirectory . self::changeExtension($fileName);

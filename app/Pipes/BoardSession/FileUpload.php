@@ -2,12 +2,11 @@
 
 namespace App\Pipes\BoardSession;
 
-use App\Contracts\Pipes\IPipeHandler;
-use App\Resolvers\PDFLinkResolver;
-use App\Services\UploadFileService;
-use App\Utilities\FileUtility;
 use Closure;
-use Illuminate\Support\Facades\Artisan;
+use App\Models\BoardSession;
+use App\Utilities\FileUtility;
+use App\Services\UploadFileService;
+use App\Contracts\Pipes\IPipeHandler;
 
 final class FileUpload implements IPipeHandler
 {
@@ -18,47 +17,18 @@ final class FileUpload implements IPipeHandler
         $this->service = app()->make(UploadFileService::class);
     }
 
+    private function updateFileLocation(BoardSession $session, string $location)
+    {
+        $session->file_path = $location;
+        $session->save();
+        $session->refresh();
+    }
+
     public function handle(mixed $payload, Closure $next)
     {
-
-        $payload['file_updated'] = false;
-        if (request()->has('file_path') && request()->file_path && is_object(request()->file_path)) {
-            try {
-                $session = $payload['boardSession'] ?? $payload['session'];
-
-
-                $request = new \Illuminate\Http\Request();
-                $request->merge(['file_path' => $payload['file_path']]);
-                $location = FileUtility::correctDirectorySeparator($this->service->handle($payload['file_path'], 'BOARD_SESSIONS'));
-                $templateFileName = FileUtility::hideFile($location);
-
-                copy($location, $templateFileName);
-
-                $session->file_path = $location;
-                $session->file_template = $templateFileName;
-
-                $fileName = basename($location);
-
-                $outputDirectory = FileUtility::publicDirectoryForViewing();
-
-                Artisan::call('convert:path "' . FileUtility::isInputDirectoryEscaped($location) . '" --output="' . $outputDirectory . '"');
-
-                $boardSessionPathForView = FileUtility::generatePathForViewing($outputDirectory, $fileName);
-
-                $session->file_path_view = $boardSessionPathForView;
-
-                $session->save();
-
-                new PDFLinkResolver($outputDirectory . FileUtility::changeExtension($fileName));
-                $payload['file_updated'] = true;
-            } catch (\Exception $e) {
-                dd($e->getMessage());
-            }
-        }
-
-
-
-
+        $session = $payload['session'];
+        $location = FileUtility::correctDirectorySeparator($this->service->handle($payload['file_path'], 'BOARD_SESSIONS'));
+        $this->updateFileLocation($session, $location);
         return $next($payload);
     }
 }

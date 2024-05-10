@@ -17,7 +17,6 @@ final class ScreenController extends Controller
     public function __invoke(int $id)
     {
         $data = ReferenceSession::with(['scheduleSessions', 'scheduleCommittees.committees', 'scheduleCommittees.committees.lead_committee_information', 'scheduleSessions.board_sessions'])->find($id);
-
         $this->screenDisplayRepository->updateScreenDisplays($data);
 
         $dataToPresent = $this->screenDisplayRepository->getCurrentScreenDisplay($data);
@@ -36,5 +35,4 @@ final class ScreenController extends Controller
             'membersNameFontSize' => $this->settingRepository->getValueByName('screen_font_size') ?? 1.9,
         ]);
     }
-
 }

@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Agenda;
 use App\Models\AgendaMember;
 use Illuminate\Database\Seeder;
+use App\Models\SanggunianMember;
 
 class AgendaMemberSeeder extends Seeder
 {
@@ -722,6 +724,8 @@ class AgendaMemberSeeder extends Seeder
             ],
         ];
         foreach ($data as $member) {
+            $member['agenda_id'] = Agenda::inRandomOrder()->limit(1)->first()->id;
+            $member['member'] = SanggunianMember::inRandomOrder()->limit(1)->first()->id;
             AgendaMember::create($member);
         }
     }

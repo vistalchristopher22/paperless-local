@@ -1,10 +1,7 @@
 <script>
-import { ref, reactive, computed, watch } from "vue";
 import Layout from "@pages/Layout.vue";
 import FullScreenLoader from "@components/FullScreenLoader.vue";
-import AllFields from "@components/AllFields.vue";
 import { Link } from "@inertiajs/vue3";
-import { Notyf } from "notyf";
 export default {
   layout: Layout,
   components: {
@@ -68,7 +65,7 @@ export default {
             <tr v-for="division in divisions" :key="division.index">
               <td class="text-center text-uppercase">{{ division.name }}</td>
               <td class="text-center text-uppercase">{{ division.description }}</td>
-              <td class="text-center text-uppercase">
+              <td class="text-start text-uppercase">
                 <img
                   class="img-fluid rounded"
                   style="width: 2vw"

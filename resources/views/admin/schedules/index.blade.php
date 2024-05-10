@@ -7,7 +7,7 @@
 
     <div class="clearfix"></div>
 
-    <div class="modal fade" tabindex="-1" id="modalVenue">
+    <div id="modalVenue" class="modal fade" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-light">
@@ -18,13 +18,13 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="">Name</label>
-                            <input type="text" class="form-control" name="name" id="venueName"
+                            <input id="venueName" type="text" class="form-control" name="name"
                                 placeholder="Enter the name of the venue">
                             <span class="text-danger error-field"></span>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-dark btn-md" id="btnSaveVenue">
+                        <button id="btnSaveVenue" type="button" class="btn btn-dark btn-md">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-send me-1" viewBox="0 0 16 16">
                                 <path
@@ -112,11 +112,11 @@
 
     </div>
 
-    <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
+    <div id="scheduleModal" class="modal fade" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header bg-light">
-                    <h5 class="modal-title text-dark  fw-medium text-uppercase" id="addScheduleModalLabel">Add
+                    <h5 id="addScheduleModalLabel" class="modal-title text-dark  fw-medium text-uppercase">Add
                         Schedule</h5>
                     <a class="cursor-pointer btn-close" data-bs-dismiss="modal">
                     </a>
@@ -124,22 +124,22 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="name" class="form-label text-capitalize">Name</label>
-                        <input type="text" class="form-control" id="name">
+                        <input id="name" type="text" class="form-control">
                     </div>
 
                     <div class="form-group">
                         <label for="time" class="form-label text-capitalize">Time</label>
-                        <input type="time" class="form-control" id="time">
+                        <input id="time" type="time" class="form-control">
                     </div>
 
                     <div class="form-group">
                         <label for="shortDescription" class="form-label text-capitalize">Short Description</label>
-                        <textarea class="form-control" name="" id="shortDescription" rows="2"></textarea>
+                        <textarea id="shortDescription" class="form-control" name="" rows="2"></textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="venue" class="form-label text-capitalize">Venue</label>
-                        <select name="venue" id="venue" class="form-control">
+                        <select id="venue" name="venue" class="form-control">
                             @foreach ($venues as $venue)
                                 <option value="{{ $venue->name }}">{{ $venue->name }}</option>
                             @endforeach
@@ -148,7 +148,7 @@
 
                     <div class="form-group">
                         <label for="type" class="form-label text-capitalize">Type</label>
-                        <select name="type" id="type" class="form-control text-capitalize" disabled>
+                        <select id="type" name="type" class="form-control text-capitalize" disabled>
                             @foreach ($scheduleTypes as $schedule)
                                 <option value="{{ $schedule }}">{{ $schedule }}</option>
                             @endforeach
@@ -157,7 +157,7 @@
 
                     <div class="form-group">
                         <label for="reference_session" class="form-label text-capitalize">Regular Session</label>
-                        <select name="reference_session" id="reference_session" class="form-control text-capitalize">
+                        <select id="reference_session" name="reference_session" class="form-control text-capitalize">
                             @foreach ($regularSessions as $regularSession)
                                 <option value="{{ addNumberSuffix($regularSession) }}">
                                     {{ addNumberSuffix($regularSession) }}
@@ -167,36 +167,35 @@
                         </select>
                     </div>
 
-                    <input class="form-control" type="hidden" id="id" name="id">
+                    <input id="id" class="form-control" type="hidden" name="id">
 
                     <div class="form-group d-flex align-items-center justify-content-between">
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="withGuests" name="with_guests">
+                            <input id="withGuests" class="form-check-input" type="checkbox" name="with_guests">
                             <label class="form-check-label" for="withGuests">With Invited Guests</label>
                         </div>
 
                         <div>
-                            <button type="button" class="btn btn-info btn-md" id="addGuest">
+                            <button id="addGuest" type="button" class="btn btn-info btn-md">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                    <path
-                                        d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1
-                                    h3v-3A.5.5 0 0 1 8 4z" />
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1
+                                        h3v-3A.5.5 0 0 1 8 4z" />
                                 </svg>
                             </button>
                         </div>
                     </div>
 
                     <div id="dynamicGuestContainer">
-                        <div class="form-group mt-2" id="defaultGuestField">
+                        <div id="defaultGuestField" class="form-group mt-2">
                             <input type="text" class="form-control" placeholder="Enter guest name" name="guests[]">
                         </div>
                     </div>
 
                 </div>
                 <div class="modal-footer border">
-                    <button type="button" class="btn btn-danger text-white shadow d-none" id="btnDeleteSchedule">
+                    <button id="btnDeleteSchedule" type="button" class="btn btn-danger text-white shadow d-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-trash" viewBox="0 0 16 16">
                             <path
@@ -211,7 +210,7 @@
                     </button>
 
 
-                    <button type="button" class="btn btn-dark shadow" id="btnSaveSchedule">
+                    <button id="btnSaveSchedule" type="button" class="btn btn-dark shadow">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-save2-fill" viewBox="0 0 16 16">
                             <path

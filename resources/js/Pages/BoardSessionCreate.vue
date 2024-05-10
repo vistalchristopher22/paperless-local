@@ -1,12 +1,13 @@
 <script>
 import Layout from "@pages/Layout.vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, useForm, router } from "@inertiajs/vue3";
 import { reactive, ref } from "vue";
 import { Notyf } from "notyf";
 import FullScreenLoader from "@components/FullScreenLoader.vue";
 import AllFields from "@components/AllFields.vue";
 import vSelect from "vue-select";
 import axios from "axios";
+import moment from "moment";
 
 export default {
   props: {},
@@ -23,9 +24,22 @@ export default {
     });
     const processing = ref(false);
     const errors = ref({});
+    const model = ref("Edit your content here!");
+    const config = ref({
+      heightMin: 200,
+      placeholderText: "Edit Your Content Here!",
+      events: {
+        initialized: function () {
+          this.html.set(model.value);
+        },
+        contentChanged: function () {
+          model.value = this.html.get();
+        },
+      },
+    });
 
     const form = ref({
-      title: "",
+      title: "OB - " + moment().format("YYYY-MM-DD"),
       file_path: "",
       unassigned_title: "",
       unassigned_business_content: "",
@@ -66,6 +80,7 @@ export default {
           processing.value = false;
           errors.value = {};
           resetForm();
+          router.visit("/board-sessions");
           notyf.success(response.data.message);
         })
         .catch((error) => {
@@ -113,7 +128,7 @@ export default {
             :class="{ 'is-invalid': errors.hasOwnProperty('title') }"
           />
           <div class="invalid-feedback" v-if="errors.hasOwnProperty('title')">
-            <span v-for="error in errors.title" v-text="error"></span>
+            <span v-for="error in errors.title" v-text="error" :key="error"></span>
           </div>
         </div>
 
@@ -126,102 +141,7 @@ export default {
             :class="{ 'is-invalid': errors.hasOwnProperty('file_path') }"
           />
           <div class="invalid-feedback" v-if="errors.hasOwnProperty('file_path')">
-            <span v-for="error in errors.file_path" v-text="error"></span>
-          </div>
-        </div>
-
-        <div class="p-3 border border-start-0 border-end-0 bg-light">
-          <div class="card-title">Unassigned Business</div>
-        </div>
-        <div class="p-3">
-          <div class="d-none mb-3">
-            <label for="unassigned_title" class="form-label"
-              >Unassigned Business Title</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              v-model="form.unassigned_title"
-              :class="{ 'is-invalid': errors.hasOwnProperty('unassigned_title') }"
-            />
-            <div
-              class="invalid-feedback"
-              v-if="errors.hasOwnProperty('unassigned_title')"
-            >
-              <span v-for="error in errors.unassigned_title" v-text="error"></span>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="unassigned_business_content" class="form-label"
-              >Unassigned Business Content</label
-            >
-            <textarea
-              class="form-control"
-              id="unassigned_business_content"
-              name="unassigned_business_content"
-              rows="8"
-              v-model="form.unassigned_business_content"
-              :class="{
-                'is-invalid': errors.hasOwnProperty('unassigned_business_content'),
-              }"
-            ></textarea>
-
-            <div
-              class="invalid-feedback"
-              v-if="errors.hasOwnProperty('unassigned_business_content')"
-            >
-              <span
-                v-for="error in errors.unassigned_business_content"
-                v-text="error"
-              ></span>
-            </div>
-          </div>
-        </div>
-
-        <div class="p-3 border border-start-0 border-end-0 bg-light">
-          <div class="card-title">Announcements</div>
-        </div>
-
-        <div class="p-3">
-          <div class="d-none mb-3">
-            <label for="announcement_title" class="form-label">Announcement Title</label>
-            <input
-              type="text"
-              class="form-control"
-              v-model="form.announcement_title"
-              :class="{
-                'is-invalid': errors.hasOwnProperty('announcement_title'),
-              }"
-            />
-            <div
-              class="invalid-feedback"
-              v-if="errors.hasOwnProperty('announcement_title')"
-            >
-              <span v-for="error in errors.announcement_title" v-text="error"></span>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="announcement_content" class="form-label"
-              >Announcement Content</label
-            >
-            <textarea
-              class="form-control"
-              id="announcement_content"
-              name="announcement_content"
-              rows="3"
-              v-model="form.announcement_content"
-              :class="{
-                'is-invalid': errors.hasOwnProperty('announcement_content'),
-              }"
-            ></textarea>
-
-            <div
-              class="invalid-feedback"
-              v-if="errors.hasOwnProperty('announcement_content')"
-            >
-              <span v-for="error in errors.announcement_content" v-text="error"></span>
-            </div>
+            <span v-for="error in errors.file_path" v-text="error" :key="error"></span>
           </div>
         </div>
 

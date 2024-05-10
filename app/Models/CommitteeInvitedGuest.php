@@ -9,4 +9,10 @@ class CommitteeInvitedGuest extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+
+    public function committee()
+    {
+        return $this->hasOne(Committee::class, 'id', 'committee_id');
+    }
 }

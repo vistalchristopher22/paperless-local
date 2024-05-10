@@ -4,8 +4,9 @@ namespace App\Enums;
 
 enum ScheduleType: string
 {
-    case MEETING = 'committee';
-    case SESSION = 'session';
+    case SESSION = 'Regular Session';
+    case JOINT_SESSION = 'Joint Session';
+    case SPECIAL_SESSION = 'Special Session';
 
     public static function values(): array
     {

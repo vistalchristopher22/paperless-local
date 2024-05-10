@@ -1,3 +1,4 @@
+import moment from 'moment';
 export const addNumberSuffix = (num) => {
     const lastTwoDigits = num % 100;
     const lastDigit = num % 10;
@@ -79,4 +80,9 @@ export const getName = (data) => {
         let fileName = file.split(["\\"]).pop();
         return removeTimestampPrefix(fileName);
     }
+};
+
+export const isRecordNew = (record) => {
+    const today = moment().startOf('day');
+    return moment(record.created_at).isSame(today, 'day');
 };

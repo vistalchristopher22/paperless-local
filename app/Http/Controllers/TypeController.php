@@ -6,7 +6,9 @@ use App\Http\Requests\TypeEditRequest;
 use App\Http\Requests\TypeStoreRequest;
 use App\Models\Type;
 use App\Repositories\TypeRepository;
-use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Http\JsonResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 final class TypeController extends Controller
 {
@@ -15,45 +17,34 @@ final class TypeController extends Controller
 
     }
 
-    public function list()
+
+    public function index(): Response
     {
-        return DataTables::of($this->typeRepository->get())
-            ->addColumn('action', function ($record) {
-                $btnEdit = "<button class='btn btn-success text-white btn-edit-type'  data-content=" . json_encode($record) . "
-                                       title='Edit Type' data-bs-toggle='tooltip' data-bs-placement='top'>
-                                        <i class='mdi mdi-pencil-outline'></i>
-                                    </button>";
-
-                $btnDelete = "<button class='btn btn-danger text-white btn-delete-type' id='btnSubmit' title='Delete Division' data-id=" . $record->id . "
-                                            data-bs-toggle='tooltip' data-bs-placement='top'><i
-                                            class='mdi mdi-trash-can-outline'></i></button>";
-
-                return $btnEdit . '&nbsp' . $btnDelete;
-            })->make(true);
+        return Inertia::render('TypeIndex', [
+            'types' => $this->typeRepository->paginate()]);
     }
 
 
-    public function index()
-    {
-        return view('admin.types.index');
-    }
 
-
-    public function store(TypeStoreRequest $request)
+    public function store(TypeStoreRequest $request): JsonResponse
     {
-        $this->typeRepository->store($request->all());
+        $this->typeRepository->store([
+            'name' => $request->name ?? null,
+        ]);
         return response()->json(['success' => true]);
     }
 
 
-    public function update(TypeEditRequest $request, Type $type)
+    public function update(TypeEditRequest $request, Type $type): JsonResponse
     {
-        $this->typeRepository->update($type, $request->all());
+        $this->typeRepository->update($type, [
+            'name' => $request->name ?? null,
+        ]);
         return response()->json(['success' => true]);
     }
 
 
-    public function destroy(Type $type)
+    public function destroy(Type $type): JsonResponse
     {
         return response()->json(['success' => $this->typeRepository->delete($type)]);
     }

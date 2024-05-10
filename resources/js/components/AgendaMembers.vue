@@ -13,7 +13,7 @@
       >
         <div>
           <h5 class="text-uppercase ms-2" id="offCanvasAgendasTitle">
-            <span class="fw-medium">{{
+            <span class="fw-bold letter-spacing-1">{{
               fetchedMembers?.title?.toLowerCase().replace("committee on", "")
             }}</span>
           </h5>
@@ -21,37 +21,39 @@
         <div>
           <button
             type="button"
-            class="btn btn-danger mb-2 rounded-0 btn-sm"
+            class="btn btn-danger btn-sm"
             data-bs-dismiss="offcanvas"
             aria-label="Close"
             @click="displayMembers = false"
           >
-            <i class="fas fa-times"></i>
+            <i class="mdi mdi-close"></i>
           </button>
         </div>
       </div>
     </div>
     <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
       <div class="overflow-auto">
-        <span class="lead fw-medium text-capitalize bg-dark text-white d-flex p-2 mb-1"
-          >Chairman</span
-        >
+        <h5 class="text-uppercase letter-spacing-1 bg-dark text-white d-flex p-2 mb-1">
+          Chairman
+        </h5>
         <div class="card mb-3">
           <div class="card-body text-center">
             <div class="user-avatar">
               <img
-                class="thumb-lg rounded-circle img-fluid"
+                class="thumb-lg rounded-circle img-fluid mb-2"
                 :src="`/storage/user-images/${fetchedMembers?.chairman_information?.profile_picture}`"
               />
             </div>
-            <span class="fw-bold lead">{{
+            <span class="fw-bold text-uppercase letter-spacing-1">{{
               fetchedMembers?.chairman_information?.fullname
             }}</span>
           </div>
         </div>
-        <span class="lead fw-medium text-capitalize bg-dark text-white d-flex p-2 mb-1"
-          >Vice-chairman</span
+        <h5
+          class="text-uppercase letter-spacing-1 fw-medium bg-dark text-white d-flex p-2 mb-1"
         >
+          Vice-chairman
+        </h5>
         <div class="card mb-3">
           <div class="card-body text-center">
             <div class="user-avatar">
@@ -60,14 +62,16 @@
                 :src="`/storage/user-images/${fetchedMembers?.vice_chairman_information?.profile_picture}`"
               />
             </div>
-            <span class="fw-bold lead">{{
+            <span class="fw-bold text-uppercase letter-spacing-1">{{
               fetchedMembers?.vice_chairman_information?.fullname
             }}</span>
           </div>
         </div>
-        <span class="lead fw-medium text-capitalize bg-dark text-white d-flex p-2 mb-1"
-          >Members</span
+        <h5
+          class="text-uppercase text-uppercase fw-medium bg-dark text-white d-flex p-2 mb-1"
         >
+          Members
+        </h5>
         <div class="card mb-3" v-for="(member, key) in fetchedMembers.members" :key="key">
           <div class="card-body text-center">
             <div class="user-avatar">
@@ -76,7 +80,9 @@
                 :src="`/storage/user-images/${member?.sanggunian_member[0]?.profile_picture}`"
               />
             </div>
-            <span class="fw-bold lead">{{ member?.sanggunian_member[0]?.fullname }}</span>
+            <span class="fw-bold text-uppercase letter-spacing-1">{{
+              member?.sanggunian_member[0]?.fullname
+            }}</span>
           </div>
         </div>
       </div>
@@ -95,4 +101,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.letter-spacing-1 {
+  letter-spacing: 1px;
+}
+</style>

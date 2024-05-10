@@ -19,6 +19,8 @@ class User extends Authenticatable
     use SoftDeletes;
     use HasFeatures;
 
+    protected $pagination = 10;
+
     /**
      * The attributes that are mass assignable.
      *

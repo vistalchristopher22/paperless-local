@@ -52,7 +52,6 @@ class DivisionController extends Controller
     public function update(DivisionUpdateRequest $request, Division $division)
     {
         $this->divisionRepository->update($division, $request->except(['_token', '_method']));
-
         return back()->with('success', 'You have successfully updated a division.');
     }
 

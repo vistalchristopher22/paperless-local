@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Schedule;
 use App\Http\Controllers\Controller;
 use App\Repositories\SettingRepository;
 use App\Repositories\SanggunianMemberRepository;
@@ -22,11 +23,24 @@ final class ScreenDisplayController extends Controller
 
     public function __invoke(int $id)
     {
-        return view('admin.screen-display.index', [
+        $schedule = Schedule::with(['order_of_business_information', 'committees' => [
+            'lead_committee_information' => [
+                'chairman_information',
+                'vice_chairman_information',
+            ],
+            'display'
+        ], 'schedule_venue'])->find($id);
+
+        $schedule->committees = $schedule?->committees->sortBy('display.index');
+
+        $settings = $this->settingRepository->getByNames('name', ['display_announcement', 'announcement_running_speed']);
+
+        return inertia('ScreenDisplayIndex', [
             'id'                => $id,
-            'data'              => $this->screenDisplayRepository->getSortedByReferenceSession($id),
+            'data'              => $schedule,
             'sanggunianMembers' => $this->sanggunianMemberRepository->get(),
-            'settingRepository' => $this->settingRepository,
+            'settings'          => $settings,
+            'schedule'          => $schedule,
         ]);
     }
 }

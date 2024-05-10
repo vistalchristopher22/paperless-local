@@ -26,8 +26,9 @@ final class CommitteeFileController extends Controller
         return $committee_file;
     }
 
-    public function download(Committee $committee)
+    public function download(int $id)
     {
+        $committee = Committee::find($id, ['id', 'file_path']);
         return Response::download(FileUtility::correctDirectorySeparator($committee->file_path), removeTimestampPrefix(basename($committee->file_path)));
     }
 }

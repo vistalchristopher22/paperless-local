@@ -23,12 +23,7 @@ class StoreBoardSessionRequest extends FormRequest
     {
         return [
             'title' => ['required'],
-            'unassigned_title' => ['nullable', 'min:2'],
-            'announcement_title' => ['nullable', 'min:2'],
-            'announcement_content' => ['nullable', 'min:2'],
-            'file_path' => ['nullable', 'file', 'mimes:pdf,doc,docx,xlsx,xls', 'max:10240'],
-            'unassigned_business_content' => ['nullable', 'min:2'],
-            'unAssignedBusinessNote' => ['nullable', 'min:2'],
+            'file_path' => ['nullable', 'file', 'max:10240'],
         ];
     }
 }

@@ -1,7 +1,7 @@
 <script>
 import Layout from "@pages/Layout.vue";
 import FullScreenLoader from "@components/FullScreenLoader.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 import { ref, watch, reactive } from "vue";
 import AllFields from "@components/AllFields.vue";
 import vSelect from "vue-select";
@@ -56,6 +56,7 @@ export default {
             errors.value = {};
             processing.value = false;
             notyf.success(response.data.message);
+            router.visit("/committee/create");
             resetFormData();
           }
         })
@@ -104,20 +105,15 @@ export default {
         method="POST"
         enctype="multipart/form-data"
       >
-        <div class="form-group" v-auto-animate>
-          <label for="name" class="form-label required">Name</label>
+        <div class="form-group mt-3">
+          <label for="file" class="form-label">File</label>
           <input
-            id="name"
-            type="text"
-            class="form-control text-capitalize"
-            :class="{ 'is-invalid': errors?.name }"
-            name="name"
-            v-model="committee.name"
+            type="file"
+            name="file"
+            id="file"
+            class="form-control"
+            @change="onFileAttached"
           />
-
-          <span class="text-danger text-xs" v-if="errors?.name">
-            {{ errors?.name[0] }}
-          </span>
         </div>
 
         <div class="form-group mt-3">
@@ -184,15 +180,20 @@ export default {
           </div>
         </div>
 
-        <div class="form-group mt-3">
-          <label for="file" class="form-label">File</label>
+        <div class="form-group mt-2" v-auto-animate>
+          <label for="name" class="form-label required">Name</label>
           <input
-            type="file"
-            name="file"
-            id="file"
-            class="form-control"
-            @change="onFileAttached"
+            id="name"
+            type="text"
+            class="form-control text-capitalize"
+            :class="{ 'is-invalid': errors?.name }"
+            name="name"
+            v-model="committee.name"
           />
+
+          <span class="text-danger text-xs" v-if="errors?.name">
+            {{ errors?.name[0] }}
+          </span>
         </div>
 
         <div class="d-flex justify-content-between align-items-center mt-3">

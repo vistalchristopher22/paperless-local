@@ -11,10 +11,10 @@ final class VenueController extends Controller
     public function store(Request $request, VenueRepository $venueRepository)
     {
         $this->validate($request, [
-            'name' => ['required', 'unique:venues'],
+            'name' => ['required', 'string', 'unique:venues'],
         ]);
 
-        $venueRepository->store($request->all());
-        return response()->json(['success' => true]);
+        $venue = $venueRepository->store($request->all());
+        return response()->json(['success' => true, 'data' => $venue]);
     }
 }

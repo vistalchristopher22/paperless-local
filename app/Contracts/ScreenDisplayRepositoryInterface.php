@@ -2,13 +2,14 @@
 
 namespace App\Contracts;
 
+use App\Models\Schedule;
 use App\Models\ReferenceSession;
 
 interface ScreenDisplayRepositoryInterface
 {
-    public function updateScreenDisplays(ReferenceSession $data);
+    public function updateScreenDisplays(Schedule $data);
 
-    public function getCurrentScreenDisplay(ReferenceSession $data);
+    public function getCurrentScreenDisplay(Schedule $data);
 
     public function getUpNextScreenDisplay(ReferenceSession $data);
 

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Contracts\ScreenDisplayRepositoryInterface;
-use App\Http\Controllers\Controller;
+use App\Models\Schedule;
 use App\Models\ReferenceSession;
 use App\Models\SanggunianMember;
+use App\Http\Controllers\Controller;
 use App\Repositories\SettingRepository;
+use App\Contracts\ScreenDisplayRepositoryInterface;
+use App\Models\ScreenDisplay;
 
 final class ScreenController extends Controller
 {
@@ -16,31 +18,31 @@ final class ScreenController extends Controller
 
     public function __invoke(int $id)
     {
-        $data = ReferenceSession::with(['scheduleSessions', 'scheduleCommittees.committees', 'scheduleCommittees.committees.committee_invited_guests', 'scheduleCommittees.committees.lead_committee_information', 'scheduleSessions.board_sessions'])->find($id);
 
-        $totalCommittees = 0;
-        $totalSessions = 0;
+        $schedule = Schedule::with(['order_of_business_information', 'committees', 'schedule_venue'])->find($id);
 
-        $data->scheduleCommittees->map(function ($schedule) use (&$totalCommittees) {
-            $totalCommittees += $schedule->committees->count();
-        });
-
-        $data->scheduleSessions->map(function ($schedule) use (&$totalSessions) {
-            $totalSessions += $schedule->board_sessions->count();
-        });
+        $totalCommittees = $schedule->committees()->count();
+        $totalSessions = $schedule->order_of_business_information()->count();
 
         $totalDataToDisplay = $totalCommittees + $totalSessions;
 
-        $this->screenDisplayRepository->updateScreenDisplays($data, $totalDataToDisplay);
+        $dataToPresent = $this->screenDisplayRepository->getCurrentScreenDisplay($schedule);
 
-        $dataToPresent = $this->screenDisplayRepository->getCurrentScreenDisplay($data);
+        $upNextData =  ScreenDisplay::with([
+            'schedule' => [
+                'order_of_business_information', 'committees', 'schedule_venue'
+            ],
+        ])
+            ->where('schedule_id', $id)
+            ->where('index', $dataToPresent->index + 1)
+            ->first();
 
-        $upNextData = $this->screenDisplayRepository->getUpNextScreenDisplay($data);
+
 
         return view('admin.screen.index', [
-            'data' => $data,
             'dataToPresent' => $dataToPresent,
             'upNextData' => $upNextData,
+            'schedule' => $schedule,
             'sanggunianMembers' => SanggunianMember::get(),
             'announcementRunningSpeed' => $this->settingRepository->getValueByName('announcement_running_speed'),
             'announcement' => $this->settingRepository->getValueByName('display_announcement'),

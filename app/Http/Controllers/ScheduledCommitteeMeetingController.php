@@ -14,14 +14,13 @@ final class ScheduledCommitteeMeetingController extends Controller
         $dates = explode("&", $dates);
 
         $allSchedules = Schedule::with(['committees:id,schedule_id,lead_committee,expanded_committee,display_index,invited_guests', 'committees.lead_committee_information', 'committees.expanded_committee_information', 'committees.committee_invited_guests'])
-            ->orderBy('with_invited_guest', 'DESC')
             ->orderBy('date_and_time', 'ASC')
             ->whereDay('date_and_time', date('d'))
             ->whereYear('date_and_time', date('Y'))
             ->where('type', 'committee')
             ->get();
 
-        if($allSchedules->count() === 0) {
+        if ($allSchedules->count() === 0) {
             return redirect()->route('login');
         }
 

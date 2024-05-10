@@ -32,7 +32,6 @@ final class CommitteeViewComposer
     {
         $committees = $this->committee->with(['lead_committee_information', 'lead_committee_information.chairman_information', 'submitted', 'submitted.division_information'])
             ->whereNull('schedule_id')
-            ->where('status', '=', 'approved')
             ->get();
 
         $view->with('onReviewData', $committees);

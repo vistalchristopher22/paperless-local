@@ -17,25 +17,45 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vtt.js/0.12.1/vtt.min.js"
-        integrity="sha512-jUblXGbKz+WLL9Tu7kU1FDIcMS7VTNRmjt33SuD9lGvutgXji4pxUKSAYp23DPdVL4zx9Hro+p6zFIybaujh9A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <style>
-        * {
-            font-family: 'Inter', sans-serif;
+        html,
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+
+
+        /* * {
+            font-family: 'Inter', sans-serif !important;
+        } */
+
+        .open-sans {
+            font-family: 'Open Sans', sans-serif !important;
         }
     </style>
+    @if (str(request()->path())->contains('schedule/schedule/committees/'))
+        <style>
+            body {
+                overflow: hidden;
+            }
+        </style>
+    @endif
     @vite('resources/js/app.js')
     @inertiaHead
 </head>
 
 <body id="body" class="dark-sidebar">
-    <div class="mt-2">
+    <div>
         @inertia
     </div>
 

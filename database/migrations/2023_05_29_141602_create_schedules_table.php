@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\ScheduleType;
-use App\Models\ReferenceSession;
+use App\Models\BoardSession;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,15 +14,14 @@ return new class () extends Migration {
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->datetime('date_and_time');
             $table->text('description')->nullable();
             $table->string('venue');
-            $table->boolean('with_invited_guest')->default(0);
             $table->string('schedule')->nullable();
-            $table->foreignIdFor(ReferenceSession::class);
+            $table->string('reference_session');
             $table->enum('type', ScheduleType::values());
-            $table->string('root_directory');
+            $table->foreignIdFor(BoardSession::class, 'order_of_business')->nullable();
+            $table->string('root_directory')->nullable();
             $table->timestamps();
         });
     }

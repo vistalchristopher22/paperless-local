@@ -4,6 +4,14 @@ import { createInertiaApp } from '@inertiajs/vue3'
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import 'notyf/notyf.min.css'; 
 import "vue-select/dist/vue-select.css";
+import getSocketInstance from '@services/socket';
+
+
+const globalConfig = {
+  socket : getSocketInstance(),
+  baseUrl : window.location.origin,
+}
+
 createInertiaApp({
   id: 'app',
   resolve: name => {
@@ -14,6 +22,8 @@ createInertiaApp({
     createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(autoAnimatePlugin)
+      .provide('$config', globalConfig) 
       .mount(el)
   },
 });
+

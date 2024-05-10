@@ -19,10 +19,6 @@ final class StoreBoardSession implements IPipeHandler
     {
         $session = $this->boardSessionRepository->store([
             'title' => $payload['title'],
-            'unassigned_title' => $payload['unassigned_title'],
-            'unassigned_content' => $payload['unassigned_business_content'],
-            'announcement_title' => $payload['announcement_title'],
-            'announcement_content' => $payload['announcement_content'],
             'submitted_by' => auth()->user()->id,
         ]);
 

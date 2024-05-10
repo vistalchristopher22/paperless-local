@@ -10,4 +10,9 @@ final class TypeRepository extends BaseRepository
     {
         parent::__construct($model);
     }
+
+    public function paginate(int $perPage = 10)
+    {
+        return $this->model->orderBy('created_at', 'DESC')->paginate($perPage);
+    }
 }

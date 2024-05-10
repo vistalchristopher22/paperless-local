@@ -15,9 +15,7 @@ final class CreateSchedule implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        $reference = $payload['reference'];
-
-        $payload['schedule'] = $this->scheduleRepository->createSchedule($payload, $reference['id']);
+        $schedule = $this->scheduleRepository->createSchedule($payload);
         return $next($payload);
     }
 }

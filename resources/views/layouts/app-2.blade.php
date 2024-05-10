@@ -38,18 +38,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
 
 
-    <!-- Google Font-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-
-
     <style>
-        * {
-            font-family: Inter, sans-serif !important;
-        }
-
         .cursor-pointer {
             cursor: pointer;
         }
@@ -137,7 +126,7 @@
 
 <body class="dark-sidenav navy-sidenav">
     <!-- Left Sidenav -->
-    <div class="left-sidenav">
+    <div class="left-sidenav bg-dark">
         <!-- LOGO -->
         <div class="brand bg-dark">
             <a href="{{ route('home') }}" class="logo">

@@ -5,9 +5,9 @@ namespace App\Enums;
 enum ScreenDisplayStatus: string
 {
     case ON_GOING = 'on_going';
-    case NEXT = 'next';
-    case PENDING = 'pending';
-    case DONE = 'done';
+    case NEXT     = 'next';
+    case PENDING  = 'pending';
+    case DONE     = 'done';
 
     public static function values(): array
     {

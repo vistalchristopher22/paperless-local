@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\DisplayScheduleType;
+use App\Enums\ScreenDisplayStatus;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Schedule extends Model
 {
@@ -15,11 +17,27 @@ class Schedule extends Model
 
     public $casts = [
         'date_and_time' => 'datetime',
+
     ];
 
-    public function committees(): HasMany
+    public function with_guest_committees(): HasMany
     {
-        return $this->hasMany(Committee::class, 'schedule_id', 'id')->orderBy('display_index', 'ASC');
+        return $this->hasMany(Committee::class, 'schedule_id', 'id')->where('invited_guests', 1)->orderBy('display_index', 'ASC');
+    }
+
+    public function without_guest_committees(): HasMany
+    {
+        return $this->hasMany(Committee::class, 'schedule_id', 'id')->where('invited_guests', 0)->orderBy('display_index', 'ASC');
+    }
+
+    public function committees()
+    {
+        return $this->hasMany(Committee::class, 'schedule_id', 'id');
+    }
+
+    public function order_of_business_information()
+    {
+        return $this->hasOne(BoardSession::class, 'id', 'order_of_business');
     }
 
     public function board_sessions(): HasMany
@@ -35,5 +53,10 @@ class Schedule extends Model
     public function guests(): HasMany
     {
         return $this->hasMany(ScheduleGuest::class, 'schedule_id', 'id');
+    }
+
+    public function schedule_venue()
+    {
+        return $this->hasOne(Venue::class, 'id', 'venue');
     }
 }

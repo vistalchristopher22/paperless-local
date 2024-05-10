@@ -9,7 +9,7 @@
     <style>
         * {
             -webkit-box-sizing: border-box;
-            font-size : 18px;
+            font-size: 18px;
         }
 
         .d-flex {
@@ -464,36 +464,36 @@
                 flex-basis: 0;
                 flex-grow: 1;
                 max-width: calc((100% / 12) * 6
-            }
+                }
 
-            .col-md-7 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: calc((100% / 12) * 7);
-            }
+                .col-md-7 {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                    max-width: calc((100% / 12) * 7);
+                }
 
-            .col-md-8 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: calc((100% / 12) * 8
-            }
+                .col-md-8 {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                    max-width: calc((100% / 12) * 8
+                    }
 
-            .col-md-9 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: calc((100% / 12) * 9);
-            }
+                    .col-md-9 {
+                        flex-basis: 0;
+                        flex-grow: 1;
+                        max-width: calc((100% / 12) * 9);
+                    }
 
-            .col-md-10 {
-                -basis: 0;
-                flex-grow: 1;
-                max-width: calc((100% / 12) * 10);
-            }
+                    .col-md-10 {
+                        -basis: 0;
+                        flex-grow: 1;
+                        max-width: calc((100% / 12) * 10);
+                    }
 
-            .col-md-11 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: calc100% / 12) * 11);
+                    .col-md-11 {
+                        flex-basis: 0;
+                        flex-grow: 1;
+                        max-width: calc100% / 12) * 11);
             }
 
             .col-md-12 {
@@ -521,233 +521,216 @@
                 flex-basis: 0;
                 flex-grow: 1;
                 max-width: calc((100% / 12) * 3
+                }
+
+                .col-sm-4 {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                    max-width: calc((100% / 12) * 4);
+                }
+
+                .col-sm-5 {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                    max-width: calc((100% / 12) 5);
+                }
+
+                .col-sm-6 {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                    max-width: calc((100% / 12) * 6);
+                }
+
+                .col-sm-7 {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                    max-width: calc((100% / 12) * 7);
+                }
+
+                .col-sm-8 {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                    max-width: calc((100%12) * 8);
+                }
+
+                .col-sm-9 {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                    max-width: calc((100% / 12) * 9);
+                }
+
+                .col-sm-10 {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                    max-width: calc((100% / 12) * 10);
+                }
+
+                .col-sm-11 {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                    max-width: calc((100% / 12) *);
+                }
+
+                .col-sm-12 {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                    max-width: 100%;
+                }
             }
 
-            .col-sm-4 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: calc((100% / 12) * 4);
+            .row {
+                display: flex;
+                flex-wrap: wrap;
             }
 
-            .col-sm-5 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: calc((100% / 12) 5);
+            .text-uppercase {
+                text-transform: uppercase;
             }
 
-            .col-sm-6 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: calc((100% / 12) * 6);
+            .text-decoration-underline {
+                position: relative;
             }
 
-            .col-sm-7 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: calc((100% / 12) * 7);
+            .text-decoration-underline::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: -1px;
+                width: 100%;
+                height: 2px;
+                background-color: black;
             }
 
-            .col-sm-8 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: calc((100%12) * 8);
+
+
+            .letter-spacing-2 {
+                letter-spacing : 2px;
             }
-
-            .col-sm-9 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: calc((100% / 12) * 9);
-            }
-
-            .col-sm-10 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: calc((100% / 12) * 10);
-            }
-
-            .col-sm-11 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: calc((100% / 12) *);
-            }
-
-            .col-sm-12 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: 100%;
-            }
-        }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .text-uppercase {
-            text-transform: uppercase;
-        }
-
-        .text-decoration-underline {
-            position: relative;
-        }
-
-        .text-decoration-underline::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -1px;
-            width: 100%;
-            height: 2px;
-            background-color: black;
-        }
-
-
-
-        .letter-spacing-2 {
-            letter-spacing : 2px;
-        }
-
     </style>
 </head>
 
 <body>
-<br>
-<div>
-    <div class="text-center">
-        <p style="letter-spacing : 1.8px;" class="fw-bold">
-            SCHEDULE OF COMMITTEE MEETINGS
-            <br>
-            <span class="text-uppercase text-decoration-underline">
-                    {{ $schedules?->first()?->first()?->venue }}
+    <br>
+    <div>
+        <div class="text-center">
+            <p style="letter-spacing : 1.8px;" class="fw-bold">
+                SCHEDULE OF COMMITTEE MEETINGS
+                <br>
+                <span class="text-uppercase text-decoration-underline">
+                    {{ $schedule?->schedule_venue?->name }}
                 </span>
+
+            </p>
+            <h4 class="text-uppercase" style="letter-spacing : 1.8px;">
+                {{ $schedule->date_and_time->format('F d, Y') }}
+            </h4>
+        </div>
+        <p class="fw-medium text-uppercase text-center mt-3" style="letter-spacing : 1.8px;">
+            <span class="fw-bold text-decoration-underline">
+                COMMITTEE WITH INVITED GUESTS
+            </span>
         </p>
-    </div>
-    @foreach ($schedules as $index => $grouppedSchedules)
-        <div id="{{ $index }}" class="schedule-container">
-            @foreach ($grouppedSchedules as $key => $schedule)
-                @if (
-                                     $key === 0 ||
-                                         $schedule->date_and_time->format('Y-m-d') !== $grouppedSchedules[$key - 1]->date_and_time->format('Y-m-d'))
-                    <h5 class="fw-medium text-center mt-5 letter-spacing-2">
-                                <span class="text-uppercase">
-                                    @if ($schedule->date_and_time->hour === 0)
-                                        {{ $schedule->date_and_time->format('F d, Y') }}
-                                    @else
-                                        {{ $schedule->date_and_time->format('F d, Y @ h:i A') }}
+        <div class="">
+            <ol id="{{ $schedule->id }}" class="">
+                @php
+                    $countIndex = 1;
+                @endphp
+                @foreach ($schedule->with_guest_committees as $committee)
+                    <li class="my-4" data-id="{{ $committee->id }}">
+                        <span class="text-white">
+                            <span class="count-index">{{ $countIndex }}. </span>
+                            Committee on
+                            <span class="fw-bold letter-spacing-1">
+                                {{ Str::remove('COMMITTEE ON', Str::upper($committee->lead_committee_information->title)) }}
+                            </span>
+                            @if (!is_null($committee->expanded_committee_information))
+                                <br>
+                                <span class="letter-spacing-2">
+                                    <span style="font-size : 15px; margin-left : 50px;">
+                                        ({{ Str::remove('COMMITTEE ON ', Str::upper($committee?->expanded_committee_information?->title)) }})
+                                    </span>
+                                    @if (!is_null($committee?->other_expanded_committee_information))
+                                        <br>
+                                        <span style="font-size : 15px; margin-left : 50px;">
+                                            ({{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }})
+                                        </span>
                                     @endif
                                 </span>
-                        {{--                        <p class="">{{ $schedule->description }}</p>--}}
-                    </h5>
-                    @php $countIndex = 1; @endphp
-                @endif
-
-                @if ($schedule->with_invited_guest == 1)
-                    <p class="text-uppercase text-center mt-3" style="letter-spacing : 1.8px;">
-                            <span class="text-decoration-underline fw-bold">
-                                COMMITTEE WITH INVITED GUESTS
+                            @endif
+                        </span>
+                        @php $countIndex++; @endphp
+                    </li>
+                @endforeach
+                <p class="fw-medium text-uppercase text-center mt-3" style="letter-spacing : 1.8px;">
+                    <span class="fw-bold text-decoration-underline">
+                        COMMITTEE WITHOUT INVITED GUESTS
+                    </span>
+                </p>
+                @foreach ($schedule->without_guest_committees as $committee)
+                    <li class="my-4" data-id="{{ $committee->id }}">
+                        <span class="text-white">
+                            <span class="count-index">{{ $countIndex }}. </span>
+                            Committee on
+                            <span class="fw-bold letter-spacing-1">
+                                {{ Str::remove('COMMITTEE ON', Str::upper($committee->lead_committee_information->title)) }}
                             </span>
-                    </p>
-                    <div class="">
-                        <ol class="" id="{{ $schedule->id }}">
-                            @foreach ($schedule->committees as $committee)
-                                <li class="my-4" data-id="{{ $committee->id }}">
-                                        <span class="text-white">
-                                            <span class="count-index">{{ $countIndex }}. </span>
-                                            Committee on
-                                            <span class="fw-bold letter-spacing-1">
-                                                {{ Str::remove('COMMITTEE ON', Str::upper($committee->lead_committee_information->title)) }}
-                                            </span>
-                                            @if(!is_null($committee->expanded_committee_information))
-                                                <br>
-                                                <span class="letter-spacing-2" style="margin-left :120px;">
-                                                (<small>
-                                                        {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
-                                                        @if(!is_null($committee?->other_expanded_committee_information))
-                                                            & {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
-                                                        @endif
-                                                </small>)
-                                            </span>
-                                            @endif
+                            @if (!is_null($committee->expanded_committee_information))
+                                <br>
+                                <span class="letter-spacing-2">
+                                    <span style="font-size : 15px; margin-left : 50px;">
+                                        ({{ Str::remove('COMMITTEE ON ', Str::upper($committee?->expanded_committee_information?->title)) }})
+                                    </span>
+                                    @if (!is_null($committee?->other_expanded_committee_information))
+                                        <br>
+                                        <span style="font-size : 15px; margin-left : 50px;">
+                                            ({{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }})
                                         </span>
-                                    @php $countIndex++; @endphp
-                                </li>
-                            @endforeach
-                        </ol>
-                    </div>
-                @else
-                    <p class="fw-medium text-uppercase text-center mt-3" style="letter-spacing : 1.8px;">
-                            <span class="fw-bold text-decoration-underline">
-                                COMMITTEE WITHOUT INVITED GUESTS
-                            </span>
-                    </p>
-                    <div class="">
-                        <ol class="" id="{{ $schedule->id }}">
-                            @foreach ($schedule->committees as $committee)
-                                <li class="my-4" data-id="{{ $committee->id }}">
-                                        <span class="text-white">
-                                            <span class="count-index">{{ $countIndex }}. </span>
-                                            Committee on
-                                            <span class="fw-bold letter-spacing-1">
-                                                {{ Str::remove('COMMITTEE ON', Str::upper($committee->lead_committee_information->title)) }}
-                                            </span>
-                                            @if(!is_null($committee->expanded_committee_information))
-                                                <br>
-                                                <span class="letter-spacing-2" style="margin-left :120px;">
-                                                (<small>
-                                                        {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
-                                                        @if(!is_null($committee?->other_expanded_committee_information))
-                                                            & {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
-                                                        @endif
-                                                </small>)
-                                            </span>
-                                            @endif
-                                        </span>
-                                    @php $countIndex++; @endphp
-                                </li>
-                            @endforeach
-                        </ol>
-                    </div>
-                @endif
-            @endforeach
+                                    @endif
+                                </span>
+                            @endif
+                        </span>
+                        @php $countIndex++; @endphp
+                    </li>
+                @endforeach
+            </ol>
         </div>
-    @endforeach
-    <br>
-    <br>
-    <br>
-    <div style="width: 47.5%; float:right;">
-        <p class="text-uppercase">
-            prepared by:
-        </p>
-        <div class="text-center">
-            <p class="fw-bold text-uppercase">
-                {{ $settings->where('name', 'prepared_by')->first()->value }}
-            </p>
-            <p class="text-center mx-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLSE II</p>
-        </div>
-    </div>
-
-    <div style="clear:both;"></div>
-
-    <div style="width : 41%;">
-        <p class="text-uppercase">
-            noted by:
-        </p>
         <br>
-        <div class="text-center">
-            <p class="text-uppercase fw-bold" style="letter-spacing : 1.09px; line-height : 0.3px">
-            {{ $settings->where('name', 'noted_by')->first()->value }}
-            <p class="">LLSO IV</p>
+        <br>
+        <br>
+        <div style="width: 47.5%; float:right;">
+            <p class="text-uppercase">
+                prepared by:
             </p>
+            <div class="text-center">
+                <p class="fw-bold text-uppercase">
+                    {{ $settings->where('name', 'prepared_by')->first()->value }}
+                </p>
+                <p class="text-center mx-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLSE II</p>
+            </div>
         </div>
-    </div>
-    {{-- <div class="col-lg-11 offset-1">
+
+        <div style="clear:both;"></div>
+
+        <div style="width : 41%;">
+            <p class="text-uppercase">
+                noted by:
+            </p>
+            <br>
+            <div class="text-center">
+                <p class="text-uppercase fw-bold" style="letter-spacing : 1.09px; line-height : 0.3px">
+                    {{ $settings->where('name', 'noted_by')->first()->value }}
+                <p class="">LLSO IV</p>
+                </p>
+            </div>
+        </div>
+        {{-- <div class="col-lg-11 offset-1">
 
         <br>
 
     </div> --}}
 
 
-</div>
+    </div>
 </body>
 
 </html>

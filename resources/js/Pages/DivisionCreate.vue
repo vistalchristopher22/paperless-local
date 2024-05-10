@@ -33,16 +33,24 @@ export default {
 
     const createDivision = () => {
       processing.value = true;
-      form.post("/division", {
-        onSuccess: () => {
-          notyf.success("Division created successfully");
-          processing.value = false;
-        },
-        onError: () => {
-          notyf.error("There was an error creating the division");
-          processing.value = false;
-        },
-      });
+      form
+        .transform((data) => {
+          let formData = new FormData();
+          formData.append("name", data.name);
+          formData.append("description", data.description);
+          formData.append("board", data.board);
+          return formData;
+        })
+        .post("/division", {
+          onSuccess: () => {
+            notyf.success("Division created successfully");
+            processing.value = false;
+          },
+          onError: () => {
+            notyf.error("There was an error creating the division");
+            processing.value = false;
+          },
+        });
     };
 
     return {

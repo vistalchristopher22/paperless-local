@@ -1,12 +1,9 @@
 @extends('layouts.app-2')
 @section('tab-title', 'Archive Regular Sessions')
 @prepend('page-css')
-    <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet"
-          type="text/css"/>
-    <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet"
-          type="text/css"/>
-    <link href="{{ asset('/assets-2/plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet"
-          type="text/css"/>
+    <link href="{{ asset('/assets-2/plugins/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/buttons.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/assets-2/plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
 @endprepend
 
 @section('content')
@@ -19,17 +16,22 @@
             <div class="table-responsive">
                 <table class="table table-striped datatable table-bordered border">
                     <thead>
-                    <tr class="bg-light">
-                        <th class="p-2 text-uppercase text-center fw-medium">Session</th>
-                        <th class="p-2 text-uppercase text-center fw-medium">Year</th>
-                        <th class="p-2 text-uppercase text-center fw-medium">Venue</th>
-                        <th class="p-2 text-uppercase text-center fw-medium">Session</th>
-                        <th class="p-2 text-uppercase text-center fw-medium">Committee</th>
-                        <th class="p-2 text-uppercase fw-medium text-center">Action</th>
-                    </tr>
+                        <tr class="bg-light">
+                            <th class="p-2 text-uppercase text-center fw-medium">Session</th>
+                            <th class="p-2 text-uppercase text-center fw-medium">Year</th>
+                            <th class="p-2 text-uppercase text-center fw-medium">Venue</th>
+                            <th class="p-2 text-uppercase text-center fw-medium">Session</th>
+                            <th class="p-2 text-uppercase text-center fw-medium">Committee</th>
+                            <th class="p-2 text-uppercase fw-medium text-center">Action</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    @foreach($referenceSessions as $session)
+                        @foreach ($schedules as $schedule)
+                            <tr>
+                                <td class="text-center">{{ $schedule->reference_session }} - {{ $schedule->type }}</td>
+                            </tr>
+                        @endforeach
+                        {{-- @foreach ($referenceSessions as $session)
                         <tr>
                             <td class="text-center">{{ $session->number }} Regular Session</td>
                             <td class="text-center">{{ $session->year }}</td>
@@ -69,11 +71,9 @@
                                         <path fill-rule="evenodd" d="M0 .5A.5.5 0 0 1 .5 0h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 .5Zm4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 4 .5Zm-4 2A.5.5 0 0 1 .5 2h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5Zm-4 2A.5.5 0 0 1 .5 4h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5Zm-4 2A.5.5 0 0 1 .5 6h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5Zm-4 2A.5.5 0 0 1 .5 8h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5Zm-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5Zm-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5Zm-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5Z"/>
                                     </svg>
                                 </a>
-
-
                             </td>
                         </tr>
-                    @endforeach
+                    @endforeach --}}
                     </tbody>
                 </table>
             </div>

@@ -16,7 +16,7 @@ final class UpdateSponsors implements IPipeHandler
     {
         if (array_key_exists('sponsors', $payload)) {
             if (!is_array($payload['sponsors'])) {
-                $payload['sponsors'] = json_decode($payload['sponsors'], TRUE);
+                $payload['sponsors'] = json_decode($payload['sponsors'], true);
             }
             $payload['sponsors'] = array_filter($payload['sponsors']);
 

@@ -9,9 +9,11 @@ use App\Enums\ScreenDisplayStatus;
 use Illuminate\Support\Facades\Route;
 use App\Contracts\ScreenDisplayRepositoryInterface;
 use App\Http\Controllers\Admin\Api\ScheduleController;
+use App\Http\Controllers\Admin\UpdateCommitteeAttachment;
 use App\Http\Controllers\Api\CommitteeScheduleController;
 use App\Http\Controllers\Admin\Api\AgendaMemberController;
 use App\Http\Controllers\Admin\BoardSessionAddScheduleController;
+use App\Http\Controllers\Admin\UpdateOrderofBusinessAttachmentController;
 use App\Http\Controllers\Admin\CommitteeController as AdminCommitteeController;
 
 Route::put('screen/start/{id}', function (int $id) {
@@ -198,3 +200,7 @@ Route::group(['prefix' => 'notifications'], function () {
         return response()->json(['success' => true, 'sender' => $sender, 'description' => $description, 'created_at' => $created_at->diffForHumans()]);
     });
 });
+
+
+Route::get('committee-update-attachment/{id}', UpdateCommitteeAttachment::class);
+Route::get('order-of-business-update-attachment/{id}', UpdateOrderofBusinessAttachmentController::class);

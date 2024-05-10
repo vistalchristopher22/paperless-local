@@ -13,12 +13,28 @@ final class BoardSessionRespository extends BaseRepository
         parent::__construct($model);
     }
 
+    public function paginated(string|null $schedule)
+    {
+        return $this->model->with(['schedule_information' => [
+            'schedule_venue',
+        ], 'file_link', 'submitted'])
+            ->when($schedule, function ($query, $schedule) {
+                $query->whereHas('schedule_information', function ($query) use ($schedule) {
+                    if ($schedule) {
+                        [$referenceSession, $type] = explode('-', $schedule);
+                        $query->where('reference_session', $referenceSession)
+                            ->where('type', trim($type));
+                    }
+                });
+            })->orderBy('created_at', 'DESC')
+            ->paginate();
+    }
 
     public function getNoScheduleEvents()
     {
         return $this->model::orderBy('created_at', 'ASC')
-            ->whereNull('schedule_id')
-            ->get(['id', 'title', 'unassigned_title', 'announcement_title']);
+            // ->whereDoesntHave('schedule_information')
+            ->get(['id', 'title']);
     }
 
     public function fetchByDate($date)

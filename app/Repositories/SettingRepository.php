@@ -54,12 +54,8 @@ final class SettingRepository extends BaseRepository
     {
         DB::transaction(function () use ($data) {
             $this->model->truncate();
-
             foreach ($data as $setting => $value) {
-                Setting::updateOrCreate(
-                    [
-                        'name' => $setting,
-                    ],
+                Setting::create(
                     [
                         'name' => $setting,
                         'value' => $value,

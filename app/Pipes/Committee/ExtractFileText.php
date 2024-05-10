@@ -2,13 +2,12 @@
 
 namespace App\Pipes\Committee;
 
-use Closure;
-use App\Models\Committee;
-use Illuminate\Support\Str;
-use App\Utilities\FileUtility;
-use App\Models\CommitteeFileLink;
 use App\Contracts\Pipes\IPipeHandler;
-use Illuminate\Support\Facades\Artisan;
+use App\Jobs\ConvertDocxToPDF;
+use App\Jobs\ExtractTextJob;
+use App\Models\Committee;
+use App\Utilities\FileUtility;
+use Closure;
 
 final class ExtractFileText implements IPipeHandler
 {
@@ -19,25 +18,20 @@ final class ExtractFileText implements IPipeHandler
     public function handle(mixed $payload, Closure $next)
     {
         if (isset($payload['file_path']) && $payload['file_path'] != null) {
-            $payload->load('file_link')->file_link()->delete();
+            ConvertDocxToPDF::dispatch(
+                $payload['file_path'],
+                FileUtility::publicDirectoryForViewing()
+            );
 
-            $filePath = FileUtility::correctDirectorySeparator($payload['file_path']);
-            $outputDirectory = FileUtility::publicDirectoryForViewing();
-            Artisan::call('convert:path "' . FileUtility::correctDirectorySeparator($filePath) . '" --output="' . $outputDirectory . '"');
-
-            $uuid = Str::uuid();
-
-            CommitteeFileLink::create([
-                'uuid' => $uuid,
-                'view_link' => url()->to('/') . "/" . "committee-file/link/{$uuid}",
-                'public_path' => $outputDirectory . basename(FileUtility::changeExtension($filePath)),
-                'committee_id' => $payload['id']
-            ]);
-            Artisan::call('extract:file ' . $payload->id);
+            ExtractTextJob::dispatch(
+                $payload->id,
+                Committee::class,
+                FileUtility::draftCommitteesDirectory() . basename($payload['file_path'])
+            );
         }
 
-        $committee = Committee::find($payload->id);
+        $payload->refresh();
 
-        return $next($committee);
+        return $next($payload);
     }
 }

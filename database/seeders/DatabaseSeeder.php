@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\BoardMemberIdentificationCardSeeder;
 
 // use Illuminate\Database\Seeder;
 
@@ -21,9 +22,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             UserSeeder::class,
             VenueSeeder::class,
-            // CommitteeSeeder::class,
-            // LegislationSeeder::class,
-            // LegislationTypeSeeder::class,
+           ....... // BoardMemberIdentificationCardSeeder::class,
         ]);
     }
 }

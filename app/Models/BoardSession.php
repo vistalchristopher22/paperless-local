@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BoardSessionStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -15,9 +16,17 @@ class BoardSession extends Model
 
     protected $guarded = [];
 
+    public $casts = [
+        'status' => BoardSessionStatus::class,
+    ];
+
+    protected $perPage = 8;
+
+    public $appends = ['file'];
+
     public function schedule_information()
     {
-        return $this->belongsTo(Schedule::class, 'schedule_id', 'id');
+        return $this->belongsTo(Schedule::class, 'id', 'order_of_business');
     }
 
     public function display(): MorphOne
@@ -27,7 +36,7 @@ class BoardSession extends Model
 
     public function file_link()
     {
-        return $this->hasOne(BoardSessionCommitteeLink::class);
+        return $this->hasOne(BoardSessionCommitteeLink::class)->latestOfMany();
     }
 
     public function submitted(): BelongsTo
@@ -35,4 +44,8 @@ class BoardSession extends Model
         return $this->belongsTo(User::class, 'submitted_by', 'id');
     }
 
+    public function getFileAttribute(): string
+    {
+        return basename($this->file_path ?? "");
+    }
 }

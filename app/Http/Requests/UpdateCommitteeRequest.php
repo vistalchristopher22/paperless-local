@@ -25,7 +25,7 @@ class UpdateCommitteeRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'file' => ['nullable', new CheckFilename(), 'mimes:docx,pdf'],
+            'file' => ['nullable', new CheckFilename()],
             'lead_committee' => ['required', 'exists:agendas,id'],
             'expanded_committee' => ['nullable'],
         ];

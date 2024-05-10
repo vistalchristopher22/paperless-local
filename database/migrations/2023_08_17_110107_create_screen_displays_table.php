@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\DisplayScheduleType;
 use App\Enums\ScheduleType;
 use App\Enums\ScreenDisplayStatus;
 use App\Models\ReferenceSession;
@@ -8,7 +9,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class () extends Migration {
+return new class() extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -16,14 +18,13 @@ return new class () extends Migration {
     {
         Schema::create('screen_displays', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(ReferenceSession::class);
             $table->foreignIdFor(Schedule::class);
             $table->integer('screen_displayable_id');
             $table->string('screen_displayable_type');
             $table->bigInteger('duration')->nullable();
             $table->timestamp('start_time')->nullable();
             $table->timestamp('end_time')->nullable();
-            $table->enum('type', ScheduleType::values());
+            $table->enum('type', DisplayScheduleType::values());
             $table->enum(column: 'status', allowed: ScreenDisplayStatus::values());
             $table->unsignedBigInteger('index')->nullable();
             $table->timestamps();

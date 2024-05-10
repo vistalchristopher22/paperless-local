@@ -4,89 +4,54 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SanggunianMember;
-use App\Models\Schedule;
 use App\Repositories\ScheduleRepository;
+use App\Repositories\SettingRepository;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 final class CommitteeMeetingSchedulePreviewController extends Controller
 {
-    public function __invoke(ScheduleRepository $scheduleRepository, string $dates)
+    private readonly ScheduleRepository $scheduleRepository;
+    private readonly SettingRepository $settingRepository;
+    public function __construct(ScheduleRepository $scheduleRepository, SettingRepository $settingRepository)
     {
-        $dates = explode('&', $dates);
-        $allSchedules = Schedule::with(['committees:id,schedule_id,lead_committee,expanded_committee,expanded_committee_2,display_index', 'committees.lead_committee_information', 'committees.expanded_committee_information', 'committees.other_expanded_committee_information'])
-            ->where(function ($query) use ($dates) {
-                foreach ($dates as $date) {
-                    $day = date('d', strtotime($date));
-                    $query->orWhereDay('date_and_time', $day);
-                }
-            })
-            ->where(function ($query) use ($dates) {
-                foreach ($dates as $date) {
-                    $month = date('m', strtotime($date));
-                    $query->orWhereMonth('date_and_time', $month);
-                }
-            })
-            ->where(function ($query) use ($dates) {
-                foreach ($dates as $date) {
-                    $year = date('Y', strtotime($date));
-                    $query->orWhereYear('date_and_time', $year);
-                }
-            })
-            ->where('type', 'committee')
-            ->orderBy('with_invited_guest', 'DESC')
-            ->get();
+        $this->scheduleRepository = $scheduleRepository;
+        $this->settingRepository  = $settingRepository;
+    }
 
-        $schedules = $allSchedules->groupBy(function ($record) {
-            return $record->date_and_time->format('Y-m-d');
-        });
+    /**
+     * @param ScheduleRepository $scheduleRepository
+     * @param string $date
+     * @return Response|ResponseFactory
+     */
+    public function __invoke(string $date)
+    {
+        $schedule = $this->scheduleRepository->findByDate($date);
 
-        $schedules = $schedules->sort();
+        $withGuests = $schedule->with_guest_committees->pluck('lead_committee_information')->toArray();
+        $withoutGuests = $schedule->without_guest_committees->pluck('lead_committee_information')->toArray();
 
-        $leadCommitteeIds = $allSchedules->map(function ($schedule) {
-            return $schedule->committees->pluck('lead_committee')->toArray();
-        })->flatten()->toArray();
+        $withGuestsChairmans     = data_get($withGuests, '*.chairman');
+        $withGuestVicechairmans = data_get($withGuests, '*.vice_chairman');
+        $withGuestMembers       = data_get($withGuests, '*.members.*.id');
 
-        $expandedCommitteeIds = $allSchedules->map(function ($schedule) {
-            return $schedule->committees->pluck('expanded_committee')->toArray();
-        })->flatten()->toArray();
+        $withoutGuestsChairmans     = data_get($withoutGuests, '*.chairman');
+        $withoutGuestVicechairmans = data_get($withoutGuests, '*.vice_chairman');
+        $withoutGuestMembers       = data_get($withoutGuests, '*.members.*.id');
 
 
-        $sanggunianMembers = SanggunianMember::with([
-            'agenda_chairman' => function ($query) use ($leadCommitteeIds) {
-                $query->whereIn('id', $leadCommitteeIds);
-            },
-            'agenda_vice_chairman' => function ($query) use ($leadCommitteeIds) {
-                $query->whereIn('id', $leadCommitteeIds);
-            },
-            'agenda_member' => function ($query) use ($leadCommitteeIds) {
-                $query->whereIn('agenda_id', $leadCommitteeIds);
-            },
-            'agenda_member.agenda',
-            'expanded_agenda_chairman' => function ($query) use ($expandedCommitteeIds) {
-                $query->whereIn('id', $expandedCommitteeIds);
-            },
-            'expanded_agenda_vice_chairman' => function ($query) use ($expandedCommitteeIds) {
-                $query->whereIn('id', $expandedCommitteeIds);
-            },
-            'expanded_agenda_member' => function ($query) use ($expandedCommitteeIds) {
-                $query->whereIn('agenda_id', $expandedCommitteeIds);
-            },
-            'expanded_agenda_member.agenda',
-        ])->get();
+        $boardMembers = array_merge($withGuestsChairmans, $withGuestVicechairmans, $withGuestMembers);
+        $boardMembers = array_merge($boardMembers, $withoutGuestsChairmans, $withoutGuestVicechairmans, $withoutGuestMembers);
 
-        $sanggunianMembers = $sanggunianMembers->filter(function ($record) {
-            return
-                !$record->agenda_chairman->isEmpty() or
-                !$record->agenda_vice_chairman->isEmpty() or
-                !$record->agenda_member->isEmpty() or
-                !$record->expanded_agenda_chairman->isEmpty() or
-                !$record->expanded_agenda_vice_chairman->isEmpty() or !$record->expanded_agenda_member->isEmpty();
-        });
+        $boardMembers = array_values(array_unique(array_map('intval', $boardMembers)));
 
+        $members = SanggunianMember::whereIn('id', $boardMembers)->get();
 
-        return view('admin.committee-meeting.preview', [
-            'members' => $sanggunianMembers,
-            'schedules' => $schedules,
-            'dates' => implode('&', $dates)
+        return inertia('CommitteeMeetingSchedulePreview', [
+            'schedule'            => $schedule,
+            'settings'            => $this->settingRepository->getByNames('name', ['prepared_by', 'noted_by']),
+            'members'             => $members,
+            'orderOfBusinessLink' =>  $schedule?->order_of_business_information?->file_link,
         ]);
     }
 }

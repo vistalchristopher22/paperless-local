@@ -24,9 +24,13 @@ export default {
         <div class="spinner-border text-white" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
-        <h5 class="text-white fw-bolder">Processing...</h5>
+        <h5 class="text-white fw-bolder letter-spacing-1">Loading</h5>
       </div>
     </div>
   </div>
 </template>
-<style scoped></style>
+<style scoped>
+.letter-spacing-1 {
+  letter-spacing: 1.5px;
+}
+</style>

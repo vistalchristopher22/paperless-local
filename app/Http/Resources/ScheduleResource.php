@@ -4,7 +4,6 @@
 
 namespace App\Http\Resources;
 
-use App\Enums\ScheduleType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -29,14 +28,14 @@ class ScheduleResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'title' => $this->name,
-            'start' => $this->date_and_time->format('Y-m-d H:i:s'),
-            'end' => $this->date_and_time->format('Y-m-d H:i:s'),
-            'with_invited_guest' => $this->with_invited_guest,
-            'type' => $this->type,
-            'borderColor' => (($this->type == ScheduleType::SESSION->value) ? 'green' : 'blue'),
-            'textColor' => 'black',
+            'id'               => $this->id,
+            'title'            => str()->upper($this->reference_session) . ' - ' . str()->upper($this->type),
+            'committees_count' => (int) $this->committees_count,
+            'start'            => $this->date_and_time->format('Y-m-d'),
+            'end'              => $this->date_and_time->format('Y-m-d'),
+            'type'             => $this->type,
+            'backgroundColor'  => '#0b51b7',
+            'textColor'        => 'white',
         ];
     }
 }

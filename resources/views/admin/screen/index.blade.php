@@ -136,28 +136,27 @@
 <body>
     <div class="d-flex flex-column flex-nowrap justify-content-center align-items-center p-1">
         @isset($dataToPresent)
-            <div class=" {{ $dataToPresent?->schedule?->type == 'session' ? '' : 'bg-light' }} text-dark p-0 d-flex justify-content-between text-center"
+            <div class="{{ $dataToPresent?->type == 'Session' ? '' : 'bg-light' }} text-dark p-0 d-flex justify-content-between text-center"
                 style="border-collapse : collapse;">
-                @if ($dataToPresent?->schedule?->type == 'session')
+                @if ($dataToPresent?->type?->value == 'Session')
                     <div class="mx-2">
-                        <span class="letter-spacing-1">&nbsp;</span>
+                        <span class="letter-spacing-1">ORDER OF BUSINESS</span>
                     </div>
                 @else
                     <div class="mx-2">
                         <span class="text-uppercase letter-spacing-1 text-truncate">
-                            {{ Str::limit(Str::remove('COMMITTEE ON', Str::upper($dataToPresent?->screen_displayable?->lead_committee_information?->title)), 45, '...') }}
+                            {{ str()->of($dataToPresent?->screen_displayable?->name)->limit(45, '...') }}
                         </span>
-                        {{-- {{ Str::limit($dataToPresent?->screen_displayable?->lead_committee_information?->title, 78, '...') }} --}}
                     </div>
                 @endif
                 <div class="mx-2">
-                    <!-- <span id="startTime" class="fw-bold">{{ $dataToPresent?->start_time?->format('h:i A - ') }}</span> -->
+                    {{-- <span id="startTime" class="fw-bold">{{ $dataToPresent?->start_time?->format('h:i A - ') }}</span>  --}}
                     <span id="elapsed-time" class="fw-bold d-none">00:00:00</span>
                 </div>
             </div>
             {{-- PRESENT DATA --}}
             <div class="container-fluid d-flex align-items-center justify-content-between p-0">
-                @if ($dataToPresent?->schedule?->type != 'session')
+                @if ($dataToPresent?->type?->value != 'Session')
                     <table class="table table-bordered" style="height : 38vh; !important;">
                         <tr>
                             <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
@@ -169,7 +168,7 @@
                             </th>
                             <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
                                 style="letter-spacing : 1px;">
-                                @if ($dataToPresent?->screen_displayable?->committee_invited_guests->count() === 0)
+                                @if ($dataToPresent?->schedule?->with_guest_committees->count() === 0)
                                     {!! generateHTMLSpace(1) !!}
                                 @else
                                     {!! generateHTMLSpace(8) !!} Invited Guest/s
@@ -182,46 +181,44 @@
                                 <div class="d-flex flex-column justify-content-around align-items-center">
                                     <img src="{{ asset('storage/user-images/' . $dataToPresent?->screen_displayable?->lead_committee_information?->chairman_information?->profile_picture) }}"
                                         class="mt-1 rounded" width="50%" alt="">
-                                    <span
-                                        class="text-uppercase text-primary fw-bold chairman-title text-truncate">{{ $dataToPresent?->screen_displayable?->lead_committee_information?->chairman_information->fullname }}</span>
+                                    <span class="text-uppercase text-primary fw-bold chairman-title text-truncate">
+                                        {{ $dataToPresent?->screen_displayable?->lead_committee_information?->chairman_information->fullname }}
+                                    </span>
                                 </div>
                             </td>
                             <td class="align-middle text-center">
                                 <span class="text-uppercase text-primary fw-bold chairman-title">
-                                    @if (method_exists($dataToPresent->screen_displayable, 'lead_committee_information'))
-                                        {{ $dataToPresent?->screen_displayable?->lead_committee_information?->vice_chairman_information->fullname }}
-                                    @endif
-
+                                    {{ $dataToPresent?->screen_displayable?->lead_committee_information?->vice_chairman_information->fullname }}
                                 </span>
                             </td>
-                            @if ($dataToPresent?->screen_displayable?->committee_invited_guests->count() !== 0)
+                            @if (@$dataToPresent->screen_displayable->committee_invited_guests->count() !== 0)
                                 <td rowspan="4">
-                                    @if ($dataToPresent?->screen_displayable?->committee_invited_guests->count() >= 8)
+                                    @if (@$dataToPresent?->screen_displayable?->committee_invited_guests->count() >= 8)
                                         <div class="scroll-to-top-present-committee-invited-guests p-0">
                                             <ul>
                                                 @foreach ($dataToPresent?->screen_displayable?->committee_invited_guests as $guest)
                                                     <li class="font-weight-600 text-truncate">
                                                         {{ $loop->index + 1 }}.
-                                                        {!! generateHTMLSpace(0) !!}{{ $guest->fullname }}
+                                                        {!! generateHTMLSpace(0) !!}
+                                                        {{ $guest->fullname }}
                                                     </li>
                                                 @endforeach
                                             </ul>
                                         </div>
                                     @elseif(
-                                        $dataToPresent?->screen_displayable?->committee_invited_guests->count() < 8 &&
-                                            $dataToPresent?->screen_displayable?->committee_invited_guests->count() !== 0)
-                                        <ul>
-                                            @foreach ($dataToPresent?->screen_displayable?->committee_invited_guests as $guest)
-                                                <li class="font-weight-600 text-truncate">
-                                                    {{ $loop->index + 1 }}. {!! generateHTMLSpace(0) !!}{{ $guest->fullname }}
-                                                </li>
-                                            @endforeach
+                                        @$dataToPresent->screen_displayable->committee_invited_guests->count() < 8 &&
+                                            @$dataToPresent->screen_displayable->committee_invited_guests->count() !== 0)
+                                        @foreach ($dataToPresent?->screen_displayable?->committee_invited_guests as $guest)
+                                            <li class="font-weight-600 text-truncate">
+                                                {{ $loop->index + 1 }}. {!! generateHTMLSpace(0) !!}{{ $guest->fullname }}
+                                            </li>
+                                        @endforeach
                                         </ul>
                                     @endif
                                 </td>
                             @else
                                 <td rowspan="4">
-                                    @if (method_exists($dataToPresent->screen_displayable, 'lead_committee_information'))
+                                    @if ($dataToPresent->screen_displayable)
                                         <div id="members-img-container" class="text-center">
                                         </div>
                                     @endif
@@ -238,16 +235,14 @@
                             <td rowspan="2" class="p-0 text-truncate" style="">
                                 <div class="scroll-to-top-sanggunian-members">
                                     <ul>
-                                        @if (method_exists($dataToPresent->screen_displayable, 'lead_committee_information'))
-                                            @foreach ($dataToPresent?->screen_displayable?->lead_committee_information?->members as $k => $member)
-                                                @foreach ($member->sanggunian_member as $m)
-                                                    <li class="">
-                                                        {!! generateHTMLSpace(1) !!}
-                                                        <span class="text-uppercase fw-bold">{{ $m->fullname }}</span>
-                                                    </li>
-                                                @endforeach
+                                        @foreach ($dataToPresent?->screen_displayable?->lead_committee_information?->members as $k => $member)
+                                            @foreach ($member->sanggunian_member as $m)
+                                                <li class="">
+                                                    {!! generateHTMLSpace(1) !!}
+                                                    <span class="text-uppercase fw-bold">{{ $m->fullname }}</span>
+                                                </li>
                                             @endforeach
-                                        @endif
+                                        @endforeach
                                     </ul>
                                 </div>
                             </td>
@@ -285,7 +280,7 @@
         @endisset
         @isset($upNextData)
             <div class="bg-light p-0 d-flex justify-content-between text-center">
-                @if ($upNextData?->schedule?->type == 'session')
+                @if ($upNextData?->type == 'Session')
                     <div class="mx-2">
                         <span class="letter-spacing-1">&nbsp;</span>
                     </div>
@@ -325,7 +320,7 @@
                             <div class="d-flex flex-column justify-content-around align-items-center">
                                 <img src="{{ asset('storage/user-images/' . $upNextData?->screen_displayable?->lead_committee_information?->chairman_information?->profile_picture) }}"
                                     class="mt-1 rounded" width="50%" alt="">
-                                @if ($upNextData?->schedule?->type != 'session')
+                                @if ($upNextData?->type != 'Session')
                                     <span
                                         class="text-uppercase text-primary fw-bold chairman-title text-truncate p-1">{{ $upNextData?->screen_displayable?->lead_committee_information?->chairman_information?->fullname }}</span>
                                 @endif
@@ -412,15 +407,9 @@
             <marquee onmouseover="this.stop();" onmouseout="this.start();" direction="left" behavior="scroll"
                 scrollamount="{{ $announcementRunningSpeed }}"
                 style="position:absolute; bottom : 0%; right : 0%; left :30.1%;">
-                <span
-                    class="text-dark fw-bold text-white text-uppercase letter-spacing-1 font-inter">{{ $data['number'] }}
-                    REGULAR SESSION
-                    @if (!empty($dataToPresent?->schedule?->venue))
-                        - {{ $dataToPresent->schedule->venue }}
-                    @endif
-                    @if (!empty($data?->schedules?->first()?->date_and_time))
-                        - {{ $data?->schedules?->first()?->date_and_time->format('F d, Y') }}
-                    @endif
+                <span class="text-dark fw-bold text-white text-uppercase letter-spacing-1 font-inter">
+                    {{ $schedule->reference_session }} {{ $schedule->type }}
+                    @ {{ $schedule->schedule_venue->name }}
                     @if (!empty($announcement))
                         |
                         {{ $announcement }}
@@ -480,7 +469,7 @@
                         setInterval(() => updateElapsedTime(response.start_time), 1000);
                     },
                     error: function(response) {
-                         location.reload();
+                        location.reload();
                     }
                 });
             }

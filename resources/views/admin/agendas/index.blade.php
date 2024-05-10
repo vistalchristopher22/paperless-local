@@ -58,7 +58,7 @@
         <div class="card-body">
 
             <div class="table-responsive">
-                <table class="table table-striped border" id="agendas-table">
+                <table id="agendas-table" class="table table-striped border">
                     <thead>
                         <tr>
                             <th class="p-3 text-center bg-light border">Order</th>
@@ -113,21 +113,21 @@
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-end" style="width:450px;" tabindex="-1" id="offCanvasCommittee"
+    <div id="offCanvasCommittee" class="offcanvas offcanvas-end" style="width:450px;" tabindex="-1"
         aria-labelledby="offCanvasCommitteeTitle">
         <div class="offcanvas-header position-relative">
             <div class="d-flex flex-column w-100">
-                <h5 class="offcanvas-title mb-3" id="offCanvasCommitteeTitle"></h5>
+                <h5 id="offCanvasCommitteeTitle" class="offcanvas-title mb-3"></h5>
                 <div class="d-flex justify-content-between align-items-center">
-                    <div class="avatar-group me-4" id="pictures">
-                        <span class="small fw-bolder ms-2 text-muted text-dark" id="picturesDescription"></span>
+                    <div id="pictures" class="avatar-group me-4">
+                        <span id="picturesDescription" class="small fw-bolder ms-2 text-muted text-dark"></span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
             <div class="overflow-auto py-2">
-                <div class="overflow-hidden" id="leadCommitteeContent">
+                <div id="leadCommitteeContent" class="overflow-hidden">
                 </div>
             </div>
         </div>

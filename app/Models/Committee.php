@@ -16,27 +16,17 @@ class Committee extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public $table = 'committees';
-
-    protected $guarded = [];
-
+    public $table   = 'committees';
     public $appends = [
         'file_name',
         'file',
         'submitted_at',
     ];
-
-    public $casts = [
-        'date' => 'date',
+    public $casts   = [
+        'date'             => 'date',
         'session_schedule' => 'date',
     ];
-
-    protected function submittedAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($_) => $this->created_at->format('F d, Y h:i A'),
-        );
-    }
+    protected $guarded = [];
 
     public function lead_committee_information(): HasOne
     {
@@ -70,21 +60,34 @@ class Committee extends Model
 
     public function getFileNameAttribute(): string
     {
-        return Str::afterLast(basename($this->file_path), '_');
+        return Str::afterLast(basename($this->file_path ?? ""), '_');
     }
 
     public function getFileAttribute(): string
     {
-        return basename($this->file_path);
+        return basename($this->file_path ?? "");
     }
 
     public function file_link()
     {
-        return $this->hasOne(CommitteeFileLink::class);
+        return $this->hasOne(CommitteeFileLink::class)->latestOfMany();
     }
 
     public function committee_invited_guests()
     {
         return $this->hasMany(CommitteeInvitedGuest::class);
+    }
+
+    protected function submittedAt(): Attribute
+    {
+        if (array_key_exists('created_at', $this->attributes)) {
+            return Attribute::make(
+                get: fn ($_) => $this->created_at->format('F d, Y h:i A'),
+            );
+        }
+
+        return Attribute::make(
+            get: fn ($_) => null,
+        );
     }
 }

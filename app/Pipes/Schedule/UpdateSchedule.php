@@ -17,7 +17,7 @@ final class UpdateSchedule implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        $payload['schedule'] = $this->scheduleRepository->updateSchedule($payload, $payload['reference']->id);
+        $payload['schedule'] = $this->scheduleRepository->updateSchedule($payload);
         return $next($payload);
     }
 }

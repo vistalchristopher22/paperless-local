@@ -13,15 +13,14 @@ final class CommitteeMeetingSchedulePrintController extends Controller
     {
     }
 
-    public function __invoke(string $dates)
+    public function __invoke(string $date)
     {
-        $dates = explode('&', $dates);
         $pdf = App::make('snappy.pdf.wrapper');
         $pdf->setOption('header-html', view('admin.committee-meeting.print-header'));
+        $schedule = $this->scheduleRepository->findByDate($date);
         $pdf->loadView('admin.committee-meeting.print', [
-            'schedules' => $this->scheduleRepository->groupedByDateCommittees($dates),
+            'schedule' => $this->scheduleRepository->findByDate($date),
             'settings' => $this->settingRepository->getByNames('name', ['prepared_by', 'noted_by']),
-            'dates' => implode('&', $dates),
         ])->setPaper('legal')->setOption('enable-local-file-access', true)->setOrientation('portrait');
         return $pdf->stream();
     }

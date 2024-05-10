@@ -73,22 +73,22 @@
         <div class="card-header m-0 py-0 px-0">
             <button class="nav-item dropdown btn btn-dark rounded-0 float-end" role="presentation">
                 <a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" href="#" role="button"
-                   aria-expanded="false">
+                    aria-expanded="false">
                     Actions
                     <i class="mdi mdi-chevron-down"></i>
                 </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" target="_blank"
-                       href="{{ route('committee-meeting-schedule.preview', $dates) }}">Preview</a>
+                        href="{{ route('committee-meeting-schedule.preview', $dates) }}">Preview</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" target="_blank"
-                       href="{{ route('committee-meeting-schedule.print', $dates) }}">Print</a>
+                        href="{{ route('committee-meeting-schedule.print', $dates) }}">Print</a>
                 </div>
             </button>
         </div>
 
-        <div class="tab-content" id="tab-panes">
-            <div class="tab-pane fade show active" id="committee" role="tabpanel" aria-labelledby="committee-tab">
+        <div id="tab-panes" class="tab-content">
+            <div id="committee" class="tab-pane fade show active" role="tabpanel" aria-labelledby="committee-tab">
                 <div class="card-body">
                     <div
                         class="header d-flex flex-row align-items-center justify-content-center border border-start-0 border-end-0 border-top-0 border-5 border-dark mb-3">
@@ -119,89 +119,53 @@
                                     $key === 0 ||
                                         $schedule->date_and_time->format('Y-m-d') !== $grouppedSchedules[$key - 1]->date_and_time->format('Y-m-d'))
                                     <h5 class="fw-medium text-center mt-5">
-                                <span class="text-uppercase">
-                                    @if ($schedule->date_and_time->hour === 0)
-                                        {{ $schedule->date_and_time->format('F d, Y') }}
-                                    @else
-                                        {{ $schedule->date_and_time->format('F d, Y @ h:i A') }}
-                                    @endif
-                                </span>
-                                        {{--                                        <p class="">{{ $schedule->description }}</p>--}}
+                                        <span class="text-uppercase">
+                                            @if ($schedule->date_and_time->hour === 0)
+                                                {{ $schedule->date_and_time->format('F d, Y') }}
+                                            @else
+                                                {{ $schedule->date_and_time->format('F d, Y @ h:i A') }}
+                                            @endif
+                                        </span>
+                                        {{--                                        <p class="">{{ $schedule->description }}</p> --}}
                                     </h5>
                                     @php $countIndex = 1; @endphp
                                 @endif
 
-                                @if ($schedule->with_invited_guest == 1)
-                                    <h5 class="fw-medium text-uppercase text-center mt-3"
-                                        style="letter-spacing : 1.8px;">
-                                        COMMITTEE WITH INVITED GUESTS
-                                    </h5>
-                                    <div class="kanban-column w-100">
-                                        <ol class="kanban-cards" id="{{ $schedule->id }}">
-                                            @foreach ($schedule->committees as $committee)
-                                                <li class="kanban-card shadow-lg" data-id="{{ $committee->id }}">
-                                            <span class="text-white">
-                                                <span class="count-index">{{ $countIndex }}. </span>
-                                                {{ $committee->lead_committee_information->title }}
-                                                @if(!is_null($committee->expanded_committee_information))
-                                                    <br>
-                                                    <span class="letter-spacing-2" style="margin-left :120px;">
-                                                (<small>
-                                                        {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
-                                                            @if(!is_null($committee?->other_expanded_committee_information))
-                                                                & {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
-                                                            @endif
-                                                </small>)
-                                            </span>
-                                                @endif
-                                            </span>
-                                                    @php $countIndex++; @endphp
-                                                </li>
-                                            @endforeach
-                                            <div style="pointer-events: none;"
-                                                 class="shadow-lg kanban-card-placeholder text-uppercase d-flex flex-column justify-content-center align-items-center">
-                                        <span class="text-muted fw-medium">
-                                            Drop committees here
-                                        </span>
+
+                                <h5 class="fw-medium text-uppercase text-center mt-3" style="letter-spacing : 1.8px;">
+                                    COMMITTEE WITHOUT INVITED GUESTS
+                                </h5>
+                                <div class="kanban-column w-100">
+                                    <ol id="{{ $schedule->id }}" class="kanban-cards">
+                                        @foreach ($schedule->committees as $committee)
+                                            <li class="kanban-card shadow-lg" data-id="{{ $committee->id }}">
+                                                <span class="text-white">
+                                                    <span class="count-index">{{ $countIndex }}. </span>
+                                                    {{ $committee->lead_committee_information->title }}
+                                                    @if (!is_null($committee->expanded_committee_information))
+                                                        <br>
+                                                        <span class="letter-spacing-2" style="margin-left :120px;">
+                                                            (<small>
+                                                                {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
+                                                                @if (!is_null($committee?->other_expanded_committee_information))
+                                                                    &
+                                                                    {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
+                                                                @endif
+                                                            </small>)
+                                                        </span>
+                                                    @endif
+                                                </span>
+                                                @php $countIndex++; @endphp
+                                            </li>
+                                        @endforeach
+                                        <div style="pointer-events: none;"
+                                            class="shadow-lg kanban-card-placeholder d-flex flex-column justify-content-center align-items-center text-uppercase fw-medium">
+                                            <div class="text-muted fw-medium">
+                                                Drop committees here
                                             </div>
-                                        </ol>
-                                    </div>
-                                @else
-                                    <h5 class="fw-medium text-uppercase text-center mt-3"
-                                        style="letter-spacing : 1.8px;">
-                                        COMMITTEE WITHOUT INVITED GUESTS
-                                    </h5>
-                                    <div class="kanban-column w-100">
-                                        <ol class="kanban-cards" id="{{ $schedule->id }}">
-                                            @foreach ($schedule->committees as $committee)
-                                                <li class="kanban-card shadow-lg" data-id="{{ $committee->id }}">
-                                            <span class="text-white">
-                                                <span class="count-index">{{ $countIndex }}. </span>
-                                                {{ $committee->lead_committee_information->title }}
-                                                @if(!is_null($committee->expanded_committee_information))
-                                                    <br>
-                                                    <span class="letter-spacing-2" style="margin-left :120px;">
-                                                (<small>
-                                                        {{ Str::remove('COMMITTEE ON', Str::upper($committee?->expanded_committee_information?->title)) }}
-                                                            @if(!is_null($committee?->other_expanded_committee_information))
-                                                                & {{ Str::remove('Committee on', Str::upper($committee?->other_expanded_committee_information?->title)) }}
-                                                            @endif
-                                                </small>)
-                                            </span>
-                                                @endif
-                                            </span>
-                                                    @php $countIndex++; @endphp
-                                                </li>
-                                            @endforeach
-                                            <div style="pointer-events: none;"
-                                                 class="shadow-lg kanban-card-placeholder d-flex flex-column justify-content-center align-items-center text-uppercase fw-medium">
-                                                <div class="text-muted fw-medium">
-                                                    Drop committees here
-                                                </div>
-                                            </div>
-                                        </ol>
-                                    </div>
-                                @endif
+                                        </div>
+                                    </ol>
+                                </div>
                             @endforeach
                         </div>
                     @endforeach
@@ -245,12 +209,12 @@
                 connectWith: ".kanban-cards",
                 placeholder: "kanban-card-placeholder",
                 forcePlaceholderSize: true,
-                start: function (event, ui) {
+                start: function(event, ui) {
                     ui.item.addClass("dragging");
                     let labelIndex = ui.item.data('index');
                     $(`#parent-index-${labelIndex}`).hide();
                 },
-                stop: function (event, ui) {
+                stop: function(event, ui) {
                     ui.item.removeClass("dragging");
                     let cardId = ui.item.data("id");
                     let columnId = ui.item.parent().attr("id");
@@ -258,7 +222,7 @@
                     let labelIndex = ui.item.data('index');
                     $(`#parent-index-${labelIndex}`).hide();
 
-                    $('.kanban-card').each(function (index, element) {
+                    $('.kanban-card').each(function(index, element) {
                         let currentElementParentId = $(element).parent().attr('id');
                         if (!items[currentElementParentId]) {
                             items[currentElementParentId] = [];
@@ -266,7 +230,7 @@
                         items[currentElementParentId].push($(element).attr('data-id'));
                     });
 
-                    $(ui.item.closest('.schedule-container')).find('li.kanban-card').each(function (index, element) {
+                    $(ui.item.closest('.schedule-container')).find('li.kanban-card').each(function(index, element) {
                         $(element).find('.count-index').text(`${index + 1}. `);
                     });
 
@@ -278,7 +242,7 @@
                             id: cardId,
                             order: items,
                         },
-                        success: function (response) {
+                        success: function(response) {
                             notyf.success('Committee moved successfully!');
                         }
                     });

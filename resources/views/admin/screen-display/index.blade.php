@@ -22,15 +22,15 @@
         <div class="card-header p-0">
             <ul class="nav nav-tabs p-3 px-2" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" id="general-tab-link" href="#general" role="tab"
+                    <a id="general-tab-link" class="nav-link" data-bs-toggle="tab" href="#general" role="tab"
                         aria-selected="true">General</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-3" data-bs-toggle="tab" id="order-of-business-tab-link" href="#order-of-business"
+                    <a id="order-of-business-tab-link" class="nav-link mx-3" data-bs-toggle="tab" href="#order-of-business"
                         role="tab" aria-selected="false">Display</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" id="committee-meeting-tab-link" href="#committee-meeting"
+                    <a id="committee-meeting-tab-link" class="nav-link" data-bs-toggle="tab" href="#committee-meeting"
                         role="tab" aria-selected="false">Committee Meeting</a>
                 </li>
             </ul>
@@ -40,13 +40,13 @@
 
             <!-- Tab panes -->
             <div class="tab-content">
-                <div class="tab-pane" id="general" role="tabpanel">
+                <div id="general" class="tab-pane" role="tabpanel">
                     @include('admin.screen-display.includes.general-tab')
                 </div>
-                <div class="tab-pane " id="order-of-business" role="tabpanel">
+                <div id="order-of-business" class="tab-pane " role="tabpanel">
                     @include('admin.screen-display.includes.order-of-business-tab')
                 </div>
-                <div class="tab-pane" id="committee-meeting" role="tabpanel">
+                <div id="committee-meeting" class="tab-pane" role="tabpanel">
                     @include('admin.screen-display.includes.committee-meeting-tab')
                 </div>
             </div>

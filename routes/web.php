@@ -1,13 +1,12 @@
 <?php
 
-// TODO the file manager rename must be update the committee file also or the committee file links
 
+use App\Models\Schedule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\Admin\HomeController as AdministratorHomeController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VenueController;
 use App\Http\Controllers\LandingPageController;
@@ -39,6 +38,7 @@ use App\Http\Controllers\Admin\CommitteeFileViewerController;
 use App\Http\Controllers\Admin\LegislationDownloadController;
 use App\Http\Controllers\ScheduledCommitteeMeetingController;
 use App\Http\Controllers\Admin\BacktrackingViewFileController;
+use App\Http\Controllers\Admin\BoardSessionDownloadController;
 use App\Http\Controllers\Admin\BoardSessionFileViewController;
 use App\Http\Controllers\Admin\ScreenQuestionofHourController;
 use App\Http\Controllers\Admin\CommitteeInvitedGuestController;
@@ -50,6 +50,7 @@ use App\Http\Controllers\Admin\Archive\FileShowInExplorerController;
 use App\Http\Controllers\Admin\BoardSessionPublishPreviewController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
+use App\Http\Controllers\Admin\HomeController as AdministratorHomeController;
 
 Auth::routes();
 Route::view('stay', 401);
@@ -58,7 +59,6 @@ Route::get('/', LandingPageController::class);
 Route::get('home', HomeController::class)->name('home');
 
 Route::get('archive/list', [FileController::class, 'list'])->name('file.list');
-Route::get('types/list', [TypeController::class, 'list']);
 
 Route::group(['prefix' => 'schedule', 'as' => 'committee-meeting-schedule.'], function () {
     Route::get('schedule/committees/{dates}/preview', CommitteeMeetingSchedulePreviewController::class)->name('preview');
@@ -70,6 +70,7 @@ Route::group(['prefix' => 'committee-file', 'as' => 'committee-file.'], function
     Route::get('link/{uuid}', CommitteeFileViewerController::class)->name('viewer');
 });
 
+Route::get('order-business-file/download/{id}', BoardSessionDownloadController::class)->name('board-session-file.download');
 Route::get('order-business-file/link/{uuid}', BoardSessionFileViewController::class)->name('board-session-file.viewer');
 Route::get('board-session/{dates}/published/preview', BoardSessionPublishPreviewController::class)->name('board-sessions-published.preview');
 
@@ -103,12 +104,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('committees', [CommitteeMeetingScheduleController::class, 'store'])->name('committee-meeting-schedule.store');
         });
 
-        Route::group(['prefix' => 'board-sessions', 'as' => 'board-sessions.'], function () {
-            Route::post('locked/{board_session}', [BoardSessionController::class, 'locked'])->name('locked');
-            Route::post('unlocked/{board_session}', [BoardSessionController::class, 'unlocked'])->name('unlocked');
-            Route::post('published/{board_session}', [BoardSessionController::class, 'published'])->name('published');
-        });
-
         Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
             Route::get('/', [SettingController::class, 'index'])->name('index');
             Route::put('update', [SettingController::class, 'update'])->name('update');
@@ -128,10 +123,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('archive/inspect-link', FileInspectController::class)->name('inspect-link');
         });
 
-        Route::group(['prefix' => 'committee-invited-guest', 'as' => 'committee.invited-guest.'], function () {
-            Route::get('{id}', [CommitteeInvitedGuestController::class, 'create'])->name('create');
-            Route::post('{id}', [CommitteeInvitedGuestController::class, 'store'])->name('store');
-        });
+        //        Route::group(['prefix' => 'committee-invited-guest', 'as' => 'committee.invited-guest.'], function () {
+        //            Route::get('{id}', [CommitteeInvitedGuestController::class, 'create'])->name('create');
+        //            Route::post('{id}', [CommitteeInvitedGuestController::class, 'store'])->name('store');
+        //        });
 
         Route::resources([
             'account'                => UserController::class,
@@ -147,8 +142,9 @@ Route::group(['middleware' => 'auth'], function () {
             'regular-session'        => RegularSessionController::class,
             'types'                  => TypeController::class,
             'backtracking'           => BackTrackingController::class,
-            'committee-file'         => CommitteeFileController::class
+            'committee-file'         => CommitteeFileController::class,
         ]);
+
 
         Route::get('invited-guests', InvitedGuestsController::class)->name('invited-guests.index');
         Route::get('screen-display/{id}', ScreenDisplayController::class)->name('screen-display.index');
@@ -169,5 +165,13 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function () 
 
     Route::resources([
         'legislation' => LegislationController::class,
+    ]);
+});
+
+
+Route::get('/generate/{id}', function (int $id) {
+    $schedule = Schedule::with(['schedule_venue'])->find($id);
+    return inertia('Generate', [
+        'schedule' => $schedule,
     ]);
 });

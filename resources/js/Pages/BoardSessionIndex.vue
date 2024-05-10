@@ -33,12 +33,19 @@ export default {
       "https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
     );
 
+    const getExtension = (filename) => {
+      const parts = filename.split(".");
+      return parts[parts.length - 1];
+    };
+
     const viewFile = (file) => {
       // reset the page value to 1
       page.value = 1;
       selectedFile.value = file;
-
-      const { pdf: newPDFToLoad, pages: newPages } = usePDF(`${file.file_path_view}`);
+      let extension = getExtension(file.file);
+      const { pdf: newPDFToLoad, pages: newPages } = usePDF({
+        url: `/storage/committees/${file.file.replace(extension, "pdf")}`,
+      });
 
       watch(newPDFToLoad, () => {
         pdf.value = newPDFToLoad.value;
@@ -58,7 +65,23 @@ export default {
       }
     };
 
+    const windowWidth = ref(window.innerWidth);
+
+    const pagePrevious = () => {
+      page.value = page.value > 1 ? page.value - 1 : page.value;
+    };
+
+    const pageNext = () => {
+      page.value = page.value < pages.value ? page.value + 1 : page.value;
+    };
+
+    const onAnnotation = (annotation) => {
+      console.log(annotation);
+    };
+
     return {
+      onAnnotation,
+      windowWidth,
       processing,
       moment,
       inspectLink,
@@ -71,6 +94,8 @@ export default {
       selectedFile,
       viewFile,
       viewLink,
+      pagePrevious,
+      pageNext,
     };
   },
 };
@@ -130,82 +155,76 @@ export default {
 
     <div
       class="modal fade"
-      id="filePreviewModal"
+      id="viewFileModal"
       tabindex="-1"
-      role="dialog"
-      aria-labelledby="filePreviewModalTitle"
+      aria-labelledby="viewFileModalTitle"
       aria-hidden="true"
-      v-if="selectedFile"
     >
-      <div class="modal-dialog modal-fullscreen" role="document">
+      <div
+        class="modal-dialog"
+        style="max-width: 90vw; width: 90vw; max-height: 90vh; height: 90vh"
+      >
         <div class="modal-content">
           <div class="modal-header bg-dark">
-            <h6 class="modal-title m-0" id="filePreviewModalTitle">
-              {{ selectedFile.title }} [ {{ page }} of {{ pages }} ]
-            </h6>
+            <h5 class="modal-title" id="viewFileModalTitle">
+              File Preview Page : {{ page }}
+            </h5>
             <button
               type="button"
-              class="btn-close text-white"
+              class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
           </div>
-          <!--end modal-header-->
-          <div class="modal-body bg-light">
-            <div class="file-preview">
-              <div class="d-flex align-items-center justify-content-between">
-                <a
-                  @click="page = page > 1 ? page - 1 : page"
-                  class="text-white cursor-pointer"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="50"
-                    height="50"
-                    fill="currentColor"
-                    class="bi bi-chevron-left text-dark"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
-                    />
-                  </svg>
-                </a>
-
+          <div class="modal-body d-flex justify-content-between">
+            <button class="border px-2" @click="pagePrevious">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                class="bi bi-chevron-left"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+                />
+              </svg>
+            </button>
+            <div class="d-flex flex-column justify-content-center">
+              <h3 class="text-center fw-bold text-dark">
+                Page : {{ page }} / {{ pages }}
+              </h3>
+              <div>
                 <VuePDF
-                  class="shadow"
                   :pdf="pdf"
                   :page="page"
-                  vue-auto-animate
-                  :scale="1.5"
+                  :scale="windowWidth / 1000"
+                  annotation-layer
+                  @annotation="onAnnotation"
                 />
-
-                <a
-                  @click="page = page < pages ? page + 1 : page"
-                  class="text-white p-2 cursor-pointer"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="50"
-                    height="50"
-                    fill="currentColor"
-                    class="bi bi-chevron-right text-dark"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
-                    />
-                  </svg>
-                </a>
               </div>
             </div>
+            <button class="border px-2" @click="pageNext">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                class="bi bi-chevron-right"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+                />
+              </svg>
+            </button>
           </div>
+          <div class="modal-footer"></div>
         </div>
-        <!--end modal-content-->
       </div>
-      <!--end modal-dialog-->
     </div>
 
     <div class="d-flex align-items-center justify-content-between mb-2">
@@ -222,7 +241,7 @@ export default {
       </div>
     </div>
     <div>
-      <table class="table table-hover border table-bordered">
+      <table class="table table-hover border table-striped">
         <thead>
           <tr>
             <th
@@ -258,17 +277,17 @@ export default {
               <span class="ms-2">{{ board_session.title }}</span>
             </td>
             <td class="text-center text-uppercase">
-              {{ board_session?.schedule_information?.regular_session?.number }}
-              {{ board_session?.schedule_information?.regular_session?.year }} -
-              {{ board_session?.schedule_information?.type }}
+              {{ board_session?.schedule_information?.reference_session }} -
+              {{ board_session?.schedule_information?.type }} -
+              {{ board_session?.schedule_information?.schedule_venue?.name }}
             </td>
-            <td class="text-center">
+            <td class="text-start">
               <span
                 v-if="board_session.file_path"
-                @click="viewFile(board_session)"
+                data-bs-target="#viewFileModal"
                 data-bs-toggle="modal"
-                data-bs-target="#filePreviewModal"
-                class="fw-medium text-decoration-underline cursor-pointer"
+                @click="viewFile(board_session)"
+                class="fw-bold text-decoration-underline cursor-pointer"
                 >{{ removeTimestampPrefix(getName(board_session.file_path)) }}</span
               >
               <span v-else class="text-danger">N/A</span>

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Committee;
-use App\Models\CommitteeInvitedGuest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\CommitteeInvitedGuest;
+use Illuminate\Support\Arr;
 
 final class CommitteeInvitedGuestController extends Controller
 {
@@ -18,22 +20,28 @@ final class CommitteeInvitedGuestController extends Controller
 
     public function store(Request $request, int $id)
     {
-        $committee = Committee::with(['committee_invited_guests'])->find($id);
+        return DB::transaction(function () use ($request, $id) {
 
-        $submittedGuest = array_filter($request->guests ?? []);
+            $committee = Committee::with(['committee_invited_guests'])->find($id);
 
-        $committee->committee_invited_guests()->delete();
+            $submittedGuest = array_filter($request->guests ?? []);
 
-        $guests = [];
+            $committee->committee_invited_guests()->delete();
 
-        foreach($submittedGuest as $guest) {
-            $guests[] = new CommitteeInvitedGuest([
-                'fullname' => $guest,
-            ]);
-        }
+            $guests = [];
 
-        $committee->committee_invited_guests()->saveMany($guests);
+            Arr::map($submittedGuest, function ($guest) use (&$guests) {
+                $guests[] = new CommitteeInvitedGuest([
+                    'fullname' => $guest,
+                ]);
+            });
 
-        return back()->with('success', 'Guest successfully added');
+
+            $committee->invited_guests = 1;
+            $committee->save();
+            $committee->committee_invited_guests()->saveMany($guests);
+
+            return back()->with('success', 'Guest successfully added');
+        });
     }
 }

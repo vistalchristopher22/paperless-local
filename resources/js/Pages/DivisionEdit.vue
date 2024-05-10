@@ -1,10 +1,11 @@
 <script>
 import Layout from "@pages/Layout.vue";
 import { Link, useForm } from "@inertiajs/vue3";
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { Notyf } from "notyf";
 import FullScreenLoader from "@components/FullScreenLoader.vue";
 import AllFields from "@components/AllFields.vue";
+import axios from "axios";
 
 export default {
   props: {
@@ -28,35 +29,51 @@ export default {
       duration: 4000,
     });
     const processing = ref(false);
-
-    const form = useForm({
-      name: "",
-      description: "",
-      board: "",
+    const errors = ref({});
+    const form = reactive({
+      name: props.division.name,
+      description: props.division.description,
+      board: props.division.board,
     });
-
-    form.name = props.division.name;
-    form.description = props.division.description;
-    form.board = props.division.board;
 
     const updateDivision = () => {
       processing.value = true;
-      form.put(`/division/${props.division.id}`, {
-        onSuccess: () => {
+      let divisionFormData = new FormData();
+      divisionFormData.append("name", form.name);
+      divisionFormData.append("description", form.description);
+      divisionFormData.append("board", form.board);
+      divisionFormData.append("_method", "PUT");
+
+      axios
+        .post(`/division/${props.division.id}`, divisionFormData)
+        .then((response) => {
           notyf.success("Division updated successfully");
           processing.value = false;
-        },
-        onError: () => {
+          errors.value = {};
+        })
+        .catch((error) => {
+          if (error.response.status === 422) {
+            processing.value = false;
+
+            errors.value = error.response.data.errors || {};
+          }
           notyf.error("There was an error updating the division");
-          processing.value = false;
-        },
-      });
+        });
+      // form.put(`/division/${props.division.id}`, {
+      //   onSuccess: () => {
+      //     notyf.success("Division updated successfully");
+      //   },
+      //   onError: () => {
+      //     notyf.error("There was an error updating the division");
+      //   },
+      // });
     };
 
     return {
       processing,
       form,
       updateDivision,
+      errors,
     };
   },
 };
@@ -83,10 +100,10 @@ export default {
             class="form-control"
             id="name"
             v-model="form.name"
-            :class="{ 'is-invalid': form.errors.name }"
+            :class="{ 'is-invalid': errors.name }"
           />
-          <small class="text-danger" v-if="form.errors.name">{{
-            form.errors.name
+          <small class="text-danger" v-if="errors.hasOwnProperty('name')">{{
+            errors.name[0]
           }}</small>
         </div>
 
@@ -97,13 +114,13 @@ export default {
           >
           <textarea
             class="form-control"
-            :class="{ 'is-invalid': form.errors.description }"
+            :class="{ 'is-invalid': errors.description }"
             id="description"
             rows="3"
             v-model="form.description"
           ></textarea>
-          <small class="text-danger" v-if="form.errors.description">{{
-            form.errors.description
+          <small class="text-danger" v-if="errors.hasOwnProperty('description')">{{
+            errors.description[0]
           }}</small>
         </div>
 
@@ -116,16 +133,14 @@ export default {
             class="form-select"
             id="chief"
             aria-label="Select Division Board Member / Chief"
-            :class="{ 'is-invalid': form.errors.board }"
+            :class="{ 'is-invalid': errors.board }"
             v-model="form.board"
           >
             <option v-for="member in members" :key="member.id" :value="member.id">
               {{ member.fullname }}
             </option>
           </select>
-          <small class="text-danger" v-if="form.errors.board">{{
-            form.errors.board
-          }}</small>
+          <small class="text-danger" v-if="errors.board">{{ errors.board }}</small>
         </div>
 
         <!-- Submit Button -->

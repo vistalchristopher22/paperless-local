@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Committee;
-use App\Utilities\FileUtility;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Schema;
 
 class ExtractTextCommand extends Command
 {
@@ -14,7 +13,7 @@ class ExtractTextCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'extract:file {id : unique ID of the record}';
+    protected $signature = 'extract:file {id : unique ID of the record} {model : the model to be used} {path : the path of the file}';
 
     /**
      * The console command description.
@@ -28,8 +27,10 @@ class ExtractTextCommand extends Command
      */
     public function handle()
     {
-        $record = Committee::find($this->argument('id'));
-        $escaped_path = escapeshellarg(FileUtility::draftCommitteesDirectory() . basename($record->file_path));
+        $model = app()->make($this->argument('model'));
+        $record = $model->find($this->argument('id'));
+        $path = $this->argument('path');
+        $escaped_path = escapeshellarg($path);
 
         $data = shell_exec(' ' . escapeshellarg(env('LIBRE_DIRECTORY')) . ' --headless --cat ' . $escaped_path);
 
@@ -39,8 +40,11 @@ class ExtractTextCommand extends Command
             ->remove("\t")
             ->ascii($data);
 
-        $record->content = $content;
-        $record->save();
+        if (Schema::hasColumn($model->getTable(), 'content')) {
+            $record->content = $content;
+            $record->save();
+        }
+
         $this->info('Successfully extract and saved all the text inside the file.');
     }
 }

@@ -17,15 +17,15 @@ class ReferenceSession extends Model
         return $this->hasMany(Schedule::class);
     }
 
-    public function scheduleCommittees(): HasMany
-    {
-        return $this->hasMany(Schedule::class)->where('type', ScheduleType::MEETING->value);
-    }
+    // public function scheduleCommittees(): HasMany
+    // {
+    //     return $this->hasMany(Schedule::class)->where('type', ScheduleType::MEETING->value);
+    // }
 
-    public function scheduleSessions(): HasMany
-    {
-        return $this->hasMany(Schedule::class)->where('type', ScheduleType::SESSION->value);
-    }
+    // public function scheduleSessions(): HasMany
+    // {
+    //     return $this->hasMany(Schedule::class)->where('type', ScheduleType::SESSION->value);
+    // }
 
     public function reference_session_screen_display()
     {

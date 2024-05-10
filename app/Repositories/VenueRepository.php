@@ -10,4 +10,9 @@ final class VenueRepository extends BaseRepository
     {
         parent::__construct($model);
     }
+
+    public static function getUniqueVenues()
+    {
+        return Venue::select('id', 'name')->get();
+    }
 }

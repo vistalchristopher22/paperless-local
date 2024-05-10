@@ -14,9 +14,18 @@ final class SettingController extends Controller
 
     public function index()
     {
-        return view('admin.settings.index', [
-            'settings' => $this->settingRepository->get(),
-            'settingRepository' => $this->settingRepository,
+        return inertia('SettingIndex', [
+            'settings' => $this->settingRepository->getByNames('name', [
+                'display_announcement',
+                'announcement_running_speed',
+                'source_folder',
+                'prepared_by',
+                'noted_by',
+                'libre_office_path',
+                'network_source_path',
+                'server_socket_url',
+                'local_socket_url',
+            ])->pluck('name', 'value')->flip()
         ]);
     }
 
@@ -24,6 +33,6 @@ final class SettingController extends Controller
     {
         $data = $request->except(['_token', '_method']);
         $this->settingRepository->updateNewSettings($data);
-        return to_route('settings.index')->with('success', 'Settings updated successfully!');
+        return redirect()->route('settings.index')->with('success', 'Settings updated successfully!');
     }
 }

@@ -17,6 +17,7 @@ final class CommitteeMeetingRepository extends CommitteeRepository
     {
         $committee = $this->model->find($data['id']);
         $committee->schedule_id = $scheduleId;
+        $committee->invited_guests = $data['withGuest'];
         $committee->save();
 
         Arr::has($data, 'order') && $this->reorderCommitteeDisplayIndices($data['order']);

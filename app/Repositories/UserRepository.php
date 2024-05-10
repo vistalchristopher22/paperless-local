@@ -23,7 +23,7 @@ final class UserRepository extends BaseRepository
 
     public function getWithDivision()
     {
-        return parent::get()->load('division_information');
+        return User::with('division_information')->paginate();
     }
 
     public static function accessibleAgendas(User $user)

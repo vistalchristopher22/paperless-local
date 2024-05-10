@@ -2,49 +2,36 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\ScheduleType;
 use Carbon\Carbon;
 use App\Models\Schedule;
-use Illuminate\Support\Str;
-use App\Utilities\FileUtility;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Artisan;
 
 final class BoardSessionPublishPreviewController extends Controller
 {
-    public function __invoke(string $dates)
+    public function __invoke(string $date)
     {
-        $date = Carbon::parse($dates);
-        $schedule = Schedule::with('board_sessions')
-                            ->whereYear('date_and_time', $date->year)
-                            ->whereMonth('date_and_time', $date->month)
-                            ->whereDay('date_and_time', $date->day)
-                            ->where('type', ScheduleType::SESSION)
-                            ->first();
+        $date = Carbon::parse($date);
+        $schedule = Schedule::with(['order_of_business_information' => [
+            'file_link'
+        ]])
+            ->whereYear('date_and_time', $date->year)
+            ->whereMonth('date_and_time', $date->month)
+            ->whereDay('date_and_time', $date->day)
+            ->first();
 
-        if(!$schedule?->board_sessions->isEmpty()) {
-            $session = $schedule->board_sessions->first();
-        }
 
-        if(Str::contains(url()->previous(), 'preview')) {
-            $committeeUrl = route('committee-meeting-schedule.preview', $dates);
-        } else {
-            $committeeUrl = route('scheduled.committee-meeting.today', $dates);
-        }
+        $session = $schedule->order_of_business_information;
 
-        $outputDirectory = FileUtility::publicDirectoryForViewing();
-        $location = FileUtility::correctDirectorySeparator($session->file_path);
-        Artisan::call('convert:path "' . FileUtility::isInputDirectoryEscaped($location) . '" --output="' . $outputDirectory . '"');
 
         if ($session) {
-            return view('admin.board-sessions.preview', [
-                'dates' => $dates,
-                'orderBusinessView' => $session->file_path_view,
-                'announcementTitle' => $session->announcement_title,
-                'announcementContent' => $session->announcement_content,
-                'committeeUrl' => $committeeUrl,
+            $orderBusinessView = str_replace(pathinfo(basename($session->file_path), PATHINFO_EXTENSION), 'pdf', $session->file_path);
+            return inertia('OrderBusiness', [
+                'file' => basename($orderBusinessView),
+                'id' => $session->id,
+                'watermarkSchedule' => $schedule->reference_session . ' - ' . $schedule->type,
             ]);
         }
-        return abort(404);
+
+        return view('errors.attachment-not-found');
     }
 }

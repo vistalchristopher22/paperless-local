@@ -40,7 +40,7 @@ final class UserController extends Controller
      */
     public function index()
     {
-        return view('admin.account.index', [
+        return inertia('UserIndex', [
             'users' => $this->userRepository->getWithDivision(),
             'divisions' => $this->divisionRepository->get(),
         ]);
@@ -53,9 +53,8 @@ final class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.account.create', [
+        return inertia('UserCreate', [
             'types' => UserTypes::cases(),
-            'status' => UserStatus::cases(),
             'divisions' => $this->divisionRepository->get(),
         ]);
     }
@@ -69,7 +68,7 @@ final class UserController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        Pipeline::send($request)
+        Pipeline::send($request->all())
             ->through([
                 ProfilePicture::class,
                 StoreUser::class,
@@ -85,6 +84,11 @@ final class UserController extends Controller
      */
     public function edit(User $account)
     {
+        return inertia('UserEdit', [
+            'account' => $account,
+            'types' => UserTypes::cases(),
+            'divisions' => $this->divisionRepository->get(),
+        ]);
         return view('admin.account.edit', compact('account'))->with([
             'types' => UserTypes::cases(),
             'status' => UserStatus::cases(),
@@ -102,7 +106,8 @@ final class UserController extends Controller
      */
     public function update(UpdateRequest $request, User $account)
     {
-        Pipeline::send($request->merge(['account' => $account]))
+        $data = $request->merge(['account' => $account])->all();
+        Pipeline::send($data)
             ->through([
                 ProfilePicture::class,
                 ChangePassword::class,
