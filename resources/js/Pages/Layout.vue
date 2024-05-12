@@ -15,7 +15,7 @@ const config = inject("$config");
       <Link href="/administrator/home" class="logo">
         <div class="d-flex align-items-center p-2 justify-content-center">
           <img
-            src="http://paperless.test/paperless-logo.png"
+            src="http://localhost:8000/paperless-logo.png"
             alt="logo-small"
             class="img-fluid me-3"
             style="width: 2vw"

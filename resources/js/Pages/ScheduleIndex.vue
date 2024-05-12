@@ -421,6 +421,74 @@ const calendarOptions = {
                     {{ referenceSessionError }}
                   </span>
                 </div>
+
+                <div class="form-group mt-2" v-if="schedule.id != ''">
+                  <label
+                    for="reference_session"
+                    class="form-label text-uppercase text-dark fw-bold"
+                    >No. of Board Members</label
+                  >
+                  <input
+                    class="form-control text-uppercase"
+                    v-model="schedule.attendance_logs_count"
+                    readonly
+                  />
+                  <div class="input-group my-2">
+                    <div class="input-group-prepend">
+                      <span
+                        class="input-group-text fw-bold text-uppercase bg-primary text-white rounded-0"
+                        >Present</span
+                      >
+                    </div>
+                    <input
+                      class="form-control text-uppercase ms-1"
+                      readonly
+                      v-model="schedule.present_count"
+                    />
+                  </div>
+
+                  <div class="input-group my-2">
+                    <div class="input-group-prepend">
+                      <span
+                        class="input-group-text fw-bold text-uppercase bg-primary text-white rounded-0"
+                        >Absent</span
+                      >
+                    </div>
+                    <input
+                      readonly
+                      class="form-control text-uppercase ms-1"
+                      v-model="schedule.absent_count"
+                    />
+                  </div>
+
+                  <div class="input-group my-2">
+                    <div class="input-group-prepend">
+                      <span
+                        class="input-group-text fw-bold text-uppercase bg-primary text-white rounded-0"
+                        >Late</span
+                      >
+                    </div>
+                    <input
+                      readonly
+                      class="form-control text-uppercase ms-1"
+                      v-model="schedule.late_count"
+                    />
+                  </div>
+
+                  <div class="input-group my-2">
+                    <div class="input-group-prepend">
+                      <span
+                        class="input-group-text fw-bold text-uppercase bg-primary text-white rounded-0"
+                        >OB</span
+                      >
+                    </div>
+                    <input
+                      readonly
+                      class="form-control text-uppercase ms-1"
+                      v-model="schedule.on_official_business_count"
+                    />
+                  </div>
+                </div>
               </div>
 
               <hr />
@@ -454,7 +522,7 @@ const calendarOptions = {
                   </button>
                 </div>
 
-                <div class="btn-group d-flex mt-2">
+                <div class="btn-group d-flex my-2">
                   <a
                     v-if="schedule.id != ''"
                     class="btn btn-primary p-2 d-flex align-items-center justify-content-center"

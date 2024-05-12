@@ -42,6 +42,7 @@ export default {
         .then((_) => {
           notyf.success("Sanggunian Member Created Successfully");
           processing.value = false;
+          errors.value = {};
           sanggunian.value = {
             fullname: null,
             district: null,
@@ -96,14 +97,17 @@ export default {
 
         <div class="form-group mb-3" v-auto-animate>
           <label for="district" class="form-label">District</label>
-          <input
+          <select
             type="text"
             name="district"
             id="district"
             class="form-control"
             v-model="sanggunian.district"
             :class="{ 'is-invalid': errors.district }"
-          />
+          >
+            <option value="1">1st District</option>
+            <option value="2">2nd District</option>
+          </select>
           <div class="invalid-feedback" v-if="errors.district">
             {{ errors.district[0] }}
           </div>

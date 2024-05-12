@@ -52,16 +52,26 @@ export default {
 
     const updateAgenda = () => {
       processing.value = true;
-      form.put(`/agendas/${props.agenda.id}`, {
-        onSuccess: () => {
+      // create form data for all data of form
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("chairman", form.chairman);
+      formData.append("vice_chairman", form.vice_chairman);
+      formData.append("sanggunian", form.sanggunian);
+      form.members.forEach((member) => {
+        formData.append("members[]", member);
+      });
+      formData.append("_method", "PUT");
+      axios
+        .post(`/agendas/${props.agenda.id}`, formData)
+        .then((response) => {
           processing.value = false;
           notyf.success("Agenda updated successfully.");
-        },
-        onError: () => {
+        })
+        .catch((error) => {
           processing.value = false;
           notyf.error("Agenda updating failed.");
-        },
-      });
+        });
     };
 
     return {

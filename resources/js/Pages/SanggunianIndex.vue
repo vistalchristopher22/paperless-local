@@ -41,11 +41,12 @@ export default {
         "Are you sure you want to delete this Sanggunian Member?",
         "",
         function (_, value) {
+          // create form data
+          const formData = new FormData();
+          formData.append("_method", "DELETE");
+          formData.append("key", value);
           axios
-            .post(`/sanggunian-members/${id}`, {
-              key: value,
-              _method: "DELETE",
-            })
+            .post(`/sanggunian-members/${id}`, formData)
             .then((_) => {
               notyf.success("Sanggunian Member Deleted Successfully");
               router.visit("/sanggunian-members", {
@@ -91,7 +92,7 @@ export default {
         <h5 class="fw-bolder text-uppercase">{{ selectedMember?.fullname }}</h5>
       </template>
     </Agenda>
-    <div class="d-flex align-items-center justify-content-between mb-2">
+    <div class="d-flex align-items-center justify-content-between mb-2 mt-2">
       <div>
         <h5 class="fw-bolder text-uppercase">
           total records [ {{ members.length }} Entries ]

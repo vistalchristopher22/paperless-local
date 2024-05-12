@@ -38,16 +38,26 @@ export default {
 
     const createAgenda = () => {
       processing.value = true;
-      form.post("/agendas", {
-        onSuccess: () => {
+      // create form data for all data of form
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("chairman", form.chairman);
+      formData.append("vice_chairman", form.vice_chairman);
+      formData.append("sanggunian", form.sanggunian);
+      form.members.forEach((member) => {
+        formData.append("members[]", member);
+      });
+
+      axios
+        .post("/agendas", formData)
+        .then(() => {
           processing.value = false;
           notyf.success("Agenda created successfully.");
-        },
-        onError: () => {
+        })
+        .catch(() => {
           processing.value = false;
           notyf.error("Agenda creation failed.");
-        },
-      });
+        });
     };
 
     return {

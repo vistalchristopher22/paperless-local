@@ -14,6 +14,7 @@ use App\Http\Resources\ScheduleResource;
 use App\Repositories\ScheduleRepository;
 use Illuminate\Support\Facades\Pipeline;
 use App\Http\Requests\ScheduleStoreRequest;
+use App\Pipes\Attendance\CreateAttendance;
 
 final class ScheduleController extends Controller
 {
@@ -32,6 +33,7 @@ final class ScheduleController extends Controller
             return Pipeline::send($request->all())
                 ->through([
                     CreateSchedule::class,
+                    CreateAttendance::class,
                 ])->then(fn ($scheduleID) => response()->json([
                     'success' => true,
                     'type'    => $request->type,
@@ -42,7 +44,7 @@ final class ScheduleController extends Controller
 
     public function show(int $id)
     {
-        $schedule       = $this->scheduleRepository->findBy(column: 'id', value: $id)->load('order_of_business_information')->loadCount('committees');
+        $schedule       = $this->scheduleRepository->findBy(column: 'id', value: $id)->load(['order_of_business_information'])->loadCount(['committees', 'attendance_logs', 'attendance_logs_present', 'attendance_logs_absent', 'attendance_logs_on_official_business', 'attendance_logs_late']);
         $schedule->time = Carbon::parse($schedule->date_and_time);
         $schedule->time = $schedule->time->format('H:i');
         return $schedule;

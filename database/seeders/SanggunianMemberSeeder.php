@@ -30,7 +30,8 @@ class SanggunianMemberSeeder extends Seeder
             ['lastname' => 'Cañedo', 'fullname' => 'Hon. Anthony Joseph P. Cañedo', 'district' => '-', 'sanggunian' => '19'],
         ];
 
-        foreach ($data as $member) {
+        foreach ($data as $index => $member) {
+            $member['unique_id'] = $index + 1;
             SanggunianMember::create($member);
         }
     }

@@ -18,6 +18,7 @@ sl<?php
                 $table->string('district');
                 $table->string('sanggunian');
                 $table->string('profile_picture')->default('no_image.png');
+                $table->string('unique_id')->unique();
                 $table->timestamps();
                 $table->softDeletes();
             });

@@ -43,7 +43,6 @@ const props = defineProps({
   },
 });
 
-const inspectLink = ref("");
 const fetchedMembers = inject(FETCHED_MEMBERS);
 const displayMembers = inject(DISPLAY_MEMBERS);
 const processing = inject(PROCESSING);
@@ -74,7 +73,7 @@ const showMembers = async (committee, type) => {
 watch([searchLead, searchExpanded, searchSession], () => {
   processing.value = true;
   router.visit(
-    `/committee/?lead=${searchLead.value || ""}&expanded=${
+    `${location.href}?lead=${searchLead.value || ""}&expanded=${
       searchExpanded.value || ""
     }&schedule=${searchSession.value || ""}`
   );

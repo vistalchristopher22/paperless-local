@@ -72,5 +72,10 @@ export function initializeScheduleFromResponse(response, event) {
     order_of_business: parseInt(response.data.order_of_business),
     committees_count: response.data.committees_count,
     selectedDate: event.startStr,
+    attendance_logs_count: response.data.attendance_logs_count,
+    present_count: response.data.attendance_logs_present_count,
+    absent_count: response.data.attendance_logs_absent_count,
+    late_count : response.data.attendance_logs_late_count,
+    on_official_business_count: response.data.attendance_logs_on_official_business_count,
   };
 }

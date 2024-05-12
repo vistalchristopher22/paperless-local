@@ -30,11 +30,13 @@ export default {
 
     const updateSanggunian = () => {
       processing.value = true;
+      const formData = new FormData();
+      formData.append("fullname", sanggunian.fullname);
+      formData.append("district", sanggunian.district);
+      formData.append("sanggunian", sanggunian.sanggunian);
+      formData.append("_method", "PUT");
       axios
-        .post(`/sanggunian-members/${props.member.id}`, {
-          ...sanggunian,
-          _method: "PUT",
-        })
+        .post(`/sanggunian-members/${props.member.id}`, formData)
         .then((_) => {
           processing.value = false;
           notyf.success("Sanggunian Member Updated Successfully");

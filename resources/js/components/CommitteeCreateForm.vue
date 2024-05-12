@@ -58,7 +58,7 @@ export default {
             errors.value = {};
             processing.value = false;
             notyf.success(response.data.message);
-            router.visit("/committee", {
+            router.visit(location.href, {
               preserveScroll: true,
               preserveState: true,
             });

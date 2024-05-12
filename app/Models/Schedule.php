@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\DisplayScheduleType;
 use App\Enums\ScreenDisplayStatus;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\LegislativeAttendance\AttendanceLog;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -58,5 +59,30 @@ class Schedule extends Model
     public function schedule_venue()
     {
         return $this->hasOne(Venue::class, 'id', 'venue');
+    }
+
+    public function attendance_logs(): HasMany
+    {
+        return $this->hasMany(AttendanceLog::class, 'schedule_id', 'id');
+    }
+
+    public function attendance_logs_present(): HasMany
+    {
+        return $this->hasMany(AttendanceLog::class, 'schedule_id', 'id')->where('status', 'present');
+    }
+
+    public function attendance_logs_absent(): HasMany
+    {
+        return $this->hasMany(AttendanceLog::class, 'schedule_id', 'id')->where('status', 'absent');
+    }
+
+    public function attendance_logs_on_official_business(): HasMany
+    {
+        return $this->hasMany(AttendanceLog::class, 'schedule_id', 'id')->where('status', 'on_official_business');
+    }
+
+    public function attendance_logs_late(): HasMany
+    {
+        return $this->hasMany(AttendanceLog::class, 'schedule_id', 'id')->where('status', 'late');
     }
 }

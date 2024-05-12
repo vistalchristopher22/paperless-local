@@ -3,9 +3,9 @@ import laravel from "laravel-vite-plugin";
 import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
-    // server: {
-    //     host: 'paperless.test',
-    // },
+    server: {
+        host: 'localhost',
+    },
     resolve: {
         alias: {
             "@": "/resources/js",

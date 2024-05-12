@@ -31,9 +31,7 @@ class ExtractTextCommand extends Command
         $record = $model->find($this->argument('id'));
         $path = $this->argument('path');
         $escaped_path = escapeshellarg($path);
-
         $data = shell_exec(' ' . escapeshellarg(env('LIBRE_DIRECTORY')) . ' --headless --cat ' . $escaped_path);
-
         $data = preg_replace('/[\n\t]/', '', $data);
 
         $content = Str::of($data)->remove("\n")
