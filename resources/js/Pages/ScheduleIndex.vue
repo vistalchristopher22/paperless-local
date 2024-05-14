@@ -423,16 +423,18 @@ const calendarOptions = {
                 </div>
 
                 <div class="form-group mt-2" v-if="schedule.id != ''">
-                  <label
-                    for="reference_session"
-                    class="form-label text-uppercase text-dark fw-bold"
-                    >No. of Board Members</label
-                  >
-                  <input
-                    class="form-control text-uppercase"
-                    v-model="schedule.attendance_logs_count"
-                    readonly
-                  />
+                  <div class="me-2">
+                    <label
+                      for="reference_session"
+                      class="form-label text-uppercase text-dark fw-bold"
+                      >No. of Board Members</label
+                    >
+                    <input
+                      class="form-control text-uppercase text-end me-2 fw-bold"
+                      v-model="schedule.attendance_logs_count"
+                      readonly
+                    />
+                  </div>
                   <div class="input-group my-2">
                     <div class="input-group-prepend">
                       <span
@@ -441,7 +443,7 @@ const calendarOptions = {
                       >
                     </div>
                     <input
-                      class="form-control text-uppercase ms-1"
+                      class="form-control text-uppercase ms-1 me-2 text-end"
                       readonly
                       v-model="schedule.present_count"
                     />
@@ -456,7 +458,7 @@ const calendarOptions = {
                     </div>
                     <input
                       readonly
-                      class="form-control text-uppercase ms-1"
+                      class="form-control text-uppercase ms-1 text-end me-2"
                       v-model="schedule.absent_count"
                     />
                   </div>
@@ -470,7 +472,7 @@ const calendarOptions = {
                     </div>
                     <input
                       readonly
-                      class="form-control text-uppercase ms-1"
+                      class="form-control text-uppercase ms-1 me-2 text-end"
                       v-model="schedule.late_count"
                     />
                   </div>
@@ -484,8 +486,22 @@ const calendarOptions = {
                     </div>
                     <input
                       readonly
-                      class="form-control text-uppercase ms-1"
+                      class="form-control text-uppercase ms-1 text-end me-2"
                       v-model="schedule.on_official_business_count"
+                    />
+                  </div>
+
+                  <div class="input-group my-2">
+                    <div class="input-group-prepend">
+                      <span
+                        class="input-group-text fw-bold text-uppercase bg-primary text-white rounded-0"
+                        >SICK LEAVE</span
+                      >
+                    </div>
+                    <input
+                      readonly
+                      class="form-control text-uppercase ms-1 text-end me-2"
+                      v-model="schedule.sick_leave_count"
                     />
                   </div>
                 </div>
@@ -529,7 +545,7 @@ const calendarOptions = {
                     :href="`/generate/${schedule.id}`"
                   >
                     <i class="mdi mdi-eye mdi-18px me-2"></i>
-                    <span class="fw-bold letter-spacing-1">GENERATE</span>
+                    <span class="fw-bold letter-spacing-1">CREATE MINUTES</span>
                   </a>
                 </div>
               </div>

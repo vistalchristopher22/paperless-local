@@ -77,5 +77,6 @@ export function initializeScheduleFromResponse(response, event) {
     absent_count: response.data.attendance_logs_absent_count,
     late_count : response.data.attendance_logs_late_count,
     on_official_business_count: response.data.attendance_logs_on_official_business_count,
+    sick_leave_count : response.data.attendance_on_sick_leave_count,
   };
 }

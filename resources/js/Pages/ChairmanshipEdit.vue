@@ -1,7 +1,7 @@
 <script>
 import Layout from "@pages/Layout.vue";
-import { Link, useForm } from "@inertiajs/vue3";
-import { reactive, ref } from "vue";
+import { Link, useForm, router } from "@inertiajs/vue3";
+import { ref } from "vue";
 import { Notyf } from "notyf";
 import FullScreenLoader from "@components/FullScreenLoader.vue";
 import AllFields from "@components/AllFields.vue";
@@ -37,10 +37,10 @@ export default {
     const processing = ref(false);
 
     const form = useForm({
-      title: null,
-      chairman: null,
-      vice_chairman: null,
-      sanggunian: null,
+      title: "",
+      chairman: "",
+      vice_chairman: "",
+      sanggunian: "",
       members: [],
     });
 
@@ -52,7 +52,6 @@ export default {
 
     const updateAgenda = () => {
       processing.value = true;
-      // create form data for all data of form
       const formData = new FormData();
       formData.append("title", form.title);
       formData.append("chairman", form.chairman);
@@ -66,10 +65,14 @@ export default {
         .post(`/agendas/${props.agenda.id}`, formData)
         .then((response) => {
           processing.value = false;
+          router.visit(location.href);
           notyf.success("Agenda updated successfully.");
         })
         .catch((error) => {
           processing.value = false;
+          if (error.response.status === 422) {
+            form.errors = error.response.data.errors;
+          }
           notyf.error("Agenda updating failed.");
         });
     };
@@ -84,6 +87,7 @@ export default {
 </script>
 
 <template>
+  <div class="mt-3"></div>
   <FullScreenLoader :processing="processing" />
   <AllFields />
   <div class="card">
@@ -107,7 +111,7 @@ export default {
             autofocus
           />
           <div class="invalid-feedback" v-if="form.errors.title">
-            <span v-for="error in form.errors.title" v-text="error" />
+            <span v-for="error in form.errors.title" :key="error" v-text="error" />
           </div>
         </div>
 
@@ -129,7 +133,7 @@ export default {
             />
           </select>
           <div class="invalid-feedback" v-if="form.errors.chairman">
-            <span v-for="error in form.errors.chairman" v-text="error" />
+            <span v-for="error in form.errors.chairman" :key="error" v-text="error" />
           </div>
         </div>
 
@@ -151,7 +155,11 @@ export default {
             />
           </select>
           <div class="invalid-feedback" v-if="form.errors.vice_chairman">
-            <span v-for="error in form.errors.vice_chairman" v-text="error" />
+            <span
+              v-for="error in form.errors.vice_chairman"
+              :key="error"
+              v-text="error"
+            />
           </div>
         </div>
 
@@ -169,7 +177,7 @@ export default {
             autofocus
           />
           <div class="invalid-feedback" v-if="form.errors.sanggunian">
-            <span v-for="error in form.errors.sanggunian" v-text="error" />
+            <span v-for="error in form.errors.sanggunian" :key="error" v-text="error" />
           </div>
         </div>
 

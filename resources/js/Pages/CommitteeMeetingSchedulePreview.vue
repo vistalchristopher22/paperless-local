@@ -62,7 +62,7 @@ const parentWidth = ref(scale.value * 20);
 page.value = 1;
 
 const { pdf: newPDFToLoad, pages: newPages } = usePDF(
-  `/storage/committees/${props.orderOfBusinessLink.name}`
+  `/storage/committees/${props?.orderOfBusinessLink?.name}`
 );
 
 watch(newPDFToLoad, () => {

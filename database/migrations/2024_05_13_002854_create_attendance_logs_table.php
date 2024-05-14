@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('time_in')->nullable();
             $table->date('time_out')->nullable();
-            $table->enum('status', ['present', 'absent', 'late', 'on_official_business'])->default('absent');
+            $table->enum('status', ['present', 'absent', 'late', 'on_official_business', 'on_sick_leave'])->default('absent');
             $table->foreignId('sanggunian_member_id')->on('sanggunian_members')->constrained()->onDelete('cascade');
             $table->foreignId('schedule_id')->on('schedules')->constrained()->onDelete('cascade');
             $table->timestamps();

@@ -65,6 +65,10 @@ class SettingSeeder extends Seeder
                 'name' => 'display_announcement',
                 'value' => 'place your text here',
             ],
+              [
+                'name' => 'presiding_officer',
+                'value' => 'Hon. Manuel O. Alameda Sr.',
+            ],
         ];
 
         foreach ($settings as $setting) {
@@ -75,3 +79,4 @@ class SettingSeeder extends Seeder
         }
     }
 }
+

@@ -13,3 +13,6 @@ export const AVAILABLE_SESSION_SCHEDULES = Symbol('AVAILABLE_SESSION_SCHEDULES')
 export const EDIT_COMMITTEE = Symbol("EDIT_COMMITTEE");
 export const VIEW_SELECTED_FILE = Symbol("VIEW_SELECTED_FILE");
 export const SOCKET_INSTANCE = Symbol("SOCKET_INSTANCE");
+
+export const FIRST_DISTRICT = 1;
+export const SECOND_DISTRICT = 2;

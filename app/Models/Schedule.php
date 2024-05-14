@@ -68,21 +68,26 @@ class Schedule extends Model
 
     public function attendance_logs_present(): HasMany
     {
-        return $this->hasMany(AttendanceLog::class, 'schedule_id', 'id')->where('status', 'present');
+        return $this->attendance_logs()->where('status', 'present');
     }
 
     public function attendance_logs_absent(): HasMany
     {
-        return $this->hasMany(AttendanceLog::class, 'schedule_id', 'id')->where('status', 'absent');
+        return $this->attendance_logs()->where('status', 'absent');
     }
 
     public function attendance_logs_on_official_business(): HasMany
     {
-        return $this->hasMany(AttendanceLog::class, 'schedule_id', 'id')->where('status', 'on_official_business');
+        return $this->attendance_logs()->where('status', 'on_official_business');
     }
 
     public function attendance_logs_late(): HasMany
     {
-        return $this->hasMany(AttendanceLog::class, 'schedule_id', 'id')->where('status', 'late');
+        return $this->attendance_logs()->where('status', 'late');
+    }
+
+    public function attendance_on_sick_leave(): HasMany
+    {
+        return $this->attendance_logs()->where('status', 'on_sick_leave');
     }
 }

@@ -1,7 +1,9 @@
 <?php
 
 
+use App\Models\Setting;
 use App\Models\Schedule;
+use App\Models\SanggunianMember;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -50,6 +52,7 @@ use App\Http\Controllers\Admin\Archive\FileShowInExplorerController;
 use App\Http\Controllers\Admin\BoardSessionPublishPreviewController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
+use App\Http\Controllers\Admin\DocumentGeneratorController;
 use App\Http\Controllers\Admin\HomeController as AdministratorHomeController;
 
 Auth::routes();
@@ -159,7 +162,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function () {
     Route::get('home', [AdministratorHomeController::class, 'index'])->name('administrator.home');
 
-
+    
     Route::get('legislation/download/{id}', LegislationDownloadController::class)->name('legislation.attachment.download');
     Route::post('update-legislation/{legislation}', [LegislationController::class, 'updateLegislation']);
 
@@ -168,10 +171,4 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function () 
     ]);
 });
 
-
-Route::get('/generate/{id}', function (int $id) {
-    $schedule = Schedule::with(['schedule_venue'])->find($id);
-    return inertia('Generate', [
-        'schedule' => $schedule,
-    ]);
-});
+Route::get('generate/{id}',  DocumentGeneratorController::class);

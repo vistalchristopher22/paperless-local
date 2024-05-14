@@ -50,6 +50,11 @@ final class SettingRepository extends BaseRepository
         return $this->model->get();
     }
 
+    public function getPresidingOfficer(): string
+    {
+        return Setting::where('name', 'presiding_officer')->first();
+    }
+
     public function updateNewSettings(array $data = [])
     {
         DB::transaction(function () use ($data) {

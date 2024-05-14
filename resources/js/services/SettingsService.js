@@ -10,6 +10,7 @@ export function createSettingFormData(setting) {
     formData.append('network_source_path', setting?.network_source_path || '');
     formData.append('server_socket_url', setting.server_socket_url || '');
     formData.append('local_socket_url', setting.local_socket_url || '');
+    formData.append('presiding_officer', setting.presiding_officer || '');
     formData.append('_method', 'PUT');
     return formData;
 }

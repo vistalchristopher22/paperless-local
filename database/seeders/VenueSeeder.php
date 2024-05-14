@@ -14,10 +14,11 @@ class VenueSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'Tandag City',
+                'name' => 'TANDAG CITY',
+                'address' => 'THE LEGISLATIVE BUILDING SESSION HALL, CAPITOL HILLS, BARANGAY TELAJE, TANDAG CITY, PROVINCE OF SURIGAO DEL SUR',
             ],
             [
-                'name' => 'Bislig City',
+                'name' => 'BISLIG CITY',
             ],
         ];
 

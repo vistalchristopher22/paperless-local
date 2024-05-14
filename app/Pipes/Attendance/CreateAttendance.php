@@ -20,7 +20,7 @@ final class CreateAttendance implements IPipeHandler
         $sanggunianMembers = $this->sanggunianMemberRepository->get();
         foreach ($sanggunianMembers as $sanggunianMember) {
             AttendanceLog::create([
-                'sanggunian_member_id' => $sanggunianMember->id,
+                'sanggunian_member_id' => $sanggunianMember->unique_id,
                 'schedule_id' => $payload['schedule']['id']
             ]);
         }

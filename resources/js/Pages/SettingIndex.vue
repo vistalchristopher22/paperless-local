@@ -48,6 +48,20 @@ const submitSettings = () => {
                 />
               </div>
             </div>
+            <div class="form-group row">
+              <label for="presiding_officer" class="col-md-2 col-form-label text-md-right"
+                >Presiding Officer</label
+              >
+              <div class="col-md-10">
+                <input
+                  type="text"
+                  name="presiding_officer"
+                  id="presiding_officer"
+                  class="form-control"
+                  v-model="options.presiding_officer"
+                />
+              </div>
+            </div>
 
             <div class="form-group row mt-2">
               <label for="libre_office_path" class="col-md-2 col-form-label text-md-right"

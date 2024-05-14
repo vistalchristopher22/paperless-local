@@ -25,6 +25,7 @@ final class SettingController extends Controller
                 'network_source_path',
                 'server_socket_url',
                 'local_socket_url',
+                'presiding_officer',
             ])->pluck('name', 'value')->flip()
         ]);
     }
