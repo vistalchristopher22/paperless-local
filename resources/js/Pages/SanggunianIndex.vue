@@ -6,7 +6,7 @@ import { Link, router } from "@inertiajs/vue3";
 import { addNumberSuffix } from "@common/helpers";
 import Widget from "@components/Widgets.vue";
 import { Notyf } from "notyf";
-import { ref } from "vue";
+import { ref, provide } from "vue";
 import axios from "axios";
 
 export default {
@@ -34,6 +34,7 @@ export default {
     const agendas = ref([]);
     const processing = ref(false);
     const selectedMember = ref(null);
+    provide("DISPLAY_AGENDA", displayAgenda);
 
     const deleteSanggunian = (id) => {
       alertify.prompt(
@@ -87,11 +88,30 @@ export default {
 <template>
   <div>
     <FullScreenLoader :processing="processing" />
-    <Agenda :displayAgenda="displayAgenda" :agendas="agendas">
+    <Agenda :agendas="agendas">
       <template #title>
         <h5 class="fw-bolder text-uppercase">{{ selectedMember?.fullname }}</h5>
       </template>
     </Agenda>
+
+    <div class="card bg-primary mt-3">
+      <div class="card-body text-white d-flex align-items-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-info-circle-fill mx-2"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"
+          />
+        </svg>
+        You can view the agenda information of a Sanggunian Member by clicking on the
+        member's name.
+      </div>
+    </div>
     <div class="d-flex align-items-center justify-content-between mb-2 mt-2">
       <div>
         <h5 class="fw-bolder text-uppercase">
@@ -119,13 +139,18 @@ export default {
             <th class="border text-white bg-dark border border-dark text-uppercase">
               Fullname
             </th>
-            <th class="border text-white bg-dark border border-dark text-uppercase">
-              District
+            <th
+              class="border text-white bg-dark border border-dark text-uppercase text-center text-uppercase"
+            >
+              Title
             </th>
             <th
               class="border text-white bg-dark border border-dark text-uppercase text-center text-uppercase"
             >
               Sanggunian
+            </th>
+            <th class="border text-white bg-dark border border-dark text-uppercase">
+              District
             </th>
             <th
               class="border text-white bg-dark border border-dark text-uppercase text-center text-uppercase"
@@ -153,16 +178,21 @@ export default {
               @click="viewAgendaInformation(member.id)"
             >
               <span
-                class="mx-5 text-dark fw-bolder text-uppercase"
+                class="text-dark fw-bolder text-uppercase"
                 style="letter-spacing: 0.9px"
               >
                 {{ member.fullname }}
               </span>
             </td>
-            <td class="text-dark text-center border">{{ member.district }}</td>
+            <td class="text-dark fw-medium border cursor-pointer text-truncate">
+              <span class="text-dark fw-bolder text-uppercase">
+                {{ member.official_title }}
+              </span>
+            </td>
             <td class="text-dark text-center border">
               {{ addNumberSuffix(member.sanggunian) }} Sangguniang Panlalawigan Member
             </td>
+            <td class="text-dark text-center border">{{ member.district }}</td>
             <td class="text-dark text-center border">
               {{ member.created_at }}
             </td>

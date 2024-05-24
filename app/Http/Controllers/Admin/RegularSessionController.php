@@ -18,7 +18,6 @@ final class RegularSessionController extends Controller
 
     public function index()
     {
-
         return inertia('RegularSessionIndex', [
             'schedules' => $this->scheduleRepository->getAllSchedules()
                 ->load(['schedule_venue', 'order_of_business_information'])

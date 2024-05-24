@@ -2,7 +2,7 @@
 import Layout from "@pages/Layout.vue";
 import { Head } from "@inertiajs/vue3";
 
-import { defineComponent, defineProps } from "vue";
+import { defineComponent, defineProps, onMounted } from "vue";
 
 import General from "@components/ScreenDisplay/General.vue";
 import Display from "@components/ScreenDisplay/Display.vue";
@@ -32,7 +32,17 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  id: {
+    type: Number,
+    required: true,
+  },
 });
+
+const saveTab = (tab) => {
+  localStorage.setItem("tab", tab);
+};
+
+const selectedTab = localStorage.getItem("tab") || "general";
 </script>
 
 <template>
@@ -41,8 +51,10 @@ const props = defineProps({
     <ul class="nav nav-pills nav-justified mt-2" role="tablist">
       <li class="nav-item waves-effect waves-light" role="presentation">
         <a
-          class="nav-link show active"
+          class="nav-link"
           data-bs-toggle="tab"
+          @click="saveTab('general')"
+          :class="{ active: selectedTab === 'general' }"
           href="#general"
           role="tab"
           aria-selected="true"
@@ -54,7 +66,9 @@ const props = defineProps({
         <a
           class="nav-link"
           data-bs-toggle="tab"
+          @click="saveTab('display')"
           href="#display"
+          :class="{ active: selectedTab === 'display' }"
           role="tab"
           aria-selected="false"
           tabindex="-1"
@@ -68,7 +82,9 @@ const props = defineProps({
         <a
           class="nav-link"
           data-bs-toggle="tab"
+          :class="{ active: selectedTab === 'committee-meeting' }"
           href="#committee-meeting"
+          @click="saveTab('committee-meeting')"
           role="tab"
           aria-selected="false"
           tabindex="-1"
@@ -83,9 +99,13 @@ const props = defineProps({
       <div class="card-body">
         <div class="tab-content" id="pills-tabContent">
           <div
-            class="tab-pane fade show active"
+            class="tab-pane fade"
             id="general"
             role="tabpanel"
+            :class="{
+              active: selectedTab === 'general',
+              show: selectedTab === 'general',
+            }"
             aria-labelledby="general-tab"
           >
             <General :settings="settings" />
@@ -94,14 +114,22 @@ const props = defineProps({
           <div
             class="tab-pane fade"
             id="display"
+            :class="{
+              active: selectedTab === 'display',
+              show: selectedTab === 'display',
+            }"
             role="tabpanel"
             aria-labelledby="display-tab"
           >
-            <Display :sanggunianMembers="sanggunianMembers" />
+            <Display :sanggunianMembers="sanggunianMembers" :id="id" />
           </div>
 
           <div
             class="tab-pane fade"
+            :class="{
+              active: selectedTab === 'committee-meeting',
+              show: selectedTab === 'committee-meeting',
+            }"
             id="committee-meeting"
             role="tabpanel"
             aria-labelledby="committee-meeting-tab"

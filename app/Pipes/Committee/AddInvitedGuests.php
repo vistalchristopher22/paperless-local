@@ -30,7 +30,7 @@ class AddInvitedGuests implements IPipeHandler
             foreach ($submittedGuest as $guest) {
                 CommitteeInvitedGuest::create([
                     'committee_id' => $payload->id,
-                    'fullname' => $guest['fullname'],
+                    'fullname' => str()->upper($guest['fullname']),
                 ]);
             }
 

@@ -140,7 +140,7 @@
                 style="border-collapse : collapse;">
                 @if ($dataToPresent?->type?->value == 'Session')
                     <div class="mx-2">
-                        <span class="letter-spacing-1">ORDER OF BUSINESS</span>
+                        <span class="letter-spacing-1"></span>
                     </div>
                 @else
                     <div class="mx-2">
@@ -246,32 +246,6 @@
                                     </ul>
                                 </div>
                             </td>
-                        </tr>
-                    </table>
-                @else
-                    <table class="table table-bordered">
-                        <tr>
-                            <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
-                                width="36%" style="letter-spacing : 1px;">
-                                &nbsp;
-                            </th>
-                            <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
-                                style="letter-spacing : 1px;">
-                                &nbsp;
-                            </th>
-                            <th class="text-uppercase text-center p-1 bg-primary border border-primary text-white"
-                                style="letter-spacing : 1px;">
-                                &nbsp;
-                            </th>
-                        </tr>
-                        <tr>
-                            <th class="p-1 text-center align-middle" colspan="3" rowspan="4">
-                                <div
-                                    class="d-flex flex-column justify-content-around align-items-center letter-spacing-2 text-primary p-3">
-                                    <img src="{{ asset('/assets-2/images/logo-screen/logo2.png') }}" alt="">
-                                    <span class="fs-4 fw-bolder">COMMITTEE MEETINGS</span>
-                                </div>
-                            </th>
                         </tr>
                     </table>
                 @endif
@@ -432,7 +406,7 @@
             .querySelector('meta[name="server-socket-url"]')
             .getAttribute("content");
 
-        let socket = io(serverSocketUrl);
+        let socket = io("http://localhost:3030");
 
         let dataToPresent = @json($dataToPresent);
 

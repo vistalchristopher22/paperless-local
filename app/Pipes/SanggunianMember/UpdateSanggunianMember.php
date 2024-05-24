@@ -20,9 +20,10 @@ final class UpdateSanggunianMember implements IPipeHandler
     public function handle(mixed $payload, Closure $next)
     {
         $this->sangguninanMemberRepository->update($payload['sanggunianMember'], [
-            'fullname' => $payload['fullname'],
-            'district' => $payload['district'],
-            'sanggunian' => $payload['sanggunian'],
+            'fullname'        => 'Hon. ' . $payload['fullname'],
+            'district'        => $payload['district'],
+            'sanggunian'      => $payload['sanggunian'],
+            'official_title'  => $payload['official_title'],
             'profile_picture' => $payload['profile_picture'] ?? $payload['sanggunianMember']['profile_picture'],
         ]);
 

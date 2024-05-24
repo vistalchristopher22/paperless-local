@@ -54,6 +54,7 @@ use App\Http\Controllers\Admin\CommitteeMeetingSchedulePrintController;
 use App\Http\Controllers\Admin\CommitteeMeetingSchedulePreviewController;
 use App\Http\Controllers\Admin\DocumentGeneratorController;
 use App\Http\Controllers\Admin\HomeController as AdministratorHomeController;
+use App\Http\Controllers\Admin\ScreenOrderofBusinessController;
 
 Auth::routes();
 Route::view('stay', 401);
@@ -81,6 +82,7 @@ Route::get('submitted-committee/list', SubmittedCommitteeController::class);
 
 Route::group(['as' => 'display.screen.'], function () {
     Route::get('screen/{id}', ScreenController::class)->name('monitor');
+    Route::get('screen-order-of-business/{id}', ScreenOrderofBusinessController::class)->name('question-of-hour');
     Route::get('screen-question-of-hour/{id}', ScreenQuestionofHourController::class)->name('question-of-hour');
     Route::get('screen-privilege-hour/{id}', ScreenPrivilegeHour::class)->name('privilege.hour');
     Route::get('screen-table/{id}', ScreenTableController::class)->name('table');

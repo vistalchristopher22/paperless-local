@@ -1,8 +1,14 @@
 <script>
+import { inject } from "vue";
 export default {
-  props: ["agendas", "displayAgenda"],
+  props: ["agendas"],
   components: {},
-  setup() {},
+  setup(props) {
+    const displayAgenda = inject("DISPLAY_AGENDA");
+    return {
+      displayAgenda,
+    };
+  },
 };
 </script>
 

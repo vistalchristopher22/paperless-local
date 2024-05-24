@@ -22,6 +22,7 @@ return new class () extends Migration {
             $table->enum('type', ScheduleType::values());
             $table->foreignIdFor(BoardSession::class, 'order_of_business')->nullable();
             $table->string('root_directory')->nullable();
+            $table->string('minutes_path')->nullable();
             $table->timestamps();
         });
     }

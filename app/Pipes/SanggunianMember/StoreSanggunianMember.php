@@ -18,9 +18,10 @@ final class StoreSanggunianMember implements IPipeHandler
     public function handle(mixed $payload, Closure $next)
     {
         $this->sanggunianMemberRepository->store([
-            'fullname' => $payload['fullname'],
-            'district' => $payload['district'],
-            'sanggunian' => $payload['sanggunian'],
+            'fullname'        => 'Hon. ' . $payload['fullname'],
+            'district'        => $payload['district'],
+            'official_title'  => $payload['official_title'],
+            'sanggunian'      => $payload['sanggunian'],
             'profile_picture' => $payload['profile_picture'] ?? 'no_image.png',
         ]);
 

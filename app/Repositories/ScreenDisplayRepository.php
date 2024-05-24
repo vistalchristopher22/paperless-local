@@ -24,29 +24,28 @@ final class ScreenDisplayRepository extends BaseRepository implements ScreenDisp
      */
     public function updateScreenDisplays(Schedule $data)
     {
-        $orderOfBusiness = $data->order_of_business_information;
-
         $currentIndex = 1;
-
-        ScreenDisplay::create([
-            'schedule_id'             => $data->id,
-            'screen_displayable_id'   => $orderOfBusiness->id,
-            'screen_displayable_type' => get_class($orderOfBusiness),
-            'type'                    => DisplayScheduleType::ORDER_OF_BUSINESS->value,
-            'status'                  => ScreenDisplayStatus::ON_GOING->value,
-            'index'                   => $currentIndex,
-        ]);
-
         foreach ($data->committees as $committee) {
-            ++$currentIndex;
-            ScreenDisplay::create([
+            if($currentIndex == 2) {
+                $status = ScreenDisplayStatus::NEXT;
+            } else if($currentIndex == 1) {
+                $status = ScreenDisplayStatus::ON_GOING;
+            } else {
+                $status = ScreenDisplayStatus::PENDING;
+            }
+             ScreenDisplay::updateOrCreate([
+                'schedule_id' => $data->id,
+                'screen_displayable_id'   => $committee->id,
+                'screen_displayable_type' => get_class($committee),
+            ], [
                 'schedule_id'             => $data->id,
                 'screen_displayable_id'   => $committee->id,
                 'screen_displayable_type' => get_class($committee),
                 'type'                    => DisplayScheduleType::MEETING->value,
-                'status'                  => ScreenDisplayStatus::PENDING->value,
+                'status'                  => $status,
                 'index'                   => $currentIndex,
             ]);
+            ++$currentIndex;
         }
     }
 

@@ -37,10 +37,10 @@ const config = inject("$config");
 const presentByDistrict = presentGroupByDistrictRecords(props.schedule);
 
 const firstDistrictPresent = ref(
-  presentByDistrict[FIRST_DISTRICT].map((record) => record.fullname)
+  presentByDistrict[FIRST_DISTRICT]?.map((record) => record.fullname)
 );
 const secondDistrictPresent = ref(
-  presentByDistrict[SECOND_DISTRICT].map((record) => record.fullname)
+  presentByDistrict[SECOND_DISTRICT]?.map((record) => record.fullname)
 );
 const selectedPresidingOfficer = ref(props.presidingOfficer.value);
 const absentMembers = ref(
@@ -53,8 +53,8 @@ const onSickLeaveMembers = ref(
   getOnSickLeaveRecords(props.schedule).map((record) => record.fullname)
 );
 
-const modifyDocument = () => {
-  config.socket.emit("WRITE_RESO", {
+const printDocument = () => {
+  config.socket.emit("PRINT_DOCUMENT", {
     ...props.schedule,
     id: props.schedule.id,
     presiding_officer: selectedPresidingOfficer.value,
@@ -68,8 +68,23 @@ const modifyDocument = () => {
   });
 };
 
-const printDocument = () => {
-  config.socket.emit("PRINT_DOCUMENT", {
+const modifyDocument = () => {
+  config.socket.emit("MODIFY_TEMPLATE", {
+    ...props.schedule,
+    id: props.schedule.id,
+    presiding_officer: selectedPresidingOfficer.value,
+    firstDistrictPresent: firstDistrictPresent.value,
+    secondDistrictPresent: secondDistrictPresent.value,
+    absents: absentMembers.value,
+    on_sick_leave: onSickLeaveMembers.value,
+    on_official_business: onOfficialBusinessMembers.value,
+    date: moment(props.schedule.date_and_time).format("MMMM DD, YYYY"),
+    suffix: addNumberSuffix(parseInt(props.schedule.reference_session, 10)),
+  });
+};
+
+const previewDocument = () => {
+  config.socket.emit("PREVIEW_DOCUMENT", {
     ...props.schedule,
     id: props.schedule.id,
     presiding_officer: selectedPresidingOfficer.value,
@@ -239,8 +254,11 @@ provide("schedule", ref(props.schedule));
       </div>
 
       <div class="add-attachment-body d-flex flex-column align-items-center p-2 mt-4">
-        <div class="align-self-end me-2" @click="printDocument">
-          <button class="btn btn-dark">
+        <div class="align-self-end me-2">
+          <button class="btn btn-primary me-2" @click="previewDocument">
+            PREVIEW DOCUMENT
+          </button>
+          <button class="btn btn-dark" @click="printDocument">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -268,8 +286,9 @@ provide("schedule", ref(props.schedule));
               class="btn btn-primary btn-lg mb-2 fw-medium shadow position-absolute"
               style="z-index: 9999999999999"
             >
-              MODIFY TEMPLATE
+              MODIFY BODY
             </button>
+
             <div class="overlay"></div>
           </div>
         </div>

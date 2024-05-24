@@ -21,6 +21,11 @@ class Schedule extends Model
 
     ];
 
+    public function screen_displays(): HasMany
+    {
+        return $this->hasMany(ScreenDisplay::class, 'schedule_id', 'id');
+    }
+
     public function with_guest_committees(): HasMany
     {
         return $this->hasMany(Committee::class, 'schedule_id', 'id')->where('invited_guests', 1)->orderBy('display_index', 'ASC');

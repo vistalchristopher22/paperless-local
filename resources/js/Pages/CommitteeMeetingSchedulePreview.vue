@@ -251,7 +251,7 @@ onMounted(() => {
             <div class="d-flex align-items-center justify-content-center">
               <li class="nav-item" role="presentation">
                 <button
-                  class="nav-link fs-4 fw-medium active text-uppercase letter-spacing-0"
+                  class="nav-link fs-5 text-uppercase fw-bold letter-spacing-0"
                   id="commitees-home-tab"
                   data-bs-toggle="pill"
                   data-bs-target="#pills-home"
@@ -265,7 +265,7 @@ onMounted(() => {
               </li>
               <li class="nav-item me-2" role="presentation">
                 <button
-                  class="nav-link fs-4 fw-medium text-uppercase letter-spacing-0"
+                  class="nav-link fs-5 text-uppercase fw-bold letter-spacing-0"
                   :href="`/${orderOfBusinessLink}`"
                   data-bs-toggle="pill"
                   data-bs-target="#pills-contact"

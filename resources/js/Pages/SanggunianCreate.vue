@@ -21,6 +21,7 @@ export default {
     const sanggunian = reactive({
       fullname: "",
       district: "",
+      official_title: "",
       sanggunian_number: "19",
       image: "",
     });
@@ -35,6 +36,7 @@ export default {
       formData.append("fullname", sanggunian.fullname);
       formData.append("district", sanggunian.district);
       formData.append("sanggunian", sanggunian.sanggunian_number);
+      formData.append("official_title", sanggunian.official_title);
       formData.append("image", sanggunian.image);
 
       axios
@@ -46,6 +48,7 @@ export default {
           sanggunian.value = {
             fullname: null,
             district: null,
+            official_title: null,
             sanggunian_number: null,
             image: null,
           };
@@ -80,18 +83,20 @@ export default {
     <div class="card-body">
       <form @submit.prevent="createSanggunian">
         <div class="form-group mb-3" v-auto-animate>
-          <label for="fullname" class="form-label">Fullname</label>
-          <input
-            type="text"
-            name="fullname"
-            id="fullname"
-            autofocus
-            v-model="sanggunian.fullname"
-            class="form-control"
-            :class="{ 'is-invalid': errors.fullname }"
-          />
-          <div class="invalid-feedback" v-if="errors.fullname">
-            {{ errors.fullname[0] }}
+          <div class="input-group">
+            <span class="input-group-text" id="basic-addon1"> Hon. </span>
+            <input
+              type="text"
+              class="form-control"
+              name="fullname"
+              id="fullname"
+              autofocus
+              v-model="sanggunian.fullname"
+              :class="{ 'is-invalid': errors.fullname }"
+            />
+            <div class="invalid-feedback" v-if="errors.fullname">
+              {{ errors.fullname[0] }}
+            </div>
           </div>
         </div>
 
@@ -114,9 +119,24 @@ export default {
         </div>
 
         <div class="form-group mb-3" v-auto-animate>
-          <label for="sanggunian" class="form-label">Sanggunian</label>
+          <label for="official_title" class="form-label">Official Title</label>
           <input
             type="text"
+            name="official_title"
+            id="official_title"
+            class="form-control"
+            :class="{ 'is-invalid': errors.official_title }"
+            v-model="sanggunian.official_title"
+          />
+          <div class="invalid-feedback" v-if="errors.official_title">
+            {{ errors.official_title[0] }}
+          </div>
+        </div>
+
+        <div class="form-group mb-3" v-auto-animate>
+          <label for="sanggunian" class="form-label">Sanggunian</label>
+          <input
+            type="number"
             name="sanggunian"
             id="sanggunian"
             class="form-control"

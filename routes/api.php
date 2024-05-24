@@ -1,12 +1,15 @@
 <?php
 
 use App\Models\User;
+use App\Models\Schedule;
 use App\Models\Committee;
 use Illuminate\Http\Request;
 use App\Models\ScreenDisplay;
 use App\Models\UserNotification;
 use App\Enums\ScreenDisplayStatus;
 use Illuminate\Support\Facades\Route;
+use App\Repositories\SettingRepository;
+use App\Repositories\ScreenDisplayRepository;
 use App\Contracts\ScreenDisplayRepositoryInterface;
 use App\Http\Controllers\Admin\Api\ScheduleController;
 use App\Http\Controllers\Admin\UpdateCommitteeAttachment;
@@ -15,6 +18,7 @@ use App\Http\Controllers\Admin\Api\AgendaMemberController;
 use App\Http\Controllers\Admin\BoardSessionAddScheduleController;
 use App\Http\Controllers\Admin\UpdateOrderofBusinessAttachmentController;
 use App\Http\Controllers\Admin\CommitteeController as AdminCommitteeController;
+use Illuminate\Support\Facades\DB;
 
 Route::put('screen/start/{id}', function (int $id) {
     $screenDisplay = tap(ScreenDisplay::where('status', ScreenDisplayStatus::ON_GOING)->find($id))->update([
@@ -204,3 +208,61 @@ Route::group(['prefix' => 'notifications'], function () {
 
 Route::get('committee-update-attachment/{id}', UpdateCommitteeAttachment::class);
 Route::get('order-of-business-update-attachment/{id}', UpdateOrderofBusinessAttachmentController::class);
+
+
+Route::post('question-of-hour-guest', function () {
+    SettingRepository::setNewValue(key: 'guest', databaseKey: 'question_of_hour_guest', data: request()->all());
+    return response()->json(['success' => true]);
+});
+
+Route::post('privilege-hour-member', function () {
+    SettingRepository::setNewValue(key: 'selectedMember', databaseKey: 'privilege_hour_member', data: request()->all());
+    return response()->json(['success' => true]);
+});
+
+Route::post('announcement', function () {
+    SettingRepository::setNewValue(key: 'announcement', databaseKey: 'display_announcement', data: request()->all());
+    SettingRepository::setNewValue(key: 'announcement_running_speed', databaseKey: 'announcement_running_speed', data: request()->all());
+    return response()->json(['success' => true]);
+});
+
+Route::post('committee-meeting-screen-next/{id}', function (int $id) {
+    ScreenDisplay::find($id)->where('status', ScreenDisplayStatus::NEXT)->update([
+        'status' => ScreenDisplayStatus::PENDING,
+    ]);
+
+    ScreenDisplay::find($id)->update([
+        'status' => ScreenDisplayStatus::NEXT,
+    ]);
+
+    return response()->json(['success' => true]);
+});
+
+Route::post('committee-meeting-screen-pending/{id}', function (int $id) {
+    ScreenDisplay::find($id)->update([
+        'status' => ScreenDisplayStatus::PENDING,
+    ]);
+
+    return response()->json(['success' => true]);
+});
+Route::post('committee-meeting-screen-current/{id}', function (int $id) {
+    ScreenDisplay::find($id)->where('status', ScreenDisplayStatus::ON_GOING)->update([
+        'status' => ScreenDisplayStatus::NEXT,
+    ]);
+
+    ScreenDisplay::find($id)->update([
+        'status' => ScreenDisplayStatus::ON_GOING,
+    ]);
+
+    return response()->json(['success' => true]);
+});
+
+Route::post('/committee-meeting-generate-display/{id}', function (int $id) {
+    return DB::transaction(function () use($id) {
+        ScreenDisplay::where('schedule_id', $id)->delete();
+        $schedule = Schedule::find($id);
+        $screenDisplayRepository = app()->make(ScreenDisplayRepository::class);
+        $screenDisplayRepository->updateScreenDisplays($schedule);
+        return response()->json(['success' => true]);
+    });
+});

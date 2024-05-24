@@ -17,6 +17,7 @@ sl<?php
                 $table->string('lastname')->nullable();
                 $table->string('district');
                 $table->string('sanggunian');
+                $table->text('official_title')->nullable();
                 $table->string('profile_picture')->default('no_image.png');
                 $table->string('unique_id')->unique()->nullable();
                 $table->timestamps();

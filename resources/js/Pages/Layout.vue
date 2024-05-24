@@ -11,11 +11,11 @@ const config = inject("$config");
 <template>
   <div class="left-sidebar bg-dark">
     <!-- LOGO -->
-    <div class="brand bg-dark">
+    <div class="brand bg-dark border-light">
       <Link href="/administrator/home" class="logo">
         <div class="d-flex align-items-center p-2 justify-content-center">
           <img
-            src="http://localhost:8000/paperless-logo.png"
+            src="http://localhost:8003/paperless-logo.png"
             alt="logo-small"
             class="img-fluid me-3"
             style="width: 2vw"
@@ -104,7 +104,7 @@ const config = inject("$config");
             </li>
             <li class="menu-label mt-0">M<span>aintenance</span></li>
             <li class="nav-item">
-              <Link href="/schedules" class="nav-link ms-3">
+              <Link href="/schedules" class="nav-link">
                 <div class="text-white">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +124,7 @@ const config = inject("$config");
             </li>
 
             <li class="nav-item">
-              <Link href="/committee" class="nav-link ms-3">
+              <Link href="/committee" class="nav-link">
                 <div class="text-white">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +143,7 @@ const config = inject("$config");
               </Link>
             </li>
             <li class="nav-item">
-              <Link href="/agendas" method="get" class="nav-link ms-3">
+              <Link href="/agendas" method="get" class="nav-link">
                 <div class="text-white">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -161,7 +161,7 @@ const config = inject("$config");
                 <span class="mx-2">Chairmanship</span>
               </Link>
             </li>
-            <li class="nav-item ms-3">
+            <li class="nav-item">
               <Link href="/division" method="get" class="nav-link">
                 <div class="text-white">
                   <svg
@@ -181,7 +181,7 @@ const config = inject("$config");
               </Link>
             </li>
             <li class="nav-item">
-              <Link href="/types/" method="get" class="nav-link ms-3">
+              <Link href="/types/" method="get" class="nav-link">
                 <div class="text-white">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -202,7 +202,6 @@ const config = inject("$config");
                 <span class="mx-2">Types</span>
               </Link>
             </li>
-            <li class="menu-label mt-0">A<span>rchives</span></li>
             <li class="nav-item">
               <Link href="/account" method="get" class="nav-link">
                 <div class="text-white">
@@ -222,25 +221,27 @@ const config = inject("$config");
                 <span class="mx-2">Users</span>
               </Link>
             </li>
-            <!-- <li class="nav-item">
-              <Link href="/legislation" method="get" class="nav-link">
+            <li class="menu-label mt-0">M<span>onitor</span></li>
+            <li class="nav-item">
+              <Link href="/regular-session" method="get" class="nav-link">
                 <div class="text-white">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
                     fill="currentColor"
-                    class="bi bi-people"
+                    class="bi bi-display"
                     viewBox="0 0 16 16"
                   >
                     <path
-                      d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8Zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022ZM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816ZM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0Zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
+                      d="M0 4s0-2 2-2h12s2 0 2 2v6s0 2-2 2h-4q0 1 .25 1.5H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.75Q6 13 6 12H2s-2 0-2-2zm1.398-.855a.76.76 0 0 0-.254.302A1.5 1.5 0 0 0 1 4.01V10c0 .325.078.502.145.602q.105.156.302.254a1.5 1.5 0 0 0 .538.143L2.01 11H14c.325 0 .502-.078.602-.145a.76.76 0 0 0 .254-.302 1.5 1.5 0 0 0 .143-.538L15 9.99V4c0-.325-.078-.502-.145-.602a.76.76 0 0 0-.302-.254A1.5 1.5 0 0 0 13.99 3H2c-.325 0-.502.078-.602.145"
                     />
                   </svg>
                 </div>
-                <span class="mx-2">Committee In-charge</span>
+                <span class="mx-2">Screen Display</span>
               </Link>
-            </li> -->
+            </li>
+            <li class="menu-label mt-0">A<span>rchives</span></li>
 
             <li class="nav-item">
               <Link href="/invited-guests" method="get" class="nav-link">
@@ -278,65 +279,6 @@ const config = inject("$config");
                   </svg>
                 </div>
                 <span class="mx-2">File Manager</span>
-              </Link>
-            </li>
-
-            <li class="nav-item">
-              <Link href="/regular-session" method="get" class="nav-link">
-                <div class="text-white">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-display"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M0 4s0-2 2-2h12s2 0 2 2v6s0 2-2 2h-4q0 1 .25 1.5H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.75Q6 13 6 12H2s-2 0-2-2zm1.398-.855a.76.76 0 0 0-.254.302A1.5 1.5 0 0 0 1 4.01V10c0 .325.078.502.145.602q.105.156.302.254a1.5 1.5 0 0 0 .538.143L2.01 11H14c.325 0 .502-.078.602-.145a.76.76 0 0 0 .254-.302 1.5 1.5 0 0 0 .143-.538L15 9.99V4c0-.325-.078-.502-.145-.602a.76.76 0 0 0-.302-.254A1.5 1.5 0 0 0 13.99 3H2c-.325 0-.502.078-.602.145"
-                    />
-                  </svg>
-                </div>
-                <span class="mx-2">Screen & Monitor</span>
-              </Link>
-            </li>
-
-            <li class="nav-item">
-              <Link href="/settings" method="get" class="nav-link">
-                <div class="text-white">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-gear-fill"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"
-                    />
-                  </svg>
-                </div>
-                <span class="mx-2">Settings & Actions</span>
-              </Link>
-            </li>
-            <li class="nav-item">
-              <Link href="/generate" method="get" class="nav-link">
-                <div class="text-white">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-gear-fill"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"
-                    />
-                  </svg>
-                </div>
-                <span class="mx-2">Ordinance & Resolution</span>
               </Link>
             </li>
           </ul>

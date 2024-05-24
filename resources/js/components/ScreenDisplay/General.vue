@@ -1,4 +1,6 @@
 <script setup>
+import { ref, inject } from "vue";
+import { Notyf } from "notyf";
 const props = defineProps({
   settings: {
     type: Object,
@@ -9,14 +11,30 @@ const props = defineProps({
 const getValueByName = (key) => {
   return props.settings.find((setting) => setting.name === key);
 };
-
-const generalSettings = {
+const config = inject("$config");
+const generalSettings = ref({
   announcement_running_speed: getValueByName("announcement_running_speed")?.value,
   announcement: getValueByName("display_announcement")?.value,
-};
+});
 
 const updateGeneralSetting = () => {
-  alert("update general setting");
+  let formData = new FormData();
+  formData.append("announcement", generalSettings.value.announcement);
+  formData.append(
+    "announcement_running_speed",
+    generalSettings.value.announcement_running_speed
+  );
+
+  axios.post("/api/announcement", formData).then((response) => {
+    if (response.data.success) {
+      new Notyf().success("General settings updated successfully.");
+      config.socket.emit("TRIGGER_REFRESH");
+    }
+  });
+};
+
+const refreshClients = () => {
+  config.socket.emit("TRIGGER_REFRESH");
 };
 </script>
 
@@ -42,7 +60,7 @@ const updateGeneralSetting = () => {
 
       <div class="form-group row mt-2">
         <label for="prepared_by" class="col-md-2 col-form-label text-md-right"
-          >Content</label
+          >Announcement</label
         >
         <div class="col-md-10">
           <textarea
@@ -70,6 +88,7 @@ const updateGeneralSetting = () => {
             class="btn bg-dark text-white fw-medium"
             type="button"
             id="refreshClients"
+            @click="refreshClients"
           >
             Refresh Clients
           </button>

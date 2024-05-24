@@ -16,7 +16,7 @@
     <style>
         * {
             font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-            font-size: 1.9vw;
+            font-size: {{ $fontSize }}vw;
         }
 
         body {
@@ -48,6 +48,10 @@
 
         .text-primary {
             color: #347c00 !important;
+        }
+
+        .text-primary-dark {
+            color: #143500 !important;
         }
 
         .scroll-container {
@@ -111,31 +115,25 @@
 <body>
 
     <div class="">
-
-        <div class="row">
-            <div class="col-lg-12 bg-primary d-flex justify-content-between align-items-center">
-                <img src="{{ asset('/assets/tsp.png') }}" class="img-fluid " width="5%" alt="">
-                <span class="text-uppercase text-white h2 mt-1" style="letter-spacing : 2px;">
-                    Privilege Hour
-                </span>
-                <img src="{{ asset('/logo.png') }}" class="img-fluid me-1 " width="4.3%" alt="">
-            </div>
-            <div class="col-lg-12">
-                <div class="d-flex flex-column justify-content-center align-items-center mt-4 text-center">
-                    <img src="{{ asset('storage/user-images/' . $selectedPrivilegeHourMember->profile_picture) }}"
-                        alt="" class="img-fluid rounded shadow-sm" style="width : 39vw;">
-                    <p class="text-uppercase fw-bold h2" style="letter-spacing : 2px;">
-                        {{ $selectedPrivilegeHourMember->fullname }}</p>
-                    <p class="font-inter text-uppercase mb-5 fw-medium bg-primary text-white px-2"
-                        style="letter-spacing : 1px;">
-                        {{ addNumberSuffix((int) $selectedPrivilegeHourMember->sanggunian) }} Sanggunian Panlalawigan
-                        Member</p>
+        <div class="col-lg-12 bg-primary d-flex justify-content-between align-items-center">
+            <img src="{{ asset('/assets/tsp.png') }}" class="img-fluid" width="5%" alt="">
+            <span class="text-uppercase text-white h2 mt-1" style="letter-spacing : 2px;">
+                {{ $data['reference_session'] }}
+                {{ $data['type'] }}
+            </span>
+            <img src="{{ asset('/logo.png') }}" class="img-fluid me-1" width="4.3%" alt="">
+        </div>
+        <div class="row mt-5">
+            <div
+                class="col-lg-12 d-flex flex-row align-items-center justify-content-center border border-top-0 border-right-0 border-bottom-0">
+                <div
+                    class="d-flex flex-column justify-content-around align-items-center letter-spacing-2 text-primary p-3">
+                    <img src="{{ asset('/assets-2/images/logo-screen/logo2.png') }}" alt="">
+                    <span class="fs-2 fw-bolder">ORDER OF BUSINESS</span>
                 </div>
             </div>
-
         </div>
     </div>
-
 
     <div class="bg-primary mt-auto fixed-bottom d-flex">
         <div class="bg-primary-2"
@@ -162,7 +160,6 @@
         </marquee>
     </div>
 
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"
         integrity="sha512-AI5A3zIoeRSEEX9z3Vyir8NqSMC1pY7r5h2cE+9J6FLsoEmSSGLFaqMQw8SWvoONXogkfFrkQiJfLeHLz3+HOg=="
@@ -179,6 +176,7 @@
         socket.on('UPDATE_SCREEN_DISPLAY', (data) => {
             window.location.href = data.url;
         });
+
 
         socket.on('TRIGGER_REFRESH_ON_CLIENTS', function() {
             location.reload();

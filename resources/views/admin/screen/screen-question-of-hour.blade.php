@@ -125,11 +125,12 @@
         <div class="row mt-5">
             <div
                 class="col-lg-12 d-flex flex-row align-items-center justify-content-center border border-top-0 border-right-0 border-bottom-0">
-                <img src="{{ asset('/assets/tsp.png') }}" class="img-fluid"
+                <img src="{{ asset('/assets/tsp.png') }}"
+                    class="img-fluid {{ empty($guestFullName) ? 'border-0' : '' }}"
                     style="width:40vw;border:6px solid black; border-left:0; border-top:0; border-bottom:0;"
                     alt="">
-
-                <div class="d-flex flex-column align-items-center justify-content-center ms-3">
+                <div
+                    class="d-flex flex-column align-items-center justify-content-center ms-3 {{ empty($guestFullName) ? 'd-none' : '' }}">
                     <p class="fw-bold text-uppercase  h1" style="letter-spacing : 2px;">
                         {{ $guestFullName }}
                     </p>
@@ -137,70 +138,6 @@
             </div>
         </div>
     </div>
-
-    {{-- <div class="mt-auto fixed-bottom">
-        <div class="scroll-container bg-primary">
-            <div class="bg-white"
-                style="position:absolute; z-index:9999; width:31.5%; height :fit-content; bottom:0%; top:0%; left :0;">
-                <div class="d-flex justify-content-center align-items-center">
-                    <span class="font-inter fw-bold text-primary-dark">
-                        POWERED BY : PADMO-ITU
-                    </span>
-                    <img src="{{ asset('/itu.gif') }}" class="img-fluid mx-1" width="8.5%" style="padding : 3px;" alt="" />
-                </div>
-            </div>
-
-            <div class="scroll-text fw-bold">
-                <span
-                    class="text-dark fw-bold text-white text-uppercase letter-spacing-1 font-inter">{{ $data['number'] }}
-                    REGULAR SESSION
-                    @if (!empty($dataToPresent?->schedule?->venue))
-                        - {{ $dataToPresent->schedule->venue }}
-                    @endif
-                    @if (!empty($data?->schedules?->first()?->date_and_time))
-                        - {{ $data?->schedules?->first()?->date_and_time->format('F d, Y') }}
-                    @endif
-                    @if (!empty($announcement))
-                        |
-                        {{ $announcement }}
-                    @endif
-                </span>
-            </div>
-        </div>
-    </div> --}}
-
-
-    {{-- <div class="mt-auto fixed-bottom">
-        <div class="scroll-container bg-primary">
-            <div class="bg-primary-2"
-                style="position:absolute; z-index:9999; width:31.5%; height :fit-content; bottom:0%; top:0%; left :0;">
-                <div class="d-flex justify-content-center align-items-center">
-                    <span class="font-inter fw-bold text-white">
-                        POWERED BY : PADMO-ITU
-                    </span>
-                    <img src="{{ asset('/itu.gif') }}" class="img-fluid mx-1" width="8.5%" style="padding : 3px;"
-                        alt="" />
-                </div>
-            </div>
-
-            <div class="scroll-text fw-bold">
-                <span
-                    class="text-dark fw-bold text-white text-uppercase letter-spacing-1 font-inter">{{ $data['number'] }}
-                    REGULAR SESSION
-                    @if (!empty($dataToPresent?->schedule?->venue))
-                        - {{ $dataToPresent->schedule->venue }}
-                    @endif
-                    @if (!empty($data?->schedules?->first()?->date_and_time))
-                        - {{ $data?->schedules?->first()?->date_and_time->format('F d, Y') }}
-                    @endif
-                    @if (!empty($announcement))
-                        |
-                        {{ $announcement }}
-                    @endif
-                </span>
-            </div>
-        </div>
-    </div> --}}
 
     <div class="bg-primary mt-auto fixed-bottom d-flex">
         <div class="bg-primary-2"
@@ -216,14 +153,9 @@
         <marquee onmouseover="this.stop();" onmouseout="this.start();" direction="left" behavior="scroll"
             scrollamount="{{ $announcementRunningSpeed }}"
             style="position:absolute; bottom : 0%; right : 0%; left :30.1%;">
-            <span class="text-dark fw-bold text-white text-uppercase letter-spacing-1 font-inter">{{ $data['number'] }}
-                REGULAR SESSION
-                @if (!empty($dataToPresent?->schedule?->venue))
-                    - {{ $dataToPresent->schedule->venue }}
-                @endif
-                @if (!empty($data?->schedules?->first()?->date_and_time))
-                    - {{ $data?->schedules?->first()?->date_and_time->format('F d, Y') }}
-                @endif
+            <span
+                class="text-dark fw-bold text-white text-uppercase letter-spacing-1 font-inter">{{ $data['reference_session'] }}
+                {{ $data['type'] }}
                 @if (!empty($announcement))
                     |
                     {{ $announcement }}

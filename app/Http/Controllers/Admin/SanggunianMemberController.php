@@ -37,7 +37,6 @@ final class SanggunianMemberController extends Controller
         return Inertia::render('SanggunianCreate', [
             'members' => $this->sanggunianMemberRepository->get(),
         ]);
-        // return view('admin.sanggunian-members.create');
     }
 
     public function store(SanggunianMemberStoreRequest $request)

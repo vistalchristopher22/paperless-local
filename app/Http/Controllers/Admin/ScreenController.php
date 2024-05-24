@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Schedule;
+use App\Models\ScreenDisplay;
 use App\Models\ReferenceSession;
 use App\Models\SanggunianMember;
+use App\Enums\ScreenDisplayStatus;
 use App\Http\Controllers\Controller;
 use App\Repositories\SettingRepository;
 use App\Contracts\ScreenDisplayRepositoryInterface;
-use App\Models\ScreenDisplay;
 
 final class ScreenController extends Controller
 {
@@ -18,8 +19,15 @@ final class ScreenController extends Controller
 
     public function __invoke(int $id)
     {
-
-        $schedule = Schedule::with(['order_of_business_information', 'committees', 'schedule_venue'])->find($id);
+        $schedule = Schedule::with(['order_of_business_information', 'committees', 'schedule_venue', 'screen_displays'])->find($id);
+        
+        // if($schedule->screen_displays->isEmpty()) {
+        //     $this->screenDisplayRepository->updateScreenDisplays($schedule);
+        // }
+        
+        // if($schedule->committees->count() !== $schedule->screen_displays->count()) {
+        //     $this->screenDisplayRepository->updateScreenDisplays($schedule);
+        // }
 
         $totalCommittees = $schedule->committees()->count();
         $totalSessions = $schedule->order_of_business_information()->count();
@@ -34,7 +42,7 @@ final class ScreenController extends Controller
             ],
         ])
             ->where('schedule_id', $id)
-            ->where('index', $dataToPresent->index + 1)
+            ->where('status', ScreenDisplayStatus::NEXT)
             ->first();
 
 

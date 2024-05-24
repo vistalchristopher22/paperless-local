@@ -513,6 +513,7 @@ const calendarOptions = {
                 <div class="btn-group d-flex">
                   <a
                     v-if="schedule.id != ''"
+                    target="_blank"
                     class="btn btn-primary p-2 d-flex align-items-center justify-content-center"
                     :href="`/schedule/committees/${schedule.date}`"
                   >
@@ -554,7 +555,7 @@ const calendarOptions = {
         </div>
       </div>
 
-      <div class="card-body">
+      <div class="card-body mt-3">
         <div class="row">
           <div class="col-lg-12">
             <div class="card">

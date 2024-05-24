@@ -11,7 +11,9 @@ final class ExtractTextFromWordDocument implements IPipeHandler
 {
     public function handle(mixed $payload, Closure $next)
     {
-        ExtractTextJob::dispatch($payload['session']['id'], BoardSession::class, $payload['session']['file_path']);
+       if(pathinfo($payload['session']['file_path'], PATHINFO_EXTENSION) === 'docx' ||  pathinfo($payload['session']['file_path'], PATHINFO_EXTENSION) === 'doc') {
+           ExtractTextJob::dispatch($payload['session']['id'], BoardSession::class, $payload['session']['file_path']);
+       }
         return $next($payload);
     }
 }
