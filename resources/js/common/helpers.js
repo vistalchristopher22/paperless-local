@@ -35,7 +35,7 @@ export const removeFileExtension = (fileName) => {
 }
 
 
-export  const removeTimestampPrefix = (fileName) => {
+export const removeTimestampPrefix = (fileName) => {
     const underscorePos = fileName.indexOf('_');
 
     if (underscorePos !== -1) {
@@ -86,3 +86,12 @@ export const isRecordNew = (record) => {
     const today = moment().startOf('day');
     return moment(record.created_at).isSame(today, 'day');
 };
+
+
+export const strLimit = (text, limit, end = '...') => {
+    if (text.length <= limit) {
+      return text;
+    }
+    return text.substring(0, limit) + end;
+  }
+  

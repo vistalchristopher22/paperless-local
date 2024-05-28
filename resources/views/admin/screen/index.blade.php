@@ -402,6 +402,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+        const id = "{{ $id }}";
         let serverSocketUrl = document
             .querySelector('meta[name="server-socket-url"]')
             .getAttribute("content");
@@ -471,6 +472,19 @@
         socket.on('UPDATE_SCREEN_DISPLAY', (data) => {
             window.location.href = data.url;
         });
+
+        function startCountdown(duration) {
+            let timeRemaining = duration;
+            let countdownInterval = setInterval(function() {
+                timeRemaining--;
+
+                if (timeRemaining <= 0) {
+                    location.href = '/screen-table/' + id;
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+        }
+        startCountdown(60);
     </script>
     <script>
         let actionMoveToTop = (element) => {

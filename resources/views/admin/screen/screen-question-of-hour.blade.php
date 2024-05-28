@@ -8,19 +8,18 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"
         integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <link href="{{ asset('/assets-2/css/style_session.css') }}" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/Nicholaiii/Aileron/71e6623b2b67e380977d234a0d64c1fdcf223781/">
     <meta content="{{ $serverSocketUrl }}" name="server-socket-url">
     <style>
         * {
-            font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+            font-family: "Aileron", sans-serif !important;
+            font-style: normal;
+            font-weight: bold;
             font-size: {{ $fontSize }}vw;
         }
 
         body {
-            background: url({{ asset('/sample-bg.jpg') }}) no-repeat fixed center center/cover;
+            background: url({{ asset('/tsp-bg.jpg') }}) no-repeat fixed center center/cover;
             background-size: cover;
             /*background-size: 30% 100%;*/
             /*background-color: #fbfcfe;*/
@@ -113,8 +112,33 @@
 </head>
 
 <body>
+    <div class="w-100 vh-100 d-flex flex-column align-items-center justify-content-center container">
+        <div class="d-flex flex-row align-items-center justify-content-around mb-3">
+            <div>
+                <img src="{{ asset('/assets/tsp.png') }}" style="width : 6.5%;" alt="">
+                <span class="text-uppercase text-white">
+                    {{ $data['reference_session'] }}
+                    {{ $data['type'] }}
+                </span>
+            </div>
+        </div>
+        <div class="align-items-center justify-content-center text-center">
+            <div>
+                <span class="fs-2 text-white text-uppercase text-center">
+                    Question / Visitors’ Hour</span>
+            </div>
+            <div class="{{ empty($guestFullName) ? 'd-none' : '' }}">
+                <hr style="color: white; border: none; height: 10px; background-color:white;">
+            </div>
 
-    <div class="">
+            <div class="text-center {{ empty($guestFullName) ? 'd-none' : '' }}">
+                <p class="fw-bolder fw-medium text-uppercase text-white fs-2" style="letter-spacing : 2px;">
+                    {!! nl2br(str_replace('|', "\n", $guestFullName)) !!}
+                </p>
+            </div>
+        </div>
+    </div>
+    {{-- <div class="">
         <div class="col-lg-12 bg-primary d-flex justify-content-between align-items-center">
             <img src="{{ asset('/assets/tsp.png') }}" class="img-fluid" width="5%" alt="">
             <span class="text-uppercase text-white h2 mt-1" style="letter-spacing : 2px;">
@@ -137,7 +161,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="bg-primary mt-auto fixed-bottom d-flex">
         <div class="bg-primary-2"

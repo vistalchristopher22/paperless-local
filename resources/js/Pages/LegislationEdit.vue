@@ -110,7 +110,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="mt-3">
     <Head title="Edit Legislation / Resolution" />
     <FullScreenLoader :processing="processing" />
     <AllFields />
@@ -273,15 +273,11 @@ export default {
             alt="No Image"
           />
           <h6 class="fw-bold">
-            {{
-              removeTimestampPrefix(
-                removeFileExtension(getFileBaseName(legislation.legislable.file))
-              )
-            }}
+            {{ legislation.legislable.file }}
           </h6>
 
           <div class="form-group mb-3">
-            <label class="form-label required">Attachment</label>
+            <label class="form-label">Attachment</label>
             <input
               type="file"
               @change="onUploadFile"

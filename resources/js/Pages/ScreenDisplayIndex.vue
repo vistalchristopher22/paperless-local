@@ -20,6 +20,12 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  guest: {
+    type: String,
+  },
+  selectedMember: {
+    type: Number,
+  },
   sanggunianMembers: {
     type: Array,
     required: true,
@@ -121,7 +127,12 @@ const selectedTab = localStorage.getItem("tab") || "general";
             role="tabpanel"
             aria-labelledby="display-tab"
           >
-            <Display :sanggunianMembers="sanggunianMembers" :id="id" />
+            <Display
+              :selected="selectedMember"
+              :sanggunianMembers="sanggunianMembers"
+              :guest="guest"
+              :id="id"
+            />
           </div>
 
           <div

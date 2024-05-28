@@ -14,6 +14,7 @@ final class UpdateCommitteeAttachment extends Controller
     {
         $committee = Committee::find($id, ['id', 'file_path']);
 
+
         ConvertDocxToPDF::dispatch(
             $committee->file_path,
             FileUtility::publicDirectoryForViewing()

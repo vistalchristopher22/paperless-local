@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer(['layouts.app', 'layouts.app-2'], CommitteeViewComposer::class);
         View::composer(['layouts.app', 'layouts.app-2'], NotificationViewComposer::class);
-        View::composer(['layouts.app', 'layouts.app-2', 'admin.board-sessions.display', 'admin.committee.file-displays', 'admin.screen.index', 'admin.scree.screen-session', 'admin.screen.screen-question-of-hour', 'admin.screen.screen-privilege-hour', 'admin.screen.screen-order-of-business'], function ($view) {
+        View::composer(['layouts.app', 'layouts.app-2', 'admin.board-sessions.display', 'admin.committee.file-displays', 'admin.screen.index', 'admin.scree.screen-session', 'admin.screen.screen-question-of-hour', 'admin.screen.screen-privilege-hour', 'admin.screen.screen-order-of-business', 'admin.screen.screen-table'], function ($view) {
             $view->with('serverSocketUrl', "http://localhost:3030");
             $view->with('localSocketUrl', "http://localhost:3030");
         });

@@ -1,7 +1,7 @@
 <script setup>
 import { usePDF, VuePDF } from "@tato30/vue-pdf";
 import { defineComponent, watch, ref, onMounted } from "vue";
-import { removeTimestampPrefix } from "@common/helpers";
+import { removeTimestampPrefix, strLimit } from "@common/helpers";
 import "@tato30/vue-pdf/style.css";
 
 const props = defineProps({
@@ -131,7 +131,9 @@ onMounted(() => {
   <div>
     <nav class="toolbar d-flex align-items-center justify-content-between">
       <div class="fw-medium">
-        <h6 class="text-white h6">{{ removeTimestampPrefix(fileName) }}</h6>
+        <h6 class="text-white h6">
+          {{ strLimit(removeTimestampPrefix(fileName), 20, "...") }}
+        </h6>
       </div>
       <div class="d-flex align-items-center justify-content-center">
         <input
@@ -192,19 +194,7 @@ onMounted(() => {
           </svg>
         </div>
       </div>
-      <div class="d-flex align-items-center justify-content-center">
-        <a :href="`/order-business-file/download/${id}`" class="text-white">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="3em"
-            height="3em"
-            viewBox="0 0 24 24"
-            class="cursor-pointer download-btn"
-          >
-            <path fill="currentColor" d="M5 20h14v-2H5zM19 9h-4V3H9v6H5l7 7z" />
-          </svg>
-        </a>
-      </div>
+      <div class="d-flex align-items-center justify-content-center"></div>
     </nav>
     <div class="w-100 main-container">
       <div class="page-container" :style="`width : ${parentWidth}vw`">

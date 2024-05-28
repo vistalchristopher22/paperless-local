@@ -54,6 +54,12 @@ const setAsCurrent = (id) => {
     router.visit(location.href);
   });
 };
+
+const markAsDone = (id) => {
+  axios.post(`/api/committee-meeting-screen-done/${id}`).then((response) => {
+    router.visit(location.href);
+  });
+};
 </script>
 <template>
   <div>
@@ -61,7 +67,7 @@ const setAsCurrent = (id) => {
       <div class="card-body">
         <h5 class="card-title text-dark">Complete listing of chairmanship</h5>
         <div class="float-end">
-          <div class="btn-group">
+          <div class="btn-group mb-2">
             <button
               class="btn btn-primary text-uppercase fw-bold"
               @click="generateScreenDisplay"
@@ -75,7 +81,7 @@ const setAsCurrent = (id) => {
         </div>
         <div class="clearfix"></div>
         <div class="card-text">
-          <table class="table table-striped table-hover">
+          <table class="table table-striped table-hover border">
             <thead>
               <tr>
                 <th class="bg-light text-uppercase fw-bold letter-spacing-1">
@@ -131,6 +137,10 @@ const setAsCurrent = (id) => {
                     v-if="committee?.display?.status === 'next'"
                     >next</span
                   >
+
+                  <span class="badge bg-info" v-if="committee?.display?.status === 'done'"
+                    >done</span
+                  >
                 </td>
                 <td class="text-center">
                   <div class="btn-group" role="group" aria-label="Basic example">
@@ -151,6 +161,12 @@ const setAsCurrent = (id) => {
                       @click="setAsCurrent(committee?.display?.id)"
                     >
                       SET AS CURRENT
+                    </button>
+                    <button
+                      class="btn btn-danger"
+                      @click="markAsDone(committee?.display?.id)"
+                    >
+                      MARK AS DONE
                     </button>
                   </div>
                 </td>

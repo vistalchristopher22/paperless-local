@@ -10,17 +10,18 @@
     <link href="{{ asset('/assets-2/css/style_session.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/Nicholaiii/Aileron/71e6623b2b67e380977d234a0d64c1fdcf223781/">
     <meta content="{{ $serverSocketUrl }}" name="server-socket-url">
     <style>
         * {
-            font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-            font-size: 1.9vw;
+            font-family: "Aileron", sans-serif !important;
+            font-style: normal;
+            font-weight: bold;
+            font-size: {{ $fontSize }}vw;
         }
 
         body {
-            background: url({{ asset('/sample-bg.jpg') }}) no-repeat fixed center center/cover;
+            background: url({{ asset('/tsp-bg.jpg') }}) no-repeat fixed center center/cover;
             background-size: cover;
             /*background-size: 30% 100%;*/
             /*background-color: #fbfcfe;*/
@@ -111,28 +112,29 @@
 <body>
 
     <div class="">
-
-        <div class="row">
-            <div class="col-lg-12 bg-primary d-flex justify-content-between align-items-center">
-                <img src="{{ asset('/assets/tsp.png') }}" class="img-fluid " width="5%" alt="">
-                <span class="text-uppercase text-white h2 mt-1" style="letter-spacing : 2px;">
-                    Privilege Hour
-                </span>
-                <img src="{{ asset('/logo.png') }}" class="img-fluid me-1 " width="4.3%" alt="">
-            </div>
-            <div class="col-lg-12">
-                <div class="d-flex flex-column justify-content-center align-items-center mt-4 text-center">
-                    <img src="{{ asset('storage/user-images/' . $selectedPrivilegeHourMember->profile_picture) }}"
-                        alt="" class="img-fluid rounded shadow-sm" style="width : 39vw;">
-                    <p class="text-uppercase fw-bold h2" style="letter-spacing : 2px;">
-                        {{ $selectedPrivilegeHourMember->fullname }}</p>
-                    <p class="font-inter text-uppercase mb-5 fw-medium bg-primary text-white px-2"
-                        style="letter-spacing : 1px;">
-                        {{ addNumberSuffix((int) $selectedPrivilegeHourMember->sanggunian) }} Sanggunian Panlalawigan
-                        Member</p>
+        <div class="w-100 vh-100 d-flex flex-column align-items-center justify-content-center container">
+            <div class="d-flex flex-row align-items-center justify-content-around mb-3">
+                <div>
+                    <img src="{{ asset('/assets/tsp.png') }}" style="width : 6.5%;" alt="">
+                    <span class="text-uppercase text-white">
+                        {{ $data['reference_session'] }}
+                        {{ $data['type'] }}
+                    </span>
                 </div>
-            </div>
 
+            </div>
+            <div class="align-items-center justify-content-center text-center">
+                <div>
+                    <span class="fs-2 text-white text-uppercase text-center">
+                        Privilege Hour</span>
+                </div>
+                <div>
+                    <img src="{{ asset('storage/user-images/' . $selectedPrivilegeHourMember->profile_picture) }}"
+                        alt="" class="img-fluid rounded shadow-sm" style="width : 30vw;">
+                </div>
+                <p class="text-uppercase fw-bold fs-2 text-white text-truncate">
+                    {{ $selectedPrivilegeHourMember->fullname }}</p>
+            </div>
         </div>
     </div>
 

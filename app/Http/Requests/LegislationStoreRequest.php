@@ -26,6 +26,7 @@ class LegislationStoreRequest extends FormRequest
         return [
             'sessionDate' => ['required', 'date'],
             'classification' => ['required', Rule::in(LegislateType::values())],
+            'reference_no' => ['required', 'unique:legislations,reference_no'],
             'title' => ['required'],
             'type' => ['required', 'numeric', Rule::exists('types', 'id')],
             'co_author' => ['nullable', 'numeric', Rule::exists('sanggunian_members', 'id')],

@@ -18,13 +18,14 @@ final class ScreenTableController extends Controller
         $listDisplay = $this->screenDisplayRepository->getByReferenceSession($id);
         return view('admin.screen.screen-table', [
             'data' => $listDisplay,
+            'id' => $id,
             'settingRepository' => $this->settingRepository,
             'sanggunianMembers' => SanggunianMember::get(),
             'announcementRunningSpeed' => $this->settingRepository->getValueByName('announcement_running_speed'),
             'announcement' => $this->settingRepository->getValueByName('display_announcement'),
-            'fontSize' => $this->settingRepository->getValueByName('screen_font_size') ?? 1.9,
-            'chairmanNameFontSize' => $this->settingRepository->getValueByName('screen_font_size') ?? 1.9,
-            'membersNameFontSize' => $this->settingRepository->getValueByName('screen_font_size') ?? 1.9,
+            'fontSize' => $this->settingRepository->getValueByName('screen_font_size') ?? 1.2,
+            'chairmanNameFontSize' => $this->settingRepository->getValueByName('screen_font_size') ?? 1.2,
+            'membersNameFontSize' => $this->settingRepository->getValueByName('screen_font_size') ?? 1.2,
         ]);
     }
 }

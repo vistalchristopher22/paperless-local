@@ -34,10 +34,14 @@ final class ScreenDisplayController extends Controller
         $schedule->committees = $schedule?->committees->sortBy('display.index');
 
         $settings = $this->settingRepository->getByNames('name', ['display_announcement', 'announcement_running_speed']);
+        $guest = $this->settingRepository->getValueByName('question_of_hour_guest');
+        $selectedMember = $this->settingRepository->getValueByName('privilege_hour_member');
 
         return inertia('ScreenDisplayIndex', [
             'id'                => $id,
             'data'              => $schedule,
+            'guest'             => $guest,
+            'selectedMember' => (int) $selectedMember, 
             'sanggunianMembers' => $this->sanggunianMemberRepository->get(),
             'settings'          => $settings,
             'schedule'          => $schedule,

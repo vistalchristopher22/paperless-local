@@ -106,7 +106,7 @@ export default {
             type="text"
             name="district"
             id="district"
-            class="form-control"
+            class="form-select"
             v-model="sanggunian.district"
             :class="{ 'is-invalid': errors.district }"
           >

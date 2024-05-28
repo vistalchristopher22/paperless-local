@@ -73,7 +73,7 @@ const showMembers = async (committee, type) => {
 watch([searchLead, searchExpanded, searchSession], () => {
   processing.value = true;
   router.visit(
-    `${location.href}?lead=${searchLead.value || ""}&expanded=${
+    `/committee?lead=${searchLead.value || ""}&expanded=${
       searchExpanded.value || ""
     }&schedule=${searchSession.value || ""}`
   );
@@ -94,8 +94,8 @@ const copyPublicLinkToClipboard = (link) => {
 
 const editAttachment = (committee) => {
   alertify.confirm(
-    "Edit Attachment",
-    "After editing, Please close the application to apply the changes are you sure you want to edit this attachment?",
+    "Edit File",
+    "After editing, Please close the application to apply the changes are you sure you want to edit this File?",
     () => {
       config.socket.emit("EDIT_FILE", {
         id: committee.id,
@@ -112,7 +112,10 @@ const updateAttachmentData = async (id) => {
     const response = await axios(`/api/committee-update-attachment/${id}`);
     if (response.status === 200) {
       notyf.success(
-        "Please refresh the page to apply the modified attachment if the changes are not applied"
+        "Please refresh the page to apply the modified file if the changes are not applied",
+        {
+          duration: 10000,
+        }
       );
       router.reload();
     }
@@ -146,14 +149,14 @@ config.socket.on("EDIT_FILE_COMMITTEE_EXIT", (data) => {
                 <div>
                   <img
                     class="img-fluid rounded"
-                    :src="`/storage/user-images/${chairman_information.profile_picture}`"
+                    :src="`/storage/user-images/${chairman_information?.profile_picture}`"
                     style="width: 3vw"
                     alt=""
                   />
                 </div>
                 <div class="d-flex flex-column ms-2">
                   <strong>{{ title }}</strong>
-                  <span>{{ chairman_information.fullname }}</span>
+                  <span>{{ chairman_information?.fullname }}</span>
                 </div>
               </div>
             </template>
@@ -245,7 +248,7 @@ config.socket.on("EDIT_FILE_COMMITTEE_EXIT", (data) => {
           <th
             class="border text-white bg-dark border border-dark text-uppercase text-center"
           >
-            Lead committee
+            Committees
           </th>
           <th
             class="border text-white bg-dark border border-dark text-uppercase text-center"
@@ -299,14 +302,20 @@ config.socket.on("EDIT_FILE_COMMITTEE_EXIT", (data) => {
               @click="showMembers(committee, 'lead_committee')"
               class="text-truncate cursor-pointer fw-bold letter-spacing-1"
             >
-              {{
-                truncateText(
-                  committee?.lead_committee_information?.title
-                    ?.toLowerCase()
-                    ?.replace("committee on", ""),
-                  50
-                )
-              }}
+              <span
+                :class="{
+                  'text-danger': committee?.file_path == null,
+                }"
+              >
+                {{
+                  truncateText(
+                    committee?.lead_committee_information?.title
+                      ?.toLowerCase()
+                      ?.replace("committee on", ""),
+                    50
+                  )
+                }}
+              </span>
             </span>
             <small v-if="committee?.expanded_committee_information">
               <br />
@@ -344,11 +353,20 @@ config.socket.on("EDIT_FILE_COMMITTEE_EXIT", (data) => {
           <td class="text-center text-dark fw-bold">
             {{ committee.committee_invited_guests_count }}
           </td>
-          <td class="text-uppercase text-start text-truncate text-dark fw-bold">
-            <span class="ms-4" v-if="committee?.schedule_information">
+          <td
+            class="text-uppercase text-center text-truncate text-dark fw-bold text-primary"
+          >
+            <a
+              class="text-primary"
+              target="_blank"
+              :href="`/schedule/committees/${moment(
+                committee?.schedule_information.date_and_time
+              )?.format('YYYY-MM-DD')}`"
+              v-if="committee?.schedule_information"
+            >
               {{ committee?.schedule_information?.reference_session }} -
               {{ committee?.schedule_information?.type }}
-            </span>
+            </a>
           </td>
           <td class="text-uppercase text-dark fw-bold">
             {{ committee?.schedule_information?.schedule_venue?.name }}
@@ -411,7 +429,7 @@ config.socket.on("EDIT_FILE_COMMITTEE_EXIT", (data) => {
                         width="16"
                         height="16"
                         fill="currentColor"
-                        class="bi bi-pencil mx-1"
+                        class="bi bi-pencil mx-1 text-primary"
                         viewBox="0 0 16 16"
                       >
                         <path
@@ -421,15 +439,15 @@ config.socket.on("EDIT_FILE_COMMITTEE_EXIT", (data) => {
                       Edit Committee
                     </button>
                   </li>
-                  <li class="dropdown-divider"></li>
-                  <li>
+                  <li class="dropdown-divider" v-if="committee?.file_path"></li>
+                  <li v-if="committee?.file_path">
                     <button class="dropdown-item" @click="editAttachment(committee)">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
                         height="16"
                         fill="currentColor"
-                        class="bi bi-file-word mx-1"
+                        class="bi bi-file-word mx-1 text-primary"
                         viewBox="0 0 16 16"
                       >
                         <path
@@ -439,11 +457,11 @@ config.socket.on("EDIT_FILE_COMMITTEE_EXIT", (data) => {
                           d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"
                         />
                       </svg>
-                      Edit Attachment
+                      Edit File
                     </button>
                   </li>
-                  <li class="dropdown-divider"></li>
-                  <li>
+                  <li class="dropdown-divider" v-if="committee?.file_path"></li>
+                  <li v-if="committee?.file_path">
                     <a
                       data-bs-target="#viewFileModal"
                       data-bs-toggle="modal"
@@ -456,18 +474,18 @@ config.socket.on("EDIT_FILE_COMMITTEE_EXIT", (data) => {
                         width="16"
                         height="16"
                         fill="currentColor"
-                        class="bi bi-file-break mx-1"
+                        class="bi bi-file-break mx-1 text-primary"
                         viewBox="0 0 16 16"
                       >
                         <path
                           d="M0 10.5a.5.5 0 0 1 .5-.5h15a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5M12 0H4a2 2 0 0 0-2 2v7h1V2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v7h1V2a2 2 0 0 0-2-2m2 12h-1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2H2v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2z"
                         />
                       </svg>
-                      Preview Attachment</a
+                      Preview File</a
                     >
                   </li>
-                  <li class="dropdown-divider"></li>
-                  <li>
+                  <li class="dropdown-divider" v-if="committee?.file_path"></li>
+                  <li v-if="committee?.file_path">
                     <a
                       class="dropdown-item"
                       :href="`/committee-file/${committee.id}/download`"
@@ -477,7 +495,7 @@ config.socket.on("EDIT_FILE_COMMITTEE_EXIT", (data) => {
                         width="16"
                         height="16"
                         fill="currentColor"
-                        class="bi bi-cloud-arrow-down mx-1"
+                        class="bi bi-cloud-arrow-down mx-1 text-primary"
                         viewBox="0 0 16 16"
                       >
                         <path
@@ -488,10 +506,10 @@ config.socket.on("EDIT_FILE_COMMITTEE_EXIT", (data) => {
                           d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"
                         />
                       </svg>
-                      Download Attachment</a
+                      Download File</a
                     >
                   </li>
-                  <li class="dropdown-divider"></li>
+                  <li class="dropdown-divider" v-if="committee?.file_path"></li>
                   <li>
                     <button
                       v-if="committee?.file_link?.view_link"
@@ -503,7 +521,7 @@ config.socket.on("EDIT_FILE_COMMITTEE_EXIT", (data) => {
                         width="16"
                         height="16"
                         fill="currentColor"
-                        class="bi bi-link-45deg mx-1"
+                        class="bi bi-link-45deg mx-1 text-primary"
                         viewBox="0 0 16 16"
                       >
                         <path

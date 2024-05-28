@@ -62,7 +62,6 @@ const searchExpanded = ref(parseInt(props.searchExpanded) || "");
 const searchLead = ref(parseInt(props.searchLead) || "");
 const searchSession = ref(props.searchSchedule || "");
 const fragment = window.location.hash;
-
 const editCommittee = (committee) => {
   existingCommittee.value = committee;
 };
@@ -79,6 +78,10 @@ const navigate = (tab) => {
   }
 };
 
+const closeAgendaMembers = () => {
+  displayMembers.value = false;
+};
+
 provide(PROCESSING, processing);
 provide(FETCHED_MEMBERS, fetchedMembers);
 provide(DISPLAY_MEMBERS, displayMembers);
@@ -93,10 +96,14 @@ provide(VIEW_SELECTED_FILE, viewSelectedFile);
 
 <template>
   <layout>
-    <div>
+    <div class="mt-2">
       <FullScreenLoader :processing="processing" />
 
-      <AgendaMembers :displayMembers="displayMembers" :fetchedMembers="fetchedMembers" />
+      <AgendaMembers
+        @close-display="closeAgendaMembers"
+        :displayMembers="displayMembers"
+        :fetchedMembers="fetchedMembers"
+      />
 
       <ViewPDFFile :file="selectedCommittee" />
 

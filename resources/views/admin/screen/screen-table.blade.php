@@ -1,5 +1,3 @@
-@php use App\Enums\ScheduleType; @endphp
-
 <html>
 
 <head>
@@ -10,15 +8,19 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"
         integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <link href="{{ asset('/assets-2/css/style_session.css') }}" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-
+    <meta content="{{ $serverSocketUrl }}" name="server-socket-url">
     <style>
         * {
-            font-family: 'Inter', sans-serif;
+            font-family: Arial, sans-serif !important;
+            font-style: normal;
             font-size: {{ $fontSize }}vw;
+        }
+
+        body {
+            background: url({{ asset('/tsp-bg.jpg') }}) no-repeat fixed center center/cover;
+            background-size: cover;
+            overflow: hidden;
+            overflow-y: scroll;
         }
 
         .chairman-title {
@@ -27,11 +29,6 @@
 
         .member-title {
             font-size: {{ $membersNameFontSize }}vw;
-        }
-
-        .bg-primary {
-            background: #347c00 !important;
-            background-color: #347c00 !important;
         }
 
         .border-primary {
@@ -50,108 +47,105 @@
         .text-primary {
             color: #347c00 !important;
         }
-
-        .scroll-container {
-            width: 100%;
-            overflow: hidden;
+    </style>
+    <style>
+        .bg-primary {
+            background: #143500 !important;
+            background-color: #143500 !important;
         }
 
-        .scroll-text {
-            white-space: nowrap;
-            animation: scroll {{ $announcementRunningSpeed }}s linear infinite;
+        .bg-primary-2 {
+            background: #347c00 !important;
+            background-color: #347c00 !important;
         }
 
-        @keyframes scroll {
-            0% {
-                transform: translateX(100%);
-            }
 
-            100% {
-                transform: translateX(-100%);
-            }
+        .letter-spacing-1 {
+            letter-spacing: 1px;
         }
 
-        .font-weight-600 {
-            font-weight: 600;
+        .text-primary {
+            color: #347c00 !important;
+        }
+
+        .text-primary-dark {
+            color: #143500 !important;
+        }
+
+        #screen-display-table {
+            background: #143500;
+            color: white;
+        }
+
+        table tr {
+            border: 10px solid #143500;
         }
     </style>
 </head>
 
 <body>
-    <div class="d-flex flex-column">
 
-        <div class="table-responsive">
-            <table id="screen-display-table" class="table table-hover border">
-                <thead>
+
+    <div class="table-responsive p-2">
+        <table id="screen-display-table" class="table">
+            <tbody>
+                <tr class="">
+                    <th class="bg-primary align-middle text-start text-uppercase">
+                        <span class="mx-3">Title</span>
+                    </th>
+                    <th class="bg-primary align-middle text-center text-uppercase">Chairman</th>
+                    <th class="bg-primary align-middle text-center text-uppercase text-truncate">Vice Chairman</th>
+                </tr>
+                @foreach ($data as $record)
                     <tr>
-                        <th class="p-3 text-center bg-light border text-uppercase">#</th>
-                        <th class="p-3 text-center bg-light border text-uppercase">Title</th>
-                        <th class="p-3 text-center bg-light border text-uppercase">Chairman</th>
-                        <th class="p-3 text-center bg-light border text-uppercase text-truncate">Vice Chairman</th>
-                        <th class="p-3 text-center bg-light border text-uppercase">Status</th>
-                        <th class="p-3 text-center bg-light border text-uppercase">Duration</th>
+                        <td
+                            class="align-middle w-50 fw-medium bg-success
+                        @if (strtolower($record->status->value) == 'on_going') bg-light text-dark @endif">
+                            {{ $loop->index + 1 }}.
+
+                            {{ $record->screen_displayable?->lead_committee_information->title }}
+                        </td>
+                        <td
+                            class="align-middle text-truncate text-start bg-success   @if (strtolower($record->status->value) == 'on_going') bg-light text-dark @endif">
+                            <span class="mx-4"></span>
+                            {{ $record->screen_displayable?->lead_committee_information?->chairman_information?->fullname }}
+                        </td>
+                        <td
+                            class="align-middle text-truncate text-start bg-success   @if (strtolower($record->status->value) == 'on_going') bg-light text-dark @endif">
+                            <span class="mx-4"></span>
+                            {{ $record->screen_displayable?->lead_committee_information?->vice_chairman_information?->fullname }}
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($data as $record)
-                        <tr data-id="{{ $record->id }}">
-                            <td
-                                class="p-3 text-center fw-bold {{ $loop->index == 0 ? 'fw-bold bg-primary border border-primary text-white' : '' }}">
-                                {{ $record->index }}</td>
-                            <td
-                                class="p-3 {{ $loop->index == 0 ? 'fw-bold bg-primary border-primary text-white text-truncate' : 'text-truncate' }}">
-                                @if ($record?->type === ScheduleType::MEETING->value)
-                                    {{ $record->screen_displayable?->lead_committee_information->title }}
-                                    / {{ $record->screen_displayable?->expanded_committee_information?->title }}
-                                    {{ $record->screen_displayable?->other_expanded_committee_information?->title }}
-                                @else
-                                    ORDER OF BUSINESS
-                                @endif
-                            </td>
-                            <td
-                                class="p-3 {{ $loop->index == 0 ? 'fw-bold bg-primary border border-primary text-white text-truncate' : '' }}">
-                                @if ($record?->type === ScheduleType::MEETING->value)
-                                    {{ $record->screen_displayable?->lead_committee_information?->chairman_information?->fullname }}
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td
-                                class="p-3 {{ $loop->index == 0 ? 'fw-bold bg-primary border border-primary text-white' : '' }}">
-                                @if ($record?->type === ScheduleType::MEETING->value)
-                                    {{ $record->screen_displayable?->lead_committee_information?->vice_chairman_information?->fullname }}
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td
-                                class="p-3 text-center fw-bold text-uppercase  text-truncate {{ $loop->index == 0 ? 'fw-bold bg-primary border border-primary text-white' : '' }}">
-                                {{ Str::headline($record->status) }}</td>
-                            <td class="text-center">{{ $record?->start_time?->format('h:i A') }} -
-                                {{ $record?->end_time?->format('h:i A') }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                @endforeach
+            </tbody>
+        </table>
+        <br>
+    </div>
 
 
-        <div class="bg-primary mt-auto fixed-bottom">
-            <div class="scroll-container">
-                <div class="scroll-text text-white fw-bold">
-                    <img src="{{ asset('/assets-2/images/logo-screen/logo.png') }}" class="img-fluid " width="2.5%"
-                        alt="">
-                    <span
-                        class="text-white fw-bold text-uppercase letter-spacing-1">{{ $data?->first()?->reference_session?->number }}
-                        REGULAR SESSION @ {{ $data?->first()->schedule?->venue }} |
-                        {{ $data?->first()->schedule?->first()?->date_and_time->format('F d, Y') }}<img
-                            src="{{ asset('/assets-2/images/logo-screen/logo2.png') }}" class="img-fluid "
-                            width="3%" alt="" /> | {{ $announcement }} </span>
-                    <span class="text-uppercase"> | Powered by : PADMO-ITU</span>
-                </div>
+    <div class="bg-primary mt-auto fixed-bottom d-flex">
+        <div class="bg-primary-2"
+            style="position:relative; z-index:9999; width:30%; height :fit-content; bottom:0%; right :0%; top:0%; left :0;">
+            <div class="d-flex align-items-center mx-1">
+                <span class="font-inter fw-bold text-white">
+                    POWERED BY : PADMO-ITU
+                </span>
+                <img src="{{ asset('/itu.gif') }}" class="img-fluid mx-1" width="8.5%" style="padding : 3px;"
+                    alt="" />
             </div>
         </div>
+        <marquee onmouseover="this.stop();" onmouseout="this.start();" direction="left" behavior="scroll"
+            scrollamount="{{ $announcementRunningSpeed }}"
+            style="position:absolute; bottom : 0%; right : 0%; left :30.1%;">
+            <span class="text-dark fw-bold text-white text-uppercase letter-spacing-1 font-inter">
+                @if (!empty($announcement))
+                    |
+                    {{ $announcement }}
+                @endif
+            </span>
+        </marquee>
     </div>
+
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
@@ -160,6 +154,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+        const id = "{{ $id }}";
         let serverSocketUrl = document
             .querySelector('meta[name="server-socket-url"]')
             ?.getAttribute("content");
@@ -171,7 +166,6 @@
         function formatTwoDigits(value) {
             return value < 10 ? `0${value}` : value;
         }
-
 
         function updateElapsedTime(startTime) {
             const currentTime = new Date();
@@ -208,6 +202,20 @@
                 });
             }
         });
+
+
+        function startCountdown(duration) {
+            let timeRemaining = duration;
+            let countdownInterval = setInterval(function() {
+                timeRemaining--;
+
+                if (timeRemaining <= 0) {
+                    location.href = '/screen/' + id;
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+        }
+        startCountdown(60);
 
         socket.on('SCREEN_TIMER_END', function() {
             if (dataToPresent.start_time) {
@@ -281,7 +289,7 @@
                     $('.containers2 ul li:first-child').appendTo('.containers2 ul');
                     $('.containers2 ul li:first-child').removeClass('bg-primary').removeClass('text-white');
                     $('.containers2 ul li:first-child').next().addClass('bg-primary').addClass(
-                    'text-white');
+                        'text-white');
                     $('.containers2 ul').css('top', '');
                 });
             }

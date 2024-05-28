@@ -2,11 +2,10 @@
 import vSelect from "vue-select";
 import { defineComponent, inject, ref } from "vue";
 import axios from "axios";
+import { Notyf } from "notyf";
 
 const config = inject("$config");
-const display_page = ref();
-const questionHourGuest = ref("");
-const selectedMember = ref(null);
+
 const props = defineProps({
   sanggunianMembers: {
     type: Array,
@@ -16,20 +15,34 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  guest: {
+    type: String,
+  },
+  selected: {
+    type: Number,
+  },
 });
+
 defineComponent({
   vSelect,
 });
+const display_page = ref();
+const questionHourGuest = ref(props.guest || "");
+const selectedMember = ref(parseInt(props.selected));
+const currentDisplay = ref(localStorage.getItem("display_page"));
 
 const updateDisplaySetting = () => {
   let selectedDisplay = document.querySelector("input[name='display_page']:checked")
     .value;
+  localStorage.setItem("display_page", selectedDisplay);
   if (selectedDisplay === "committee_meeting") {
+    new Notyf().success("Successfully changed the screen display to Committee Meeting!");
     config.socket.emit("SCREEN_DISPLAY_CHANGED", {
       id: props.id,
       url: `/screen/${props.id}`,
     });
   } else if (selectedDisplay === "order_of_business") {
+    new Notyf().success("Successfully changed the screen display to Order of Business!");
     config.socket.emit("SCREEN_DISPLAY_CHANGED", {
       id: props.id,
       url: `/screen-order-of-business/${props.id}`,
@@ -37,16 +50,25 @@ const updateDisplaySetting = () => {
   } else if (selectedDisplay === "question_of_hour") {
     let formData = new FormData();
     formData.append("guest", questionHourGuest.value);
-    axios.post(`/api/question-of-hour-guest`, formData).then((response) => {
+    axios.post(`/api/question-of-hour-guest`, formData).then(() => {
+      new Notyf().success("Successfully changed the screen display to Question of Hour", {
+        duration: 5000,
+      });
       config.socket.emit("SCREEN_DISPLAY_CHANGED", {
         id: props.id,
         url: `/screen-question-of-hour/${props.id}`,
       });
     });
   } else if (selectedDisplay === "privilege_hour") {
+    if (!selectedMember.value) {
+      new Notyf().error("Please select a member!");
+      return;
+    }
+
     let formData = new FormData();
-    formData.append("selectedMember", selectedMember.value.id);
-    axios.post(`/api/privilege-hour-member`, formData).then((response) => {
+    formData.append("selectedMember", selectedMember.value);
+    axios.post(`/api/privilege-hour-member`, formData).then(() => {
+      new Notyf().success("Successfully changed the screen display to privilege hour!");
       config.socket.emit("SCREEN_DISPLAY_CHANGED", {
         id: props.id,
         url: `/screen-privilege-hour/${props.id}`,
@@ -64,7 +86,7 @@ const updateDisplaySetting = () => {
           type="radio"
           value="order_of_business"
           class="me-2"
-          checked
+          :checked="currentDisplay == 'order_of_business' ? true : false"
           ref="display_page"
           name="display_page"
           id="orderOfBusiness"
@@ -79,8 +101,8 @@ const updateDisplaySetting = () => {
         <input
           type="radio"
           value="committee_meeting"
+          :checked="currentDisplay == 'committee_meeting' ? true : false"
           class="me-2"
-          checked
           ref="display_page"
           name="display_page"
           id="committeeMeeting"
@@ -95,6 +117,7 @@ const updateDisplaySetting = () => {
         type="radio"
         value="question_of_hour"
         id="questionOfHour"
+        :checked="currentDisplay == 'question_of_hour' ? true : false"
         class="me-2"
         ref="display_page"
         name="display_page"
@@ -104,10 +127,13 @@ const updateDisplaySetting = () => {
         This will display a banner for <strong>Question of Hour</strong> on the screen.
       </p>
 
-      <label for="prepared_by" class="">Guest</label>
+      <label for="prepared_by" class=""
+        >Guest (For multiple Guests add "|" as separator it will automatically rendered as
+        new line on the screen.)</label
+      >
       <input
         type="text"
-        class="form-control text-uppercase"
+        class="form-control"
         placeholder="Enter Fullname"
         v-model="questionHourGuest"
       />
@@ -117,6 +143,7 @@ const updateDisplaySetting = () => {
         id="privilegeHour"
         ref="display_page"
         value="privilege_hour"
+        :checked="currentDisplay == 'privilege_hour' ? true : false"
         class="me-2 mt-3"
         name="display_page"
       />
@@ -130,6 +157,7 @@ const updateDisplaySetting = () => {
         class="text-uppercase"
         :options="sanggunianMembers"
         label="fullname"
+        :reduce="(sanggunian) => sanggunian.id"
         v-model="selectedMember"
       >
         <template #option="{ fullname, profile_picture }">

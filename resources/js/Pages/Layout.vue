@@ -296,7 +296,9 @@ const config = inject("$config");
       <ul
         class="list-unstyled topbar-nav d-flex justify-content-between align-items-center mb-0"
       >
-        <h5 class="ms-4 fw-bolder"></h5>
+        <h5 class="ms-4 fw-bolder">
+          <!-- display logo -->
+        </h5>
 
         <li class="dropdown">
           <a

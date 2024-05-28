@@ -79,6 +79,7 @@ final class LegislationController extends Controller
             'type' => request()->type ?? '',
             'fromDate' => request()->from_date ?? '',
             'toDate' => request()->to_date ?? '',
+            'filter' => request()->filter ?? false,
         ]);
     }
 

@@ -23,9 +23,11 @@ class LegislationUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('legislation')?->id;
         return [
             'sessionDate' => ['required'],
             'classification' => ['required', Rule::in(LegislateType::values())],
+            'reference_no' => ['required', 'unique:legislations,reference_no,' . $id],
             'title' => ['required'],
             'type' => ['required', Rule::exists('types', 'id')],
             'author' => ['nullable', Rule::exists('sanggunian_members', 'id')],

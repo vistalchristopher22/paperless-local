@@ -18,7 +18,7 @@ final class ProfilePicture implements IPipeHandler
 
     public function handle(mixed $payload, Closure $next)
     {
-        if (!isset($payload['image'])) {
+        if (!request()->hasFile('image')) {
             return $next($payload);
         }
 

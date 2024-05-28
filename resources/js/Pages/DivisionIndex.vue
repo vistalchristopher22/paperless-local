@@ -20,7 +20,7 @@ export default {
 };
 </script>
 <template>
-  <div>
+  <div class="mt-2">
     <div>
       <!-- <FullScreenLoader :processing="processing" /> -->
       <div class="d-flex align-items-center justify-content-between mb-2">

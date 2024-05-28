@@ -35,7 +35,12 @@ export default {
         }
       });
     };
+
+    const close = () => {
+      displayMembers.value = false;
+    };
     return {
+      close,
       displayMembers,
       fetchedMembers,
       processing,
@@ -45,10 +50,14 @@ export default {
 };
 </script>
 <template>
-  <div>
+  <div class="mt-2">
     <div>
       <FullScreenLoader :processing="processing" />
-      <AgendaMembers :displayMembers="displayMembers" :fetchedMembers="fetchedMembers" />
+      <AgendaMembers
+        :displayMembers="displayMembers"
+        :fetchedMembers="fetchedMembers"
+        @close-display="close"
+      />
       <div class="d-flex align-items-center justify-content-between mb-2">
         <div>
           <h5 class="fw-bolder text-uppercase">
@@ -108,10 +117,10 @@ export default {
                 {{ committee.title?.toLowerCase().replace("committee on", "") }}
               </td>
               <td class="text-start text-capitalize fw-bold" @click="so">
-                {{ committee.chairman_information.fullname }}
+                {{ committee.chairman_information?.fullname }}
               </td>
               <td class="text-start text-capitalize fw-bold">
-                {{ committee.vice_chairman_information.fullname }}
+                {{ committee.vice_chairman_information?.fullname }}
               </td>
               <td class="text-center">
                 <a

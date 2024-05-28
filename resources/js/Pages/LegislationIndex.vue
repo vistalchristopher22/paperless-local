@@ -1,9 +1,10 @@
 <script>
 import Layout from "@pages/Layout.vue";
-import { Link, router } from "@inertiajs/vue3";
-import { reactive, ref, watch } from "vue";
-import { getBaseURL } from "@common/helpers";
+import { Link, router, Head } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
+import { getBaseURL, strLimit } from "@common/helpers";
 import vSelect from "vue-select";
+import axios from "axios";
 
 export default {
   props: {
@@ -26,6 +27,9 @@ export default {
     author: {
       type: String,
     },
+    filter: {
+      required: false,
+    },
     classification: {
       type: String,
     },
@@ -42,9 +46,12 @@ export default {
   layout: Layout,
   components: {
     Link,
+    Head,
     vSelect,
   },
   setup(props) {
+    const displayFilter = ref(props.filter || false);
+    const displayDownloadSpinner = ref(false);
     const baseURL = getBaseURL();
     const fetchLegislations = (url) => router.visit(url, { preserveScroll: true });
 
@@ -75,10 +82,44 @@ export default {
       Object.keys(params).forEach((key) => params[key] == null && delete params[key]);
 
       const searchParams = new URLSearchParams(params).toString();
-      fetchLegislations(`${baseURL}/administrator/legislation?${searchParams}`);
+      fetchLegislations(
+        `${baseURL}/administrator/legislation?${searchParams}&filter=${displayFilter.value}`
+      );
     });
 
+    const filterDisplay = () => {
+      if (displayFilter.value) {
+        router.visit("/administrator/legislation");
+      } else {
+        displayFilter.value = true;
+      }
+    };
+
+    const downloadFile = (legislation) => {
+      displayDownloadSpinner.value = true;
+      axios
+        .get(`/administrator/legislation/download/${legislation.id}`, {
+          responseType: "blob",
+        })
+        .then((response) => {
+          const blob = new Blob([response.data], { type: "application/pdf" }); // Specify the MIME type for PDF
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = `${legislation.no}.pdf`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(link.href);
+          displayDownloadSpinner.value = false;
+        })
+        .catch(console.error);
+    };
+
     return {
+      displayDownloadSpinner,
+      downloadFile,
+      filterDisplay,
+      displayFilter,
       baseURL,
       fromDate,
       toDate,
@@ -86,30 +127,32 @@ export default {
       classification,
       filterAuthor,
       fetchLegislations,
+      strLimit,
     };
   },
 };
 </script>
 
 <template>
+  <Head title="Complete Listing of Ordinance & Resolution" />
   <div>
-    <div class="card">
+    <div class="card mt-3 rounded-0" v-if="displayFilter">
       <div class="card-body">
         <div class="row">
           <div class="col-lg-2">
-            <label for="daterange" class="form-label text-dark">Start Date</label>
+            <label for="daterange" class="form-label text-dark fw-bold">Start Date</label>
             <div class="input-group">
               <input type="date" class="form-control" v-model="fromDate" />
             </div>
           </div>
           <div class="col-lg-2">
-            <label for="daterange" class="form-label text-dark">End Date</label>
+            <label for="daterange" class="form-label text-dark fw-bold">End Date</label>
             <div class="input-group">
               <input type="date" class="form-control" v-model="toDate" />
             </div>
           </div>
           <div class="col-lg-3">
-            <label for="author" class="form-label text-dark">Author</label>
+            <label for="author" class="form-label text-dark fw-bold">Author</label>
             <v-select
               class="border text-uppercase"
               :options="spMembers"
@@ -119,7 +162,7 @@ export default {
             ></v-select>
           </div>
           <div class="col-lg-2">
-            <label for="type" class="form-label text-dark">Type</label>
+            <label for="type" class="form-label text-dark fw-bold">Type</label>
             <v-select
               name="type"
               id="type"
@@ -132,7 +175,7 @@ export default {
             </v-select>
           </div>
           <div class="col-lg-3">
-            <label for="classification" class="form-label text-dark"
+            <label for="classification" class="form-label text-dark fw-bold"
               >Classification</label
             >
             <v-select
@@ -166,31 +209,58 @@ export default {
       </div>
     </div>
 
-    <Link href="/administrator/legislation/create" class="btn btn-dark my-2 float-end"
-      >Add New Ordinance / Resolution</Link
-    >
+    <div class="btn-group my-2 float-end mt-3">
+      <button class="btn btn-primary" @click="filterDisplay">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-funnel-fill"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z"
+          />
+        </svg>
+        Filter
+      </button>
+      <button class="btn btn-dark">
+        <Link href="/administrator/legislation/create" class="text-white">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-file-earmark-plus-fill"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0"
+            />
+          </svg>
+          Add New Ordinance / Resolution
+        </Link>
+      </button>
+    </div>
+
     <table class="table table-hover border" id="legislationTable" width="100%">
       <thead>
         <tr class="bg-light">
           <th
-            class="border text-white bg-dark border border-dark text-uppercase text-center"
+            class="border text-white bg-dark border border-dark text-uppercase text-start"
           >
             No
           </th>
           <th
             class="border text-white bg-dark border border-dark text-uppercase text-center"
           >
-            Reference No.
+            Ref No.
           </th>
           <th
             class="border text-white bg-dark border border-dark text-uppercase text-center"
           >
             Title
-          </th>
-          <th
-            class="border text-white bg-dark border border-dark text-uppercase text-center"
-          >
-            Type
           </th>
           <th
             class="border text-white bg-dark border border-dark text-uppercase text-center"
@@ -201,11 +271,6 @@ export default {
             class="border text-white bg-dark border border-dark text-uppercase text-center"
           >
             Co-Author
-          </th>
-          <th
-            class="border text-white bg-dark border border-dark text-uppercase text-center"
-          >
-            Description
           </th>
           <th
             class="border text-white bg-dark border border-dark text-uppercase text-center"
@@ -226,52 +291,62 @@ export default {
       </thead>
       <tbody>
         <tr v-for="legislation in legislations.data" :key="legislation.id">
-          <td class="text-center fw-bold">{{ legislation.no }}</td>
-          <td class="text-center">{{ legislation.reference_no }}</td>
-          <td>{{ legislation.title }}</td>
-          <td class="text-uppercase text-center">
-            <span class="badge bg-warning">{{
-              legislation?.legislable?.record_type?.name
-            }}</span>
-          </td>
+          <td class="fw-bold">{{ legislation.no }}</td>
+          <td class="text-start">{{ legislation.reference_no }}</td>
+          <td class="text-start">{{ strLimit(legislation.title, 30, "...") }}</td>
           <td class="text-uppercase text-start">
             {{ legislation?.legislable?.author_information?.fullname }}
           </td>
           <td class="text-uppercase text-start">
             {{ legislation?.legislable?.co_author_information?.fullname }}
           </td>
-          <td>{{ legislation?.description }}</td>
           <td class="text-uppercase text-center">
-            <span
-              class="badge bg-primary"
-              v-if="legislation?.classification?.toLowerCase() === 'resolution'"
-            >
-              {{ legislation?.classification }}
-            </span>
-            <span class="badge bg-success" v-else>
-              {{ legislation?.classification }}
-            </span>
+            <div v-if="legislation?.classification?.toLowerCase() === 'resolution'">
+              <span class="badge bg-primary me-2">
+                {{ legislation?.classification }}
+              </span>
+
+              <span class="badge bg-warning">{{
+                legislation?.legislable?.record_type?.name
+              }}</span>
+            </div>
+
+            <div v-else>
+              <span class="badge bg-success me-2">
+                {{ legislation?.classification }}
+              </span>
+              <span class="badge bg-warning">{{
+                legislation?.legislable?.record_type?.name
+              }}</span>
+            </div>
           </td>
           <td class="text-center">{{ legislation?.legislable?.session_date }}</td>
           <td class="text-center">
-            <Link
-              :href="`/administrator/legislation/${legislation.id}/edit`"
-              class="btn btn-soft-success"
-            >
-              <i class="mdi mdi-pencil"></i>
-            </Link>
+            <div class="btn-group">
+              <Link
+                :href="`/administrator/legislation/${legislation.id}/edit`"
+                class="btn btn-success"
+              >
+                Edit
+              </Link>
 
-            <a
-              :href="`/administrator/legislation/download/${legislation.id}`"
-              class="btn btn-soft-primary mx-2"
-              download
-            >
-              <i class="mdi mdi-download"></i>
-            </a>
+              <button
+                @click="downloadFile(legislation)"
+                class="btn btn-primary"
+                :disabled="displayDownloadSpinner"
+              >
+                <div
+                  class="spinner-border text-light spinner-border-sm"
+                  role="status"
+                  v-if="displayDownloadSpinner"
+                >
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <div v-else>Download</div>
+              </button>
 
-            <a class="btn btn-soft-info" target="_blank">
-              <i class="mdi mdi-eye"></i>
-            </a>
+              <a class="btn btn-info" target="_blank"> View </a>
+            </div>
           </td>
         </tr>
       </tbody>

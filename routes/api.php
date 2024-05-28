@@ -242,9 +242,16 @@ Route::post('committee-meeting-screen-pending/{id}', function (int $id) {
     ScreenDisplay::find($id)->update([
         'status' => ScreenDisplayStatus::PENDING,
     ]);
-
     return response()->json(['success' => true]);
 });
+
+Route::post('committee-meeting-screen-done/{id}', function (int $id) {
+    ScreenDisplay::find($id)->update([
+        'status' => ScreenDisplayStatus::DONE,
+    ]);
+    return response()->json(['success' => true]);
+});
+
 Route::post('committee-meeting-screen-current/{id}', function (int $id) {
     ScreenDisplay::find($id)->where('status', ScreenDisplayStatus::ON_GOING)->update([
         'status' => ScreenDisplayStatus::NEXT,

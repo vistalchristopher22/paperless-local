@@ -1,3 +1,19 @@
+<script>
+import { ref, reactive, computed, watch } from "vue";
+
+export default {
+  props: ["displayMembers", "fetchedMembers"],
+  emits: ["close-display"],
+  setup(props, { emit }) {
+    const close = () => {
+      emit("close-display");
+    };
+    return {
+      close,
+    };
+  },
+};
+</script>
 <template>
   <div
     class="offcanvas offcanvas-end shadow"
@@ -24,7 +40,7 @@
             class="btn btn-danger btn-sm"
             data-bs-dismiss="offcanvas"
             aria-label="Close"
-            @click="displayMembers = false"
+            @click="close"
           >
             <i class="mdi mdi-close"></i>
           </button>
@@ -33,14 +49,12 @@
     </div>
     <div class="offcanvas-body h-100 d-flex justify-content-between flex-column pb-0">
       <div class="overflow-auto">
-        <h5 class="text-uppercase letter-spacing-1 bg-dark text-white d-flex p-2 mb-1">
-          Chairman
-        </h5>
+        <h5 class="letter-spacing-1 bg-dark text-white d-flex p-2 mb-1">Chairman</h5>
         <div class="card mb-3">
           <div class="card-body text-center">
             <div class="user-avatar">
               <img
-                class="thumb-lg rounded-circle img-fluid mb-2"
+                class="w-25"
                 :src="`/storage/user-images/${fetchedMembers?.chairman_information?.profile_picture}`"
               />
             </div>
@@ -49,16 +63,14 @@
             }}</span>
           </div>
         </div>
-        <h5
-          class="text-uppercase letter-spacing-1 fw-medium bg-dark text-white d-flex p-2 mb-1"
-        >
+        <h5 class="letter-spacing-1 fw-medium bg-dark text-white d-flex p-2 mb-1">
           Vice-chairman
         </h5>
         <div class="card mb-3">
           <div class="card-body text-center">
             <div class="user-avatar">
               <img
-                class="thumb-lg rounded-circle img-fluid"
+                class="w-25"
                 :src="`/storage/user-images/${fetchedMembers?.vice_chairman_information?.profile_picture}`"
               />
             </div>
@@ -67,16 +79,12 @@
             }}</span>
           </div>
         </div>
-        <h5
-          class="text-uppercase text-uppercase fw-medium bg-dark text-white d-flex p-2 mb-1"
-        >
-          Members
-        </h5>
+        <h5 class="bg-dark text-white d-flex p-2 mb-1">Members</h5>
         <div class="card mb-3" v-for="(member, key) in fetchedMembers.members" :key="key">
           <div class="card-body text-center">
             <div class="user-avatar">
               <img
-                class="thumb-lg rounded-circle img-fluid"
+                class="w-25"
                 :src="`/storage/user-images/${member?.sanggunian_member[0]?.profile_picture}`"
               />
             </div>
@@ -89,17 +97,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import { ref, reactive, computed, watch } from "vue";
-
-export default {
-  props: ["displayMembers", "fetchedMembers"],
-  setup(props) {
-    return {};
-  },
-};
-</script>
 
 <style scoped>
 .letter-spacing-1 {

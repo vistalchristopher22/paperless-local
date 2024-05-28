@@ -3,7 +3,7 @@ import { ref, reactive } from "vue";
 import Layout from "@pages/Layout.vue";
 import FullScreenLoader from "@components/FullScreenLoader.vue";
 import AllFields from "@components/AllFields.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, Head } from "@inertiajs/vue3";
 import vSelect from "vue-select";
 import { Notyf } from "notyf";
 
@@ -12,6 +12,7 @@ export default {
   props: ["spMembers", "types", "classifications"],
   components: {
     Link,
+    Head,
     vSelect,
     FullScreenLoader,
     AllFields,
@@ -99,7 +100,8 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="mt-3">
+    <Head title="Create Ordinance or Resolution" />
     <FullScreenLoader :processing="processing" />
     <AllFields />
     <div class="card">

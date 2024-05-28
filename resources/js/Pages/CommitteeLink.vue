@@ -193,7 +193,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="d-flex align-items-center justify-content-center">
-        <a :href="`/order-business-file/download/${id}`" class="text-white">
+        <!-- <a :href="`/order-business-file/download/${id}`" class="text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="3em"
@@ -203,7 +203,7 @@ onMounted(() => {
           >
             <path fill="currentColor" d="M5 20h14v-2H5zM19 9h-4V3H9v6H5l7 7z" />
           </svg>
-        </a>
+        </a> -->
       </div>
     </nav>
     <div class="w-100 main-container">

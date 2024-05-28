@@ -21,18 +21,8 @@ final class ScreenController extends Controller
     {
         $schedule = Schedule::with(['order_of_business_information', 'committees', 'schedule_venue', 'screen_displays'])->find($id);
         
-        // if($schedule->screen_displays->isEmpty()) {
-        //     $this->screenDisplayRepository->updateScreenDisplays($schedule);
-        // }
-        
-        // if($schedule->committees->count() !== $schedule->screen_displays->count()) {
-        //     $this->screenDisplayRepository->updateScreenDisplays($schedule);
-        // }
-
         $totalCommittees = $schedule->committees()->count();
         $totalSessions = $schedule->order_of_business_information()->count();
-
-        $totalDataToDisplay = $totalCommittees + $totalSessions;
 
         $dataToPresent = $this->screenDisplayRepository->getCurrentScreenDisplay($schedule);
 
@@ -46,8 +36,8 @@ final class ScreenController extends Controller
             ->first();
 
 
-
         return view('admin.screen.index', [
+            'id'                => $id,
             'dataToPresent' => $dataToPresent,
             'upNextData' => $upNextData,
             'schedule' => $schedule,

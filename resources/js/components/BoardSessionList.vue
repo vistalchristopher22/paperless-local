@@ -58,9 +58,10 @@ const viewLink = (link) => {
 };
 
 watch(searchSession, (newValue) => {
+  let fragment = window.location.hash || "";
   if (newValue) {
     processing.value = true;
-    router.visit("/committee?schedule=" + newValue + "#order_of_business");
+    router.visit("/committee?schedule=" + newValue + fragment);
   }
 });
 
@@ -75,8 +76,8 @@ const copyPublicLinkToClipboard = (link) => {
 
 const editAttachment = (boardSession) => {
   alertify.confirm(
-    "Edit Attachment",
-    "After editing, Please close the application to apply the changes are you sure you want to edit this attachment?",
+    "Edit File",
+    "After editing, Please close the application to apply the changes are you sure you want to edit this File?",
     () => {
       config.socket.emit("EDIT_FILE", {
         id: boardSession.id,
@@ -93,7 +94,7 @@ const updateAttachmentData = async (id) => {
     const response = await axios(`/api/order-of-business-update-attachment/${id}`);
     if (response.status === 200) {
       notyf.success(
-        "Please refresh the page to apply the modified attachment if the changes are not applied"
+        "Please refresh the page to apply the modified file if the changes are not applied"
       );
       router.reload();
     }
@@ -206,7 +207,12 @@ config.socket.on("EDIT_FILE_ORDER_OF_BUSINESS_EXIT", (data) => {
               </span>
             </td>
             <td>
-              <span class="text-uppercase fw-bold text-dark">
+              <span
+                class="text-uppercase fw-bold"
+                :class="{
+                  'text-danger': !board_session.file_path,
+                }"
+              >
                 {{ board_session.title }}</span
               >
               <div v-if="board_session.file_path" class="d-flex align-items-center">
@@ -308,12 +314,16 @@ config.socket.on("EDIT_FILE_ORDER_OF_BUSINESS_EXIT", (data) => {
                           d="M0 10.5a.5.5 0 0 1 .5-.5h15a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5M12 0H4a2 2 0 0 0-2 2v7h1V2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v7h1V2a2 2 0 0 0-2-2m2 12h-1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2H2v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2z"
                         />
                       </svg>
-                      Preview Attachment
+                      Preview File
                     </button>
                   </li>
-                  <li class="dropdown-divider"></li>
+                  <li class="dropdown-divider" v-if="board_session?.file_path"></li>
                   <li>
-                    <a href="#" @click="editAttachment(board_session)">
+                    <a
+                      href="#"
+                      @click="editAttachment(board_session)"
+                      v-if="board_session?.file_path"
+                    >
                       <span
                         class="dropdown-item text-decoration-none fw-medium text-capitalize cursor-pointer btn-view-file"
                         data-path=""
@@ -334,12 +344,12 @@ config.socket.on("EDIT_FILE_ORDER_OF_BUSINESS_EXIT", (data) => {
                             d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"
                           />
                         </svg>
-                        Edit Attachment
+                        Edit File
                       </span>
                     </a>
                   </li>
-                  <li class="dropdown-divider"></li>
-                  <li>
+                  <li class="dropdown-divider" v-if="board_session?.file_path"></li>
+                  <li v-if="board_session?.file_path">
                     <a
                       class="dropdown-item"
                       :href="`/order-business-file/download/${board_session.id}`"
@@ -360,7 +370,7 @@ config.socket.on("EDIT_FILE_ORDER_OF_BUSINESS_EXIT", (data) => {
                           d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"
                         />
                       </svg>
-                      Download Attachment</a
+                      Download File</a
                     >
                   </li>
 

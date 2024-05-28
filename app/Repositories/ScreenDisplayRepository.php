@@ -97,11 +97,10 @@ final class ScreenDisplayRepository extends BaseRepository implements ScreenDisp
     public function getByReferenceSession(int $id)
     {
         return $this->model::with([
-            'reference_session',
             'schedule',
             'screen_displayable',
         ])
-            ->where('reference_session_id', $id)
+            ->where('schedule_id', $id)
             ->orderBy('index', 'ASC')
             ->get();
     }

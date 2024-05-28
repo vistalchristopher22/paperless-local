@@ -24,6 +24,7 @@ class HomeController extends Controller
 
     public function __invoke()
     {
+        return to_route("schedules.index");
         $user = auth()?->user()?->features();
 
         if ($user && $user->active('administrator')) {

@@ -87,14 +87,22 @@ watch([selectedAgenda, selectedSchedule, selectedVenue], () => {
     `/invited-guests?search=${search.value}&agenda=${selectedAgenda.value}&schedule=${selectedSchedule.value}&venue=${selectedVenue.value}`
   );
 });
+
+const onCloseDisplay = () => {
+  displayMembers.value = false;
+};
 </script>
 
 <template>
   <div>
     <layout>
-      <AgendaMembers :displayMembers="displayMembers" :fetchedMembers="fetchedMembers" />
+      <AgendaMembers
+        @close-display="onCloseDisplay"
+        :displayMembers="displayMembers"
+        :fetchedMembers="fetchedMembers"
+      />
 
-      <div class="card">
+      <div class="card mt-2">
         <div
           class="card-header bg-dark p-3 justify-content-between align-items-center d-flex"
         >

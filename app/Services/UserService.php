@@ -9,7 +9,7 @@ final class UserService extends AccountService
 {
     public function isUserWantToChangeProfilePicture(Request $request, IUploadService $uploadService): array
     {
-        if ($request->has('image')) {
+        if ($request->hasFile('image')) {
             $fileName = $uploadService->handle($request->file('image'));
             $request->merge(['profile_picture' => $fileName]);
         }

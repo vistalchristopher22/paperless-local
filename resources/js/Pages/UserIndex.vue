@@ -20,7 +20,7 @@ const props = defineProps({
 
 <template>
   <layout>
-    <div class="d-flex align-items-center justify-content-between mb-2">
+    <div class="d-flex align-items-center justify-content-between mb-2 mt-2">
       <div>
         <h5 class="fw-bolder text-uppercase">no. of users [ {{ users.total }} ]</h5>
       </div>

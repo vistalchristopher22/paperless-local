@@ -163,6 +163,7 @@ onMounted(() => {
       :class="{ 'd-none': showSidebar }"
       style="width: 380px"
     >
+      {{}}
       <div v-auto-animate>
         <div
           href="/"
@@ -251,7 +252,7 @@ onMounted(() => {
             <div class="d-flex align-items-center justify-content-center">
               <li class="nav-item" role="presentation">
                 <button
-                  class="nav-link fs-5 text-uppercase fw-bold letter-spacing-0"
+                  class="nav-link fs-5 text-uppercase fw-bold letter-spacing-0 active show"
                   id="commitees-home-tab"
                   data-bs-toggle="pill"
                   data-bs-target="#pills-home"
@@ -266,7 +267,6 @@ onMounted(() => {
               <li class="nav-item me-2" role="presentation">
                 <button
                   class="nav-link fs-5 text-uppercase fw-bold letter-spacing-0"
-                  :href="`/${orderOfBusinessLink}`"
                   data-bs-toggle="pill"
                   data-bs-target="#pills-contact"
                   type="button"
